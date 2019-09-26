@@ -1,0 +1,64 @@
+variables:
+  # Directory of Jacoco html reports
+  JACOCO_HTML_DIR: build/reports/jacoco/test/html
+
+  # Path to all Junit html files
+  JUNIT_FILES: build/test-results/test/TEST-*.xml
+
+  # nshmp-lib repo
+  NSHMP_LIB: nshmp-lib
+
+  # nshmp-lib git url
+  NSHMP_LIB_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${NSHMP_LIB}.git
+
+stages:
+  - assemble
+  - test
+
+####
+# Git clone nshmp-lib
+####
+before_script:
+  - yum install git -y
+  - cd ..
+  - rm -rf ${NSHMP_LIB}
+  - git clone ${NSHMP_LIB_GIT} 
+  - cd ${CI_PROJECT_NAME}
+
+####
+# Build jar file. 
+####
+build-project:
+  stage: assemble
+  image: usgsnshmp/openjdk:jdk8
+  only:
+    - merge_request
+    - master
+  tags:
+    - nshmp-runner
+  script:
+    - ./gradlew assemble
+
+####
+# Run tests.
+# Globals:
+#   (string) JACOCO_HTML_DIR - Directory of Jacoco html reports
+#   (string) JUNIT_FILES - Path to all Junit html files
+####
+test-project:
+  stage: test
+  image: usgsnshmp/openjdk:jdk8
+  only:
+    - merge_request
+    - master
+  coverage: '/Total.*?([0-9]{1,3})%/'
+  tags:
+    - nshmp-runner
+  script:
+    - ./gradlew check
+    - cat ${JACOCO_HTML_DIR}/index.html
+  artifacts:
+    paths:
+      - ${JACOCO_HTML_DIR}
+    reports:
+      junit: ${JUNIT_FILES}
