@@ -31,7 +31,7 @@ import Tools from './lib/Tools.js';
  *         - Percent difference of the response spectrum
  *
  * The class first class out to the source model webservice, 
- *     nshmp-haz-ws/source/models, to get the usage and build the 
+ *     nshmp-haz-v2/source/models, to get the usage and build the 
  *     following menus: 
  *         - Model
  *         - Second Model
@@ -63,7 +63,7 @@ export class DynamicCompare extends Hazard {
   /** @param {!Config} config - The config file */
   constructor(config) {
     let webApp = 'DynamicCompare';
-    let webServiceUrl = '/nshmp-haz-ws/haz';
+    let webServiceUrl = '/nshmp-haz-v2/haz';
     super(webApp, webServiceUrl, config);
     this.header.setTitle('Dynamic Compare');
 
@@ -242,7 +242,7 @@ export class DynamicCompare extends Hazard {
   }
 
   /**
-   * Process usage response from nshmp-haz-ws/source/models and set menus.
+   * Process usage response from nshmp-haz-v2/source/models and set menus.
    */
   buildInputs() {
     this.spinner.off();
@@ -1106,7 +1106,7 @@ export class DynamicCompare extends Hazard {
   }
 
   /**
-   * Given the models in nshmp-haz-ws/source/models find only models
+   * Given the models in nshmp-haz-v2/source/models find only models
    *     that can be compared, ones that have that same region.
    */
   setComparableModels() {

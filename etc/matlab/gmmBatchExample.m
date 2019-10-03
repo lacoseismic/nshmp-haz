@@ -1,4 +1,4 @@
-%% nshmp-haz-ws Ground Motion Model (GMM) batch processing example script
+%% nshmp-haz-v2 Ground Motion Model (GMM) batch processing example script
 
 clear;
 
@@ -31,7 +31,7 @@ inputs = fileread('gmm-inputs.csv');
 % All GMM services are available to call for batch processing.
 host = 'http://localhost:8080';
 
-service = '/nshmp-haz-ws/gmm/spectra';
+service = '/nshmp-haz-v2/gmm/spectra';
 
 query = 'gmm=AB_06_PRIME&gmm=CAMPBELL_03&gmm=FRANKEL_96';
 

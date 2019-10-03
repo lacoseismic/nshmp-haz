@@ -32,7 +32,7 @@ public class UtilitiesService extends NshmpServlet {
       throws ServletException, IOException {
 
     PrintWriter out = response.getWriter();
-    String utilUrl = "/nshmp-haz-ws/apps/util.html";
+    String utilUrl = "/nshmp-haz-v2/apps/util.html";
 
     String pathInfo = request.getPathInfo();
 

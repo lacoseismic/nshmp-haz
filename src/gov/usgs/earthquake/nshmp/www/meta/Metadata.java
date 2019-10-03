@@ -34,7 +34,7 @@ public final class Metadata {
    */
   private static final Set<Imt> HAZARD_IMTS = Region.WUS.imts;
 
-  private static final String URL_PREFIX = "%s://%s/nshmp-haz-ws";
+  private static final String URL_PREFIX = "%s://%s/nshmp-haz-v2";
 
   public static final String HAZARD_USAGE = ServletUtil.GSON.toJson(
       new Default(

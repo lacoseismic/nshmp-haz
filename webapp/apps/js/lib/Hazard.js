@@ -59,7 +59,7 @@ export class Hazard {
       this.footer.setOptions(this.footerOptions);
     });
  
-    this.dynamicUrl = this.config.server.dynamic + "/nshmp-haz-ws/hazard";
+    this.dynamicUrl = `${this.config.server.dynamic}/${this.config.base}/hazard`;
     this.staticUrl  = this.config.server.static + "/hazws/staticcurve/1";
     
     this.testSitePickerBtnEl = document.querySelector('#test-site-picker');
@@ -209,7 +209,7 @@ export class Hazard {
   -  This function is used for model-compare and model-explorer
 
   Format of Dynamic URL:
-    https://earthquake.usgs.gov/nshmp-haz-ws/hazard?
+    https://earthquake.usgs.gov/nshmp-haz-v2/hazard?
         edition=value&region=value&longitude=value
         &latitude=value&imt=value&vs30=value
 

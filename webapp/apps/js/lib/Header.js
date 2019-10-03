@@ -3,7 +3,7 @@
 /**
 * @class Header
 *
-* @fileoverview Creates the header to be used for all nshmp-haz-ws webapps.
+* @fileoverview Creates the header to be used for all nshmp-haz-v2 webapps.
 *
 * @typedef {Object} HeaderOptions - Object for header options
 * @property {String} position - CSS positions: fixed || absolute
@@ -21,7 +21,7 @@ export default class Header{
   *     to put the header. Default is body.
   */
   constructor(containerEl = document.querySelector('body')) {
-    document.title = "NSHMP-HAZ-WS";
+    document.title = "nshmp-haz-v2";
     
     /** @type {HeaderOptions} */
     this.options = {
@@ -32,34 +32,34 @@ export default class Header{
     this.menuItems = [
       { 
         label: 'Dashboard', 
-        href: '/nshmp-haz-ws/',
+        href: '/nshmp-haz-v2/',
       }, {
         label: 'Dynamic Comparison', 
-        href: '/nshmp-haz-ws/apps/dynamic-compare.html',
+        href: '/nshmp-haz-v2/apps/dynamic-compare.html',
       }, {
         label: 'Geographic Deaggregation',
-        href: '/nshmp-haz-ws/apps/geo-deagg.html',
+        href: '/nshmp-haz-v2/apps/geo-deagg.html',
       }, {
         label: 'Ground Motion Vs. Distance', 
-        href: '/nshmp-haz-ws/apps/gmm-distance.html',
+        href: '/nshmp-haz-v2/apps/gmm-distance.html',
       }, {
         label: 'Hanging Wall Effects', 
-        href: '/nshmp-haz-ws/apps/hw-fw.html',
+        href: '/nshmp-haz-v2/apps/hw-fw.html',
       }, {
         label: 'Model Compare', 
-        href: '/nshmp-haz-ws/apps/model-compare.html',
+        href: '/nshmp-haz-v2/apps/model-compare.html',
       }, {
         label: 'Model Explorer', 
-        href: '/nshmp-haz-ws/apps/model-explorer.html',
+        href: '/nshmp-haz-v2/apps/model-explorer.html',
       }, {
         label: 'Response Spectra', 
-        href: '/nshmp-haz-ws/apps/spectra-plot.html',
+        href: '/nshmp-haz-v2/apps/spectra-plot.html',
       }, {
         label: 'Exceedance Explorer',
-        href: '/nshmp-haz-ws/apps/exceedance-explorer.html'
+        href: '/nshmp-haz-v2/apps/exceedance-explorer.html'
       }, {
         label: 'Services',  
-        href: '/nshmp-haz-ws/apps/services.html',
+        href: '/nshmp-haz-v2/apps/services.html',
       }
     ];
             

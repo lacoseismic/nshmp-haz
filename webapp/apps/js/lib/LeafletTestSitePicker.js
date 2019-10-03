@@ -284,7 +284,7 @@ export default class LeafletTestSitePciker extends TestSiteView {
   /**
   * @method getUsage
   *
-  * Get the test sites from /nshmp-haz-ws/util/testsites.
+  * Get the test sites from /nshmp-haz-v2/util/testsites.
   * Update the activationBtnEl to be clickable.
   * Trigger the custom event on('testSiteLoad').
   */

@@ -30,7 +30,7 @@ export class Hazard {
    * @param {String} webApp - Identifier of the application being used.
    *     Possible values: 'DynamicCompare', 'ModelComparison', 'ModelExplorer'.
    * @param {String} webServiceUrl - URK to corresponding web servce.
-   *     Possible values: '/nshmp-haz-ws/hazard', '/nshmp-haz-ws/source/models'
+   *     Possible values: '/nshmp-haz-v2/hazard', '/nshmp-haz-v2/source/models'
    * @param {Config} config - The config file.
    */
   constructor(webApp, webServiceUrl, config) {
@@ -94,7 +94,7 @@ export class Hazard {
     };
   
     /** @type {String} */
-    this.dynamicUrl = this.config.server.dynamic + '/nshmp-haz-ws/haz';
+    this.dynamicUrl = `${this.config.server.dynamic}/${this.config.base}/haz`;
 
     /** @type {String} */
     this.staticUrl = this.config.server.static + '/hazws/staticcurve/1';

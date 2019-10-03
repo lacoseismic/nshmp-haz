@@ -29,7 +29,7 @@ import { WebServiceResponse } from '../response/WebServiceResponse.js';
 * @property {{
 *   url: {String},
 *   version: {String},
-* }} nshmp-haz-ws - nshmp-haz-ws info.
+* }} nshmp-haz-v2 - nshmp-haz-v2 info.
 * @poperty {Number} threads - Number of threads used.
 * @property {String} servlet.
 * @property {String} calc - Calculation time.
@@ -95,7 +95,7 @@ export default class Footer{
         .attr('title', 'Submit a GitHub issue')
         .attr('alt', 'Submit a GitHub issue')
         .attr('data-toggle', 'tooltip')
-        .attr('src', '/nshmp-haz-ws/apps/img/github.svg');
+        .attr('src', '/nshmp-haz-v2/apps/img/github.svg');
     
     // Add collapsable div for metadata
     footerD3.append('div')
@@ -240,7 +240,7 @@ export default class Footer{
 
     let codeInfo = [
       ['nshmp-haz version: ' + server['nshmp-haz'].version],
-      ['nshmp-haz-ws version: ' + server['nshmp-haz-ws'].version],
+      ['nshmp-haz-v2 version: ' + server['nshmp-haz-ws'].version],
       ['Cores used: ' + server['threads']],
     ];
     
@@ -253,7 +253,7 @@ export default class Footer{
   }
 
   /**
-   * Set the collapsable panel with the nshmp-haz and nshmp-haz-ws 
+   * Set the collapsable panel with the nshmp-haz and nshmp-haz-v2 
    *    version numbers.
    * 
    * @param {WebServiceResponse} response The web service response

@@ -17,8 +17,8 @@ import Tools from './lib/Tools.js';
 *
 * @fileoverview Class for gmm-distance..html, ground motion Vs. 
 *   distance web app.
-* This class plots the results of nshmp-haz-ws/gmm/distance web service.
-* This class will first call out to nshmp-haz-ws/gmm/distance web service
+* This class plots the results of nshmp-haz-v2/gmm/distance web service.
+* This class will first call out to nshmp-haz-v2/gmm/distance web service
 *     to obtain the usage and create the control panel with the following:
 *     - Ground motions models
 *     - Intensity measure type
@@ -51,7 +51,7 @@ export class GmmDistance extends Gmm {
   * @param {HTMLElement} contentEl - Container element to put plots
   */ 
   constructor(config) {
-    let webServiceUrl = '/nshmp-haz-ws/gmm/distance';
+    let webServiceUrl = `/${config.base}/gmm/distance`;
     let webApp = 'GmmDistance';
     super(webApp, webServiceUrl, config);
     this.header.setTitle('Ground Motion Vs. Distance');

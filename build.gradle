@@ -1,3 +1,27 @@
+/*
+ * Eclipse notes: In order to build and run services via Eclipse,
+ * one needs to include the following directories in webapp (they
+ * are ignored by git):
+ *
+ *   webapp/
+ *      models/
+ *         ak/
+ *            2007/
+ *         wus/
+ *            2008/
+ *            2014/
+ *            2014b/
+ *            2018/
+ *         ceus/
+ *            2008/
+ *            2014/
+ *            2018/
+ *
+ * ...with each 'year' directory being an alias to the corresponding
+ * git repository. One also must set Properties > Deployment Assembly
+ * to include the nshmp-haz project and the 'webapp' directory. Other
+ * default Eclipse directories such as WebContent may be deleted.
+ */
 
 apply plugin: 'jacoco'
 apply plugin: 'war'
@@ -220,6 +244,7 @@ task thinJar(type: Jar) {
 war {
   enabled = true
   webAppDirName = 'webapp'
+  dependsOn jar
   
   /* 
    * Exclude existing models directory with symlinks
@@ -280,7 +305,7 @@ task assembleUsgsDev(type: Sync) {
  * Create a zip file of all dependencies
  */
 task dependencies(type: Zip) {
-  baseName = "nshmp-haz-ws-dependencies"
+  baseName = "nshmp-haz-dependencies"
   from {
     configurations.compile.collect {
       it
