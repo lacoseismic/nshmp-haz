@@ -40,8 +40,8 @@ export class Gmm {
   * @param {!String} webApp Identifier of the application being used.
   *     Possible values: GmmDistance, HwFW, or Spectra
   * @param {!String} wsUrl URL to corresponding web service.
-  *     Possible values: /nshmp-haz-ws/gmm/distance, 
-  *         /nshmp-haz-ws/gmm/hw-fw, /nshmp-haz-ws/gmm/spectra
+  *     Possible values: /nshmp-haz-v2/gmm/distance, 
+  *         /nshmp-haz-v2/gmm/hw-fw, /nshmp-haz-v2/gmm/spectra
   */
   constructor(webApp, webServiceUrl, config) {
     /** @type {Footer} */

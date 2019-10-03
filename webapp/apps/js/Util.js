@@ -13,7 +13,7 @@ export default class Util{
     _this.header.setTitle("Utilities");
 
     var urlPrefix = window.location.protocol 
-        + "//" + window.location.host + "/nshmp-haz-ws";
+        + "//" + window.location.host + "/nshmp-haz-v2";
     
     $(".serviceLink").each(function() {
       var serviceUrl = urlPrefix + $(this).text();

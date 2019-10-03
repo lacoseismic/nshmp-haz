@@ -13,7 +13,7 @@ import Tools from './lib/Tools.js';
 * @class GeoDeagg
 *
 * @fileoverview Class for the geographic deaggregation webpage, geo-deagg.html.
-* The class first calls out to the deagg webservice, nshmp-haz-ws/deagg, to 
+* The class first calls out to the deagg webservice, nshmp-haz-v2/deagg, to 
 *     get the usage and builds the following menus:
 *         - Edition
 *         - Region
@@ -72,7 +72,7 @@ export default class GeoDeagg {
     };
 
     /** @type {String} */
-    this.webServiceUrl = this.config.server.dynamic + '/nshmp-haz-ws/deagg';
+    this.webServiceUrl = `${this.config.server.dynamic}/${this.config.base}/deagg`;
     
     /** @type {HTMLElement} */
     this.contentEl = document.querySelector('#content');

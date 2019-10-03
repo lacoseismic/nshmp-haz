@@ -17,9 +17,9 @@ export default class Services {
     
     /** @type {String} */
     this.urlPrefix = config.server.dynamic.trim() != '' ? 
-        config.server.dynamic + '/nshmp-haz-ws' :
+        `${config.server.dynamic}/${onfig.base}` :
         window.location.protocol + '//' + 
-            window.location.host + '/nshmp-haz-ws';
+            `${window.location.host}/${config.base}`;
     
     /** @type {HTMLElement} */
     this.servicesEl = undefined;
@@ -101,7 +101,7 @@ export default class Services {
     svc.name = 'Deaggregation';
     svc.service = 'deagg';
     svc.id = 'deagg';
-    svc.usage = '/nshmp-haz-ws/deagg';
+    svc.usage = '/nshmp-haz-v2/deagg';
     
     svc.description = 'Deaggregate seismic hazard.'; 
     svc.formats = [
@@ -139,7 +139,7 @@ export default class Services {
     svc.name = 'Ground Motion Vs. Distance';
     svc.service = 'gmm/distance';
     svc.id = 'gmm-distance';
-    svc.usage = '/nshmp-haz-ws/gmm/distance';
+    svc.usage = '/nshmp-haz-v2/gmm/distance';
     
     svc.description = 'Compute ground motion Vs. distance.'
     svc.formats = [
@@ -183,7 +183,7 @@ export default class Services {
     svc.name = 'Hazard';
     svc.service = 'hazard';
     svc.id = 'hazard';
-    svc.usage = '/nshmp-haz-ws/hazard';
+    svc.usage = '/nshmp-haz-v2/hazard';
     
     svc.description = 'Compute probabilisitic seismic hazard ' + 
         'curves at a site of interest.';
@@ -225,7 +225,7 @@ export default class Services {
     svc.name = 'Hanging Wall Effect';
     svc.service = 'gmm/hw-fw';
     svc.id = 'hw-fw';
-    svc.usage = '/nshmp-haz-ws/gmm/hw-fw';
+    svc.usage = '/nshmp-haz-v2/gmm/hw-fw';
     
     svc.description = 'Compute ground motion Vs. distance.'
     svc.formats = [
@@ -362,7 +362,7 @@ export default class Services {
     svc.name = 'Probability';
     svc.service = 'probability';
     svc.id = 'probability';
-    svc.usage = '/nshmp-haz-ws/probability';
+    svc.usage = '/nshmp-haz-v2/probability';
     
     svc.description = 'Compute the Poisson probability of earthquake' +
         ' occurrence at a site of interest.';
@@ -399,7 +399,7 @@ export default class Services {
     svc.name = 'Rate';
     svc.service = 'rate';
     svc.id = 'rate';
-    svc.usage = '/nshmp-haz-ws/rate';
+    svc.usage = '/nshmp-haz-v2/rate';
     
     svc.description = 'Compute the annual rate of earthquakes at a site' +
         ' of interest.'; 
@@ -458,7 +458,7 @@ export default class Services {
     svc.name = 'Response Spectra';
     svc.service = 'gmm/spectra';
     svc.id = 'spectra';
-    svc.usage = '/nshmp-haz-ws/gmm/spectra';
+    svc.usage = '/nshmp-haz-v2/gmm/spectra';
     
     svc.description = 'Compute determinisitic reponse spectra.'
     svc.formats = [

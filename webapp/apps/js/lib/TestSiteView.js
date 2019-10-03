@@ -19,7 +19,7 @@ export default class TestSiteView {
   */
   constructor(latEl, lonEl, activationBtnEl) {
     /** @type {String} */
-    this.webServiceUrl = '/nshmp-haz-ws/util/testsites';
+    this.webServiceUrl = '/nshmp-haz-v2/util/testsites';
     
     /** @type {Object} */
     this.viewOptions = {

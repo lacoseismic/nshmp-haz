@@ -47,6 +47,7 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
+import gov.usgs.earthquake.nshmp.data.Sequences;
 import gov.usgs.earthquake.nshmp.data.XySequence;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.eq.model.SourceType;
@@ -452,7 +453,7 @@ public final class HazardService extends NshmpServlet {
         for (Imt imt : hazardResult.curves().keySet()) {
 
           // total curve
-          XySequence.addToMap(imt, totalMap, hazardResult.curves().get(imt));
+          Sequences.addToMap(imt, totalMap, hazardResult.curves().get(imt));
 
           // component curves
           Map<SourceType, ? extends XySequence> typeTotalMap = typeTotalMaps.get(imt);
@@ -463,7 +464,7 @@ public final class HazardService extends NshmpServlet {
           }
 
           for (SourceType type : typeTotalMap.keySet()) {
-            XySequence.addToMap(type, componentMap, typeTotalMap.get(type));
+            Sequences.addToMap(type, componentMap, typeTotalMap.get(type));
           }
 
           xValuesLinearMap.put(

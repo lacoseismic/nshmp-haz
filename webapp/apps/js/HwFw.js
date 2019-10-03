@@ -18,8 +18,8 @@ import NshmpError from './error/NshmpError.js';
 * @extends Gmm
 *
 * @fileoverview Class for hw-fw.html, hanging wall effects web app.
-* This class plots the results of nshmp-haz-ws/gmm/hw-fw web service.
-* This class will first call out to nshmp-haz-ws/gmm/hw-fw web service
+* This class plots the results of nshmp-haz-v2/gmm/hw-fw web service.
+* This class will first call out to nshmp-haz-v2/gmm/hw-fw web service
 *     to obtain the usage and create the control panel with the following:
 *     - Ground motions models
 *     - Intensity measure type
@@ -48,7 +48,7 @@ export class HwFw extends Gmm {
   * @param {HTMLElement} contentEl - Container element to put plots
   */ 
   constructor(config) {
-    let webServiceUrl = '/nshmp-haz-ws/gmm/hw-fw';
+    let webServiceUrl = `/${config.base}/gmm/hw-fw`;
     let webApp = 'HwFw';
     super(webApp, webServiceUrl, config);
     this.header.setTitle('Hanging Wall Effects');

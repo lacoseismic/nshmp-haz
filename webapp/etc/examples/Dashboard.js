@@ -39,13 +39,13 @@ export class Dashboard {
     let menuItems = [
       { 
         label: 'Dashboard', 
-        href: '/nshmp-haz-ws/etc/examples',
+        href: '/nshmp-haz-v2/etc/examples',
       }, {
         label: 'D3 Basic Line Plot', 
-        href: '/nshmp-haz-ws/etc/examples/d3/d3-basic-line-plot.html',
+        href: '/nshmp-haz-v2/etc/examples/d3/d3-basic-line-plot.html',
       }, {
         label: 'D3 Custom Line Plot', 
-        href: '/nshmp-haz-ws/etc/examples/d3/d3-custom-line-plot.html',
+        href: '/nshmp-haz-v2/etc/examples/d3/d3-custom-line-plot.html',
       },
     ];
 

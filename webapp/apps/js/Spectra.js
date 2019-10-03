@@ -14,8 +14,8 @@ import { Preconditions } from './error/Preconditions.js';
 
 /** 
  * @fileoverview Class for spectra-plot.html, response spectra web app.
- * This class plots the results of nshmp-haz-ws/gmm/spectra web service.
- * This class will first call out to nshmp-haz-ws/gmm/spectra web service
+ * This class plots the results of nshmp-haz-v2/gmm/spectra web service.
+ * This class will first call out to nshmp-haz-v2/gmm/spectra web service
  *     to obtain the usage and create the control panel with the following:
  *     - Ground motions models
  *     - Magnitude
@@ -43,7 +43,8 @@ export class Spectra extends GmmBeta {
 
   constructor(config) {
     let webApp = 'Spectra';
-    let wsUrl = '/nshmp-haz-ws/gmm/spectra'
+    console.log(config);
+    let wsUrl = `/${config.base}/gmm/spectra`;
     
     super(webApp, wsUrl, config);
 

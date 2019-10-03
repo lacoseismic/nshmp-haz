@@ -13,7 +13,7 @@ export class WebServiceResponse {
 
   /**
    * Create new WebServiceResponse given the JSON return from a 
-   *    nshmp-haz-ws call.
+   *    nshmp-haz-v2 call.
    *  
    * @param {Object} response The JSON response from web service call
    */

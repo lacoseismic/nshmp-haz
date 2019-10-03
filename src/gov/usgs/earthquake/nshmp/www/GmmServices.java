@@ -389,7 +389,7 @@ public class GmmServices extends NshmpServlet {
     Parameters parameters;
 
     Metadata(Service service) {
-      this.syntax = "%s://%s/nshmp-haz-ws/gmm" + service.pathInfo + "?";
+      this.syntax = "%s://%s/nshmp-haz-v2/gmm" + service.pathInfo + "?";
       this.description = service.description;
       this.parameters = new Parameters(service);
     }

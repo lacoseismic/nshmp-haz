@@ -119,9 +119,9 @@ export default class D3GeoDeagg extends D3View {
     this.upperPanel = this.updatePlotPanelObject(this.upperPanel); 
     
     /** @type {String} */
-    this.mapBorderUrl = '/nshmp-haz-ws/data/us.json';
+    this.mapBorderUrl = '/nshmp-haz-v2/data/us.json';
     /** @type {String */
-    this.mapUrl = '/nshmp-haz-ws/data/americas.json';
+    this.mapUrl = '/nshmp-haz-v2/data/americas.json';
   
     let defaultView = this.options.defaultView == 'closeUp' ? 
         this.options.mapCloseUp : this.options.mapOverview;
