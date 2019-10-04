@@ -19,7 +19,6 @@ stages:
 # Git clone nshmp-lib
 ####
 before_script:
-  - yum install git -y
   - cd ..
   - rm -rf ${NSHMP_LIB}
   - git clone ${NSHMP_LIB_GIT} 
