@@ -174,7 +174,7 @@ public class DeaggIml {
       .append("  ").append(USAGE_COMMAND).append(NEWLINE)
       .append(NEWLINE)
       .append("Where:").append(NEWLINE)
-      .append("  'model' is a model zip file or directory")
+      .append("  'model' is a model directory")
       .append(NEWLINE)
       .append("  'sites' is either:")
       .append(NEWLINE)
