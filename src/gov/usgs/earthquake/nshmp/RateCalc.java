@@ -42,7 +42,7 @@ public class RateCalc {
    * Entry point for the calculation of earthquake rates and probabilities.
    *
    * <p>Computing earthquake rates requires at least 2, and at most 3,
-   * arguments. At a minimum, the path to a model zip file or directory and the
+   * arguments. At a minimum, the path to a model directory and the
    * site(s) at which to perform calculations must be specified. Under the
    * 2-argument scenario, model initialization and calculation configuration
    * settings are drawn from the config file that <i>must</i> reside at the root
@@ -224,7 +224,7 @@ public class RateCalc {
       .append("  ").append(USAGE_COMMAND).append(NEWLINE)
       .append(NEWLINE)
       .append("Where:").append(NEWLINE)
-      .append("  'model' is a model zip file or directory")
+      .append("  'model' is a model directory")
       .append(NEWLINE)
       .append("  'sites' is either:")
       .append(NEWLINE)
