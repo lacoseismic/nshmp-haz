@@ -2,8 +2,10 @@ package gov.usgs.earthquake.nshmp.site;
 
 import static com.google.common.base.Strings.padEnd;
 import static com.google.common.base.Strings.padStart;
-import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.AK_CLIP;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII_CLIP;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CEUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONTERMINOUS_US;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CYBERSHAKE;
@@ -52,6 +54,9 @@ import gov.usgs.earthquake.nshmp.NamedLocation;
  * @author Peter Powers
  */
 final class NshmpSiteFiles {
+  
+  // TODO consider removing this to nshm-model-dev
+  // keeping the outputs in nshmp-haz
 
   private static final Path EXPORT_DIR = Paths.get("etc", "nshm");
   private static final String EXTENTS_COLOR = "#AA0078";
@@ -92,7 +97,14 @@ final class NshmpSiteFiles {
         ALASKA.toString(),
         ALASKA.coordinates(),
         0.1,
-        AK_CLIP.coordinates().bounds().toList());
+        ALASKA_CLIP.coordinates().bounds().toList());
+
+    writePolyJson(
+        EXPORT_DIR.resolve("map-hawaii.geojson"),
+        HAWAII.toString(),
+        HAWAII.coordinates(),
+        0.1,
+        HAWAII_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
         EXPORT_DIR.resolve("map-la-basin.geojson"),

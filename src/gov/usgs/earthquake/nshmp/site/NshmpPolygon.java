@@ -12,8 +12,8 @@ public enum NshmpPolygon {
 
   CEUS_CLIP(Data.CEUS_CLIP, "Central & Eastern US Map Extents"),
   WUS_CLIP(Data.WUS_CLIP, "Western US Map Extents"),
-  AK_CLIP(Data.AK_CLIP, "Alaska Map Extents"),
-  HI_CLIP(Data.HI_CLIP, "Hawaii Map Extents"),
+  ALASKA_CLIP(Data.ALASKA_CLIP, "Alaska Map Extents"),
+  HAWAII_CLIP(Data.HAWAII_CLIP, "Hawaii Map Extents"),
   
   ALASKA(Data.ALASKA, "Alaska"),
   HAWAII(Data.HAWAII, "Hawaii"),
@@ -72,7 +72,7 @@ public enum NshmpPolygon {
         { -100.0, 50.0 }
     };
 
-    private static final double[][] AK_CLIP = {
+    private static final double[][] ALASKA_CLIP = {
         { -200.0, 48.0 },
         { -125.0, 72.0 }
     };
@@ -105,7 +105,7 @@ public enum NshmpPolygon {
         { -137.5, 70.6 }
     };
 
-    private static final double[][] HI_CLIP = {
+    private static final double[][] HAWAII_CLIP = {
         { -161.0, 18.0 },
         { -154.0, 23.0 }
     };
