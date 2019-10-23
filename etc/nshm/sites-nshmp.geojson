@@ -5,7 +5,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-176.65, 51.9]
+        "coordinates": [-176.7, 51.9]
       },
       "properties": {
         "marker-size": "small",
@@ -27,7 +27,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.75, 71.3]
+        "coordinates": [-149.9, 61.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Anchorage (ATC) AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-156.8, 71.3]
       },
       "properties": {
         "marker-size": "small",
@@ -49,6 +60,17 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-144.5, 61.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Chitina AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-145.7, 64.0]
       },
       "properties": {
@@ -60,7 +82,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-158.45, 59.05]
+        "coordinates": [-158.5, 59.1]
       },
       "properties": {
         "marker-size": "small",
@@ -71,7 +93,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-166.55, 53.9]
+        "coordinates": [-166.6, 53.9]
       },
       "properties": {
         "marker-size": "small",
@@ -93,7 +115,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-147.7, 64.85]
+        "coordinates": [-147.7, 64.9]
       },
       "properties": {
         "marker-size": "small",
@@ -104,7 +126,40 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-145.55, 62.1]
+        "coordinates": [-147.7, 64.9]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Fairbanks (ATC) AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-145.3, 62.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Gakona AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-156.9, 64.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Galena AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-145.6, 62.1]
       },
       "properties": {
         "marker-size": "small",
@@ -115,7 +170,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-135.45, 59.25]
+        "coordinates": [-135.5, 59.3]
       },
       "properties": {
         "marker-size": "small",
@@ -126,7 +181,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-151.5, 59.65]
+        "coordinates": [-151.5, 59.7]
       },
       "properties": {
         "marker-size": "small",
@@ -148,7 +203,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-151.25, 60.55]
+        "coordinates": [-151.3, 60.6]
       },
       "properties": {
         "marker-size": "small",
@@ -159,11 +214,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-131.65, 55.35]
+        "coordinates": [-131.7, 55.4]
       },
       "properties": {
         "marker-size": "small",
         "title": "Ketchikan AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-149.7, 61.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Knik-Fairview AK"
       }
     },
     {
@@ -192,7 +258,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.6, 62.95]
+        "coordinates": [-149.4, 61.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Lakes AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.6, 63.0]
       },
       "properties": {
         "marker-size": "small",
@@ -214,7 +291,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-145.5, 63.05]
+        "coordinates": [-145.5, 63.1]
       },
       "properties": {
         "marker-size": "small",
@@ -225,7 +302,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-148.35, 70.25]
+        "coordinates": [-148.4, 70.3]
       },
       "properties": {
         "marker-size": "small",
@@ -236,11 +313,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-135.35, 57.05]
+        "coordinates": [-135.4, 57.1]
       },
       "properties": {
         "marker-size": "small",
         "title": "Sitka AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.2, 61.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Sleetmute AK"
       }
     },
     {
@@ -258,7 +346,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-146.35, 61.15]
+        "coordinates": [-166.6, 53.9]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Unalaska AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-146.4, 61.2]
       },
       "properties": {
         "marker-size": "small",
@@ -269,7 +368,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-149.45, 61.6]
+        "coordinates": [-149.5, 61.6]
       },
       "properties": {
         "marker-size": "small",
@@ -280,7 +379,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-139.7, 59.55]
+        "coordinates": [-139.7, 59.6]
       },
       "properties": {
         "marker-size": "small",
@@ -340,6 +439,94 @@
       "properties": {
         "marker-size": "small",
         "title": "Little Rock AR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-171.8, -13.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Apia Upolu (Samoa) AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.7, -14.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Aua AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.8, -14.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Futiga AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.8, -14.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Leone AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.7, -14.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Tutuila (central) AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.8, -14.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Tutuila (southwest) AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.8, -14.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Vailoatai AS"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-170.7, -14.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Vaitogi AS"
       }
     },
     {
@@ -951,6 +1138,94 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [144.9, 13.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Anderson AFB (ATC) GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.8, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Central GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Dededo GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Northeast GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.7, 13.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Santa Rita GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.7, 13.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Southwest GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yigo GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.8, 13.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yona GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-158.1, 21.3]
       },
       "properties": {
@@ -962,7 +1237,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-159.75, 22.05]
+        "coordinates": [-159.76, 22.06]
       },
       "properties": {
         "marker-size": "small",
@@ -973,7 +1248,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.55, 19.75]
+        "coordinates": [-155.56, 19.76]
       },
       "properties": {
         "marker-size": "small",
@@ -984,7 +1259,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.8, 21.25]
+        "coordinates": [-157.8, 21.26]
       },
       "properties": {
         "marker-size": "small",
@@ -995,7 +1270,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.25, 20.7]
+        "coordinates": [-156.26, 20.7]
       },
       "properties": {
         "marker-size": "small",
@@ -1017,7 +1292,40 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.05, 19.7]
+        "coordinates": [-155.98, 20.76]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hana HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.78, 19.1]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hawaiian Ocean View HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.1, 19.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hilo (ATC) HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.06, 19.7]
       },
       "properties": {
         "marker-size": "small",
@@ -1028,7 +1336,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.85, 21.3]
+        "coordinates": [-157.86, 21.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Honolulu (ATC) HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.86, 21.3]
       },
       "properties": {
         "marker-size": "small",
@@ -1039,11 +1358,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.55, 20.8]
+        "coordinates": [-156.56, 20.8]
       },
       "properties": {
         "marker-size": "small",
         "title": "Kaheawa Wind HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.94, 21.68]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Kahuku HI"
       }
     },
     {
@@ -1061,7 +1391,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.0, 19.65]
+        "coordinates": [-156.0, 19.66]
       },
       "properties": {
         "marker-size": "small",
@@ -1094,7 +1424,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.25, 19.4]
+        "coordinates": [-156.46, 20.78]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Kihei HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.26, 19.4]
       },
       "properties": {
         "marker-size": "small",
@@ -1105,7 +1446,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.95, 21.65]
+        "coordinates": [-156.68, 20.88]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Lahaina HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.96, 21.66]
       },
       "properties": {
         "marker-size": "small",
@@ -1116,7 +1468,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.95, 20.8]
+        "coordinates": [-156.96, 20.8]
       },
       "properties": {
         "marker-size": "small",
@@ -1127,7 +1479,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-159.35, 21.95]
+        "coordinates": [-159.36, 21.96]
       },
       "properties": {
         "marker-size": "small",
@@ -1138,7 +1490,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.75, 21.45]
+        "coordinates": [-157.76, 21.46]
       },
       "properties": {
         "marker-size": "small",
@@ -1149,7 +1501,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.45, 19.8]
+        "coordinates": [-155.46, 19.8]
       },
       "properties": {
         "marker-size": "small",
@@ -1160,7 +1512,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.75, 19.1]
+        "coordinates": [-155.76, 19.1]
       },
       "properties": {
         "marker-size": "small",
@@ -1171,11 +1523,33 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.95, 21.35]
+        "coordinates": [-157.96, 21.36]
       },
       "properties": {
         "marker-size": "small",
         "title": "Pearl Harbor HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.1, 19.84]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Pepeekeo HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-159.48, 22.22]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Princeville HI"
       }
     },
     {
@@ -1193,6 +1567,17 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-155.22, 19.44]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Volcano HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-158.0, 21.5]
       },
       "properties": {
@@ -1204,11 +1589,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-158.2, 21.45]
+        "coordinates": [-158.2, 21.46]
       },
       "properties": {
         "marker-size": "small",
         "title": "Waianae HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.78, 19.94]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Waikoloa Village HI"
       }
     },
     {
@@ -1462,6 +1858,39 @@
       "properties": {
         "marker-size": "small",
         "title": "St Louis MO"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.7, 15.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Saipan (central) MP"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.8, 15.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Saipan MP"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.6, 15.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Tinian MP"
       }
     },
     {
@@ -1897,6 +2326,138 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-66.72, 18.47]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Arecibo PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.16, 18.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Bayamon PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.04, 18.24]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Caguas PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3, 18.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Culebra Barrio PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.65, 18.34]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Fajardo PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.44, 18.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Isabel II PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-67.14, 18.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Mayaguez PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.62, 18.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Ponce PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.1, 18.45]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Juan (ATC) PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.12, 18.47]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Juan PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.7, 18.27]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Utuado PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.88, 18.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yabucoa PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-71.4, 41.8]
       },
       "properties": {
@@ -2133,6 +2694,50 @@
       "properties": {
         "marker-size": "small",
         "title": "Richmond VA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.93, 18.34]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Charlotte Amalie (1) VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.95, 18.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Charlotte Amalie (2) VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.7, 17.75]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Christiansted VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.79, 18.33]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Cruz Bay VI"
       }
     },
     {

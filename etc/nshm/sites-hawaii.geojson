@@ -16,7 +16,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-159.75, 22.05]
+        "coordinates": [-159.76, 22.06]
       },
       "properties": {
         "marker-size": "small",
@@ -27,7 +27,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.55, 19.75]
+        "coordinates": [-155.56, 19.76]
       },
       "properties": {
         "marker-size": "small",
@@ -38,7 +38,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.8, 21.25]
+        "coordinates": [-157.8, 21.26]
       },
       "properties": {
         "marker-size": "small",
@@ -49,7 +49,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.25, 20.7]
+        "coordinates": [-156.26, 20.7]
       },
       "properties": {
         "marker-size": "small",
@@ -71,7 +71,40 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.05, 19.7]
+        "coordinates": [-155.98, 20.76]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hana HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.78, 19.1]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hawaiian Ocean View HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.1, 19.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hilo (ATC) HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.06, 19.7]
       },
       "properties": {
         "marker-size": "small",
@@ -82,7 +115,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.85, 21.3]
+        "coordinates": [-157.86, 21.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Honolulu (ATC) HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.86, 21.3]
       },
       "properties": {
         "marker-size": "small",
@@ -93,11 +137,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.55, 20.8]
+        "coordinates": [-156.56, 20.8]
       },
       "properties": {
         "marker-size": "small",
         "title": "Kaheawa Wind HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.94, 21.68]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Kahuku HI"
       }
     },
     {
@@ -115,7 +170,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.0, 19.65]
+        "coordinates": [-156.0, 19.66]
       },
       "properties": {
         "marker-size": "small",
@@ -148,7 +203,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.25, 19.4]
+        "coordinates": [-156.46, 20.78]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Kihei HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.26, 19.4]
       },
       "properties": {
         "marker-size": "small",
@@ -159,7 +225,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.95, 21.65]
+        "coordinates": [-156.68, 20.88]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Lahaina HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.96, 21.66]
       },
       "properties": {
         "marker-size": "small",
@@ -170,7 +247,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.95, 20.8]
+        "coordinates": [-156.96, 20.8]
       },
       "properties": {
         "marker-size": "small",
@@ -181,7 +258,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-159.35, 21.95]
+        "coordinates": [-159.36, 21.96]
       },
       "properties": {
         "marker-size": "small",
@@ -192,7 +269,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.75, 21.45]
+        "coordinates": [-157.76, 21.46]
       },
       "properties": {
         "marker-size": "small",
@@ -203,7 +280,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.45, 19.8]
+        "coordinates": [-155.46, 19.8]
       },
       "properties": {
         "marker-size": "small",
@@ -214,7 +291,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.75, 19.1]
+        "coordinates": [-155.76, 19.1]
       },
       "properties": {
         "marker-size": "small",
@@ -225,11 +302,33 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-157.95, 21.35]
+        "coordinates": [-157.96, 21.36]
       },
       "properties": {
         "marker-size": "small",
         "title": "Pearl Harbor HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.1, 19.84]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Pepeekeo HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-159.48, 22.22]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Princeville HI"
       }
     },
     {
@@ -247,6 +346,17 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-155.22, 19.44]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Volcano HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-158.0, 21.5]
       },
       "properties": {
@@ -258,11 +368,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-158.2, 21.45]
+        "coordinates": [-158.2, 21.46]
       },
       "properties": {
         "marker-size": "small",
         "title": "Waianae HI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.78, 19.94]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Waikoloa Village HI"
       }
     },
     {
