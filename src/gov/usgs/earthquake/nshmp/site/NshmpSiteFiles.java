@@ -54,9 +54,14 @@ import gov.usgs.earthquake.nshmp.NamedLocation;
  * @author Peter Powers
  */
 final class NshmpSiteFiles {
-  
+
   // TODO consider removing this to nshm-model-dev
   // keeping the outputs in nshmp-haz
+
+  /*
+   * Developer note: Disable GeoJSON.GSON_DEFAULT serializeNulls() to skip 'id'
+   * serialization when null.
+   */
 
   private static final Path EXPORT_DIR = Paths.get("etc", "nshm");
   private static final String EXTENTS_COLOR = "#AA0078";
@@ -221,7 +226,7 @@ final class NshmpSiteFiles {
     if (bounds != null) {
       Map<String, Object> boundsProps = Properties.builder()
           .put(Style.FILL, EXTENTS_COLOR)
-          .put(Style.MARKER_COLOR, EXTENTS_COLOR)
+          .put(Style.STROKE, EXTENTS_COLOR)
           .put(Style.TITLE, name + " Map Extents")
           .build();
       b.add(Feature.polygon(bounds)
