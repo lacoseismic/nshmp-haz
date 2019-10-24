@@ -181,6 +181,94 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [144.9, 13.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Anderson AFB (ATC) GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.8, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Central GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Dededo GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Northeast GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.7, 13.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Santa Rita GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.7, 13.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Southwest GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.9, 13.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yigo GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [144.8, 13.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yona GU"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-93.6, 41.6]
       },
       "properties": {
@@ -390,6 +478,39 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [145.7, 15.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Saipan (central) MP"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.8, 15.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Saipan MP"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.6, 15.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Tinian MP"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-90.2, 32.3]
       },
       "properties": {
@@ -577,6 +698,138 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-66.72, 18.47]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Arecibo PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.16, 18.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Bayamon PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.04, 18.24]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Caguas PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3, 18.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Culebra Barrio PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.65, 18.34]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Fajardo PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.44, 18.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Isabel II PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-67.14, 18.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Mayaguez PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.62, 18.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Ponce PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.1, 18.45]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Juan (ATC) PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.12, 18.47]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Juan PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-66.7, 18.27]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Utuado PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.88, 18.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yabucoa PR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-71.4, 41.8]
       },
       "properties": {
@@ -758,6 +1011,50 @@
       "properties": {
         "marker-size": "small",
         "title": "Richmond VA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.93, 18.34]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Charlotte Amalie (1) VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.95, 18.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Charlotte Amalie (2) VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.7, 17.75]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Christiansted VI"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.79, 18.33]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Cruz Bay VI"
       }
     },
     {

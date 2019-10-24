@@ -5,7 +5,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-176.65, 51.9]
+        "coordinates": [-176.7, 51.9]
       },
       "properties": {
         "marker-size": "small",
@@ -27,7 +27,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-156.75, 71.3]
+        "coordinates": [-149.9, 61.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Anchorage (ATC) AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-156.8, 71.3]
       },
       "properties": {
         "marker-size": "small",
@@ -49,6 +60,17 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-144.5, 61.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Chitina AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-145.7, 64.0]
       },
       "properties": {
@@ -60,7 +82,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-158.45, 59.05]
+        "coordinates": [-158.5, 59.1]
       },
       "properties": {
         "marker-size": "small",
@@ -71,7 +93,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-166.55, 53.9]
+        "coordinates": [-166.6, 53.9]
       },
       "properties": {
         "marker-size": "small",
@@ -93,7 +115,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-147.7, 64.85]
+        "coordinates": [-147.7, 64.9]
       },
       "properties": {
         "marker-size": "small",
@@ -104,7 +126,40 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-145.55, 62.1]
+        "coordinates": [-147.7, 64.9]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Fairbanks (ATC) AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-145.3, 62.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Gakona AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-156.9, 64.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Galena AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-145.6, 62.1]
       },
       "properties": {
         "marker-size": "small",
@@ -115,7 +170,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-135.45, 59.25]
+        "coordinates": [-135.5, 59.3]
       },
       "properties": {
         "marker-size": "small",
@@ -126,7 +181,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-151.5, 59.65]
+        "coordinates": [-151.5, 59.7]
       },
       "properties": {
         "marker-size": "small",
@@ -148,7 +203,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-151.25, 60.55]
+        "coordinates": [-151.3, 60.6]
       },
       "properties": {
         "marker-size": "small",
@@ -159,11 +214,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-131.65, 55.35]
+        "coordinates": [-131.7, 55.4]
       },
       "properties": {
         "marker-size": "small",
         "title": "Ketchikan AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-149.7, 61.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Knik-Fairview AK"
       }
     },
     {
@@ -192,7 +258,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-155.6, 62.95]
+        "coordinates": [-149.4, 61.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Lakes AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-155.6, 63.0]
       },
       "properties": {
         "marker-size": "small",
@@ -214,7 +291,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-145.5, 63.05]
+        "coordinates": [-145.5, 63.1]
       },
       "properties": {
         "marker-size": "small",
@@ -225,7 +302,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-148.35, 70.25]
+        "coordinates": [-148.4, 70.3]
       },
       "properties": {
         "marker-size": "small",
@@ -236,11 +313,22 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-135.35, 57.05]
+        "coordinates": [-135.4, 57.1]
       },
       "properties": {
         "marker-size": "small",
         "title": "Sitka AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.2, 61.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Sleetmute AK"
       }
     },
     {
@@ -258,7 +346,18 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-146.35, 61.15]
+        "coordinates": [-166.6, 53.9]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Unalaska AK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-146.4, 61.2]
       },
       "properties": {
         "marker-size": "small",
@@ -269,7 +368,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-149.45, 61.6]
+        "coordinates": [-149.5, 61.6]
       },
       "properties": {
         "marker-size": "small",
@@ -280,7 +379,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-139.7, 59.55]
+        "coordinates": [-139.7, 59.6]
       },
       "properties": {
         "marker-size": "small",

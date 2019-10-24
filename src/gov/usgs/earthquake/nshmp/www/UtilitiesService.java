@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import gov.usgs.earthquake.nshmp.geo.json.Feature;
 import gov.usgs.earthquake.nshmp.geo.json.GeoJson;
 import gov.usgs.earthquake.nshmp.geo.json.Properties;
-import gov.usgs.earthquake.nshmp.internal.NshmpSite;
+import gov.usgs.earthquake.nshmp.site.NshmpSite;
 
 @WebServlet(
     name = "Utilities Service",
@@ -68,7 +68,7 @@ public class UtilitiesService extends NshmpServlet {
             .build();
 
         builder.add(Feature.point(site.location())
-            .id(site.id())
+            .id(site.name())
             .properties(properties)
             .build());
       }
