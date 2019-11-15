@@ -16,25 +16,31 @@ stages:
   - test
 
 ####
+# GitLab runner tags
+####
+.tags:
+  tags:
+    - development
+
+####
 # Git clone nshmp-lib
 ####
 before_script:
   - cd ..
   - rm -rf ${NSHMP_LIB}
-  - git clone ${NSHMP_LIB_GIT} 
+  - git clone ${NSHMP_LIB_GIT}
   - cd ${CI_PROJECT_NAME}
 
 ####
-# Build jar file. 
+# Build jar file.
 ####
-build-project:
+build project:
   stage: assemble
   image: usgsnshmp/openjdk:jdk8
+  extends: .tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
-  tags:
-    - nshmp-runner
   script:
     - ./gradlew assemble
 
@@ -44,15 +50,14 @@ build-project:
 #   (string) JACOCO_HTML_DIR - Directory of Jacoco html reports
 #   (string) JUNIT_FILES - Path to all Junit html files
 ####
-test-project:
+test project:
   stage: test
   image: usgsnshmp/openjdk:jdk8
+  extends: .tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
   coverage: '/Total.*?([0-9]{1,3})%/'
-  tags:
-    - nshmp-runner
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
