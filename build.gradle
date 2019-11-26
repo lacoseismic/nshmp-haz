@@ -23,9 +23,11 @@
  * default Eclipse directories such as WebContent may be deleted.
  */
 
-apply plugin: 'jacoco'
-apply plugin: 'war'
-apply plugin: 'eclipse-wtp'
+plugins {
+  id 'eclipse-wtp'
+  id 'jacoco'
+  id 'war'
+}
 
 sourceCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
@@ -39,15 +41,15 @@ repositories {
 }
 
 dependencies {
-  compile 'org.apache.tomcat:tomcat-catalina:8.0.45'
-  compile 'javax.websocket:javax.websocket-api:1.1'
-  compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
-  compile 'com.amazonaws:aws-java-sdk-lambda:1.11.461'
-  compile 'com.amazonaws:aws-java-sdk-s3:1.11.579'
-  compile 'com.amazonaws:aws-java-sdk-ec2:1.11.619'
-  compile project(':nshmp-lib')
+  implementation 'org.apache.tomcat:tomcat-catalina:8.0.45'
+  implementation 'javax.websocket:javax.websocket-api:1.1'
+  implementation 'com.amazonaws:aws-lambda-java-core:1.1.0'
+  implementation 'com.amazonaws:aws-java-sdk-lambda:1.11.461'
+  implementation 'com.amazonaws:aws-java-sdk-s3:1.11.579'
+  implementation 'com.amazonaws:aws-java-sdk-ec2:1.11.619'
+  implementation project(':nshmp-lib')
 
-  testCompile 'junit:junit:4.12'
+  testImplementation 'junit:junit:4.12'
 }
 
 sourceSets {
@@ -75,7 +77,7 @@ ext {
   projectName = 'nshmp-haz'
 
   propsPath = '/classes/java/main/service.properties'
-  
+
   /* Multi-model repository paths for version tracking */
   repo_cous_2008 = '../nshm-cous-2008'
   repo_cous_2014 = '../nshm-cous-2014'
@@ -83,7 +85,7 @@ ext {
   repo_cous_2018 = '../nshm-cous-2018'
   repo_hi_2020 = '../nshm-hi-2020'
   repo_ak_2007 = '../nshm-ak-2007'
-  
+
   /* Explicit model paths */
   model_wus_2008 = "${repo_cous_2008}/Western US"
   model_ceus_2008 = "${repo_cous_2008}/Central & Eastern US"
@@ -109,15 +111,15 @@ ext {
   dev_models = [
     [ model_ceus_2018, 'models/ceus/2018' ],
     [ model_wus_2018, 'models/wus/2018' ],
-    [ model_hi_2020, 'models/hi/2020' ]    
+    [ model_hi_2020, 'models/hi/2020' ]
   ]
 
-  getGitTag = { gitDir -> 
+  getGitTag = { gitDir ->
     def cmd = 'git --git-dir=' + gitDir + '/.git describe --tags'
     return cmd.execute().text.replace('\n', '') ?: 'unknown'
   }
 
-  /* 
+  /*
    * The git-dir option gets the correct tag when
    * build is called from nshmp-haz-ws.
    */
@@ -128,7 +130,7 @@ ext {
   docTitle = projectName + ': ' + gitLink
   docFooter = '<div style="float: left; font-size: 16px; text-align: right; ' +
     'padding: 10px; width: 100%; box-sizing: border-box; background-color: #f9f9f9">' +
-    '<b><a href="https://www.usgs.gov" target="_top">U.S. Geological Survey</a></b> ' + 
+    '<b><a href="https://www.usgs.gov" target="_top">U.S. Geological Survey</a></b> ' +
     '– National Seismic Hazard Model Project ' +
     '(<a href="https://earthquake.usgs.gov/hazards/" target="_top">NSHMP</a>) ' +
     '– <a href="https://github.com/usgs/nshmp-haz/blob/master/LICENSE.md" ' +
@@ -149,11 +151,11 @@ jacocoTestReport {
     html.enabled true
   }
   afterEvaluate {
-    classDirectories = files(classDirectories.files.collect {
+    classDirectories.from(files(classDirectories.files.collect {
       fileTree(
         dir: it,
         exclude: ['**/etc/**'])
-      })
+      }))
   }
 }
 check.dependsOn jacocoTestReport
@@ -205,14 +207,14 @@ jar {
   doFirst {
     /* possible fat jar */
     if (rootProject.name == projectName && !thinJar) {
-      from { configurations.compile.collect {
+      from { configurations.compileClasspath.collect {
         it.isDirectory() ? it : zipTree(it).matching {
           exclude { it.path.contains('META-INF') }
         }
       }}
     }
-    
-    /* 
+
+    /*
      * Possibly record app version. The creation of this file
      * on each build causes the classpath to appear changed so
      * Gradle reruns tests, even though no code has changed.
@@ -245,8 +247,8 @@ war {
   enabled = true
   webAppDirName = 'webapp'
   dependsOn jar
-  
-  /* 
+
+  /*
    * Exclude existing models directory with symlinks
    * to support Eclipse deployments.
    */
@@ -279,7 +281,7 @@ task assembleDev(type: War, dependsOn: 'war') {
  * Create am exploded war file with production models
  */
 task assembleUsgs(type: Sync) {
-  into "${libsDir}/exploded-war"
+  into "${libsDirectory.get()}/exploded-war"
   with war
 
   doFirst {
@@ -292,7 +294,7 @@ task assembleUsgs(type: Sync) {
  * Create am exploded war file with development models
  */
 task assembleUsgsDev(type: Sync) {
-  into "${libsDir}/exploded-war"
+  into "${libsDirectory.get()}/exploded-war"
   with assembleDev
 
   doFirst {
@@ -304,17 +306,17 @@ task assembleUsgsDev(type: Sync) {
 /**
  * Create a zip file of all dependencies
  */
-task dependencies(type: Zip) {
-  baseName = "nshmp-haz-dependencies"
+task libs(type: Zip) {
+  archiveBaseName = "nshmp-haz-dependencies"
   from {
-    configurations.compile.collect {
+    configurations.compileClasspath.collect {
       it
     }
   }
 
   into("java/lib")
-  
-  destinationDir libsDir
+
+  destinationDirectory.value(libsDirectory)
 }
 
 /**
