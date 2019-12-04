@@ -1,4 +1,10 @@
 variables:
+  # nshm-fault-sections repo
+  FAULT_SECTIONS: nshm-fault-sections
+
+  # nshm-fault-sections git url
+  FAULT_SECTIONS_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${FAULT_SECTIONS}.git
+
   # Directory of Jacoco html reports
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
 
@@ -23,24 +29,32 @@ stages:
     - development
 
 ####
-# Git clone nshmp-lib
+# Download nshmp-lib and nshm-fault-sections
 ####
-before_script:
-  - cd ..
-  - rm -rf ${NSHMP_LIB}
-  - git clone ${NSHMP_LIB_GIT}
-  - cd ${CI_PROJECT_NAME}
+.get-lib:
+  nshmp-lib: &nshmp-lib |-
+    cd ..;
+    rm -rf ${NSHMP_LIB};
+    git clone ${NSHMP_LIB_GIT};
+    cd ${CI_PROJECT_NAME};
+  fault-sections: &fault-sections |-
+    cd ..;
+    rm -rf ${FAULT_SECTIONS};
+    git clone ${FAULT_SECTIONS_GIT};
+    cd ${CI_PROJECT_NAME};
 
 ####
 # Build jar file.
 ####
 build project:
   stage: assemble
-  image: usgsnshmp/openjdk:jdk8
+  image: gradle
   extends: .tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
   script:
     - ./gradlew assemble
 
@@ -52,12 +66,15 @@ build project:
 ####
 test project:
   stage: test
-  image: usgsnshmp/openjdk:jdk8
+  image: gradle
   extends: .tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
   coverage: '/Total.*?([0-9]{1,3})%/'
+  before_script:
+    - *fault-sections
+    - *nshmp-lib
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
