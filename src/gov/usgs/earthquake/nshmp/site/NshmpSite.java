@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ComparisonChain;
 
 import gov.usgs.earthquake.nshmp.geo.Location;
+import gov.usgs.earthquake.nshmp.internal.UsRegion;
 import gov.usgs.earthquake.nshmp.NamedLocation;
 import gov.usgs.earthquake.nshmp.Text;
 
