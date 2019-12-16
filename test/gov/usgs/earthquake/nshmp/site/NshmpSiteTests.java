@@ -58,6 +58,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
 import gov.usgs.earthquake.nshmp.geo.Location;
+import gov.usgs.earthquake.nshmp.internal.UsRegion;
 import gov.usgs.earthquake.nshmp.site.NshmpSite.StateComparator;
 
 @SuppressWarnings("javadoc")
