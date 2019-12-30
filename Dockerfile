@@ -66,6 +66,8 @@ LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@us
 ARG libs_dir
 ARG builder_workdir
 ARG project
+ARG TOMCAT_MAJOR=8
+ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.5.40
 
 ENV PROJET ${project}
 ENV JAVA_XMS 8g
@@ -94,6 +96,7 @@ VOLUME [ "/app/output" ]
 ENV CATALINA_HOME /usr/local/tomcat
 ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
 ENV PATH ${CATALINA_HOME}/bin:${PATH}
+ENV TOMCAT_URL ${TOMCAT_SOURCE}/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 ENV JAVA_OPTS -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
 
 ENV WS_HOME ${CATALINA_HOME}
