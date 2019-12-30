@@ -1,4 +1,16 @@
 variables:
+  # Image version to publish
+  IMAGE_VERSION: "0.0.1"
+
+  # Deployment image name
+  DEPLOY_IMAGE: "${GITLAB_INNERSOURCE_REGISTRY}/ghsc/nshmp/images/${CI_PROJECT_NAME}"
+
+  # Directory to put images
+  DOCKER_DIR: docker-images
+
+  # Path to image tar
+  DOCKER_TAR: ${DOCKER_DIR}/app.tar
+
   # nshm-fault-sections repo
   FAULT_SECTIONS: nshm-fault-sections
 
@@ -11,6 +23,9 @@ variables:
   # Path to all Junit html files
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
+  # Local image name
+  LOCAL_IMAGE: local/${CI_PROJECT_NAME}:${IMAGE_VERSION}
+
   # nshmp-lib repo
   NSHMP_LIB: nshmp-lib
 
@@ -18,8 +33,9 @@ variables:
   NSHMP_LIB_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${NSHMP_LIB}.git
 
 stages:
-  - assemble
+  - build
   - test
+  - publish
 
 ####
 # GitLab runner tags
@@ -47,7 +63,7 @@ stages:
 # Build jar file.
 ####
 build project:
-  stage: assemble
+  stage: build
   image: gradle
   extends: .tags
   only:
@@ -83,3 +99,64 @@ test project:
       - ${JACOCO_HTML_DIR}
     reports:
       junit: ${JUNIT_FILES}
+
+####
+# Build Docker image.
+# Globals:
+#   DOCKER_DIR - The directory to put Docker image
+#   DOCKER_TAR - The path to the Docker image tar
+#   LOCAL_IMAGE - Docker local image name
+####
+build image:
+  stage: build
+  image: docker:stable
+  extends:
+    - .tags
+  only:
+    - merge_requests
+    - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - env
+    - rm -rf ${DOCKER_DIR}
+    - apk add git;
+    - *nshmp-lib
+    - mv ../${NSHMP_LIB} .
+    - *fault-sections
+    - mv ../${FAULT_SECTIONS} .
+  script:
+    - mkdir ${DOCKER_DIR}
+    - docker build -t ${LOCAL_IMAGE} .
+    - docker save ${LOCAL_IMAGE} > ${DOCKER_TAR}
+  artifacts:
+    paths:
+      - ${DOCKER_DIR}
+
+####
+# Publish Docker image to GitLab registry.
+# Globals:
+#   CHS_PASSWORD - GitLab password
+#   CHS_USERNAME - GitLab username
+#   DEPLOY_IMAGE - Docker image name for depolyment
+#   DOCKER_TAR - The path to the Docker image tar
+#   GITLAB_INNERSOURCE_REGISTRY - URL to registry
+#   IMAGE_VERSION - The current version of the image to publish
+#   LOCAL_IMAGE - Docker local image name
+####
+publish image:
+  stage: publish
+  image: docker:stable
+  extends: .tags
+  only:
+    - merge_requests
+    - master@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${GITLAB_INNERSOURCE_REGISTRY}
+    - docker load -i ${DOCKER_TAR}
+    # Push current version
+    - docker tag ${LOCAL_IMAGE} ${DEPLOY_IMAGE}:${IMAGE_VERSION}
+    - docker push ${DEPLOY_IMAGE}:${IMAGE_VERSION}
+    # Update latest tag
+    - docker tag ${LOCAL_IMAGE} ${DEPLOY_IMAGE}:latest
+    - docker push ${DEPLOY_IMAGE}:latest
+    # Delete pass file
+    - rm -rf /root/.docker/config.json
