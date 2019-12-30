@@ -101,7 +101,8 @@ ENV HAZ_HOME /app
 
 WORKDIR ${HAZ_HOME}
 
-COPY --from=builder ${libs_dir}/* .
+COPY --from=builder ${libs_dir}/* ./
+RUN ls
 COPY docker-entrypoint.sh .
 
 WORKDIR ${WS_HOME}

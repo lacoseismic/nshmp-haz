@@ -116,7 +116,8 @@ build image:
     - merge_requests
     - master@ghsc/nshmp/nshmp-haz-v2
   before_script:
-    - env
+    - echo "${CODE_REGISTRY}"
+    - echo "${CODE_REGISTRY_IMAGE}"
     - rm -rf ${DOCKER_DIR}
     - apk add git;
     - *nshmp-lib
