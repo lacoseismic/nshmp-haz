@@ -102,13 +102,12 @@ ENV HAZ_HOME /app
 WORKDIR ${HAZ_HOME}
 
 COPY --from=builder ${libs_dir}/* ./
-RUN ls
 COPY docker-entrypoint.sh .
 
 WORKDIR ${WS_HOME}
 
 RUN yum update -y \
-    && yum install -y add file epel-release jq java-1.8.0-openjdk-headless \
+    && yum install -y file jq java-1.8.0-openjdk-headless \
     && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
 
 WORKDIR ${HAZ_HOME}
