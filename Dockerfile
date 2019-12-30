@@ -32,109 +32,86 @@
 ####
 
 # Project
-ARG project=nshmp-haz
+ARG project=nshmp-haz-v2
 
 # Builder image working directory
 ARG builder_workdir=/app/${project}
 
 # Path to JAR file in builder image
-ARG jar_path=${builder_workdir}/build/libs/${project}.jar
+ARG libs_dir=${builder_workdir}/build/libs
 
 ####
-# Builder Image: Java 8 in usgsnshmp/centos image
-#   - Install git
-#   - Build nshmp-haz
+# Builder image
 ####
-FROM usgsnshmp/openjdk:jdk8 as builder
+FROM usgs/centos:8 as builder
 
-# Get builder workdir
 ARG builder_workdir
 
-# Set working directory
-WORKDIR ${builder_workdir} 
+WORKDIR ${builder_workdir}
 
-# Copy project over to container
-COPY . ${builder_workdir}/. 
+COPY . .
 
-# Install git
-RUN yum install -y git
+RUN yum install -y java-1.8.0-openjdk-devel which git
 
-# Build nshmp-haz
-RUN ./gradlew assemble
+RUN mv nshmp-lib ../. \
+    && ./gradlew --no-daemon assemble
 
 ####
-# Application Image: Java 8 in usgsnshmp/centos image
-#   - Install jq
-#   - Copy JAR file from builder image
-#   - Download model
-#   - Run nshmp-haz (docker-entrypoint.sh)
+# Application image
 ####
-FROM usgsnshmp/openjdk:jdk8
+FROM usgs/centos:8
 
-# Set author
-LABEL maintainer="Peter Powers <pmpowers@usgs.gov>"
+LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
-# Set working directory
-WORKDIR /app
-
-# Install file and jq
-RUN yum install -y add file epel-release
-RUN yum install -y jq
-
-# Get JAR path
-ARG jar_path
-
-# Get builder working directory
+ARG libs_dir
 ARG builder_workdir
+ARG project
 
-# Copy JAR file from builder image
-COPY --from=builder ${jar_path} .
-
-# Copy entrypoint script
-COPY docker-entrypoint.sh .
-
-# NSHM repository version
-ENV NSHM_VERSION=master
-
-# Set Java memory
+ENV PROJET ${project}
 ENV JAVA_XMS 8g
 ENV JAVA_XMX 8g
 
-# NSHM
+# Whether to run hazard jar file or web services war file
+ENV RUN_HAZARD true
+
+# Running Hazard
 ENV MODEL ""
-
-# Whether to mount the model instead of selecting a model
+ENV NSHM_VERSION=master
 ENV MOUNT_MODEL false
-
-# Program to run: deagg | deagg-epsilon | hazard | rate
 ENV PROGRAM hazard
-
-# Return period for deagg
 ENV RETURN_PERIOD ""
-
-# Intensity measure level (in units of g) for deagg-iml
 ENV IML ""
-
-# Optional config file
 ENV CONFIG_FILE "config.json"
 
-# Whether to have access to Java VisualVM
+# Java VisualVM
 ENV ACCESS_VISUALVM false
-
-# Port for Java VisualVM
 ENV VISUALVM_PORT 9090
-
-# Java VisualVM hostname
 ENV VISUALVM_HOSTNAME localhost
 
-# Set volume for output
 VOLUME [ "/app/output" ]
 
-# Create empty config file
-RUN echo "{}" > ${CONFIG_FILE}
+# Tomcat
+ENV CATALINA_HOME /usr/local/tomcat
+ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
+ENV PATH ${CATALINA_HOME}/bin:${PATH}
+ENV JAVA_OPTS -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
 
-# Run nshmp-haz
+ENV WS_HOME ${CATALINA_HOME}
+ENV HAZ_HOME /app
+
+WORKDIR ${HAZ_HOME}
+
+COPY --from=builder ${libs_dir}/* .
+COPY docker-entrypoint.sh .
+
+WORKDIR ${WS_HOME}
+
+RUN yum update -y \
+    && yum install -y add file epel-release jq java-1.8.0-openjdk-headless \
+    && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
+
+WORKDIR ${HAZ_HOME}
+
 ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
 
-# Expose Java VisualVM port
-EXPOSE ${VISUALVM_PORT}
+EXPOSE ${VISUALVM_PORT} 8080
