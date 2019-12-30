@@ -148,7 +148,9 @@ run_hazard() {
 run_ws() {
   cd ${TOMCAT_WEBAPPS};
   mv ${HAZ_HOME}/${PROJECT}.war ${TOMCAT_WEBAPPS};
-  tar -xvf ${PROJECT}.war;
+  pwd
+  ls
+  tar -xvf ${PROJECT}.war 2> ${LOG_FILE};
   cd ${PROJECT}/webapps;
   mkdir models;
   cd models;
