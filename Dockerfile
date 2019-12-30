@@ -96,6 +96,7 @@ VOLUME [ "/app/output" ]
 ENV CATALINA_HOME /usr/local/tomcat
 ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
 ENV PATH ${CATALINA_HOME}/bin:${PATH}
+ENV TOMCAT_SOURCE http://archive.apache.org/dist/tomcat
 ENV TOMCAT_URL ${TOMCAT_SOURCE}/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 ENV JAVA_OPTS -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
 
