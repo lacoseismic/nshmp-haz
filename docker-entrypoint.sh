@@ -7,9 +7,9 @@
 set -o errexit;
 set -o errtrace;
 
-WUS="Western US";
+readonly WUS="Western US";
 
-CEUS="Central & Eastern US";
+readonly CEUS="Central & Eastern US";
 
 # check_config_file global return variable
 CHECK_CONFIG_FILE_RETURN="";
@@ -35,15 +35,13 @@ readonly LOG_FILE="docker-entrypoint.log";
 # Docker usage
 readonly USAGE="
   docker run \\
+      -e RUN_HAZARD=<true | false> \\
       -e PROGRAM=<deagg | deagg-epsilon | hazard | rate> \\
       -e MODEL=<WUS-20[08|14|18] | CEUS-20[08|14|18] | COUS-20[08|14|18] | AK-2007> \\
       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \\
-      -e ACCESS_VISUALVM=<true | false> \\
-      -e VISUALVM_PORT=<port> \\
-      -e VISUALVM_HOSTNAME=<hostname> \\
       -v /absolute/path/to/config/file:/app/config.json \\
       -v /absolute/path/to/output:/app/output \\
-      usgs/nshmp-haz
+      code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 ";
 
 main() {
@@ -51,9 +49,9 @@ main() {
   trap 'error_exit "${BASH_COMMAND}" "$(< ${LOG_FILE})" "${USAGE}"' ERR;
 
   if [ ${RUN_HAZARD} = true ]; then
-    run_hazard 2> ${LOG_FILE};
+    run_hazard;
   else
-    run_ws 2> ${LOG_FILE};
+    run_ws;
   fi
 }
 
@@ -102,22 +100,8 @@ run_hazard() {
   # Monitor log file
   tail -f ${LOG_FILE} &
 
-  # Set Java VisualVM
-  local visualvm_opts="";
-  if [ ${ACCESS_VISUALVM} = true ]; then
-    visualvm_opts="-Dcom.sun.management.jmxremote
-      -Dcom.sun.management.jmxremote.rmi.port=${VISUALVM_PORT}
-      -Dcom.sun.management.jmxremote.port=${VISUALVM_PORT}
-      -Dcom.sun.management.jmxremote.ssl=false
-      -Dcom.sun.management.jmxremote.authenticate=false
-      -Dcom.sun.management.jmxremote.local.only=false
-      -Djava.rmi.server.hostname=${VISUALVM_HOSTNAME}
-    ";
-  fi
-
   # Run nshmp-haz
   java -Xms${JAVA_XMS} -Xmx${JAVA_XMX} \
-      ${visualvm_opts} \
       -cp nshmp-haz.jar \
       gov.usgs.earthquake.nshmp.${nshmp_program} \
       "${nshmp_model_path}" \
@@ -146,32 +130,31 @@ run_hazard() {
 #   None
 ####
 run_ws() {
-  cd ${TOMCAT_WEBAPPS};
-  mv ${HAZ_HOME}/${PROJECT}.war ${TOMCAT_WEBAPPS};
-  pwd
-  ls
-  tar -xvf ${PROJECT}.war 2> ${LOG_FILE};
-  cd ${PROJECT}/webapps;
-  mkdir models;
-  cd models;
+  cd ${TOMCAT_WEBAPPS} 2> ${LOG_FILE};
+  mkdir ${PROJECT} 2> ${LOG_FILE};
+  cd ${PROJECT} 2> ${LOG_FILE};
+  cp ${HAZ_HOME}/${PROJECT}.war . 2> ${LOG_FILE};
+  unzip ${PROJECT}.war 2> ${LOG_FILE};
 
-  get_cous_model;
+  mkdir models 2> ${LOG_FILE};
+  cd models 2> ${LOG_FILE};
+  get_cous_model 2> ${LOG_FILE};
   local nshm_model="${GET_COUS_MODEL_RETURN}";
-  local model="$(echo ${nshm_model} | cut -d _ -f1 | awk {'print tolower($0)'})";
-  local year="$(echo ${nshm_model} | cut -d _ -f2 | awk {'print tolower($0)'})";
+  local model="$(echo ${nshm_model} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
+  local year="$(echo ${nshm_model} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
 
   if [ ${model} == 'cous' ]; then
-    mkdir wus ceus;
-    mv ${nshm_model}/${CEUS} ceus/${year};
-    mv ${nshm_model}/${WUS} wus/${year};
+    mkdir wus ceus 2> ${LOG_FILE};
+    mv ${nshm_model}/${CEUS} ceus/${year} 2> ${LOG_FILE};
+    mv ${nshm_model}/${WUS} wus/${year} 2> ${LOG_FILE};
   else
-    mkdir ${model};
-    mv ${nshm_model} ${model}/${year};
+    mkdir ${model} 2> ${LOG_FILE};
+    mv ${nshm_model} ${model}/${year} ${LOG_FILE};
   fi
 
-  cd ${WS_HOME};
+  cd ${WS_HOME} 2> ${LOG_FILE};
 
-  catalina.sh run 1> ${LOG_FILE};
+  catalina.sh run 2>&1;
 }
 
 ####

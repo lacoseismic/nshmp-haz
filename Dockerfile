@@ -1,47 +1,30 @@
 ####
-# Dockerfile for nshmp-haz.
+# Run hazard jar file or run web services war file.
 #
-# Usage:
+# Running Hazard:
+#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 #   docker run \
 #       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
-#       -e MODEL=<WUS-20[08|14|18] | CEUS-20[08|14|18] | COUS-20[08|14|18] | AK-2007> \
-#       -e ACCESS_VISUALVM=<true | false> \
-#       -e VISUALVM_PORT=<port> \
-#       -e VISUALVM_HOSTNAME=<hostname> \
+#       -e MODEL=<WUS-20[08|14|18] | CEUS-20[08|14|18] | COUS-20[08|14|18] | AK-2007 | HI-2020> \
 #       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
 #       -v /absolute/path/to/config/file:/app/config.json \
 #       -v /absolute/path/to/output:/app/output \
-#       usgs/nshmp-haz
+#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 #
-# Usage with custom model:
-#   docker run \
-#       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
-#       -e ACCESS_VISUALVM=<true | false> \
-#       -e VISUALVM_PORT=<port> \
-#       -e VISUALVM_HOSTNAME=<hostname> \
-#       -e MOUNT_MODEL=true \
-#       -v /absolute/path/to/model:/app/model \
-#       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
-#       -v /absolute/path/to/config/file:/app/config.json \
-#       -v /absolute/path/to/output:/app/output \
-#       usgs/nshmp-haz
-#
-# Note: Models load as requested. While all supported models are
-# available, requesting them all will eventually result in an
-# OutOfMemoryError. Increase -Xmx to -Xmx16g or -Xmx24g, if available.
+# Running Web Services:
+#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#   docker run -p <PORT>:8080 \
+#       -e RUN_HAZARD=false \
+#       -e MODEL=<COUS-20[08|14|18] | AK-2007 | HI-2020> \
+#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 ####
 
-# Project
 ARG project=nshmp-haz-v2
-
-# Builder image working directory
 ARG builder_workdir=/app/${project}
-
-# Path to JAR file in builder image
 ARG libs_dir=${builder_workdir}/build/libs
 
 ####
-# Builder image
+# Builder image: Build jar and war file.
 ####
 FROM usgs/centos:8 as builder
 
@@ -57,7 +40,7 @@ RUN mv nshmp-lib ../. \
     && ./gradlew --no-daemon assemble
 
 ####
-# Application image
+# Application image: Run jar or war file.
 ####
 FROM usgs/centos:8
 
@@ -84,12 +67,6 @@ ENV PROGRAM hazard
 ENV RETURN_PERIOD ""
 ENV IML ""
 ENV CONFIG_FILE "config.json"
-
-# Java VisualVM
-ENV ACCESS_VISUALVM false
-ENV VISUALVM_PORT 9090
-ENV VISUALVM_HOSTNAME localhost
-
 VOLUME [ "/app/output" ]
 
 # Tomcat
@@ -111,11 +88,9 @@ COPY docker-entrypoint.sh .
 WORKDIR ${WS_HOME}
 
 RUN yum update -y \
-    && yum install -y file jq java-1.8.0-openjdk-headless \
+    && yum install -y file jq zip java-1.8.0-openjdk-headless \
     && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
 
 WORKDIR ${HAZ_HOME}
 
 ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
-
-EXPOSE ${VISUALVM_PORT} 8080
