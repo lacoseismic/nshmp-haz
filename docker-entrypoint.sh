@@ -149,7 +149,7 @@ run_ws() {
     mv ${nshm_model}/${WUS} wus/${year} 2> ${LOG_FILE};
   else
     mkdir ${model} 2> ${LOG_FILE};
-    mv ${nshm_model} ${model}/${year} ${LOG_FILE};
+    mv ${nshm_model} ${model}/${year} 2> ${LOG_FILE};
   fi
 
   cd ${WS_HOME} 2> ${LOG_FILE};
