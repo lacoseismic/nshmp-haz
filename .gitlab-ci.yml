@@ -34,7 +34,7 @@ variables:
 
 stages:
   - build
-  # - test
+  - test
   - publish
 
 ####
@@ -74,31 +74,31 @@ build project:
   script:
     - ./gradlew assemble
 
-# ####
-# # Run tests.
-# # Globals:
-# #   (string) JACOCO_HTML_DIR - Directory of Jacoco html reports
-# #   (string) JUNIT_FILES - Path to all Junit html files
-# ####
-# test project:
-#   stage: test
-#   image: gradle
-#   extends: .tags
-#   only:
-#     - merge_request
-#     - master@ghsc/nshmp/nshmp-haz-v2
-#   coverage: '/Total.*?([0-9]{1,3})%/'
-#   before_script:
-#     - *fault-sections
-#     - *nshmp-lib
-#   script:
-#     - ./gradlew check
-#     - cat ${JACOCO_HTML_DIR}/index.html
-#   artifacts:
-#     paths:
-#       - ${JACOCO_HTML_DIR}
-#     reports:
-#       junit: ${JUNIT_FILES}
+####
+# Run tests.
+# Globals:
+#   (string) JACOCO_HTML_DIR - Directory of Jacoco html reports
+#   (string) JUNIT_FILES - Path to all Junit html files
+####
+test project:
+  stage: test
+  image: gradle
+  extends: .tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+  coverage: '/Total.*?([0-9]{1,3})%/'
+  before_script:
+    - *fault-sections
+    - *nshmp-lib
+  script:
+    - ./gradlew check
+    - cat ${JACOCO_HTML_DIR}/index.html
+  artifacts:
+    paths:
+      - ${JACOCO_HTML_DIR}
+    reports:
+      junit: ${JUNIT_FILES}
 
 ####
 # Build Docker image.
@@ -146,7 +146,6 @@ publish image:
   image: docker:stable
   extends: .tags
   only:
-    - merge_requests
     - master@ghsc/nshmp/nshmp-haz-v2
   script:
     - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${GITLAB_INNERSOURCE_REGISTRY}
