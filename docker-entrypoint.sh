@@ -11,6 +11,8 @@ readonly WUS="Western US";
 
 readonly CEUS="Central & Eastern US";
 
+readonly VERSION_2014B="v4.1.1";
+
 # check_config_file global return variable
 CHECK_CONFIG_FILE_RETURN="";
 
@@ -319,7 +321,7 @@ get_cous_model() {
       ;;
     "COUS-2014B")
       model="nshm-cous-2014";
-      version="v4.1.1";
+      version="${VERSION_2014B}";
       ;;
     "COUS-2018")
       model="nshm-cous-2018";
@@ -356,6 +358,7 @@ get_cous_model() {
 get_model() {
   local model=""
   local model_path=""
+  local version="master"
 
   case ${MODEL} in
     "AK-2007")
@@ -374,6 +377,11 @@ get_model() {
       model="nshm-cous-2014";
       model_path="${model}/${CEUS}/";
       ;;
+    "CEUS-2014B")
+      model="nshm-cous-2014";
+      model_path="${model}/${CEUS}/";
+      version="${VERSION_2014B}";
+      ;;
     "CEUS-2018")
       model="nshm-cous-2018";
       model_path="${model}/${CEUS}/";
@@ -385,6 +393,11 @@ get_model() {
     "WUS-2014")
       model="nshm-cous-2014";
       model_path="${model}/${WUS}/";
+      ;;
+    "WUS-2014B")
+      model="nshm-cous-2014";
+      model_path="${model}/${WUS}/";
+      version="${VERSION_2014B}";
       ;;
     "WUS-2018")
       model="nshm-cous-2018";
