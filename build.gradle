@@ -74,7 +74,7 @@ sourceSets {
 }
 
 ext {
-  projectName = 'nshmp-haz'
+  projectName = 'nshmp-haz-v2'
 
   propsPath = '/classes/java/main/service.properties'
 
