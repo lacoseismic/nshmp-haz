@@ -30,7 +30,10 @@ GET_MODEL_PATH_RETURN="";
 GET_NSHMP_PROGRAM_RETURN="";
 
 # Log file
-readonly LOG_FILE="docker-entrypoint.log";
+readonly LOG_FILE="${HAZ_HOME}/docker-entrypoint.log";
+
+MODEL=$(echo ${MODEL} | awk {'print toupper($0)'});
+PROGRAM=$(echo ${PROGRAM} | awk {'print tolower($0)'});
 
 # Docker usage
 readonly USAGE="
@@ -102,7 +105,7 @@ run_hazard() {
 
   # Run nshmp-haz
   java -Xms${JAVA_XMS} -Xmx${JAVA_XMX} \
-      -cp nshmp-haz.jar \
+      -cp ${HAZ_HOME}/${PROJECT}.jar \
       gov.usgs.earthquake.nshmp.${nshmp_program} \
       "${nshmp_model_path}" \
       "${site_file}" \
@@ -134,24 +137,25 @@ run_ws() {
   mkdir ${PROJECT} 2> ${LOG_FILE};
   cd ${PROJECT} 2> ${LOG_FILE};
   cp ${HAZ_HOME}/${PROJECT}.war . 2> ${LOG_FILE};
-  unzip ${PROJECT}.war 2> ${LOG_FILE};
+  unzip ${PROJECT}.war 2> ${LOG_FILE} &> /dev/null;
 
   mkdir models 2> ${LOG_FILE};
   cd models 2> ${LOG_FILE};
   get_cous_model 2> ${LOG_FILE};
   local nshm_model="${GET_COUS_MODEL_RETURN}";
-  local model="$(echo ${nshm_model} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
-  local year="$(echo ${nshm_model} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
+  local model="$(echo ${MODEL} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
+  local year="$(echo ${MODEL} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
 
   if [ ${model} == 'cous' ]; then
     mkdir wus ceus 2> ${LOG_FILE};
-    mv ${nshm_model}/${CEUS} ceus/${year} 2> ${LOG_FILE};
-    mv ${nshm_model}/${WUS} wus/${year} 2> ${LOG_FILE};
+    mv "${nshm_model}/${CEUS}" ceus/${year} 2> ${LOG_FILE};
+    mv "${nshm_model}/${WUS}" wus/${year} 2> ${LOG_FILE};
   else
     mkdir ${model} 2> ${LOG_FILE};
     mv ${nshm_model} ${model}/${year} 2> ${LOG_FILE};
   fi
 
+  rm -r ${nshm_model};
   cd ${WS_HOME} 2> ${LOG_FILE};
 
   catalina.sh run 2>&1;
@@ -238,7 +242,7 @@ download_repo() {
     return;
   fi
 
-  printf "\n Downloading [${url}] \n\n";
+  printf "\n Downloading ${repo} [${url}] \n\n";
 
   if [ -z "${directory}" ]; then
     directory=${repo};
