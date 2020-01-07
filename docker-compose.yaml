@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  war:
+    image: tomcat:jdk8-corretto
+    container_name: nshmp-haz-v2_docker-compose
+    ports:
+      - 8080-9080:8080
+    volumes:
+      - ./build/libs/nshmp-haz-v2.war:/usr/local/tomcat/webapps/nshmp-haz-v2.war

@@ -1,140 +1,96 @@
 ####
-# Dockerfile for nshmp-haz.
+# Run hazard jar file or run web services war file.
 #
-# Usage:
+# Running Hazard:
+#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 #   docker run \
 #       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
-#       -e MODEL=<WUS-20[08|14|18] | CEUS-20[08|14|18] | COUS-20[08|14|18] | AK-2007> \
-#       -e ACCESS_VISUALVM=<true | false> \
-#       -e VISUALVM_PORT=<port> \
-#       -e VISUALVM_HOSTNAME=<hostname> \
+#       -e MODEL=<WUS-20[08|14|18] | CEUS-20[08|14|18] | COUS-20[08|14|18] | AK-2007 | HI-2020> \
 #       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
 #       -v /absolute/path/to/config/file:/app/config.json \
 #       -v /absolute/path/to/output:/app/output \
-#       usgs/nshmp-haz
+#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 #
-# Usage with custom model:
-#   docker run \
-#       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
-#       -e ACCESS_VISUALVM=<true | false> \
-#       -e VISUALVM_PORT=<port> \
-#       -e VISUALVM_HOSTNAME=<hostname> \
-#       -e MOUNT_MODEL=true \
-#       -v /absolute/path/to/model:/app/model \
-#       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
-#       -v /absolute/path/to/config/file:/app/config.json \
-#       -v /absolute/path/to/output:/app/output \
-#       usgs/nshmp-haz
-#
-# Note: Models load as requested. While all supported models are
-# available, requesting them all will eventually result in an
-# OutOfMemoryError. Increase -Xmx to -Xmx16g or -Xmx24g, if available.
+# Running Web Services:
+#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#   docker run -p <PORT>:8080 \
+#       -e RUN_HAZARD=false \
+#       -e MODEL=<COUS-20[08|14|18] | AK-2007 | HI-2020> \
+#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 ####
 
-# Project
-ARG project=nshmp-haz
-
-# Builder image working directory
+ARG project=nshmp-haz-v2
 ARG builder_workdir=/app/${project}
-
-# Path to JAR file in builder image
-ARG jar_path=${builder_workdir}/build/libs/${project}.jar
+ARG libs_dir=${builder_workdir}/build/libs
 
 ####
-# Builder Image: Java 8 in usgsnshmp/centos image
-#   - Install git
-#   - Build nshmp-haz
+# Builder image: Build jar and war file.
 ####
-FROM usgsnshmp/openjdk:jdk8 as builder
+FROM usgs/centos:8 as builder
 
-# Get builder workdir
 ARG builder_workdir
 
-# Set working directory
-WORKDIR ${builder_workdir} 
+WORKDIR ${builder_workdir}
 
-# Copy project over to container
-COPY . ${builder_workdir}/. 
+COPY . .
 
-# Install git
-RUN yum install -y git
+RUN yum install -y java-1.8.0-openjdk-devel which git
 
-# Build nshmp-haz
-RUN ./gradlew assemble
+RUN mv nshmp-lib ../. \
+    && ./gradlew --no-daemon assemble
 
 ####
-# Application Image: Java 8 in usgsnshmp/centos image
-#   - Install jq
-#   - Copy JAR file from builder image
-#   - Download model
-#   - Run nshmp-haz (docker-entrypoint.sh)
+# Application image: Run jar or war file.
 ####
-FROM usgsnshmp/openjdk:jdk8
+FROM usgs/centos:8
 
-# Set author
-LABEL maintainer="Peter Powers <pmpowers@usgs.gov>"
+LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
-# Set working directory
-WORKDIR /app
-
-# Install file and jq
-RUN yum install -y add file epel-release
-RUN yum install -y jq
-
-# Get JAR path
-ARG jar_path
-
-# Get builder working directory
+ARG libs_dir
 ARG builder_workdir
+ARG project
+ARG TOMCAT_MAJOR=8
+ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.5.40
 
-# Copy JAR file from builder image
-COPY --from=builder ${jar_path} .
-
-# Copy entrypoint script
-COPY docker-entrypoint.sh .
-
-# NSHM repository version
-ENV NSHM_VERSION=master
-
-# Set Java memory
+ENV PROJECT ${project}
 ENV JAVA_XMS 8g
 ENV JAVA_XMX 8g
 
-# NSHM
+# Whether to run hazard jar file or web services war file
+ENV RUN_HAZARD true
+
+# Running Hazard
 ENV MODEL ""
-
-# Whether to mount the model instead of selecting a model
+ENV NSHM_VERSION=master
 ENV MOUNT_MODEL false
-
-# Program to run: deagg | deagg-epsilon | hazard | rate
 ENV PROGRAM hazard
-
-# Return period for deagg
 ENV RETURN_PERIOD ""
-
-# Intensity measure level (in units of g) for deagg-iml
 ENV IML ""
-
-# Optional config file
 ENV CONFIG_FILE "config.json"
-
-# Whether to have access to Java VisualVM
-ENV ACCESS_VISUALVM false
-
-# Port for Java VisualVM
-ENV VISUALVM_PORT 9090
-
-# Java VisualVM hostname
-ENV VISUALVM_HOSTNAME localhost
-
-# Set volume for output
 VOLUME [ "/app/output" ]
 
-# Create empty config file
-RUN echo "{}" > ${CONFIG_FILE}
+# Tomcat
+ENV CATALINA_HOME /usr/local/tomcat
+ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
+ENV PATH ${CATALINA_HOME}/bin:${PATH}
+ENV TOMCAT_SOURCE http://archive.apache.org/dist/tomcat
+ENV TOMCAT_URL ${TOMCAT_SOURCE}/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
+ENV JAVA_OPTS -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
 
-# Run nshmp-haz
+ENV WS_HOME ${CATALINA_HOME}
+ENV HAZ_HOME /app
+
+WORKDIR ${HAZ_HOME}
+
+COPY --from=builder ${libs_dir}/* ./
+COPY docker-entrypoint.sh .
+
+WORKDIR ${WS_HOME}
+
+RUN yum update -y \
+    && yum install -y file jq zip java-1.8.0-openjdk-headless \
+    && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
+
+WORKDIR ${HAZ_HOME}
+
 ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
-
-# Expose Java VisualVM port
-EXPOSE ${VISUALVM_PORT}
