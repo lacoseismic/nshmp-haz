@@ -199,11 +199,14 @@ publish image:
   before_script:
     - *adjust-image-names
   script:
+    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${GITLAB_INNERSOURCE_REGISTRY}
     - docker load -i ${DOCKER_TAR}
     - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
     - docker push ${INTERNAL_IMAGE_NAME}
     - docker image rm local/${IMAGE_NAME}
     - docker image rm ${INTERNAL_IMAGE_NAME}
+    - rm -rf /root/.docker/config.json
+
 
 ####
 # Deploy to prod01
