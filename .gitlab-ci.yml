@@ -110,6 +110,11 @@ build project:
   stage: build
   image: gradle
   extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+    - production@ghsc/nshmp/nshmp-haz-v2
   before_script:
     - *nshmp-lib
   script:
@@ -125,6 +130,11 @@ test project:
   stage: test
   image: gradle
   extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+    - production@ghsc/nshmp/nshmp-haz-v2
   coverage: '/Total.*?([0-9]{1,3})%/'
   before_script:
     - *fault-sections
@@ -149,6 +159,11 @@ build image:
   stage: build
   image: docker:stable
   extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+    - production@ghsc/nshmp/nshmp-haz-v2
   before_script:
     - *adjust-image-names
     - rm -rf ${DOCKER_DIR}
