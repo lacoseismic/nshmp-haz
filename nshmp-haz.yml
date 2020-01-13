@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  # Deploy nshmp-haz with COUS-2018
+  nshmp-haz-cous-2018:
+    image: ${REGISTRY}/${IMAGE_NAME}
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      replicas: 3
+      update_config:
+        order: start-first
+        parallelism: 3
+    ports:
+      - 8080
+    environment:
+      RUN_HAZARD: 'false'
+      MODEL: COUS-2018
