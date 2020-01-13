@@ -1,53 +1,35 @@
 variables:
-  # Image version to publish
-  IMAGE_VERSION: "0.0.1"
-
-  # Deployment image name
-  DEPLOY_IMAGE: "${GITLAB_INNERSOURCE_REGISTRY}/ghsc/nshmp/images/${CI_PROJECT_NAME}"
-
-  # Directory to put images
+  CI_REGISTRY: ${CODE_REGISTRY}
+  CI_REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
   DOCKER_DIR: docker-images
-
-  # Path to image tar
   DOCKER_TAR: ${DOCKER_DIR}/app.tar
-
-  # nshm-fault-sections repo
   FAULT_SECTIONS: nshm-fault-sections
-
-  # nshm-fault-sections git url
   FAULT_SECTIONS_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${FAULT_SECTIONS}.git
-
-  # Directory of Jacoco html reports
+  IMAGE_NAME: usgs/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
-
-  # Path to all Junit html files
   JUNIT_FILES: build/test-results/test/TEST-*.xml
-
-  # Local image name
-  LOCAL_IMAGE: local/${CI_PROJECT_NAME}:${IMAGE_VERSION}
-
-  # nshmp-lib repo
   NSHMP_LIB: nshmp-lib
-
-  # nshmp-lib git url
   NSHMP_LIB_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${NSHMP_LIB}.git
 
 stages:
-  - build
   - test
-  - publish
+  - build
+  - deploy
 
 ####
-# GitLab runner tags
+# Template: GitLab runner tags
 ####
-.tags:
+.dev-tags:
   tags:
     - development
 
 ####
-# Download nshmp-lib and nshm-fault-sections
+# Templates:
+#   - nshmp-lib: Download nshmp-lib repo
+#   - fault-sections: Download nshm-fault-sections repo
+#   - adjust-image-names: Update container image names
 ####
-.get-lib:
+.templates:
   nshmp-lib: &nshmp-lib |-
     cd ..;
     rm -rf ${NSHMP_LIB};
@@ -58,6 +40,67 @@ stages:
     rm -rf ${FAULT_SECTIONS};
     git clone ${FAULT_SECTIONS_GIT};
     cd ${CI_PROJECT_NAME};
+  adjust-image-names: &adjust-image-names
+    IMAGE_NAME=${IMAGE_NAME/:master/:latest};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME};
+
+####
+# Template: Deploy to Docker Swarm
+# Globals:
+#   CODE_REGISTRY: Path to container registry
+#   GENERIC_SWARM_DEPLOY_REPO: Path to swarm deploy container
+#   CI_REGISTRY_IMAGE: Path to container image
+####
+.deploy:
+  cache: {}
+  image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
+  before_script:
+    - *adjust-image-names
+  script:
+    - git clone ${GENERIC_SWARM_DEPLOY_REPO} generic-deploy
+    - export REGISTRY=${CI_REGISTRY_IMAGE}
+    - cp -v
+      generic-deploy/default.config.sh
+      generic-deploy/default.funcs.sh
+      generic-deploy/deploy.sh
+      scripts/.
+    - scripts/deploy.sh
+  stage: deploy
+  tags:
+    - deploy
+    - swarm
+  variables:
+    APP_NAME: nshmp-haz
+    STACK_NAME: nshmp-haz
+
+.staging:
+  only:
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+
+.staging01:
+  tags:
+    - staging01
+
+.staging02:
+  tags:
+    - staging02
+
+.production:
+  except:
+    - ^.*beta.*$
+    - ^.*-rc.*$
+  only:
+    - tags@ghsc/nshmp/nshmp-haz-v2
+    - production@ghsc/nshmp/nshmp-haz-v2
+
+.production01:
+  tags:
+    - production01
+
+.production02:
+  tags:
+    - production02
 
 ####
 # Build jar file.
@@ -65,10 +108,7 @@ stages:
 build project:
   stage: build
   image: gradle
-  extends: .tags
-  only:
-    - merge_request
-    - master@ghsc/nshmp/nshmp-haz-v2
+  extends: .dev-tags
   before_script:
     - *nshmp-lib
   script:
@@ -77,16 +117,13 @@ build project:
 ####
 # Run tests.
 # Globals:
-#   (string) JACOCO_HTML_DIR - Directory of Jacoco html reports
-#   (string) JUNIT_FILES - Path to all Junit html files
+#   JACOCO_HTML_DIR - Directory of Jacoco html reports
+#   JUNIT_FILES - Path to all Junit html files
 ####
 test project:
   stage: test
   image: gradle
-  extends: .tags
-  only:
-    - merge_request
-    - master@ghsc/nshmp/nshmp-haz-v2
+  extends: .dev-tags
   coverage: '/Total.*?([0-9]{1,3})%/'
   before_script:
     - *fault-sections
@@ -110,12 +147,9 @@ test project:
 build image:
   stage: build
   image: docker:stable
-  extends:
-    - .tags
-  only:
-    - merge_requests
-    - master@ghsc/nshmp/nshmp-haz-v2
+  extends: .dev-tags
   before_script:
+    - *adjust-image-names
     - rm -rf ${DOCKER_DIR}
     - apk add git;
     - *nshmp-lib
@@ -124,8 +158,8 @@ build image:
     - mv ../${FAULT_SECTIONS} .
   script:
     - mkdir ${DOCKER_DIR}
-    - docker build -t ${LOCAL_IMAGE} .
-    - docker save ${LOCAL_IMAGE} > ${DOCKER_TAR}
+    - docker build -t local/${IMAGE_NAME} .
+    - docker save local$/{IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
     paths:
       - ${DOCKER_DIR}
@@ -135,26 +169,58 @@ build image:
 # Globals:
 #   CHS_PASSWORD - GitLab password
 #   CHS_USERNAME - GitLab username
-#   DEPLOY_IMAGE - Docker image name for depolyment
 #   DOCKER_TAR - The path to the Docker image tar
-#   GITLAB_INNERSOURCE_REGISTRY - URL to registry
-#   IMAGE_VERSION - The current version of the image to publish
-#   LOCAL_IMAGE - Docker local image name
 ####
 publish image:
-  stage: publish
+  stage: deploy
   image: docker:stable
-  extends: .tags
+  tags:
+    - build
   only:
     - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+    - production@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *adjust-image-names
   script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${GITLAB_INNERSOURCE_REGISTRY}
     - docker load -i ${DOCKER_TAR}
-    # Push current version
-    - docker tag ${LOCAL_IMAGE} ${DEPLOY_IMAGE}:${IMAGE_VERSION}
-    - docker push ${DEPLOY_IMAGE}:${IMAGE_VERSION}
-    # Update latest tag
-    - docker tag ${LOCAL_IMAGE} ${DEPLOY_IMAGE}:latest
-    - docker push ${DEPLOY_IMAGE}:latest
-    # Delete pass file
-    - rm -rf /root/.docker/config.json
+    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
+    - docker push ${INTERNAL_IMAGE_NAME}
+    - docker image rm local/${IMAGE_NAME}
+    - docker image rm ${INTERNAL_IMAGE_NAME}
+
+####
+# Deploy to prod01
+####
+# Production01:
+#   extends:
+#     - .deploy
+#     - .production
+#     - .production01
+
+####
+# Deploy to prod02
+####
+# Production02:
+#   extends:
+#     - .deploy
+#     - .production
+#     - .production02
+
+####
+# Deploy to stage01
+####
+Staging01:
+  extends:
+    - .deploy
+    - .staging
+    - .staging01
+
+####
+# Deploy to stage02
+####
+Staging02:
+  extends:
+    - .deploy
+    - .staging
+    - .staging02
