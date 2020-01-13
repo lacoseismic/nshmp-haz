@@ -175,7 +175,7 @@ build image:
   script:
     - mkdir ${DOCKER_DIR}
     - docker build -t local/${IMAGE_NAME} .
-    - docker save local$/{IMAGE_NAME} > ${DOCKER_TAR}
+    - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
     paths:
       - ${DOCKER_DIR}
