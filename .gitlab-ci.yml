@@ -76,7 +76,6 @@ stages:
 
 .staging:
   only:
-    - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
 
@@ -194,7 +193,6 @@ publish image:
   tags:
     - build
   only:
-    - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
     - production@ghsc/nshmp/nshmp-haz-v2
