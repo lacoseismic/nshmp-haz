@@ -1,3 +1,3 @@
 export SERVICE_MAP=(
-  "/beta/nshmp-haz":"nshmp-haz-cous-2018"
+  "/nshmp-haz":"nshmp-haz-cous-2018"
 );

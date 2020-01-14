@@ -5,7 +5,7 @@ variables:
   DOCKER_TAR: ${DOCKER_DIR}/app.tar
   FAULT_SECTIONS: nshm-fault-sections
   FAULT_SECTIONS_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${FAULT_SECTIONS}.git
-  IMAGE_NAME: usgs/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+  IMAGE_NAME: ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
   NSHMP_LIB: nshmp-lib
@@ -55,6 +55,7 @@ stages:
 .deploy:
   cache: {}
   image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
+  dependencies:
   before_script:
     - *adjust-image-names
   script:
@@ -106,7 +107,7 @@ stages:
 ####
 # Build jar file.
 ####
-build project:
+Build Project:
   stage: build
   image: gradle
   extends: .dev-tags
@@ -126,7 +127,7 @@ build project:
 #   JACOCO_HTML_DIR - Directory of Jacoco html reports
 #   JUNIT_FILES - Path to all Junit html files
 ####
-test project:
+Test Project:
   stage: test
   image: gradle
   extends: .dev-tags
@@ -153,9 +154,11 @@ test project:
 # Globals:
 #   DOCKER_DIR - The directory to put Docker image
 #   DOCKER_TAR - The path to the Docker image tar
-#   LOCAL_IMAGE - Docker local image name
+#   FAULT_SECTIONS - nshm-fault-sections repo name
+#   IMAGE_NAME - Docker image name
+#   NSHMP_LIB - nshmp-lib repo name
 ####
-build image:
+Build Image:
   stage: build
   image: docker:stable
   extends: .dev-tags
@@ -186,12 +189,13 @@ build image:
 #   CHS_PASSWORD - GitLab password
 #   CHS_USERNAME - GitLab username
 #   DOCKER_TAR - The path to the Docker image tar
+#   INTERNAL_IMAGE_NAME - GitLab registry Docker image name
+#   IMAGE_NAME - Docker image name
 ####
-publish image:
+Publish Image:
   stage: publish
   image: docker:stable
-  tags:
-    - build
+  extends: .dev-tags
   only:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
@@ -199,14 +203,13 @@ publish image:
   before_script:
     - *adjust-image-names
   script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${GITLAB_INNERSOURCE_REGISTRY}
+    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
     - docker load -i ${DOCKER_TAR}
     - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
     - docker push ${INTERNAL_IMAGE_NAME}
     - docker image rm local/${IMAGE_NAME}
     - docker image rm ${INTERNAL_IMAGE_NAME}
     - rm -rf /root/.docker/config.json
-
 
 ####
 # Deploy to prod01
@@ -229,7 +232,7 @@ publish image:
 ####
 # Deploy to stage01
 ####
-Staging01:
+Staging 01:
   extends:
     - .deploy
     - .staging
@@ -238,7 +241,7 @@ Staging01:
 ####
 # Deploy to stage02
 ####
-Staging02:
+Staging 02:
   extends:
     - .deploy
     - .staging
