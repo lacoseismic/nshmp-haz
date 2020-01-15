@@ -107,7 +107,7 @@ stages:
 ####
 # Build jar file.
 ####
-build project:
+Build Project:
   stage: build
   image: gradle
   extends: .dev-tags
@@ -127,7 +127,7 @@ build project:
 #   JACOCO_HTML_DIR - Directory of Jacoco html reports
 #   JUNIT_FILES - Path to all Junit html files
 ####
-test project:
+Test Project:
   stage: test
   image: gradle
   extends: .dev-tags
@@ -158,7 +158,7 @@ test project:
 #   IMAGE_NAME - Docker image name
 #   NSHMP_LIB - nshmp-lib repo name
 ####
-build image:
+Build Image:
   stage: build
   image: docker:stable
   extends: .dev-tags
@@ -192,7 +192,7 @@ build image:
 #   INTERNAL_IMAGE_NAME - GitLab registry Docker image name
 #   IMAGE_NAME - Docker image name
 ####
-publish image:
+Publish Image:
   stage: publish
   image: docker:stable
   extends: .dev-tags
@@ -232,7 +232,7 @@ publish image:
 ####
 # Deploy to stage01
 ####
-Staging01:
+Staging 01:
   extends:
     - .deploy
     - .staging
@@ -241,7 +241,7 @@ Staging01:
 ####
 # Deploy to stage02
 ####
-Staging02:
+Staging 02:
   extends:
     - .deploy
     - .staging
