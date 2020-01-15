@@ -58,8 +58,7 @@ public abstract class NshmpServlet extends HttpServlet {
   public static class UrlHelper {
 
     private final HttpServletResponse response;
-    private final String host;
-    private final String protocol;
+    private final String urlPrefix;
     public final String url;
 
     UrlHelper(HttpServletRequest request, HttpServletResponse response) {
@@ -70,6 +69,7 @@ public abstract class NshmpServlet extends HttpServlet {
        */
       String host = request.getServerName();
       String protocol = request.getHeader("X-FORWARDED-PROTO");
+      String contextPath = request.getContextPath();
       if (protocol == null) {
         /* Not a forwarded request. Honor reported protocol and port. */
         protocol = request.getScheme();
@@ -86,8 +86,7 @@ public abstract class NshmpServlet extends HttpServlet {
       String url = urlBuf.toString().replace("http://", protocol + "://");
 
       this.response = response;
-      this.host = host;
-      this.protocol = protocol;
+      this.urlPrefix = String.format("%s://%s%s", protocol, host, contextPath);
       this.url = url;
     }
 
@@ -99,7 +98,7 @@ public abstract class NshmpServlet extends HttpServlet {
      */
     public void writeResponse(String usage) throws IOException {
       // TODO had to add duplicate fields to handle haz and g syntax strings
-      response.getWriter().printf(usage, protocol, host, protocol, host);
+      response.getWriter().printf(usage, urlPrefix, urlPrefix);
     }
   }
 
