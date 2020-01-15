@@ -123,43 +123,15 @@ run_hazard() {
 ####
 # Run web services in Tomcat.
 # Globals:
-#   (string) GET_COUS_MODEL_RETURN - The return of get_cous_model
-#   (string) HAZ_HOME - The home for running hazard code
-#   (string) LOG_FILE - The log file
-#   (string) PROJECT - The project name
-#   (string) TOMCAT_WEBAPPS - The Tomcat webapps dir
-#   (string) WS_HOME - The home for running the web services
+#   None
 # Arguments:
 #   None
 # Returns:
 #   None
 ####
 run_ws() {
-  cd ${TOMCAT_WEBAPPS} 2> ${LOG_FILE};
-  mkdir ${PROJECT} 2> ${LOG_FILE};
-  cd ${PROJECT} 2> ${LOG_FILE};
-  cp ${HAZ_HOME}/${PROJECT}.war . 2> ${LOG_FILE};
-  unzip ${PROJECT}.war 2> ${LOG_FILE} &> /dev/null;
-
-  mkdir models 2> ${LOG_FILE};
-  cd models 2> ${LOG_FILE};
-  get_cous_model 2> ${LOG_FILE};
-  local nshm_model="${GET_COUS_MODEL_RETURN}";
-  local model="$(echo ${MODEL} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
-  local year="$(echo ${MODEL} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
-
-  if [ ${model} == 'cous' ]; then
-    mkdir wus ceus 2> ${LOG_FILE};
-    mv "${nshm_model}/${CEUS}" ceus/${year} 2> ${LOG_FILE};
-    mv "${nshm_model}/${WUS}" wus/${year} 2> ${LOG_FILE};
-  else
-    mkdir ${model} 2> ${LOG_FILE};
-    mv ${nshm_model} ${model}/${year} 2> ${LOG_FILE};
-  fi
-
-  rm -r ${nshm_model};
-  cd ${WS_HOME} 2> ${LOG_FILE};
-
+  unpack_war;
+  get_ws_models;
   catalina.sh run 2>&1;
 }
 
@@ -486,6 +458,38 @@ get_nshmp_program() {
 }
 
 ####
+# Get NSHMs for web services.
+# Globals:
+#   (string) GET_COUS_MODEL_RETURN - The return of get_cous_model
+#   (string) LOG_FILE - The log file
+#   (string) WS_HOME - The home for running the web services
+# Arguments:
+#   None
+# Returns:
+#   None
+####
+get_ws_models() {
+  mkdir models 2> ${LOG_FILE};
+  cd models 2> ${LOG_FILE};
+  get_cous_model 2> ${LOG_FILE};
+  local nshm_model="${GET_COUS_MODEL_RETURN}";
+  local model="$(echo ${MODEL} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
+  local year="$(echo ${MODEL} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
+
+  if [ ${model} == 'cous' ]; then
+    mkdir wus ceus 2> ${LOG_FILE};
+    mv "${nshm_model}/${CEUS}" ceus/${year} 2> ${LOG_FILE};
+    mv "${nshm_model}/${WUS}" wus/${year} 2> ${LOG_FILE};
+  else
+    mkdir ${model} 2> ${LOG_FILE};
+    mv ${nshm_model} ${model}/${year} 2> ${LOG_FILE};
+  fi
+
+  rm -r ${nshm_model};
+  cd ${WS_HOME} 2> ${LOG_FILE};
+}
+
+####
 # Move artifacts to mounted volume.
 # Globals:
 #   (string) CONFIG_FILE - The config file name
@@ -504,6 +508,34 @@ move_to_output_volume() {
 
   # Copy output to volume output
   cp -r ${hazout}/* output/. 2> ${LOG_FILE};
+}
+
+####
+# Unpack war file into webapps/<CONTEXT_PATH>.
+# Globals:
+#   (string) CONTEXT_PATH - The context path for the web services
+#   (string) LOG_FILE - The log file
+#   (string) MODEL - The model to use
+#   (string) PROJECT - The project name
+#   (string) TOMCAT_WEBAPPS - The Tomcat webapps dir
+# Arguments:
+#   None
+# Returns:
+#   None
+####
+unpack_war() {
+  cd ${TOMCAT_WEBAPPS} 2> ${LOG_FILE};
+
+  if [ -z ${CONTEXT_PATH} ]; then
+    CONTEXT_PATH="nshmp/${MODEL}";
+  fi
+
+  CONTEXT_PATH=$(echo ${CONTEXT_PATH//\//#} | awk {'print tolower($0)'}) 2> ${LOG_FILE};
+  mkdir ${CONTEXT_PATH} 2> ${LOG_FILE};
+  cd ${CONTEXT_PATH} 2> ${LOG_FILE};
+  cp ${HAZ_HOME}/${PROJECT}.war . 2> ${LOG_FILE};
+  unzip ${PROJECT}.war 2> ${LOG_FILE} &> /dev/null;
+  rm ${PROJECT}.war 2> ${LOG_FILE};
 }
 
 ####

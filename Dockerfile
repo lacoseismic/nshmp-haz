@@ -70,6 +70,7 @@ ENV CONFIG_FILE "config.json"
 VOLUME [ "/app/output" ]
 
 # Tomcat
+ENV CONTEXT_PATH ""
 ENV CATALINA_HOME /usr/local/tomcat
 ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
 ENV PATH ${CATALINA_HOME}/bin:${PATH}
@@ -93,4 +94,5 @@ RUN yum update -y \
 
 WORKDIR ${HAZ_HOME}
 
+EXPOSE 8080
 ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
