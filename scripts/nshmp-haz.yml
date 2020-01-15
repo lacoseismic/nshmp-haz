@@ -21,8 +21,8 @@ services:
       MODEL: HI-2020
       CONTEXT_PATH: nshmp/hi-2020
 
-  # Deploy nshmp-haz with COUS-2018
-  nshmp-haz-cous-2018:
+  # Deploy nshmp-haz with CONUS-2018
+  nshmp-haz-conus-2018:
     image: ${REGISTRY}/${IMAGE_NAME}
     deploy:
       restart_policy:
@@ -38,11 +38,11 @@ services:
       - 8080
     environment:
       RUN_HAZARD: 'false'
-      MODEL: COUS-2018
-      CONTEXT_PATH: nshmp/cous-2018
+      MODEL: CONUS-2018
+      CONTEXT_PATH: nshmp/conus-2018
 
-  # Deploy nshmp-haz with COUS-2014
-  nshmp-haz-cous-2014:
+  # Deploy nshmp-haz with CONUS-2014
+  nshmp-haz-conus-2014:
     image: ${REGISTRY}/${IMAGE_NAME}
     deploy:
       restart_policy:
@@ -58,11 +58,11 @@ services:
       - 8080
     environment:
       RUN_HAZARD: 'false'
-      MODEL: COUS-2014
-      CONTEXT_PATH: nshmp/cous-2014
+      MODEL: CONUS-2014
+      CONTEXT_PATH: nshmp/conus-2014
 
-  # Deploy nshmp-haz with COUS-2014B
-  nshmp-haz-cous-2014b:
+  # Deploy nshmp-haz with CONUS-2014B
+  nshmp-haz-conus-2014b:
     image: ${REGISTRY}/${IMAGE_NAME}
     deploy:
       restart_policy:
@@ -78,11 +78,11 @@ services:
       - 8080
     environment:
       RUN_HAZARD: 'false'
-      MODEL: COUS-2014B
-      CONTEXT_PATH: nshmp/cous-2014b
+      MODEL: CONUS-2014B
+      CONTEXT_PATH: nshmp/conus-2014b
 
-  # Deploy nshmp-haz with COUS-2008
-  nshmp-haz-cous-2008:
+  # Deploy nshmp-haz with CONUS-2008
+  nshmp-haz-conus-2008:
     image: ${REGISTRY}/${IMAGE_NAME}
     deploy:
       restart_policy:
@@ -98,8 +98,8 @@ services:
       - 8080
     environment:
       RUN_HAZARD: 'false'
-      MODEL: COUS-2008
-      CONTEXT_PATH: nshmp/cous-2008
+      MODEL: CONUS-2008
+      CONTEXT_PATH: nshmp/conus-2008
 
   # Deploy nshmp-haz with AK-2007
   nshmp-haz-ak-2007:

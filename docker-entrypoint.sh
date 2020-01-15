@@ -285,17 +285,17 @@ get_cous_model() {
     "AK-2007")
       model="nshm-ak-2007";
       ;;
-    "COUS-2008")
+    "CONUS-2008")
       model="nshm-cous-2008";
       ;;
-    "COUS-2014")
+    "CONUS-2014")
       model="nshm-cous-2014";
       ;;
-    "COUS-2014B")
+    "CONUS-2014B")
       model="nshm-cous-2014";
       version="${VERSION_2014B}";
       ;;
-    "COUS-2018")
+    "CONUS-2018")
       model="nshm-cous-2018";
       ;;
     "HI-2020")
