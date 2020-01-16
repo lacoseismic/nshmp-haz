@@ -299,7 +299,7 @@ get_cous_model() {
       model="nshm-cous-2018";
       ;;
     "HI-2020")
-      model="hi-2020";
+      model="nshm-hi-2020";
       ;;
     *)
       error_exit \
@@ -338,7 +338,7 @@ get_model() {
       model_path="${model}";
       ;;
     "HI-2020")
-      model="hi-2020";
+      model="nshm-hi-2020";
       model_path="${model}";
       ;;
     "CEUS-2008")
@@ -480,12 +480,12 @@ get_ws_models() {
     mkdir wus ceus 2> ${LOG_FILE};
     mv "${nshm_model}/${CEUS}" ceus/${year} 2> ${LOG_FILE};
     mv "${nshm_model}/${WUS}" wus/${year} 2> ${LOG_FILE};
+    rm -r ${nshm_model};
   else
     mkdir ${model} 2> ${LOG_FILE};
     mv ${nshm_model} ${model}/${year} 2> ${LOG_FILE};
   fi
 
-  rm -r ${nshm_model};
   cd ${WS_HOME} 2> ${LOG_FILE};
 }
 
