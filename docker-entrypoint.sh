@@ -476,7 +476,7 @@ get_ws_models() {
   local model="$(echo ${MODEL} | cut -d - -f1 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
   local year="$(echo ${MODEL} | cut -d - -f2 | awk {'print tolower($0)'})" 2> ${LOG_FILE};
 
-  if [ ${model} == 'cous' ]; then
+  if [ ${model} == 'conus' ]; then
     mkdir wus ceus 2> ${LOG_FILE};
     mv "${nshm_model}/${CEUS}" ceus/${year} 2> ${LOG_FILE};
     mv "${nshm_model}/${WUS}" wus/${year} 2> ${LOG_FILE};
