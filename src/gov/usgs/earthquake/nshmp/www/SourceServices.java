@@ -96,8 +96,8 @@ public class SourceServices extends NshmpServlet {
     ResponseData() {
       this.name = "Source Models";
       this.description = "Installed source model listing";
-      this.syntax = "%s://%s/nshmp-haz-v2/haz/{model}/{longitude}/{latitude}/{vs30}";
-      this.deaggSyntax = "%s://%s/nshmp-haz-v2/deagg2/{model}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}/{basin}";
+      this.syntax = "%s/haz/{model}/{longitude}/{latitude}/{vs30}";
+      this.deaggSyntax = "%s/deagg2/{model}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}/{basin}";
       this.status = Status.USAGE.toString();
       this.server = serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
       this.parameters = new Parameters();
