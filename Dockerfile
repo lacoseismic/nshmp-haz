@@ -53,7 +53,6 @@ ARG TOMCAT_MAJOR=8
 ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.5.40
 
 ENV PROJECT ${project}
-ENV JAVA_XMS 8g
 ENV JAVA_XMX 8g
 
 # Whether to run hazard jar file or web services war file
@@ -76,7 +75,7 @@ ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
 ENV PATH ${CATALINA_HOME}/bin:${PATH}
 ENV TOMCAT_SOURCE http://archive.apache.org/dist/tomcat
 ENV TOMCAT_URL ${TOMCAT_SOURCE}/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
-ENV JAVA_OPTS -Xms${JAVA_XMS} -Xmx${JAVA_XMX}
+ENV JAVA_OPTS -Xmx${JAVA_XMX}
 
 ENV WS_HOME ${CATALINA_HOME}
 ENV HAZ_HOME /app
