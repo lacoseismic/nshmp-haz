@@ -58,6 +58,7 @@ stages:
   dependencies:
   before_script:
     - *adjust-image-names
+    - docker pull ${INTERNAL_IMAGE_NAME}
   script:
     - git clone ${GENERIC_SWARM_DEPLOY_REPO} generic-deploy
     - export REGISTRY=${CI_REGISTRY_IMAGE}
