@@ -19,7 +19,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: HI-2020
-      CONTEXT_PATH: hawaii-2020
+      CONTEXT_PATH: nshmp/hawaii-2020
 
   # Deploy nshmp-haz with CONUS-2018
   nshmp-haz-conus-2018:
@@ -115,4 +115,4 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: AK-2007
-      CONETEXT_PATH: alaska-2007
+      CONETEXT_PATH: nshmp/alaska-2007
