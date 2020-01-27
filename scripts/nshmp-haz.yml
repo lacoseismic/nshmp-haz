@@ -119,4 +119,4 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: AK-2007
-      CONETEXT_PATH: nshmp/alaska-2007
+      CONTEXT_PATH: nshmp/alaska-2007
