@@ -39,6 +39,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2018
+      CONTEXT_PATH: nshmp/conus-2018
 
   # Deploy nshmp-haz with CONUS-2014
   nshmp-haz-conus-2014:
@@ -58,6 +59,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2014
+      CONTEXT_PATH: nshmp/conus-2014
 
   # Deploy nshmp-haz with CONUS-2014B
   nshmp-haz-conus-2014b:
@@ -77,6 +79,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2014B
+      CONTEXT_PATH: nshmp/conus-2014b
 
   # Deploy nshmp-haz with CONUS-2008
   nshmp-haz-conus-2008:
@@ -96,6 +99,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2008
+      CONTEXT_PATH: nshmp/conus-2008
 
   # Deploy nshmp-haz with AK-2007
   nshmp-haz-ak-2007:
