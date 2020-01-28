@@ -1,21 +1,25 @@
 version: "3.7"
 
+# General deployment config
+x-app: &app
+  image: ${REGISTRY}/${IMAGE_NAME}
+  deploy:
+    restart_policy:
+      condition: any
+      delay: 5s
+      max_attempts: 3
+      window: 120s
+    replicas: 1
+    update_config:
+      order: start-first
+      parallelism: 1
+  ports:
+    - 8080
+
 services:
   # Deploy nshmp-haz with HI-2020
   nshmp-haz-hi-2020:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: HI-2020
@@ -23,19 +27,7 @@ services:
 
   # Deploy nshmp-haz with CONUS-2018
   nshmp-haz-conus-2018:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2018
@@ -43,19 +35,7 @@ services:
 
   # Deploy nshmp-haz with CONUS-2014
   nshmp-haz-conus-2014:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2014
@@ -63,19 +43,7 @@ services:
 
   # Deploy nshmp-haz with CONUS-2014B
   nshmp-haz-conus-2014b:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2014B
@@ -83,19 +51,7 @@ services:
 
   # Deploy nshmp-haz with CONUS-2008
   nshmp-haz-conus-2008:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2008
@@ -103,19 +59,7 @@ services:
 
   # Deploy nshmp-haz with AK-2007
   nshmp-haz-ak-2007:
-    image: ${REGISTRY}/${IMAGE_NAME}
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      replicas: 3
-      update_config:
-        order: start-first
-        parallelism: 3
-    ports:
-      - 8080
+    <<: *app
     environment:
       RUN_HAZARD: 'false'
       MODEL: AK-2007
