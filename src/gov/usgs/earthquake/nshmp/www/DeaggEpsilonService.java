@@ -225,8 +225,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
   }
 
   private static Hazard process(HazardModel model, Site site, Set<Imt> imts) {
-    CalcConfig config = CalcConfig.Builder
-        .copyOf(model.config())
+    CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(imts)
         .build();
     // System.out.println(config);

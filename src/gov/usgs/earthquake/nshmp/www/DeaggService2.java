@@ -249,8 +249,7 @@ public final class DeaggService2 extends NshmpServlet {
   }
 
   private static Hazard process(HazardModel model, Site site, Imt imt) {
-    CalcConfig config = CalcConfig.Builder
-        .copyOf(model.config())
+    CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(EnumSet.of(imt))
         .build();
     return HazardCalcs.hazard(model, config, site, ServletUtil.CALC_EXECUTOR);
