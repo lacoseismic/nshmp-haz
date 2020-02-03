@@ -275,8 +275,7 @@ public final class RateService extends NshmpServlet {
       double distance,
       Optional<Double> timespan) {
 
-    Builder configBuilder = CalcConfig.Builder
-        .copyOf(model.config())
+    Builder configBuilder = CalcConfig.copyOf(model.config())
         .distance(distance);
     if (timespan.isPresent()) {
       /* Also sets value format to Poisson probability. */

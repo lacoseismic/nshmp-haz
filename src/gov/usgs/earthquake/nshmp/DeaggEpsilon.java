@@ -108,12 +108,12 @@ public class DeaggEpsilon {
       CalcConfig ceusConfig = ceusModel.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
-        wusConfig = CalcConfig.Builder.copyOf(wusModel.config())
-            .extend(CalcConfig.Builder.fromFile(userConfigPath))
+        wusConfig = CalcConfig.copyOf(wusModel.config())
+            .extend(CalcConfig.fromFile(userConfigPath))
             .imts(EnumSet.copyOf(imts))
             .build();
-        ceusConfig = CalcConfig.Builder.copyOf(ceusModel.config())
-            .extend(CalcConfig.Builder.fromFile(userConfigPath))
+        ceusConfig = CalcConfig.copyOf(ceusModel.config())
+            .extend(CalcConfig.fromFile(userConfigPath))
             .imts(EnumSet.copyOf(imts))
             .build();
       }

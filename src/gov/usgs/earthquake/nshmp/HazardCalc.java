@@ -97,8 +97,8 @@ public class HazardCalc {
       CalcConfig config = model.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
-        config = CalcConfig.Builder.copyOf(model.config())
-            .extend(CalcConfig.Builder.fromFile(userConfigPath))
+        config = CalcConfig.copyOf(model.config())
+            .extend(CalcConfig.fromFile(userConfigPath))
             .build();
       }
       log.info(config.toString());

@@ -88,8 +88,8 @@ public class DeaggIml {
       CalcConfig config = model.config();
       if (argCount == 4) {
         Path userConfigPath = Paths.get(args[3]);
-        config = CalcConfig.Builder.copyOf(model.config())
-            .extend(CalcConfig.Builder.fromFile(userConfigPath))
+        config = CalcConfig.copyOf(model.config())
+            .extend(CalcConfig.fromFile(userConfigPath))
             .build();
       }
       log.info(config.toString());

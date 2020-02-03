@@ -320,7 +320,7 @@ public final class HazardService extends NshmpServlet {
   }
 
   private static Hazard process(HazardModel model, Site site, Set<Imt> imts) {
-    Builder configBuilder = CalcConfig.Builder.copyOf(model.config());
+    Builder configBuilder = CalcConfig.copyOf(model.config());
     configBuilder.imts(imts);
     CalcConfig config = configBuilder.build();
     return HazardCalcs.hazard(model, config, site, ServletUtil.CALC_EXECUTOR);
