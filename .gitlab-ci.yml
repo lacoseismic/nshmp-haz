@@ -109,10 +109,9 @@ Build Project:
 # Run Spotless check.
 ####
 Spotless Check:
-  extends:
-    - .gradle
-    - .dev-tags
   stage: test
+  image: gradle
+  extends: .dev-tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
@@ -123,10 +122,9 @@ Spotless Check:
 # Run Spotbugs main.
 ####
 Spotbugs Main:
-  extends:
-    - .gradle
-    - .dev-tags
   stage: test
+  image: gradle
+  extends: .dev-tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
@@ -137,10 +135,9 @@ Spotbugs Main:
 # Run Spotbugs test.
 ####
 Spotbugs Test:
-  extends:
-    - .gradle
-    - .dev-tags
   stage: test
+  image: gradle
+  extends: .dev-tags
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
