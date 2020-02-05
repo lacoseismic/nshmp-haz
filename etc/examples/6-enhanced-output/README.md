@@ -40,4 +40,3 @@ __Results directory structure:__
 ```
 
 #### Next: [Example 7 – Deaggregation](../7-deaggregation)
-

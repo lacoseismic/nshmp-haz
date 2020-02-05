@@ -75,4 +75,3 @@ __Results directory structure:__
 Note that in the output above, there are only deaggregation results for subduction GMMs (e.g. `AB_03_CASCADIA_SLAB`) for sites closer to the Cascadia subduction zone; empty results will not be saved.
 
 #### Next: [Example 8 – Earthquake probabilities and rates](../8-probabilities)
-

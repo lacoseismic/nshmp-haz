@@ -10,4 +10,3 @@ alias hazard='java -cp /path/to/nshmp-haz/build/libs/nshmp-haz.jar gov.usgs.eart
 Because each example builds on prior concepts, it is best step through all the examples, however quickly.
 
 #### Start: [Example 1 – A simple hazard calculation](1-hazard-curve)
-

@@ -39,4 +39,3 @@ __Results directory structure:__
       ├─ RateCalc.log
       └─ probs.csv
 ```
-
