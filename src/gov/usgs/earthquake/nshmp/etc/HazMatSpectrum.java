@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp.etc;
 
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.util.Arrays;
 

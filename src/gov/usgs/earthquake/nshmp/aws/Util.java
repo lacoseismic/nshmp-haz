@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Util {
-  
+
   static final String CURVES_FILE = "curves.csv";
   static final String MAP_FILE = "map.csv";
 

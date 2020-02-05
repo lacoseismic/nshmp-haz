@@ -4,9 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.readBoolean;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.BASIN;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.IMT;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
@@ -14,6 +11,9 @@ import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.MODEL;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.RETURNPERIOD;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.Util.readBoolean;
+import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
+import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,6 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;

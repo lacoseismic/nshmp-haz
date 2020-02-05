@@ -1,11 +1,10 @@
 package gov.usgs.earthquake.nshmp.www.meta;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.common.collect.ImmutableMap;
 import gov.usgs.earthquake.nshmp.HazardCalc;
 
 /*
@@ -15,7 +14,6 @@ import gov.usgs.earthquake.nshmp.HazardCalc;
  */
 class Versions {
 
-  
   static final String NSHMP_HAZ_VERSION = HazardCalc.VERSION;
   static final String NSHMP_HAZ_WS_VERSION;
   private static final Map<String, String> MODEL_VERSIONS;
@@ -26,7 +24,7 @@ class Versions {
     ImmutableMap.Builder<String, String> modelMap = ImmutableMap.builder();
 
     /* Always runs from a war (possibly unpacked). */
-    try (InputStream in = Metadata.class.getResourceAsStream("/service.properties")){
+    try (InputStream in = Metadata.class.getResourceAsStream("/service.properties")) {
       Properties props = new Properties();
       props.load(in);
       in.close();
@@ -43,7 +41,7 @@ class Versions {
     } catch (Exception e) {
       /* Do nothing; probably running outside standard build. */
     }
-    
+
     NSHMP_HAZ_WS_VERSION = nshmpHazWsVersion;
     MODEL_VERSIONS = modelMap.build();
   }

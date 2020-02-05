@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp;
 
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 import java.io.IOException;
@@ -42,12 +42,11 @@ public class RateCalc {
    * Entry point for the calculation of earthquake rates and probabilities.
    *
    * <p>Computing earthquake rates requires at least 2, and at most 3,
-   * arguments. At a minimum, the path to a model directory and the
-   * site(s) at which to perform calculations must be specified. Under the
-   * 2-argument scenario, model initialization and calculation configuration
-   * settings are drawn from the config file that <i>must</i> reside at the root
-   * of the model directory. Sites may be defined as a string, a CSV file, or a
-   * GeoJSON file.
+   * arguments. At a minimum, the path to a model directory and the site(s) at
+   * which to perform calculations must be specified. Under the 2-argument
+   * scenario, model initialization and calculation configuration settings are
+   * drawn from the config file that <i>must</i> reside at the root of the model
+   * directory. Sites may be defined as a string, a CSV file, or a GeoJSON file.
    *
    * <p>To override any default or calculation configuration settings included
    * with the model, supply the path to another configuration file as a third
@@ -127,7 +126,7 @@ public class RateCalc {
    * Compute earthquake rates or probabilities using the supplied model, config,
    * and sites. Method returns the path to the directory where results were
    * written.
-   * 
+   *
    * Unlike hazard calculations, which spread work out over multiple threads for
    * a single calculation, rate calculations are single threaded. Concurrent
    * calculations for multiple sites are handled below.
@@ -184,7 +183,7 @@ public class RateCalc {
      * there are one or more longer-running calcs in the batch, processing
      * batches of locations to a List preserves submission order; as opposed to
      * using FutureCallbacks, which will reorder sites on export.
-     * 
+     *
      * TODO this is a terrible implementation with batch size 10. resulted from
      * refactor to exports not queueing results
      */

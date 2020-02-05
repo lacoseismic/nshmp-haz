@@ -257,7 +257,7 @@ public final class Metadata {
 
   static final String BUSY_MESSAGE = "Server busy. Please try again later. " +
       "We apologize for any inconvenience while we increase capacity.";
-      
+
   private static class Busy {
 
     final String status = Status.BUSY.toString();

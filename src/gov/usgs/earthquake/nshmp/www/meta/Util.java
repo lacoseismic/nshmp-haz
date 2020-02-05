@@ -15,11 +15,11 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import gov.usgs.earthquake.nshmp.Maths;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput.Field;
-import gov.usgs.earthquake.nshmp.Maths;
 
 @SuppressWarnings("javadoc")
 public final class Util {

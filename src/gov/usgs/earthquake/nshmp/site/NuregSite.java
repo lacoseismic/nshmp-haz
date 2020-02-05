@@ -1,9 +1,9 @@
 package gov.usgs.earthquake.nshmp.site;
 
-import gov.usgs.earthquake.nshmp.geo.Location;
-import gov.usgs.earthquake.nshmp.internal.UsRegion;
 import gov.usgs.earthquake.nshmp.NamedLocation;
 import gov.usgs.earthquake.nshmp.Text;
+import gov.usgs.earthquake.nshmp.geo.Location;
+import gov.usgs.earthquake.nshmp.internal.UsRegion;
 
 /**
  * CEUS-SSCn NRC NUREG demonstration sites. Most are also present in

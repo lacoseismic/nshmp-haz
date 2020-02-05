@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp;
 
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,11 +42,11 @@ public class HazardCalc {
    * Entry point for a probabilisitic seismic hazard calculation.
    *
    * <p>Computing hazard curves requires at least 2, and at most 3, arguments.
-   * At a minimum, the path to a model directory and the site(s) at
-   * which to perform calculations must be specified. Under the 2-argument
-   * scenario, model initialization and calculation configuration settings are
-   * drawn from the config file that <i>must</i> reside at the root of the model
-   * directory. Sites may be defined as a string, a CSV file, or a GeoJSON file.
+   * At a minimum, the path to a model directory and the site(s) at which to
+   * perform calculations must be specified. Under the 2-argument scenario,
+   * model initialization and calculation configuration settings are drawn from
+   * the config file that <i>must</i> reside at the root of the model directory.
+   * Sites may be defined as a string, a CSV file, or a GeoJSON file.
    *
    * <p>To override any default or calculation configuration settings included
    * with the model, supply the path to another configuration file as a third

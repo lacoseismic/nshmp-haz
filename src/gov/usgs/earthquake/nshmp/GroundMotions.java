@@ -21,7 +21,6 @@ import gov.usgs.earthquake.nshmp.gmm.GmmInput;
 import gov.usgs.earthquake.nshmp.gmm.GroundMotionModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.ScalarGroundMotion;
-import gov.usgs.earthquake.nshmp.Maths;
 
 public class GroundMotions {
 

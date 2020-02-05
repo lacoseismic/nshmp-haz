@@ -1,35 +1,27 @@
 package gov.usgs.earthquake.nshmp.www;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static gov.usgs.earthquake.nshmp.calc.ValueFormat.ANNUAL_RATE;
 import static gov.usgs.earthquake.nshmp.calc.ValueFormat.POISSON_PROBABILITY;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.DISTANCE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.EDITION;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.REGION;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.TIMESPAN;
+import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
+import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
 
-import java.util.Optional;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ListenableFuture;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -37,9 +29,12 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig.Builder;
@@ -112,7 +107,7 @@ public final class RateService extends NshmpServlet {
           urlHelper.url,
           ServletUtil.hitCount,
           ServletUtil.missCount);
-      //response.setStatus(503);
+      // response.setStatus(503);
       response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
       response.getWriter().print(message);
       return;
@@ -253,11 +248,11 @@ public final class RateService extends NshmpServlet {
       rates = EqRate.combine(wusRates.get(), ceusRates.get());
 
     } else {
-      
-      String year = (baseYear.equals("2014B") && data.region == Region.CEUS) 
-          ?  "2014" : baseYear;
+
+      String year = (baseYear.equals("2014B") && data.region == Region.CEUS)
+          ? "2014" : baseYear;
       Model modelId = Model.valueOf(data.region.name() + "_" + year);
-      
+
       HazardModel model = modelCache.get(modelId);
       rates = process(model, site, distance, emptyTimespan).get();
     }

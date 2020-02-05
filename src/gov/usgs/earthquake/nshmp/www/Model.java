@@ -1,8 +1,27 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import static gov.usgs.earthquake.nshmp.calc.Vs30.*;
-import static gov.usgs.earthquake.nshmp.gmm.Imt.*;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.*;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_1150;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_180;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_2000;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_259;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_360;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_537;
+import static gov.usgs.earthquake.nshmp.calc.Vs30.VS_760;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.PGA;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P1;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P2;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P3;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P5;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P75;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA1P0;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA2P0;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA3P0;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA4P0;
+import static gov.usgs.earthquake.nshmp.gmm.Imt.SA5P0;
+import static gov.usgs.earthquake.nshmp.www.meta.Region.AK;
+import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
+import static gov.usgs.earthquake.nshmp.www.meta.Region.HI;
+import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
 
 import java.nio.file.Paths;
 import java.util.EnumSet;
@@ -50,7 +69,7 @@ enum Model {
   WUS_2018(
       EnumSet.of(PGA, SA0P1, SA0P2, SA0P3, SA0P5, SA0P75, SA1P0, SA2P0, SA3P0, SA4P0, SA5P0),
       EnumSet.of(VS_1150, VS_760, VS_537, VS_360, VS_259, VS_180)),
-  
+
   HI_2020(
       EnumSet.of(PGA, SA0P1, SA0P2, SA0P3, SA0P5, SA0P75, SA1P0, SA2P0, SA3P0, SA5P0),
       EnumSet.of(VS_1150, VS_760, VS_537, VS_360, VS_259, VS_180));

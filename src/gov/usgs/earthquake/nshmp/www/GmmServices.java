@@ -5,8 +5,8 @@ import static gov.usgs.earthquake.nshmp.ResponseSpectra.spectra;
 import static gov.usgs.earthquake.nshmp.gmm.GmmInput.Field.VSINF;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.AI;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.PGV;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.IMT;
+import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.meta.Metadata.errorMessage;
 
 import java.io.BufferedReader;

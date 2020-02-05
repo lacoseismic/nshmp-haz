@@ -5,9 +5,6 @@ import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
-import static gov.usgs.earthquake.nshmp.www.Util.readValues;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.EDITION;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.IMT;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
@@ -15,6 +12,9 @@ import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.REGION;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.RETURNPERIOD;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
+import static gov.usgs.earthquake.nshmp.www.Util.readValue;
+import static gov.usgs.earthquake.nshmp.www.Util.readValues;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.COUS;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
@@ -24,7 +24,6 @@ import java.time.ZonedDateTime;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,11 +33,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.Sequence;
 
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig.Builder;
@@ -137,7 +134,7 @@ public final class HazardService extends NshmpServlet {
           urlHelper.url,
           ServletUtil.hitCount,
           ServletUtil.missCount);
-      //response.setStatus(503);
+      // response.setStatus(503);
       response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
       response.getWriter().print(message);
       return;
@@ -447,7 +444,8 @@ public final class HazardService extends NshmpServlet {
         totalMap = new EnumMap<>(Imt.class);
         xValuesLinearMap = new EnumMap<>(Imt.class);
 
-        Map<Imt, Map<SourceType, ? extends XySequence>> typeTotalMaps = curvesBySource(hazardResult);
+        Map<Imt, Map<SourceType, ? extends XySequence>> typeTotalMaps =
+            curvesBySource(hazardResult);
 
         for (Imt imt : hazardResult.curves().keySet()) {
 
@@ -468,8 +466,7 @@ public final class HazardService extends NshmpServlet {
 
           xValuesLinearMap.put(
               imt,
-              hazardResult.config()
-                  .hazard
+              hazardResult.config().hazard
                   .modelCurve(imt)
                   .xValues()
                   .boxed()
