@@ -115,6 +115,8 @@ Spotless Check:
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
   script:
     - ./gradlew spotlessCheck;
 
@@ -128,6 +130,8 @@ Spotbugs Main:
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
   script:
     - ./gradlew spotbugsMain;
 
@@ -141,6 +145,8 @@ Spotbugs Test:
   only:
     - merge_request
     - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
   script:
     - ./gradlew spotbugsTest;
 
