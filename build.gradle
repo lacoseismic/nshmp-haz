@@ -147,11 +147,23 @@ def writeProperties() {
   props.store(propsFile.newWriter(), null)
 }
 
+/*
+ * Update XML formatting
+ */
 spotless {
+  /* XML formatting */
   format "xml", {
     target fileTree(".") {
       include "**/*.xml"
-      exclude "**/webapp/models/**"
+      exclude "**/build/**", ".settings/**", "**/webapp/models/**"
     }
+  }
+}
+
+/* Add HTML reports to SpotBugs */
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
   }
 }
