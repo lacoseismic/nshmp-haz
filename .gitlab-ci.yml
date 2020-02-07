@@ -13,7 +13,6 @@ variables:
 
 stages:
   - test
-  - build
   - publish
   - deploy
 
@@ -89,27 +88,11 @@ stages:
   tags:
     - staging02
 
-.production:
-  except:
-    - ^.*beta.*$
-    - ^.*-rc.*$
-  only:
-    - tags@ghsc/nshmp/nshmp-haz-v2
-    - production@ghsc/nshmp/nshmp-haz-v2
-
-.production01:
-  tags:
-    - production01
-
-.production02:
-  tags:
-    - production02
-
 ####
 # Build jar file.
 ####
 Build Project:
-  stage: build
+  stage: test
   image: gradle
   extends: .dev-tags
   only:
@@ -123,12 +106,57 @@ Build Project:
     - ./gradlew assemble
 
 ####
+# Run Spotless check.
+####
+Spotless Check:
+  stage: test
+  image: gradle
+  extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
+  script:
+    - ./gradlew spotlessCheck;
+
+####
+# Run Spotbugs main.
+####
+Spotbugs Main:
+  stage: test
+  image: gradle
+  extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
+  script:
+    - ./gradlew spotbugsMain;
+
+####
+# Run Spotbugs test.
+####
+Spotbugs Test:
+  stage: test
+  image: gradle
+  extends: .dev-tags
+  only:
+    - merge_request
+    - master@ghsc/nshmp/nshmp-haz-v2
+  before_script:
+    - *nshmp-lib
+  script:
+    - ./gradlew spotbugsTest;
+
+####
 # Run tests.
 # Globals:
 #   JACOCO_HTML_DIR - Directory of Jacoco html reports
 #   JUNIT_FILES - Path to all Junit html files
 ####
-Test Project:
+Unit Tests:
   stage: test
   image: gradle
   extends: .dev-tags
@@ -160,7 +188,7 @@ Test Project:
 #   NSHMP_LIB - nshmp-lib repo name
 ####
 Build Image:
-  stage: build
+  stage: test
   image: docker:stable
   extends: .dev-tags
   only:
@@ -211,24 +239,6 @@ Publish Image:
     - docker image rm local/${IMAGE_NAME}
     - docker image rm ${INTERNAL_IMAGE_NAME}
     - rm -rf /root/.docker/config.json
-
-####
-# Deploy to prod01
-####
-# Production01:
-#   extends:
-#     - .deploy
-#     - .production
-#     - .production01
-
-####
-# Deploy to prod02
-####
-# Production02:
-#   extends:
-#     - .deploy
-#     - .production
-#     - .production02
 
 ####
 # Deploy to stage01

@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp;
 
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -140,7 +140,7 @@ public class Hazard2018 {
 
   /*
    * Developer notes:
-   * 
+   *
    * This program will not correctly output results by source type and GMM due
    * to model combining; only one model is listed in a combined hazard result.
    * This needs to be fixed; see Hazard.merge() for additional notes.

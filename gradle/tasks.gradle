@@ -1,0 +1,62 @@
+
+task thinJar(type: Jar) {
+  doFirst {
+    thinJar = true
+  }
+  with jar
+}
+
+/*
+ * Create a war file with development models
+ */
+task assembleDev(type: War, dependsOn: 'war') {
+  prod_models.each{model ->
+    from(model[0]) { into model[1] }
+  }
+
+  dev_models.each{model ->
+    from(model[0]) { into model[1] }
+  }
+}
+
+/*
+ * Create am exploded war file with production models
+ */
+task assembleUsgs(type: Sync) {
+  into "${libsDirectory.get()}/exploded-war"
+  with war
+
+  doFirst {
+    /* Record service and model versions */
+    writeProperties()
+  }
+}
+
+/*
+ * Create am exploded war file with development models
+ */
+task assembleUsgsDev(type: Sync) {
+  into "${libsDirectory.get()}/exploded-war"
+  with assembleDev
+
+  doFirst {
+    /* Record service and model versions */
+    writeProperties()
+  }
+}
+
+/*
+ * Create a zip file of all dependencies
+ */
+task libs(type: Zip) {
+  archiveBaseName = "nshmp-haz-dependencies"
+  from {
+    configurations.compileClasspath.collect {
+      it
+    }
+  }
+
+  into("java/lib")
+
+  destinationDirectory.value(libsDirectory)
+}

@@ -1,7 +1,7 @@
 package gov.usgs.earthquake.nshmp.site;
 
-import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.NamedLocation;
+import gov.usgs.earthquake.nshmp.geo.Location;
 
 /**
  * Cybershake UGMS sites.

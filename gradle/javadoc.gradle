@@ -1,0 +1,38 @@
+/*
+ * JavaDoc config
+ */
+javadoc {
+  options.setUse(true)
+  options.author(true)
+  options.version(true)
+  options.windowTitle(projectName)
+  options.docTitle(docTitle)
+  options.encoding('UTF-8')
+  options.docEncoding('UTF-8')
+  options.charSet('UTF-8')
+  options.bottom(docFooter)
+  options.addStringOption('Xdoclint:none', '-quiet')
+  options.links(
+      'https://docs.oracle.com/javase/8/docs/api/',
+      'https://google.github.io/guava/releases/23.0/api/docs/',
+      'https://google.github.io/gson/apidocs/')
+  include 'gov/usgs/earthquake/nshmp/**'
+  exclude 'gov/usgs/earthquake/nshmp/www/**'
+  exclude 'gov/usgs/earthquake/nshmp/aws/**'
+  exclude 'gov/usgs/earthquake/nshmp/etc/**'
+  exclude 'gov/usgs/earthquake/nshmp/internal/**'
+  exclude '**/Scratch*'
+  doLast {
+    if (docOut) {
+      delete docOut
+      copy {
+        from 'build/docs/javadoc'
+        into docOut
+      }
+      copy {
+        from 'etc/resources/docs'
+        into docOut + '/resources'
+      }
+    }
+  }
+}

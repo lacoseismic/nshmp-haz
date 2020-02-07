@@ -1,7 +1,7 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import static gov.usgs.earthquake.nshmp.www.meta.Metadata.serverData;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.INSTALLED_MODELS;
+import static gov.usgs.earthquake.nshmp.www.meta.Metadata.serverData;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -97,7 +96,8 @@ public class SourceServices extends NshmpServlet {
       this.name = "Source Models";
       this.description = "Installed source model listing";
       this.syntax = "%s/haz/{model}/{longitude}/{latitude}/{vs30}";
-      this.deaggSyntax = "%s/deagg2/{model}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}/{basin}";
+      this.deaggSyntax =
+          "%s/deagg2/{model}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}/{basin}";
       this.status = Status.USAGE.toString();
       this.server = serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
       this.parameters = new Parameters();

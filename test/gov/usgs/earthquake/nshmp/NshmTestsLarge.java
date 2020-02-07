@@ -34,7 +34,6 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.eq.model.Loader;
-import gov.usgs.earthquake.nshmp.NamedLocation;
 
 /**
  * Class for end-to-end tests of hazard calculations. These tests require
@@ -214,18 +213,18 @@ public class NshmTestsLarge {
   }
 
   public static void main(String[] args) throws Exception {
-    
+
     /* Initialize and shut down executor to generate results. */
     setUpBeforeClass();
-    
-//    writeExpecteds("ceus", 2008, CEUS_SITES);
-//    writeExpecteds("ceus", 2014, CEUS_SITES);
-//    writeExpecteds("ceus", 2018, CEUS_SITES);
-    
-//    writeExpecteds("wus", 2008, WUS_SITES);
-//    writeExpecteds("wus", 2014, WUS_SITES);
+
+    // writeExpecteds("ceus", 2008, CEUS_SITES);
+    // writeExpecteds("ceus", 2014, CEUS_SITES);
+    // writeExpecteds("ceus", 2018, CEUS_SITES);
+
+    // writeExpecteds("wus", 2008, WUS_SITES);
+    // writeExpecteds("wus", 2014, WUS_SITES);
     writeExpecteds("wus", 2018, WUS_SITES);
-    
+
     tearDownAfterClass();
   }
 

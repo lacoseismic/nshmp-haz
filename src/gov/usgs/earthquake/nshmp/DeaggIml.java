@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp;
 
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,13 +36,13 @@ public class DeaggIml {
 
   /**
    * Entry point for the deaggregation of probabilisitic seismic hazard.
-   * 
+   *
    * <p>Deaggregating siesmic hazard is largeley identical to a hazard
    * calculation except that an intensity measure level (in units of g) must be
    * supplied as an additional argument after the 'site(s)' argument. See the
    * {@link HazardCalc#main(String[]) HazardCalc program} for more information
    * on required parameters.
-   * 
+   *
    * <p>Please refer to the nshmp-haz <a
    * href="https://github.com/usgs/nshmp-haz/wiki" target="_top">wiki</a> for
    * comprehensive descriptions of source models, configuration files, site
@@ -118,7 +118,7 @@ public class DeaggIml {
   /*
    * Compute hazard curves using the supplied model, config, and sites. Method
    * returns the path to the directory where results were written.
-   * 
+   *
    * TODO consider refactoring to supply an Optional<Double> return period to
    * HazardCalc.calc() that will trigger deaggregations if the value is present.
    */

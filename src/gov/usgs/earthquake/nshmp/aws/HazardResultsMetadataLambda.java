@@ -108,7 +108,9 @@ public class HazardResultsMetadataLambda implements RequestStreamHandler {
     return transformS3Listing(users, s3Listings);
   }
 
-  private static List<HazardResults> transformS3Listing(Set<String> users, List<S3Listing> s3Listings) {
+  private static List<HazardResults> transformS3Listing(
+      Set<String> users,
+      List<S3Listing> s3Listings) {
     List<HazardResults> hazardResults = new ArrayList<>();
 
     users.forEach(user -> {

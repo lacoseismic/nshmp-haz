@@ -5,12 +5,12 @@ import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.MODEL;
 import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
+import static gov.usgs.earthquake.nshmp.www.Util.readValue;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -303,7 +303,8 @@ public final class HazardService2 extends NshmpServlet {
         totalMap = new EnumMap<>(Imt.class);
         xValuesLinearMap = new EnumMap<>(Imt.class);
 
-        Map<Imt, Map<SourceType, ? extends XySequence>> typeTotalMaps = curvesBySource(hazardResult);
+        Map<Imt, Map<SourceType, ? extends XySequence>> typeTotalMaps =
+            curvesBySource(hazardResult);
 
         for (Imt imt : hazardResult.curves().keySet()) {
 
@@ -324,8 +325,7 @@ public final class HazardService2 extends NshmpServlet {
 
           xValuesLinearMap.put(
               imt,
-              hazardResult.config()
-                  .hazard
+              hazardResult.config().hazard
                   .modelCurve(imt)
                   .xValues()
                   .boxed()

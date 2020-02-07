@@ -1,7 +1,7 @@
 package gov.usgs.earthquake.nshmp;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static gov.usgs.earthquake.nshmp.internal.TextUtils.NEWLINE;
+import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -190,7 +190,7 @@ public class DeaggEpsilon {
   /*
    * Compute hazard curves using the supplied model, config, and sites. Method
    * returns the path to the directory where results were written.
-   * 
+   *
    * TODO consider refactoring to supply an Optional<Double> return period to
    * HazardCalc.calc() that will trigger deaggregations if the value is present.
    */
@@ -219,7 +219,7 @@ public class DeaggEpsilon {
     Files.createDirectory(siteDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
-    
+
     for (int i = 0; i < sites.size(); i++) {
 
       Site site = sites.get(i);

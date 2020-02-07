@@ -71,7 +71,7 @@ public class ServletUtil implements ServletContextListener {
   public static final Gson GSON;
 
   static final String MODEL_CACHE_CONTEXT_ID = "model.cache";
-  
+
   static Model[] INSTALLED_MODELS;
 
   /* Stateful flag to reject requests while a result is pending. */
@@ -109,13 +109,13 @@ public class ServletUtil implements ServletContextListener {
   public void contextInitialized(ServletContextEvent e) {
 
     final ServletContext context = e.getServletContext();
-    
+
     INSTALLED_MODELS = Stream.of(Model.values())
         .filter(model -> {
           Path path = Paths.get(context.getRealPath(model.path));
           return Files.isDirectory(path);
         }).toArray(Model[]::new);
-    
+
     final LoadingCache<Model, HazardModel> modelCache = CacheBuilder.newBuilder().build(
         new CacheLoader<Model, HazardModel>() {
           @Override

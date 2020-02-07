@@ -14,7 +14,7 @@ public enum NshmpPolygon {
   WUS_CLIP(Data.WUS_CLIP, "Western US Map Extents"),
   ALASKA_CLIP(Data.ALASKA_CLIP, "Alaska Map Extents"),
   HAWAII_CLIP(Data.HAWAII_CLIP, "Hawaii Map Extents"),
-  
+
   ALASKA(Data.ALASKA, "Alaska"),
   HAWAII(Data.HAWAII, "Hawaii"),
   CONTERMINOUS_US(Data.CONTERMINOUS, "Conterminous US"),

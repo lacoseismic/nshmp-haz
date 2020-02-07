@@ -2,13 +2,13 @@ package gov.usgs.earthquake.nshmp.site;
 
 import static com.google.common.base.Strings.padEnd;
 import static com.google.common.base.Strings.padStart;
-import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA;
-import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII_CLIP;
-import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CEUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONTERMINOUS_US;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CYBERSHAKE;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.LA_BASIN;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.NEW_MADRID;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.PUGET;
@@ -39,14 +39,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import gov.usgs.earthquake.nshmp.Maths;
+import gov.usgs.earthquake.nshmp.NamedLocation;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.geo.LocationList;
 import gov.usgs.earthquake.nshmp.geo.json.Feature;
 import gov.usgs.earthquake.nshmp.geo.json.GeoJson;
 import gov.usgs.earthquake.nshmp.geo.json.Properties;
 import gov.usgs.earthquake.nshmp.geo.json.Properties.Style;
-import gov.usgs.earthquake.nshmp.Maths;
-import gov.usgs.earthquake.nshmp.NamedLocation;
 
 /**
  * Methods for exporting nshmp site data as CSV and GeoJSON.
