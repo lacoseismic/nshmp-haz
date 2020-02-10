@@ -40,7 +40,10 @@ apply from: project(":nshmp-lib").file("gradle/git-hooks.gradle")
 apply from: project(":nshmp-lib").file("gradle/spotbugs.gradle")
 apply from: project(":nshmp-lib").file("gradle/spotless.gradle")
 
-sourceCompatibility = 1.8
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
 compileJava.options.encoding = 'UTF-8'
 
 jacoco {
