@@ -93,7 +93,7 @@ stages:
 ####
 Build Project:
   stage: test
-  image: gradle
+  image: gradle:jdk11
   extends: .dev-tags
   only:
     - merge_request
@@ -110,7 +110,7 @@ Build Project:
 ####
 Spotless Check:
   stage: test
-  image: gradle
+  image: gradle:jdk11
   extends: .dev-tags
   only:
     - merge_request
@@ -125,7 +125,7 @@ Spotless Check:
 ####
 Spotbugs Main:
   stage: test
-  image: gradle
+  image: gradle:jdk11
   extends: .dev-tags
   only:
     - merge_request
@@ -140,7 +140,7 @@ Spotbugs Main:
 ####
 Spotbugs Test:
   stage: test
-  image: gradle
+  image: gradle:jdk11
   extends: .dev-tags
   only:
     - merge_request
@@ -158,7 +158,7 @@ Spotbugs Test:
 ####
 Unit Tests:
   stage: test
-  image: gradle
+  image: gradle:jdk11
   extends: .dev-tags
   only:
     - merge_request
