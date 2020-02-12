@@ -34,7 +34,7 @@ WORKDIR ${builder_workdir}
 
 COPY . .
 
-RUN yum install -y java-1.8.0-openjdk-devel which git
+RUN yum install -y java-11-openjdk-devel which git
 
 RUN mv nshmp-lib ../. \
     && ./gradlew --no-daemon assemble
@@ -88,7 +88,7 @@ COPY docker-entrypoint.sh .
 WORKDIR ${WS_HOME}
 
 RUN yum update -y \
-    && yum install -y file jq zip java-1.8.0-openjdk-headless \
+    && yum install -y file jq zip java-11-openjdk-headless \
     && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
 
 WORKDIR ${HAZ_HOME}
