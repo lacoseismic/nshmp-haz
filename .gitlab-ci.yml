@@ -178,82 +178,82 @@ Unit Tests:
     reports:
       junit: ${JUNIT_FILES}
 
-####
-# Build Docker image.
-# Globals:
-#   DOCKER_DIR - The directory to put Docker image
-#   DOCKER_TAR - The path to the Docker image tar
-#   FAULT_SECTIONS - nshm-fault-sections repo name
-#   IMAGE_NAME - Docker image name
-#   NSHMP_LIB - nshmp-lib repo name
-####
-Build Image:
-  stage: test
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - merge_request
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
-    - production@ghsc/nshmp/nshmp-haz-v2
-  before_script:
-    - *adjust-image-names
-    - rm -rf ${DOCKER_DIR}
-    - apk add git;
-    - *nshmp-lib
-    - mv ../${NSHMP_LIB} .
-    - *fault-sections
-    - mv ../${FAULT_SECTIONS} .
-  script:
-    - mkdir ${DOCKER_DIR}
-    - docker build -t local/${IMAGE_NAME} .
-    - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
-  artifacts:
-    paths:
-      - ${DOCKER_DIR}
+# ####
+# # Build Docker image.
+# # Globals:
+# #   DOCKER_DIR - The directory to put Docker image
+# #   DOCKER_TAR - The path to the Docker image tar
+# #   FAULT_SECTIONS - nshm-fault-sections repo name
+# #   IMAGE_NAME - Docker image name
+# #   NSHMP_LIB - nshmp-lib repo name
+# ####
+# Build Image:
+#   stage: test
+#   image: docker:stable
+#   extends: .dev-tags
+#   only:
+#     - merge_request
+#     - master@ghsc/nshmp/nshmp-haz-v2
+#     - tags@ghsc/nshmp/nshmp-haz-v2
+#     - production@ghsc/nshmp/nshmp-haz-v2
+#   before_script:
+#     - *adjust-image-names
+#     - rm -rf ${DOCKER_DIR}
+#     - apk add git;
+#     - *nshmp-lib
+#     - mv ../${NSHMP_LIB} .
+#     - *fault-sections
+#     - mv ../${FAULT_SECTIONS} .
+#   script:
+#     - mkdir ${DOCKER_DIR}
+#     - docker build -t local/${IMAGE_NAME} .
+#     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
+#   artifacts:
+#     paths:
+#       - ${DOCKER_DIR}
 
-####
-# Publish Docker image to GitLab registry.
-# Globals:
-#   CHS_PASSWORD - GitLab password
-#   CHS_USERNAME - GitLab username
-#   DOCKER_TAR - The path to the Docker image tar
-#   INTERNAL_IMAGE_NAME - GitLab registry Docker image name
-#   IMAGE_NAME - Docker image name
-####
-Publish Image:
-  stage: publish
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
-    - production@ghsc/nshmp/nshmp-haz-v2
-  before_script:
-    - *adjust-image-names
-  script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
-    - docker load -i ${DOCKER_TAR}
-    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
-    - docker push ${INTERNAL_IMAGE_NAME}
-    - docker image rm local/${IMAGE_NAME}
-    - docker image rm ${INTERNAL_IMAGE_NAME}
-    - rm -rf /root/.docker/config.json
+# ####
+# # Publish Docker image to GitLab registry.
+# # Globals:
+# #   CHS_PASSWORD - GitLab password
+# #   CHS_USERNAME - GitLab username
+# #   DOCKER_TAR - The path to the Docker image tar
+# #   INTERNAL_IMAGE_NAME - GitLab registry Docker image name
+# #   IMAGE_NAME - Docker image name
+# ####
+# Publish Image:
+#   stage: publish
+#   image: docker:stable
+#   extends: .dev-tags
+#   only:
+#     - master@ghsc/nshmp/nshmp-haz-v2
+#     - tags@ghsc/nshmp/nshmp-haz-v2
+#     - production@ghsc/nshmp/nshmp-haz-v2
+#   before_script:
+#     - *adjust-image-names
+#   script:
+#     - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
+#     - docker load -i ${DOCKER_TAR}
+#     - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
+#     - docker push ${INTERNAL_IMAGE_NAME}
+#     - docker image rm local/${IMAGE_NAME}
+#     - docker image rm ${INTERNAL_IMAGE_NAME}
+#     - rm -rf /root/.docker/config.json
 
-####
-# Deploy to stage01
-####
-Staging 01:
-  extends:
-    - .deploy
-    - .staging
-    - .staging01
+# ####
+# # Deploy to stage01
+# ####
+# Staging 01:
+#   extends:
+#     - .deploy
+#     - .staging
+#     - .staging01
 
-####
-# Deploy to stage02
-####
-Staging 02:
-  extends:
-    - .deploy
-    - .staging
-    - .staging02
+# ####
+# # Deploy to stage02
+# ####
+# Staging 02:
+#   extends:
+#     - .deploy
+#     - .staging
+#     - .staging02
