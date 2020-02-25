@@ -12,6 +12,7 @@ import gov.usgs.earthquake.nshmp.data.XySequence;
  * @author Peter Powers
  */
 @SuppressWarnings("unused")
+@Deprecated
 public class XY_DataGroup {
 
   private final String label;

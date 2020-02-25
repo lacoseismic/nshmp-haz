@@ -22,6 +22,7 @@ import gov.usgs.earthquake.nshmp.gmm.GroundMotionModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.ScalarGroundMotion;
 
+@Deprecated
 public class GroundMotions {
 
   private final static int ROUND = 5;

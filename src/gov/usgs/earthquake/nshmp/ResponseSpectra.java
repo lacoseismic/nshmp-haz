@@ -29,6 +29,7 @@ import gov.usgs.earthquake.nshmp.gmm.ScalarGroundMotion;
  *
  * @author Peter Powers
  */
+@Deprecated
 public class ResponseSpectra {
 
   private static final double PGA_PERIOD = 0.001;
