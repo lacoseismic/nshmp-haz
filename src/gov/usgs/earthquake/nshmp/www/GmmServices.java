@@ -67,6 +67,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Util;
     urlPatterns = {
         "/gmm",
         "/gmm/*" })
+@Deprecated
 public class GmmServices extends NshmpServlet {
   private static final long serialVersionUID = 1L;
 

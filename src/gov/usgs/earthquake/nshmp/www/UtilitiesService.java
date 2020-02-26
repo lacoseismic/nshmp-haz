@@ -23,6 +23,7 @@ import gov.usgs.earthquake.nshmp.site.NshmpSite;
         "/util",
         "/util/*" })
 @SuppressWarnings("javadoc")
+@Deprecated
 public class UtilitiesService extends NshmpServlet {
 
   @Override
