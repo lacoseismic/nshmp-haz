@@ -28,6 +28,8 @@ ARG libs_dir=${builder_workdir}/build/libs
 ####
 FROM usgs/centos:8 as builder
 
+ENV LANG="en_US.UTF-8"
+
 ARG builder_workdir
 
 WORKDIR ${builder_workdir}
@@ -45,6 +47,8 @@ RUN mv nshmp-lib ../. \
 FROM usgs/centos:8
 
 LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
+
+ENV LANG="en_US.UTF-8"
 
 ARG libs_dir
 ARG builder_workdir
