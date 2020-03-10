@@ -63,27 +63,6 @@ dependencies {
   testImplementation 'junit:junit:4.12'
 }
 
-sourceSets {
-  main {
-    java {
-      srcDirs = ['src']
-    }
-    resources {
-      srcDirs = ['src']
-      exclude '**/*.java'
-    }
-  }
-  test {
-    java {
-      srcDirs = ['test']
-    }
-    resources {
-      srcDirs = ['test']
-      exclude '**/*.java'
-    }
-  }
-}
-
 test {
   filter {
     includeTestsMatching "gov.usgs.earthquake.nshmp.programs.*"
