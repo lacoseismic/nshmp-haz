@@ -24,12 +24,15 @@
  */
 
 plugins {
-  id 'eclipse-wtp'
-  id 'jacoco'
-  id 'war'
+  id "eclipse-wtp"
+  id "jacoco"
+  id "war"
+  id "application"
   id "com.star-zero.gradle.githook" version "1.2.0"
   id "com.github.spotbugs" version "3.0.0"
   id "com.diffplug.gradle.spotless" version "3.27.1"
+  id "com.github.johnrengelman.shadow" version "5.2.0"
+  id "net.ltgt.apt-eclipse" version "0.21"
 }
 
 apply from: "${projectDir}/gradle/ext.gradle"
@@ -41,10 +44,12 @@ apply from: project(":nshmp-lib").file("gradle/spotbugs.gradle")
 apply from: project(":nshmp-lib").file("gradle/spotless.gradle")
 
 sourceCompatibility = JavaVersion.VERSION_11
-compileJava.options.encoding = 'UTF-8'
+compileJava.options.encoding = "UTF-8"
+
+mainClassName = "gov.usgs.earthquake.nshmp.www.Application"
 
 jacoco {
-  toolVersion = '0.8.4'
+  toolVersion = "0.8.4"
 }
 
 repositories {
@@ -52,18 +57,48 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.apache.tomcat:tomcat-catalina:8.0.45'
-  implementation 'javax.websocket:javax.websocket-api:1.1'
-  implementation 'com.amazonaws:aws-lambda-java-core:1.1.0'
-  implementation 'com.amazonaws:aws-java-sdk-lambda:1.11.461'
-  implementation 'com.amazonaws:aws-java-sdk-s3:1.11.579'
-  implementation 'com.amazonaws:aws-java-sdk-ec2:1.11.619'
-  implementation project(':nshmp-lib')
+  implementation project(":nshmp-lib")
 
-  testImplementation 'junit:junit:4.12'
+  // Tomcat
+  implementation "org.apache.tomcat:tomcat-catalina:8.0.45"
+  implementation "javax.websocket:javax.websocket-api:1.1"
+
+  // AWS
+  implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"
+  implementation "com.amazonaws:aws-java-sdk-lambda:${awsLambdaVersion}"
+  implementation "com.amazonaws:aws-java-sdk-s3:${awsS3Version}"
+  implementation "com.amazonaws:aws-java-sdk-ec2:${awsEc2Version}"
+
+  // Micronaut
+  annotationProcessor platform("io.micronaut:micronaut-bom:${mnVersion}")
+  annotationProcessor "io.micronaut:micronaut-inject-java"
+  annotationProcessor "io.micronaut:micronaut-validation"
+  implementation platform("io.micronaut:micronaut-bom:${mnVersion}")
+  implementation "io.micronaut:micronaut-http-client"
+  implementation "io.micronaut:micronaut-inject"
+  implementation "io.micronaut:micronaut-validation"
+  implementation "io.micronaut:micronaut-runtime"
+  implementation "io.micronaut:micronaut-http-server-netty"
+  implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:${jacksonVersion}"
+  runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+
+  // Swagger
+  annotationProcessor("io.micronaut.configuration:micronaut-openapi:${mnOpenAPIVersion}")
+  implementation("io.swagger.core.v3:swagger-annotations:${swaggerVersion}")
+  implementation("io.swagger.core.v3:swagger-models:${swaggerVersion}")
+
+  // junit
+  testAnnotationProcessor "io.micronaut:micronaut-inject-java:${mnVersion}"
+  testImplementation platform("io.micronaut:micronaut-bom:${mnVersion}")
+  testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api"
+  testImplementation "io.micronaut.test:micronaut-test-junit5"
+  testImplementation "io.micronaut.test:micronaut-test-spock"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
 test {
+  useJUnitPlatform()
   filter {
     includeTestsMatching "gov.usgs.earthquake.nshmp.programs.*"
   }
@@ -78,25 +113,38 @@ jacocoTestReport {
     classDirectories.from(files(classDirectories.files.collect {
       fileTree(
           dir: it,
-          exclude: ['**/etc/**'])
+          exclude: ["**/etc/**"])
     }))
   }
 }
 check.dependsOn jacocoTestReport
+
+shadowJar {
+  mergeServiceFiles()
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = "UTF-8"
+  options.compilerArgs.add("-parameters")
+}
+
+tasks.withType(JavaExec) {
+  jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
 
 /**
  * Create war file with production models
  */
 war {
   enabled = true
-  webAppDirName = 'webapp'
+  webAppDirName = "webapp"
   dependsOn jar
 
   /*
    * Exclude existing models directory with symlinks
    * to support Eclipse deployments.
    */
-  exclude 'models'
+  exclude "models"
 
   prod_models.each{model ->
     from(model[0]) { into model[1] }

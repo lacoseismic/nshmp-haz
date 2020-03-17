@@ -1,13 +1,13 @@
 package gov.usgs.earthquake.nshmp.programs;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("javadoc")
 public class HazardCurveTest {
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {}
+  @BeforeEach
+  public void setUpBeforeClass() throws Exception {}
 
   @Test
   public final void testRun() {
