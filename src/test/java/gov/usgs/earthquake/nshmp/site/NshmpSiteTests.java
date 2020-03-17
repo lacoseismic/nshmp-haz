@@ -46,13 +46,13 @@ import static gov.usgs.earthquake.nshmp.site.NshmpSite.VALLEJO_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.VENTURA_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.WASHINGTON_DC;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.YAKUTAT_AK;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
