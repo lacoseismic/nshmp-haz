@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class HazardCurveTest {
 
   @BeforeEach
-  public static void setUpBeforeClass() throws Exception {}
+  public void setUpBeforeClass() throws Exception {}
 
   @Test
   public final void testRun() {
