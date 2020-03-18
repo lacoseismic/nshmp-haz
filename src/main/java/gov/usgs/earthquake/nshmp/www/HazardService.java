@@ -3,18 +3,17 @@ package gov.usgs.earthquake.nshmp.www;
 import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.EDITION;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.IMT;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.REGION;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.RETURNPERIOD;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
-import static gov.usgs.earthquake.nshmp.www.Util.readValues;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.EDITION;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.IMT;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LATITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LONGITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.REGION;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.RETURNPERIOD;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readDouble;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readValue;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readValues;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.COUS;
 import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
@@ -273,7 +272,7 @@ public final class HazardService extends NshmpServlet {
 
     @SuppressWarnings("unchecked")
     LoadingCache<Model, HazardModel> modelCache =
-        (LoadingCache<Model, HazardModel>) context.getAttribute(MODEL_CACHE_CONTEXT_ID);
+        (LoadingCache<Model, HazardModel>) context.getAttribute("");
 
     // TODO cache calls should be using checked get(id)
 

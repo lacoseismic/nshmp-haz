@@ -2,15 +2,14 @@ package gov.usgs.earthquake.nshmp.www;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.BASIN;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.MODEL;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
-import static gov.usgs.earthquake.nshmp.www.Util.readBoolean;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.BASIN;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LATITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LONGITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.MODEL;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readBoolean;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readDouble;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +70,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
   public void init() throws ServletException {
 
     ServletContext context = getServletConfig().getServletContext();
-    Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
+    // Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
     this.modelCache = (LoadingCache<Model, HazardModel>) modelCache;
 
     try (InputStream config =
@@ -149,7 +148,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
   }
 
   private static List<Model> readModelsFromQuery(HttpServletRequest request) {
-    String[] ids = Util.readValues(MODEL, request);
+    String[] ids = WsUtil.readValues(MODEL, request);
     return Arrays.stream(ids)
         .map(Model::valueOf)
         .distinct()

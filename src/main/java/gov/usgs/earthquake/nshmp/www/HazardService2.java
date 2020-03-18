@@ -3,14 +3,13 @@ package gov.usgs.earthquake.nshmp.www;
 import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.MODEL_CACHE_CONTEXT_ID;
 import static gov.usgs.earthquake.nshmp.www.ServletUtil.emptyRequest;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LATITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.LONGITUDE;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.MODEL;
-import static gov.usgs.earthquake.nshmp.www.Util.Key.VS30;
-import static gov.usgs.earthquake.nshmp.www.Util.readDouble;
-import static gov.usgs.earthquake.nshmp.www.Util.readValue;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LATITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.LONGITUDE;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.MODEL;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.Key.VS30;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readDouble;
+import static gov.usgs.earthquake.nshmp.www.WsUtil.readValue;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -99,7 +98,7 @@ public final class HazardService2 extends NshmpServlet {
   @SuppressWarnings("unchecked")
   public void init() {
     ServletContext context = getServletConfig().getServletContext();
-    Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
+    // Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
     this.modelCache = (LoadingCache<Model, HazardModel>) modelCache;
   }
 
