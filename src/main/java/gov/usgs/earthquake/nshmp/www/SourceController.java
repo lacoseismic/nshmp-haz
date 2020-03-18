@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 
-import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -34,9 +33,6 @@ public class SourceController {
   @Inject
   private NshmpMicronautServlet servlet;
 
-  @Value("${nshmp-haz.installed-model}")
-  private Model model;
-
   /**
    * GET method to return the source model usage
    * 
@@ -53,7 +49,7 @@ public class SourceController {
   @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
     var urlHelper = servlet.urlHelper(request);
-    return SourceServices.handleDoGetUsage(model, urlHelper);
+    return SourceServices.handleDoGetUsage(urlHelper);
   }
 
 }

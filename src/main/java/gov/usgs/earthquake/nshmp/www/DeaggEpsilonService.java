@@ -44,6 +44,7 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTask;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
+import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 
 /**
  * Hazard deaggregation service.

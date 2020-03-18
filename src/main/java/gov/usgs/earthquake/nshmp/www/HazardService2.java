@@ -43,9 +43,10 @@ import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTask;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
-import gov.usgs.earthquake.nshmp.www.SourceServices.SourceModel;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
+import gov.usgs.earthquake.nshmp.www.services.SourceServices;
+import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 /**
  * Probabilisitic seismic hazard calculation service.

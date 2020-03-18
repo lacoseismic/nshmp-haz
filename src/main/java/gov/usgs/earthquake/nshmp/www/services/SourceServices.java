@@ -51,7 +51,7 @@ public class SourceServices {
 
   private static final Logger LOGGER = Logger.getLogger(SourceServices.class.getName());
 
-  static final Gson GSON;
+  public static final Gson GSON;
 
   static {
     GSON = new GsonBuilder()
@@ -65,11 +65,11 @@ public class SourceServices {
         .create();
   }
 
-  public static HttpResponse<String> handleDoGetUsage(Model model, UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
     try {
       LOGGER.info(NAME + "- Request:\n" + urlHelper.url);
       var response = new Response<>(
-          Status.USAGE, NAME, urlHelper.url, new ResponseData(model), urlHelper);
+          Status.USAGE, NAME, urlHelper.url, new ResponseData(), urlHelper);
       var jsonString = GSON.toJson(response);
       LOGGER.info(NAME + "- Response:\n" + jsonString);
       return HttpResponse.ok(jsonString);
@@ -82,15 +82,15 @@ public class SourceServices {
    * TODO service metadata should be in same package as services (why
    * ResponseData is currently public); rename meta package to
    */
-  static class ResponseData {
+  public static class ResponseData {
     final String description;
     final Object server;
     final Parameters parameters;
 
-    ResponseData(Model model) {
+    public ResponseData() {
       this.description = "Installed source model listing";
       this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
-      this.parameters = new Parameters(model);
+      this.parameters = new Parameters();
     }
   }
 
@@ -101,8 +101,8 @@ public class SourceServices {
     EnumParameter<Imt> imt;
     EnumParameter<Vs30> vs30;
 
-    Parameters(Model model) {
-      this.model = new SourceModel(model);
+    Parameters() {
+      this.model = new SourceModel(INSTALLED_MODEL);
 
       region = new EnumParameter<>(
           "Region",
@@ -141,7 +141,7 @@ public class SourceServices {
         .collect(Collectors.toSet()));
   }
 
-  static class SourceModel {
+  public static class SourceModel {
     String region;
     String display;
     String path;
@@ -149,7 +149,7 @@ public class SourceServices {
     String year;
     ModelConstraints supports;
 
-    SourceModel(Model model) {
+    public SourceModel(Model model) {
       this.display = model.name;
       this.region = model.region.name();
       this.path = model.path;
