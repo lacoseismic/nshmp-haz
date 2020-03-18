@@ -1,26 +1,30 @@
 /*
- * Eclipse notes: In order to build and run services via Eclipse,
- * one needs to include the following directories in webapp (they
+ * In order to build and run services locally,
+ * one needs to include the following directorie(s) in the root project (they
  * are ignored by git):
  *
- *   webapp/
- *      models/
- *         ak/
- *            2007/
- *         wus/
- *            2008/
- *            2014/
- *            2014b/
- *            2018/
- *         ceus/
- *            2008/
- *            2014/
- *            2018/
+ *    models/
+ *       ak/
+ *          2007/
+ *       wus/
+ *          2008/
+ *          2014/
+ *          2014b/
+ *          2018/
+ *       ceus/
+ *          2008/
+ *          2014/
+ *          2018/
  *
  * ...with each 'year' directory being an alias to the corresponding
- * git repository. One also must set Properties > Deployment Assembly
- * to include the nshmp-haz project and the 'webapp' directory. Other
- * default Eclipse directories such as WebContent may be deleted.
+ * git repository. One only needs to include the model they will run in the services.
+ *
+ * Then build the JAR file: ./gradlew assemble
+ *
+ * One can then specify the model to run in the services:
+ *    java -jar build/libs/nshmp-haz-v2-all.jar -model=<MODEL>
+ *
+ * Where <MODEL> is one of the model enums in nshmp.www.Model
  */
 
 plugins {
@@ -182,7 +186,7 @@ spotless {
   format "xml", {
     target fileTree(".") {
       include "**/*.xml"
-      exclude "**/build/**", ".settings/**", "**/webapp/models/**"
+      exclude "**/build/**", ".settings/**", "**/models/**"
     }
   }
 }
