@@ -1,0 +1,25 @@
+micronaut:
+  io:
+    watch:
+      paths: src
+      restart: true
+  router:
+    static-resources:
+      swagger-yml:
+        enabled: true
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger:
+        enabled: true
+        paths: classpath:swagger
+        mapping: /**
+
+nshmp-haz:
+  ##
+  # The NSHM to use.
+  # Models must reside in the models directory in the root of the project.
+  # To specify the model to use:
+  #     java -jar build/libs/nshmp-haz-v2-all.jar -model=<MODEL>
+  # See nshmp.www.Model for Model enums
+  # See build.gradle for more information on models directory
+  installed-model: ${model:CEUS_2018}
