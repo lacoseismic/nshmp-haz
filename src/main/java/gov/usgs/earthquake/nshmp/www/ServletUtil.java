@@ -11,7 +11,6 @@ import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
@@ -19,18 +18,12 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
@@ -46,19 +39,26 @@ import gov.usgs.earthquake.nshmp.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
 import gov.usgs.earthquake.nshmp.www.meta.Util;
 
+import io.micronaut.context.annotation.Value;
+import io.micronaut.context.event.ShutdownEvent;
+import io.micronaut.context.event.StartupEvent;
+import io.micronaut.runtime.event.annotation.EventListener;
+import io.micronaut.runtime.server.EmbeddedServer;
+
 /**
- * Servlet utility objects and methods.
+ * Micronaut controller utility objects and methods.
  *
  * @author Peter Powers
  */
-@SuppressWarnings("javadoc")
-@WebListener
-public class ServletUtil implements ServletContextListener {
+public class ServletUtil {
 
-  /*
-   * Some shared resources may be accessed statically, others, such as models,
-   * depend on a context-param and may be accessed as context attributes.
-   */
+  @Inject
+  private EmbeddedServer server;
+
+  @Value("${nshmp-haz.installed-model}")
+  private Model model;
+  public static Model INSTALLED_MODEL;
+  public static HazardModel HAZARD_MODEL;
 
   public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ssXXX");
@@ -66,13 +66,9 @@ public class ServletUtil implements ServletContextListener {
   static final ListeningExecutorService CALC_EXECUTOR;
   static final ExecutorService TASK_EXECUTOR;
 
-  static final int THREAD_COUNT;
+  public static final int THREAD_COUNT;
 
   public static final Gson GSON;
-
-  static final String MODEL_CACHE_CONTEXT_ID = "model.cache";
-
-  static Model[] INSTALLED_MODELS;
 
   /* Stateful flag to reject requests while a result is pending. */
   static boolean uhtBusy = false;
@@ -99,34 +95,19 @@ public class ServletUtil implements ServletContextListener {
         .create();
   }
 
-  @Override
-  public void contextDestroyed(ServletContextEvent e) {
+  @EventListener
+  void shutdown(ShutdownEvent event) {
     CALC_EXECUTOR.shutdown();
     TASK_EXECUTOR.shutdown();
   }
 
-  @Override
-  public void contextInitialized(ServletContextEvent e) {
-
-    final ServletContext context = e.getServletContext();
-
-    INSTALLED_MODELS = Stream.of(Model.values())
-        .filter(model -> {
-          Path path = Paths.get(context.getRealPath(model.path));
-          return Files.isDirectory(path);
-        }).toArray(Model[]::new);
-
-    final LoadingCache<Model, HazardModel> modelCache = CacheBuilder.newBuilder().build(
-        new CacheLoader<Model, HazardModel>() {
-          @Override
-          public HazardModel load(Model model) {
-            return loadModel(context, model);
-          }
-        });
-    context.setAttribute(MODEL_CACHE_CONTEXT_ID, modelCache);
+  @EventListener
+  void startup(StartupEvent event) {
+    INSTALLED_MODEL = model;
+    HAZARD_MODEL = loadModel(model);
   }
 
-  private static HazardModel loadModel(ServletContext context, Model model) {
+  private HazardModel loadModel(Model model) {
     Path path;
     URL url;
     URI uri;
@@ -135,15 +116,15 @@ public class ServletUtil implements ServletContextListener {
     FileSystem fs;
 
     try {
-      url = context.getResource(model.path);
+      url = Paths.get(model.path).toUri().toURL();
       uri = new URI(url.toString().replace(" ", "%20"));
       uriString = uri.toString();
 
       /*
-       * When the web sevice is deployed inside a WAR file (and not unpacked by
+       * When the web sevice is deployed inside a JAR file (and not unpacked by
        * the servlet container) model resources will not exist on disk as
        * otherwise expected. In this case, load the resources directly out of
-       * the WAR file as well. This is slower, but with the preload option
+       * the JAR file as well. This is slower, but with the preload option
        * enabled it may be less of an issue if the models are already in memory.
        */
 
@@ -176,7 +157,7 @@ public class ServletUtil implements ServletContextListener {
         (request.getPathInfo() == null || request.getPathInfo().equals("/"));
   }
 
-  static Timer timer() {
+  public static Timer timer() {
     return new Timer();
   }
 

@@ -20,8 +20,7 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 @SuppressWarnings("javadoc")
 public final class Metadata {
 
-  static final String NSHMP_HAZ_URL = "https://github.com/usgs/nshmp-haz";
-  static final String NSHMP_HAZ_WS_URL = "https://github.com/usgs/nshmp-haz-ws";
+  static final String NSHMP_HAZ_URL = "https://code.usgs.gov/ghsc/nshmp/nshmp-haz";
 
   /*
    * The hazard service needs to report the list of all possible IMTs supported
@@ -97,9 +96,6 @@ public final class Metadata {
     @SerializedName("nshmp-haz")
     final Component nshmpHaz = NSHMP_HAZ_COMPONENT;
 
-    @SerializedName("nshmp-haz-ws")
-    final Component nshmpHazWs = NSHMP_HAZ_WS_COMPONENT;
-
     Server(int threads, Timer timer) {
       this.threads = threads;
       this.servlet = timer.servletTime();
@@ -109,10 +105,6 @@ public final class Metadata {
     static Component NSHMP_HAZ_COMPONENT = new Component(
         NSHMP_HAZ_URL,
         Versions.NSHMP_HAZ_VERSION);
-
-    static Component NSHMP_HAZ_WS_COMPONENT = new Component(
-        NSHMP_HAZ_WS_URL,
-        Versions.NSHMP_HAZ_WS_VERSION);
 
     static final class Component {
 

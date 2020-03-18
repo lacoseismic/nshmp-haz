@@ -1,20 +1,14 @@
-package gov.usgs.earthquake.nshmp.www;
+package gov.usgs.earthquake.nshmp.www.services;
 
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.INSTALLED_MODELS;
-import static gov.usgs.earthquake.nshmp.www.meta.Metadata.serverData;
+import static gov.usgs.earthquake.nshmp.www.ServletUtil.INSTALLED_MODEL;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,30 +19,39 @@ import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
+import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
+import gov.usgs.earthquake.nshmp.internal.www.Response;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
+import gov.usgs.earthquake.nshmp.www.Model;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.WsUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.EnumParameter;
+import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.meta.Util;
+
+import io.micronaut.http.HttpResponse;
 
 /**
  * Entry point for services related to source models. Current services:
- * <ul><li>nshmp-haz-v2/source/</li></ul>
+ * <ul><li>/source/</li></ul>
  * 
  * @author Brandon Clayton
  * @author Peter Powers
  */
-@WebServlet(
-    name = "Source Services",
-    description = "Utilities for querying earthquake source models",
-    urlPatterns = {
-        "/source",
-        "/source/*" })
 @SuppressWarnings("unused")
-public class SourceServices extends NshmpServlet {
-  private static final long serialVersionUID = 1L;
-  static final Gson GSON;
+public class SourceServices {
+
+  private static final String NAME = "Source Model";
+  private static final String DESCRIPTION = "Installed source model listing";
+  private static final String SERVICE_DESCRIPTION =
+      "Utilities for querying earthquake source models";
+
+  private static final Logger LOGGER = Logger.getLogger(SourceServices.class.getName());
+
+  public static final Gson GSON;
 
   static {
     GSON = new GsonBuilder()
@@ -62,19 +65,16 @@ public class SourceServices extends NshmpServlet {
         .create();
   }
 
-  @Override
-  protected void doGet(
-      HttpServletRequest request,
-      HttpServletResponse response)
-      throws ServletException, IOException {
-
-    ResponseData svcResponse = null;
+  public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
     try {
-      svcResponse = new ResponseData();
-      String jsonString = GSON.toJson(svcResponse);
-      response.getWriter().print(jsonString);
+      LOGGER.info(NAME + "- Request:\n" + urlHelper.url);
+      var response = new Response<>(
+          Status.USAGE, NAME, urlHelper.url, new ResponseData(), urlHelper);
+      var jsonString = GSON.toJson(response);
+      LOGGER.info(NAME + "- Response:\n" + jsonString);
+      return HttpResponse.ok(jsonString);
     } catch (Exception e) {
-      e.printStackTrace();
+      return WsUtil.handleError(e, NAME, LOGGER, urlHelper);
     }
   }
 
@@ -82,42 +82,27 @@ public class SourceServices extends NshmpServlet {
    * TODO service metadata should be in same package as services (why
    * ResponseData is currently public); rename meta package to
    */
-  static final class ResponseData {
-
-    final String name;
+  public static class ResponseData {
     final String description;
-    final String status;
-    final String syntax;
-    final String deaggSyntax;
     final Object server;
     final Parameters parameters;
 
-    ResponseData() {
-      this.name = "Source Models";
+    public ResponseData() {
       this.description = "Installed source model listing";
-      this.syntax = "%s/haz/{model}/{longitude}/{latitude}/{vs30}";
-      this.deaggSyntax =
-          "%s/deagg2/{model}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}/{basin}";
-      this.status = Status.USAGE.toString();
-      this.server = serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
+      this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
       this.parameters = new Parameters();
     }
   }
 
   static class Parameters {
-    SourceModelsParameter models;
+    SourceModel model;
     EnumParameter<Region> region;
     DoubleParameter returnPeriod;
     EnumParameter<Imt> imt;
     EnumParameter<Vs30> vs30;
 
     Parameters() {
-      models = new SourceModelsParameter(
-          "Source models",
-          ParamType.STRING,
-          Stream.of(INSTALLED_MODELS)
-              .map(SourceModel::new)
-              .collect(Collectors.toList()));
+      this.model = new SourceModel(INSTALLED_MODEL);
 
       region = new EnumParameter<>(
           "Region",
@@ -142,35 +127,21 @@ public class SourceServices extends NshmpServlet {
     }
   }
 
-  private static class SourceModelsParameter {
-    private final String label;
-    private final ParamType type;
-    private final List<SourceModel> values;
-
-    SourceModelsParameter(String label, ParamType type, List<SourceModel> values) {
-      this.label = label;
-      this.type = type;
-      this.values = values;
-    }
-  }
-
   /* Union of IMTs across all models. */
   static Set<Imt> modelUnionImts() {
-    return EnumSet.copyOf(Stream.of(INSTALLED_MODELS)
+    return EnumSet.copyOf(Stream.of(INSTALLED_MODEL)
         .flatMap(model -> model.imts.stream())
         .collect(Collectors.toSet()));
   }
 
   /* Union of Vs30s across all models. */
   static Set<Vs30> modelUnionVs30s() {
-    return EnumSet.copyOf(Stream.of(INSTALLED_MODELS)
+    return EnumSet.copyOf(Stream.of(INSTALLED_MODEL)
         .flatMap(model -> model.vs30s.stream())
         .collect(Collectors.toSet()));
   }
 
-  static class SourceModel {
-    int displayorder;
-    int id;
+  public static class SourceModel {
     String region;
     String display;
     String path;
@@ -178,10 +149,8 @@ public class SourceServices extends NshmpServlet {
     String year;
     ModelConstraints supports;
 
-    SourceModel(Model model) {
+    public SourceModel(Model model) {
       this.display = model.name;
-      this.displayorder = model.ordinal();
-      this.id = model.ordinal();
       this.region = model.region.name();
       this.path = model.path;
       this.supports = new ModelConstraints(model);
@@ -191,7 +160,6 @@ public class SourceServices extends NshmpServlet {
   }
 
   private static class ModelConstraints {
-
     final List<String> imt;
     final List<String> vs30;
 
