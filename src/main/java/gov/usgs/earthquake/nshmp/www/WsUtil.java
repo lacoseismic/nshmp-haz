@@ -6,14 +6,36 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletRequest;
 
+import com.google.gson.GsonBuilder;
+
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
+import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
+import gov.usgs.earthquake.nshmp.internal.www.Response;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 
-public class Util {
+import io.micronaut.http.HttpResponse;
+
+public class WsUtil {
+
+  public static HttpResponse<String> handleError(
+      Throwable e,
+      String name,
+      Logger logger,
+      UrlHelper urlHelper) {
+    var msg = e.getMessage() + " (see logs)";
+    var svcResponse = new Response<>(Status.ERROR, name, urlHelper.url, msg, urlHelper);
+    var gson = new GsonBuilder().setPrettyPrinting().create();
+    var response = gson.toJson(svcResponse);
+    logger.severe(name + " -\n" + response);
+    e.printStackTrace();
+    return HttpResponse.serverError(response);
+  }
 
   /**
    * Returns the value of a servlet request parameter as a boolean.
