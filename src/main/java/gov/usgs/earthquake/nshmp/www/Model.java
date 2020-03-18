@@ -36,7 +36,7 @@ import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
 
-enum Model {
+public enum Model {
 
   AK_2007(
       EnumSet.of(PGA, SA0P1, SA0P2, SA0P3, SA0P5, SA1P0, SA2P0),
@@ -76,20 +76,20 @@ enum Model {
 
   private static final String MODEL_DIR = "models";
 
-  final Set<Imt> imts;
-  final Set<Vs30> vs30s;
+  public final Set<Imt> imts;
+  public final Set<Vs30> vs30s;
 
-  final String path;
-  final String name;
-  final Region region;
-  final String year;
+  public final String path;
+  public final String name;
+  public final Region region;
+  public final String year;
 
   private Model(Set<Imt> imts, Set<Vs30> vs30s) {
     this.imts = Sets.immutableEnumSet(imts);
     this.vs30s = Sets.immutableEnumSet(vs30s);
     region = deriveRegion(name());
     year = name().substring(name().lastIndexOf('_') + 1);
-    path = Paths.get("/", MODEL_DIR)
+    path = Paths.get(MODEL_DIR)
         .resolve(region.name().toLowerCase())
         .resolve(year.toLowerCase())
         .toString();
