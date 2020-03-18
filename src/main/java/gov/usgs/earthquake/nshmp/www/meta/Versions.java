@@ -16,12 +16,10 @@ import gov.usgs.earthquake.nshmp.HazardCalc;
 class Versions {
 
   static final String NSHMP_HAZ_VERSION = HazardCalc.VERSION;
-  static final String NSHMP_HAZ_WS_VERSION;
   private static final Map<String, String> MODEL_VERSIONS;
   private static final String UNKNOWN = "unknown";
 
   static {
-    String nshmpHazWsVersion = UNKNOWN;
     ImmutableMap.Builder<String, String> modelMap = ImmutableMap.builder();
 
     /* Always runs from a war (possibly unpacked). */
@@ -32,10 +30,6 @@ class Versions {
 
       for (String key : props.stringPropertyNames()) {
         String value = props.getProperty(key);
-        /* Web-services version. */
-        if (key.equals("app.version")) {
-          nshmpHazWsVersion = value;
-        }
         /* Model versions. */
         modelMap.put(key, value);
       }
@@ -43,7 +37,6 @@ class Versions {
       /* Do nothing; probably running outside standard build. */
     }
 
-    NSHMP_HAZ_WS_VERSION = nshmpHazWsVersion;
     MODEL_VERSIONS = modelMap.build();
   }
 
