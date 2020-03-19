@@ -41,17 +41,17 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTask;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 /**
  * Probabilisitic seismic hazard calculation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 @WebServlet(
@@ -69,7 +69,7 @@ public final class HazardService2 extends NshmpServlet {
    * editions, to simplify model comparison. Models are defined by a region and
    * year. This service computes hazard for all supported IMTs and a single
    * vs30.
-   * 
+   *
    * As with the existing hazard service, calculations are designed to leverage
    * all available processors by default, distributing work using the
    * ServletUtil.CALC_EXECUTOR. This can create problems in a servlet
@@ -85,12 +85,12 @@ public final class HazardService2 extends NshmpServlet {
    * To address this, requests are submitted as tasks to the single-threaded
    * ServletUtil.TASK_EXECUTOR and are processed one-at-a-time in the order
    * received.
-   * 
+   *
    * TODO Add support for multi model requests in order to combine models per
    * the original hazard service.
    */
 
-  private LoadingCache<Model, HazardModel> modelCache;
+  private LoadingCache<BaseModel, HazardModel> modelCache;
 
   private static final String USAGE = SourceServices.GSON.toJson(
       new SourceServices.ResponseData());
@@ -100,7 +100,7 @@ public final class HazardService2 extends NshmpServlet {
   public void init() {
     ServletContext context = getServletConfig().getServletContext();
     // Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
-    this.modelCache = (LoadingCache<Model, HazardModel>) modelCache;
+    this.modelCache = (LoadingCache<BaseModel, HazardModel>) modelCache;
   }
 
   @Override
@@ -136,14 +136,14 @@ public final class HazardService2 extends NshmpServlet {
 
     try {
 
-      Model model;
+      BaseModel model;
       double lon;
       double lat;
       Vs30 vs30;
 
       if (request.getQueryString() != null) {
         /* process query '?' request */
-        model = readValue(MODEL, request, Model.class);
+        model = readValue(MODEL, request, BaseModel.class);
         lon = readDouble(LONGITUDE, request);
         lat = readDouble(LATITUDE, request);
         vs30 = Vs30.fromValue(readDouble(VS30, request));
@@ -153,7 +153,7 @@ public final class HazardService2 extends NshmpServlet {
         List<String> params = Parsing.splitToList(
             request.getPathInfo(),
             Delimiter.SLASH);
-        model = Model.valueOf(params.get(0));
+        model = BaseModel.valueOf(params.get(0));
         lon = Double.valueOf(params.get(1));
         lat = Double.valueOf(params.get(2));
         vs30 = Vs30.fromValue(Double.valueOf(params.get(3)));
@@ -209,13 +209,13 @@ public final class HazardService2 extends NshmpServlet {
 
   static final class RequestData {
 
-    final Model model;
+    final BaseModel model;
     final double latitude;
     final double longitude;
     final Vs30 vs30;
 
     RequestData(
-        Model model,
+        BaseModel model,
         double longitude,
         double latitude,
         Vs30 vs30) {

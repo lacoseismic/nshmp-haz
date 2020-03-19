@@ -6,21 +6,21 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 /**
  * Cybershake UGMS sites.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public enum CybershakeSite implements NamedLocation {
 
   /*
    * Notes:
-   * 
+   *
    * CVM4 derived vs30 values have been rounded to the nearest whole value. Note
    * that there are scattered inconsistencies between the Wills and CVM vs30
    * values (e.g. LAPD) Sites beginning with lowercase s have been capitalized.
-   * 
+   *
    * CVM vs30 values for [S603, S684], [S474, S476], [S644, S646], and [S688,
    * S689] are identical; waiting on reponse from Callahan or Milner.
-   * 
+   *
    * Site S603 is repeated (and commented out) in Inland Empire group.
    */
 

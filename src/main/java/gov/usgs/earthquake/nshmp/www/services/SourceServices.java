@@ -1,14 +1,11 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.INSTALLED_MODEL;
-
 import java.lang.reflect.Type;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,25 +18,24 @@ import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
+import gov.usgs.earthquake.nshmp.internal.www.meta.EnumParameter;
+import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.Model;
+import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
-import gov.usgs.earthquake.nshmp.www.meta.EnumParameter;
+import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
-import gov.usgs.earthquake.nshmp.www.meta.Util;
 
 import io.micronaut.http.HttpResponse;
 
 /**
  * Entry point for services related to source models. Current services:
  * <ul><li>/source/</li></ul>
- * 
- * @author Brandon Clayton
- * @author Peter Powers
+ *
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 public class SourceServices {
@@ -55,9 +51,9 @@ public class SourceServices {
 
   static {
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Imt.class, new Util.EnumSerializer<Imt>())
-        .registerTypeAdapter(ParamType.class, new Util.ParamTypeSerializer())
-        .registerTypeAdapter(Vs30.class, new Util.EnumSerializer<Vs30>())
+        .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
+        .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
+        .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
         .registerTypeAdapter(Region.class, new RegionSerializer())
         .disableHtmlEscaping()
         .serializeNulls()
@@ -95,14 +91,16 @@ public class SourceServices {
   }
 
   static class Parameters {
-    SourceModel model;
+    List<SourceModel> models;
     EnumParameter<Region> region;
     DoubleParameter returnPeriod;
     EnumParameter<Imt> imt;
     EnumParameter<Vs30> vs30;
 
     Parameters() {
-      this.model = new SourceModel(INSTALLED_MODEL);
+      models = ServletUtil.installedModel().models().stream()
+          .map(SourceModel::new)
+          .collect(Collectors.toList());
 
       region = new EnumParameter<>(
           "Region",
@@ -129,14 +127,14 @@ public class SourceServices {
 
   /* Union of IMTs across all models. */
   static Set<Imt> modelUnionImts() {
-    return EnumSet.copyOf(Stream.of(INSTALLED_MODEL)
+    return EnumSet.copyOf(ServletUtil.installedModel().models().stream()
         .flatMap(model -> model.imts.stream())
         .collect(Collectors.toSet()));
   }
 
   /* Union of Vs30s across all models. */
   static Set<Vs30> modelUnionVs30s() {
-    return EnumSet.copyOf(Stream.of(INSTALLED_MODEL)
+    return EnumSet.copyOf(ServletUtil.installedModel().models().stream()
         .flatMap(model -> model.vs30s.stream())
         .collect(Collectors.toSet()));
   }
@@ -149,7 +147,7 @@ public class SourceServices {
     String year;
     ModelConstraints supports;
 
-    public SourceModel(Model model) {
+    public SourceModel(BaseModel model) {
       this.display = model.name;
       this.region = model.region.name();
       this.path = model.path;
@@ -163,9 +161,9 @@ public class SourceServices {
     final List<String> imt;
     final List<String> vs30;
 
-    ModelConstraints(Model model) {
-      this.imt = Util.enumsToNameList(model.imts);
-      this.vs30 = Util.enumsToStringList(
+    ModelConstraints(BaseModel model) {
+      this.imt = MetaUtil.enumsToNameList(model.imts);
+      this.vs30 = MetaUtil.enumsToStringList(
           model.vs30s,
           vs30 -> vs30.name().substring(3));
     }

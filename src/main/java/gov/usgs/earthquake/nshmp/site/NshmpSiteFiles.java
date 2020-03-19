@@ -51,7 +51,7 @@ import gov.usgs.earthquake.nshmp.geo.json.Properties.Style;
 /**
  * Methods for exporting nshmp site data as CSV and GeoJSON.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 final class NshmpSiteFiles {
 

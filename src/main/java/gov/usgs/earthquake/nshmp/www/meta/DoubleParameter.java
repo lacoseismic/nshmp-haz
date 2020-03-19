@@ -1,5 +1,7 @@
 package gov.usgs.earthquake.nshmp.www.meta;
 
+import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
+
 @SuppressWarnings({ "javadoc", "unused" })
 public final class DoubleParameter {
 

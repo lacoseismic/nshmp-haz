@@ -5,7 +5,7 @@ import gov.usgs.earthquake.nshmp.geo.LocationList;
 /**
  * Geographic polygons commonly used by the NSHMP.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public enum NshmpPolygon {

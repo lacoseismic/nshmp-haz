@@ -30,7 +30,7 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
  * Deaggregate probabilisitic seismic hazard at an intesity measure level of
  * interest.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class DeaggIml {
 

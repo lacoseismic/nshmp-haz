@@ -42,16 +42,16 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTask;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 
 /**
  * Hazard deaggregation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @Deprecated
 @SuppressWarnings("unused")
@@ -217,12 +217,12 @@ public final class DeaggService2 extends NshmpServlet {
 
   /*
    * Developer notes:
-   * 
+   *
    * We're opting here to fetch basin terms ourselves. If we were to set the
    * basin provider in the config, which requires additions to config, the URL
    * is tested every time a site is created for a servlet request. While this
    * worked for maps it's not good here.
-   * 
+   *
    * Site has logic for parsing the basin service response, which perhaps it
    * shouldn't. TODO is it worth decomposing data objects and services
    */
