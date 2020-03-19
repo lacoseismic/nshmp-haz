@@ -20,9 +20,10 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput.Field;
+import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 
 @SuppressWarnings("javadoc")
-public final class Util {
+public final class MetaUtil {
 
   public static <E extends Enum<E>> List<String> enumsToNameList(
       Collection<E> values) {

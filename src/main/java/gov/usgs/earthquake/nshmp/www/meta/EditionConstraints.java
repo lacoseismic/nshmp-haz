@@ -17,12 +17,12 @@ class EditionConstraints implements Constraints {
   EditionConstraints(Set<Region> regions, Set<Imt> imts) {
     // converting to Strings here, otherwise EnumSerializer will be used
     // and we want a compact list of (possible modified) enum.name()s
-    this.region = Util.enumsToNameList(regions);
-    this.imt = Util.enumsToNameList(imts);
+    this.region = MetaUtil.enumsToNameList(regions);
+    this.imt = MetaUtil.enumsToNameList(imts);
     Set<Vs30> vs30s = EnumSet.noneOf(Vs30.class);
     for (Region region : regions) {
       vs30s.addAll(region.vs30s);
     }
-    this.vs30 = Util.enumsToStringList(vs30s, vs30 -> vs30.name().substring(3));
+    this.vs30 = MetaUtil.enumsToStringList(vs30s, vs30 -> vs30.name().substring(3));
   }
 }

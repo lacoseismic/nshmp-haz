@@ -10,7 +10,9 @@ import com.google.gson.annotations.SerializedName;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.mfd.Mfds;
+import gov.usgs.earthquake.nshmp.internal.www.meta.EnumParameter;
+import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 
@@ -47,19 +49,6 @@ public final class Metadata {
           URL_PREFIX +
               "/deagg/{edition}/{region}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}",
           new DeaggParameters()));
-
-  public static final String RATE_USAGE = ServletUtil.GSON.toJson(
-      new Rate(
-          "Compute incremental earthquake annual-rates at a location",
-          URL_PREFIX + "/rate/{edition}/{region}/{longitude}/{latitude}/{distance}",
-          new RateParameters()));
-
-  public static final String PROBABILITY_USAGE = ServletUtil.GSON.toJson(
-      new Probability(
-          "Compute cumulative earthquake probabilities P(M ≥ x) at a location",
-          URL_PREFIX +
-              "/probability/{edition}/{region}/{longitude}/{latitude}/{distance}/{timespan}",
-          new ProbabilityParameters()));
 
   @SuppressWarnings("unused")
   private static class Default {
@@ -119,24 +108,24 @@ public final class Metadata {
   }
 
   @SuppressWarnings("unused")
-  private static class DefaultParameters {
+  public static class DefaultParameters {
 
-    final EnumParameter<Edition> edition;
-    final EnumParameter<Region> region;
+    // final EnumParameter<Edition> edition;
+    // final EnumParameter<Region> region;
     final DoubleParameter longitude;
     final DoubleParameter latitude;
 
-    DefaultParameters() {
+    public DefaultParameters() {
 
-      edition = new EnumParameter<>(
-          "Model edition",
-          ParamType.STRING,
-          EnumSet.allOf(Edition.class));
-
-      region = new EnumParameter<>(
-          "Model region",
-          ParamType.STRING,
-          EnumSet.allOf(Region.class));
+      // edition = new EnumParameter<>(
+      // "Model edition",
+      // ParamType.STRING,
+      // EnumSet.allOf(Edition.class));
+      //
+      // region = new EnumParameter<>(
+      // "Model region",
+      // ParamType.STRING,
+      // EnumSet.allOf(Region.class));
 
       longitude = new DoubleParameter(
           "Longitude (in decimal degrees)",
@@ -193,52 +182,6 @@ public final class Metadata {
           ParamType.NUMBER,
           1.0,
           4000.0);
-    }
-  }
-
-  private static class Rate extends Default {
-    private Rate(
-        String description,
-        String syntax,
-        RateParameters parameters) {
-      super(description, syntax, parameters);
-    }
-  }
-
-  @SuppressWarnings("unused")
-  private static class RateParameters extends DefaultParameters {
-
-    final DoubleParameter distance;
-
-    RateParameters() {
-      distance = new DoubleParameter(
-          "Cutoff distance (in km)",
-          ParamType.NUMBER,
-          0.01,
-          1000.0);
-    }
-  }
-
-  private static class Probability extends Default {
-    private Probability(
-        String description,
-        String syntax,
-        ProbabilityParameters parameters) {
-      super(description, syntax, parameters);
-    }
-  }
-
-  @SuppressWarnings("unused")
-  private static class ProbabilityParameters extends RateParameters {
-
-    final DoubleParameter timespan;
-
-    ProbabilityParameters() {
-      timespan = new DoubleParameter(
-          "Forecast time span (in years)",
-          ParamType.NUMBER,
-          Mfds.TIMESPAN_RANGE.lowerEndpoint(),
-          Mfds.TIMESPAN_RANGE.upperEndpoint());
     }
   }
 
