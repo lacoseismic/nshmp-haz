@@ -36,9 +36,9 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.data.Interpolator;
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
+import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 /**
  * AWS Lambda function to read in a curves file from AWS S3 and create slices at
