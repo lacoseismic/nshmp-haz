@@ -14,12 +14,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,16 +35,15 @@ import gov.usgs.earthquake.nshmp.calc.ValueFormat;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
+import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.www.meta.Edition;
-import gov.usgs.earthquake.nshmp.www.meta.ParamType;
+import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
-import gov.usgs.earthquake.nshmp.www.meta.Util;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
-import io.micronaut.runtime.server.EmbeddedServer;
 
 /**
  * Micronaut controller utility objects and methods.
@@ -52,18 +52,15 @@ import io.micronaut.runtime.server.EmbeddedServer;
  */
 public class ServletUtil {
 
-  @Inject
-  private EmbeddedServer server;
-
   @Value("${nshmp-haz.installed-model}")
   private Model model;
-  public static Model INSTALLED_MODEL;
-  public static HazardModel HAZARD_MODEL;
 
+  private static Model INSTALLED_MODEL;
+  private static Map<BaseModel, HazardModel> HAZARD_MODELS = new EnumMap<>(BaseModel.class);
   public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ssXXX");
 
-  static final ListeningExecutorService CALC_EXECUTOR;
+  public static final ListeningExecutorService CALC_EXECUTOR;
   static final ExecutorService TASK_EXECUTOR;
 
   public static final int THREAD_COUNT;
@@ -71,9 +68,9 @@ public class ServletUtil {
   public static final Gson GSON;
 
   /* Stateful flag to reject requests while a result is pending. */
-  static boolean uhtBusy = false;
-  static long hitCount = 0;
-  static long missCount = 0;
+  public static boolean uhtBusy = false;
+  public static long hitCount = 0;
+  public static long missCount = 0;
 
   static {
     /* TODO modified for deagg-epsilon branch; should be context var */
@@ -81,18 +78,26 @@ public class ServletUtil {
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Edition.class, new Util.EnumSerializer<Edition>())
-        .registerTypeAdapter(Region.class, new Util.EnumSerializer<Region>())
-        .registerTypeAdapter(Imt.class, new Util.EnumSerializer<Imt>())
-        .registerTypeAdapter(Vs30.class, new Util.EnumSerializer<Vs30>())
-        .registerTypeAdapter(ValueFormat.class, new Util.EnumSerializer<ValueFormat>())
-        .registerTypeAdapter(Double.class, new Util.DoubleSerializer())
-        .registerTypeAdapter(ParamType.class, new Util.ParamTypeSerializer())
-        .registerTypeAdapter(Site.class, new Util.SiteSerializer())
+        .registerTypeAdapter(Edition.class, new MetaUtil.EnumSerializer<Edition>())
+        .registerTypeAdapter(Region.class, new MetaUtil.EnumSerializer<Region>())
+        .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
+        .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
+        .registerTypeAdapter(ValueFormat.class, new MetaUtil.EnumSerializer<ValueFormat>())
+        .registerTypeAdapter(Double.class, new MetaUtil.DoubleSerializer())
+        .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
+        .registerTypeAdapter(Site.class, new MetaUtil.SiteSerializer())
         .disableHtmlEscaping()
         .serializeNulls()
         .setPrettyPrinting()
         .create();
+  }
+
+  public static Model installedModel() {
+    return INSTALLED_MODEL;
+  }
+
+  public static Map<BaseModel, HazardModel> hazardModels() {
+    return HAZARD_MODELS;
   }
 
   @EventListener
@@ -104,10 +109,15 @@ public class ServletUtil {
   @EventListener
   void startup(StartupEvent event) {
     INSTALLED_MODEL = model;
-    HAZARD_MODEL = loadModel(model);
+
+    model.models().forEach(baseModel -> {
+      HAZARD_MODELS.put(baseModel, loadModel(baseModel));
+    });
+
+    HAZARD_MODELS = Map.copyOf(HAZARD_MODELS);
   }
 
-  private HazardModel loadModel(Model model) {
+  private HazardModel loadModel(BaseModel model) {
     Path path;
     URL url;
     URI uri;
