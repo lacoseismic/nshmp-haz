@@ -22,4 +22,4 @@ nshmp-haz:
   #     java -jar build/libs/nshmp-haz-v2-all.jar -model=<MODEL>
   # See nshmp.www.Model for Model enums
   # See build.gradle for more information on models directory
-  installed-model: ${model:CEUS_2018}
+  installed-model: ${model:CONUS_2018}
