@@ -60,7 +60,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Region;
 /**
  * Probabilisitic seismic hazard calculation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 @WebServlet(

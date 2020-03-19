@@ -34,7 +34,7 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
 /**
  * Compute earthquake rates or Poisson probabilities from a {@link HazardModel}.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class RateCalc {
 

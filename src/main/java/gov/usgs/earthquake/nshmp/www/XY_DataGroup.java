@@ -8,8 +8,8 @@ import gov.usgs.earthquake.nshmp.data.XySequence;
 /**
  * Container class of XY data sequences prior to Json serialization. This
  * implementation is for data series that share the same x-values
- * 
- * @author Peter Powers
+ *
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 @Deprecated

@@ -33,7 +33,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Region;
 /**
  * Hazard deaggregation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 @WebServlet(

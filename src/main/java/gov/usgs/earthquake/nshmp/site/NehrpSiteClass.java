@@ -3,7 +3,7 @@ package gov.usgs.earthquake.nshmp.site;
 /**
  * Placeholder enum for likely move to Nehrp site class identifier instead of
  * Vs30.
- * 
+ *
  * <p>These site class identifiers map to NEHRP site clases, but the intent is
  * that they can be used more generally for models in other parts of the world
  * where the GMMs are not necessarily parameterized in terms of vs30 to define
@@ -14,24 +14,24 @@ package gov.usgs.earthquake.nshmp.site;
  * are supported (in 2018) across the entire U.S., there have been changes
  * proposed for balloting by the BSSC to make the Vs30 definitions of site
  * classes consistent in how they are calculated.
- * 
- * @author Peter Powers
+ *
+ * @author U.S. Geological Survey
  */
 enum SiteClass {
 
   /*
    * Notes on calculation of Vs30 for site class:
-   * 
+   *
    * Question: Why is it that the soil shear wave velocity shown in the Unified
    * Hazard Tool is not equal to the average of the values shown in ASCE 7-10
    * table 20.3-1?
-   * 
+   *
    * For instance: 259 m/s (Site Class D), from the Unified Hazard Tool, is not
    * equal to (600 ft/s + 1200 ft/s)/2 * .3048 = 274 m/s
-   * 
+   *
    * Answer (Sanaz): we take the geometric mean: sqrt(1200*600)*0.3048 =
    * 258.6314 , which rounds to 259m/s.
-   * 
+   *
    *
    */
 

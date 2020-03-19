@@ -51,7 +51,7 @@ import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 /**
  * Hazard deaggregation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @Deprecated
 @SuppressWarnings("unused")
@@ -217,12 +217,12 @@ public final class DeaggService2 extends NshmpServlet {
 
   /*
    * Developer notes:
-   * 
+   *
    * We're opting here to fetch basin terms ourselves. If we were to set the
    * basin provider in the config, which requires additions to config, the URL
    * is tested every time a site is created for a servlet request. While this
    * worked for maps it's not good here.
-   * 
+   *
    * Site has logic for parsing the basin service response, which perhaps it
    * shouldn't. TODO is it worth decomposing data objects and services
    */

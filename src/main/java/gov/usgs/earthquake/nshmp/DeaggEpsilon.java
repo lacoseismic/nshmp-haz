@@ -48,7 +48,7 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
  * supplied ground motion. The set of IMTs processed is dictated by the set
  * defined in the sites file.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class DeaggEpsilon {
 

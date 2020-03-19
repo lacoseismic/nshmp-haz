@@ -27,7 +27,7 @@ import gov.usgs.earthquake.nshmp.gmm.ScalarGroundMotion;
  * Matlab structs and arrays. {@link #spectra(Set, GmmInput, boolean)} returns a
  * more complex result and is for use with web services.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @Deprecated
 public class ResponseSpectra {

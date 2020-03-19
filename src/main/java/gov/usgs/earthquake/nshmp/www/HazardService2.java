@@ -51,7 +51,7 @@ import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 /**
  * Probabilisitic seismic hazard calculation service.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 @WebServlet(
@@ -69,7 +69,7 @@ public final class HazardService2 extends NshmpServlet {
    * editions, to simplify model comparison. Models are defined by a region and
    * year. This service computes hazard for all supported IMTs and a single
    * vs30.
-   * 
+   *
    * As with the existing hazard service, calculations are designed to leverage
    * all available processors by default, distributing work using the
    * ServletUtil.CALC_EXECUTOR. This can create problems in a servlet
@@ -85,7 +85,7 @@ public final class HazardService2 extends NshmpServlet {
    * To address this, requests are submitted as tasks to the single-threaded
    * ServletUtil.TASK_EXECUTOR and are processed one-at-a-time in the order
    * received.
-   * 
+   *
    * TODO Add support for multi model requests in order to combine models per
    * the original hazard service.
    */

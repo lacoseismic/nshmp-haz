@@ -16,8 +16,7 @@ import gov.usgs.earthquake.nshmp.internal.UsRegion;
 /**
  * Locations that are used for NSHMP hazard comparisons.
  *
- * @author Allison Shumway
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public enum NshmpSite implements NamedLocation {

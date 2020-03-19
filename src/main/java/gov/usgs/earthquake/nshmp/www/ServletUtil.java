@@ -48,7 +48,7 @@ import io.micronaut.runtime.event.annotation.EventListener;
 /**
  * Micronaut controller utility objects and methods.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class ServletUtil {
 

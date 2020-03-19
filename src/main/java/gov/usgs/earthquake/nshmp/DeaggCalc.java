@@ -29,7 +29,7 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
 /**
  * Deaggregate probabilisitic seismic hazard at a return period of interest.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class DeaggCalc {
 

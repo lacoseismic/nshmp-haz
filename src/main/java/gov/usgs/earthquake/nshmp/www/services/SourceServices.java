@@ -34,9 +34,8 @@ import io.micronaut.http.HttpResponse;
 /**
  * Entry point for services related to source models. Current services:
  * <ul><li>/source/</li></ul>
- * 
- * @author Brandon Clayton
- * @author Peter Powers
+ *
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("unused")
 public class SourceServices {

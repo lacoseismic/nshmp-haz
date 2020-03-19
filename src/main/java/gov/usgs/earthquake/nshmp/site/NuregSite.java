@@ -9,7 +9,7 @@ import gov.usgs.earthquake.nshmp.internal.UsRegion;
  * CEUS-SSCn NRC NUREG demonstration sites. Most are also present in
  * {@code NshmpSite}, but with less precise coordinates.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public enum NuregSite implements NamedLocation {

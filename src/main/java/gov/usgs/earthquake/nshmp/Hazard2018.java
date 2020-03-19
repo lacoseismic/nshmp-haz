@@ -39,7 +39,7 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
  * model. This class deals with teh joint calculation of hazard in WUS and CEUS
  * regions.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 public class Hazard2018 {
 
