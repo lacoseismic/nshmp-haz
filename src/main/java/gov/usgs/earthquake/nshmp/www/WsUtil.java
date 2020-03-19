@@ -122,7 +122,7 @@ public class WsUtil {
         .collect(Collectors.toSet());
   }
 
-  enum Key {
+  public enum Key {
     EDITION,
     REGION,
     MODEL,
