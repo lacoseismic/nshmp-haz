@@ -24,8 +24,8 @@ package gov.usgs.earthquake.nshmp;
  * Class for scaled down tests that exercise the primary hazard calculation
  * packages and pipeline without incurring the overhead of loading national
  * scale models.
- * 
- * @author Peter Powers
+ *
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public class NshmTestsSmall {

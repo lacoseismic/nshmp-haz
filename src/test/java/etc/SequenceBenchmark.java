@@ -13,7 +13,7 @@ import gov.usgs.earthquake.nshmp.function.EvenlyDiscretizedFunc;
  * EvenlyDiscretizedFunction, and XySequence. XySequence is generally faster and
  * more concise.
  *
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 class SequenceBenchmark {
 

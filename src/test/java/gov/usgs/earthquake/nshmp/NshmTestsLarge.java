@@ -40,9 +40,9 @@ package gov.usgs.earthquake.nshmp;
  * significant system resources to load source models, and source models are
  * required to be in adjacent repositories. These tests should be run
  * frequently, but not as part of continuous integration. Consider nightlies.
- * 
+ *
  * @see NshmTestsSmall
- * @author Peter Powers
+ * @author U.S. Geological Survey
  */
 @SuppressWarnings("javadoc")
 public class NshmTestsLarge {
