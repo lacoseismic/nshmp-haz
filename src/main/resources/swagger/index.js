@@ -30,7 +30,7 @@ window.onload = function() {
       };
     },
     ui = SwaggerUIBundle({
-      url: contextPath + "nshmp-haz-openapi.yml",
+      url: contextPath + "/swagger/nshmp-haz-openapi.yml",
       dom_id: "#swagger-ui",
       tagsSorter: 'alpha',
       presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
