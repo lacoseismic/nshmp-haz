@@ -118,19 +118,19 @@ public final class HazardService {
   }
 
   static Hazard calc(RequestData data) throws InterruptedException, ExecutionException {
-    var futures = ServletUtil.installedModel().models().stream()
+    var futuresList = ServletUtil.installedModel().models().stream()
         .map(baseModel -> calcHazard(baseModel, ServletUtil.hazardModels().get(baseModel), data))
         .collect(Collectors.toList());
 
-    var hazardFutures = CompletableFuture
-        .allOf(futures.toArray(new CompletableFuture[futures.size()]))
+    var hazardsFuture = CompletableFuture
+        .allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]))
         .thenApply(v -> {
-          return futures.stream()
+          return futuresList.stream()
               .map(future -> future.join())
               .collect(Collectors.toList());
         });
 
-    var hazards = hazardFutures.get().toArray(new Hazard[] {});
+    var hazards = hazardsFuture.get().toArray(new Hazard[] {});
     return Hazard.merge(hazards);
   }
 
