@@ -193,6 +193,7 @@ spotless {
 
 /* Add HTML reports to SpotBugs */
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
+  ignoreFailures = false // TODO remove when nshmp-lib is updated
   reports {
     xml.enabled = false
     html.enabled = true
