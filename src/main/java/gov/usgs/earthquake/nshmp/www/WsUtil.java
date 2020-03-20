@@ -17,7 +17,9 @@ import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
+import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
+import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
 
@@ -35,6 +37,45 @@ public class WsUtil {
     logger.severe(name + " -\n" + response);
     e.printStackTrace();
     return HttpResponse.serverError(response);
+  }
+
+  public static interface ServiceQuery {
+    boolean isNull();
+
+    void checkValues();
+  }
+
+  public static class ServiceQueryData implements ServiceQuery {
+    public final Double longitude;
+    public final Double latitude;
+
+    public ServiceQueryData(Double longitude, Double latitude) {
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+
+    @Override
+    public boolean isNull() {
+      return longitude == null && latitude == null;
+    }
+
+    @Override
+    public void checkValues() {
+      WsUtils.checkValue(Key.LONGITUDE, longitude);
+      WsUtils.checkValue(Key.LATITUDE, latitude);
+    }
+  }
+
+  public static class ServiceRequestData {
+    public final SourceModel model;
+    public final double longitude;
+    public final double latitude;
+
+    public ServiceRequestData(ServiceQueryData query) {
+      model = new SourceModel(ServletUtil.installedModel());
+      longitude = query.longitude;
+      latitude = query.latitude;
+    }
   }
 
   /**
