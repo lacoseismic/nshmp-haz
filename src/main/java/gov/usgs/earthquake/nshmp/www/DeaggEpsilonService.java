@@ -71,7 +71,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
   public void init() throws ServletException {
 
     ServletContext context = getServletConfig().getServletContext();
-    // Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
+    Object modelCache = context.getAttribute("");
     this.modelCache = (LoadingCache<Model, HazardModel>) modelCache;
 
     try (InputStream config =

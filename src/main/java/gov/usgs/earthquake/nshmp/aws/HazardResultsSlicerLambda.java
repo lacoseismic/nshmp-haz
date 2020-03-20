@@ -231,6 +231,11 @@ public class HazardResultsSlicerLambda implements RequestStreamHandler {
     private static class ZipResult {
       String path;
       String instanceId;
+
+      ZipResult(String path, String instanceId) {
+        this.path = path;
+        this.instanceId = instanceId;
+      }
     }
   }
 
