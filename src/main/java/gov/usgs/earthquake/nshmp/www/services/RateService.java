@@ -2,23 +2,17 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
-import gov.usgs.earthquake.nshmp.calc.CalcConfig.Builder;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.data.XySequence;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
-import gov.usgs.earthquake.nshmp.eq.model.SourceType;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
@@ -31,10 +25,11 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.WsUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtil.Key;
+import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceQueryData;
+import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
-import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
 
@@ -85,21 +80,19 @@ public final class RateService {
    * @param urlHelper The url helper
    * @return
    */
-  public static HttpResponse<String> handleDoGetCalc(
-      Service service,
-      Query query,
-      UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetCalc(Query query, UrlHelper urlHelper) {
+    var service = query.service;
+
     try {
       var timer = ServletUtil.timer();
       LOGGER.info(service.name + " - Request:\n" + ServletUtil.GSON.toJson(query));
 
-      if (query.distance == null && query.latitude == null && query.longitude == null &&
-          ((service == Service.PROBABILITY && query.timespan.isEmpty()) ||
-              service == Service.RATE)) {
+      if (query.isNull()) {
         return handleDoGetUsage(service, urlHelper);
       }
 
-      var requestData = buildRequest(service, query);
+      query.checkValues();
+      var requestData = new RequestData(query);
       var response = processRequest(service, requestData, urlHelper, timer);
       var svcResponse = ServletUtil.GSON.toJson(response);
       LOGGER.info(service.name + " - Response:\n" + svcResponse);
@@ -115,31 +108,20 @@ public final class RateService {
     return new Response<>(Status.USAGE, service.name, urlHelper.url, usage, urlHelper);
   }
 
-  private static RequestData buildRequest(Service service, Query query) {
-    var timespan = service == Service.PROBABILITY
-        ? Optional.of(WsUtils.checkValue(Key.TIMESPAN, query.timespan.get())) : query.timespan;
-
-    return new RequestData(
-        WsUtils.checkValue(Key.LONGITUDE, query.longitude),
-        WsUtils.checkValue(Key.LATITUDE, query.latitude),
-        WsUtils.checkValue(Key.DISTANCE, query.distance),
-        timespan);
-  }
-
   static Response<RequestData, ResponseData> processRequest(
       Service service,
       RequestData data,
       UrlHelper urlHelper,
       Timer timer) throws InterruptedException, ExecutionException {
     var rates = calc(service, data);
-    var responseData = new ResponseData(new ResponseMetadata(data), rates, timer);
+    var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
     return new Response<>(Status.SUCCESS, service.name, data, responseData, urlHelper);
   }
 
   private static EqRate calc(Service service, RequestData data)
       throws InterruptedException, ExecutionException {
-    Location location = Location.create(data.latitude, data.longitude);
-    Site site = Site.builder().location(location).build();
+    var location = Location.create(data.latitude, data.longitude);
+    var site = Site.builder().location(location).build();
     var futureRates = new ArrayList<ListenableFuture<EqRate>>();
 
     /*
@@ -179,14 +161,13 @@ public final class RateService {
       Site site,
       double distance,
       Optional<Double> timespan) {
-
-    Builder configBuilder = CalcConfig.copyOf(model.config()).distance(distance);
+    var configBuilder = CalcConfig.copyOf(model.config()).distance(distance);
     if (service == Service.PROBABILITY) {
       /* Also sets value format to Poisson probability. */
       configBuilder.timespan(timespan.get());
     }
-    CalcConfig config = configBuilder.build();
-    Callable<EqRate> task = EqRate.callable(model, config, site);
+    var config = configBuilder.build();
+    var task = EqRate.callable(model, config, site);
     return ServletUtil.CALC_EXECUTOR.submit(task);
   }
 
@@ -216,44 +197,47 @@ public final class RateService {
     }
   }
 
-  public static class Query {
-    final Double latitude;
-    final Double longitude;
+  public static class Query extends ServiceQueryData {
     final Double distance;
     final Optional<Double> timespan;
+    final Service service;
 
     public Query(
+        Service service,
         Double longitude,
         Double latitude,
         Double distance,
         Optional<Double> timespan) {
-      this.latitude = latitude;
-      this.longitude = longitude;
+      super(longitude, latitude);
+      this.service = service;
       this.distance = distance;
       this.timespan = timespan;
     }
 
+    @Override
+    public boolean isNull() {
+      return super.isNull() && distance == null &&
+          ((service == Service.PROBABILITY && timespan.isEmpty()) || service == Service.RATE);
+    }
+
+    @Override
+    public void checkValues() {
+      super.checkValues();
+      WsUtils.checkValue(Key.DISTANCE, distance);
+      if (service == Service.PROBABILITY) {
+        WsUtils.checkValue(Key.TIMESPAN, timespan.get());
+      }
+    }
   }
 
-  static final class RequestData {
-    final List<SourceModel> models;
-    final double latitude;
-    final double longitude;
+  static final class RequestData extends ServiceRequestData {
     final double distance;
     final Optional<Double> timespan;
 
-    RequestData(
-        double longitude,
-        double latitude,
-        double distance,
-        Optional<Double> timespan) {
-      models = ServletUtil.installedModel().models().stream()
-          .map(SourceModel::new)
-          .collect(Collectors.toList());
-      this.latitude = latitude;
-      this.longitude = longitude;
-      this.distance = distance;
-      this.timespan = timespan;
+    RequestData(Query query) {
+      super(query);
+      this.distance = query.distance;
+      this.timespan = query.timespan;
     }
   }
 
@@ -267,8 +251,8 @@ public final class RateService {
     final String xlabel = "Magnitude (Mw)";
     final String ylabel;
 
-    ResponseMetadata(RequestData request) {
-      boolean isProbability = request.timespan.isPresent();
+    ResponseMetadata(Service service, RequestData request) {
+      var isProbability = service == Service.PROBABILITY;
       this.longitude = request.longitude;
       this.latitude = request.latitude;
       this.distance = request.distance;
@@ -290,32 +274,31 @@ public final class RateService {
     }
 
     List<Sequence> buildSequence(EqRate rates) {
-
-      ImmutableList.Builder<Sequence> sequenceListBuilder = ImmutableList.builder();
+      var sequences = new ArrayList<Sequence>();
 
       /* Total mfd. */
-      XySequence total = (!rates.totalMfd.isClear()) ? rates.totalMfd.trim() : rates.totalMfd;
-      Sequence totalOut = new Sequence(
+      var total = (!rates.totalMfd.isClear()) ? rates.totalMfd.trim() : rates.totalMfd;
+      var totalOut = new Sequence(
           TOTAL_KEY,
           total.xValues().boxed().collect(Collectors.toList()),
           total.yValues().boxed().collect(Collectors.toList()));
-      sequenceListBuilder.add(totalOut);
+      sequences.add(totalOut);
 
       /* Source type mfds. */
-      for (Entry<SourceType, XySequence> entry : rates.typeMfds.entrySet()) {
-        XySequence type = entry.getValue();
+      for (var entry : rates.typeMfds.entrySet()) {
+        var type = entry.getValue();
         if (type.isClear()) {
           continue;
         }
         type = type.trim();
-        Sequence typeOut = new Sequence(
+        var typeOut = new Sequence(
             entry.getKey().toString(),
             type.xValues().boxed().collect(Collectors.toList()),
             type.yValues().boxed().collect(Collectors.toList()));
-        sequenceListBuilder.add(typeOut);
+        sequences.add(typeOut);
       }
 
-      return sequenceListBuilder.build();
+      return List.copyOf(sequences);
     }
   }
 

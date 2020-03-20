@@ -22,6 +22,7 @@ import gov.usgs.earthquake.nshmp.internal.www.meta.EnumParameter;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.BaseModel;
+import gov.usgs.earthquake.nshmp.www.Model;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
@@ -91,16 +92,14 @@ public class SourceServices {
   }
 
   static class Parameters {
-    List<SourceModel> models;
+    SourceModel model;
     EnumParameter<Region> region;
     DoubleParameter returnPeriod;
     EnumParameter<Imt> imt;
     EnumParameter<Vs30> vs30;
 
     Parameters() {
-      models = ServletUtil.installedModel().models().stream()
-          .map(SourceModel::new)
-          .collect(Collectors.toList());
+      model = new SourceModel(ServletUtil.installedModel());
 
       region = new EnumParameter<>(
           "Region",
@@ -142,18 +141,30 @@ public class SourceServices {
   public static class SourceModel {
     String region;
     String display;
-    String path;
     String value;
     String year;
-    ModelConstraints supports;
+    List<BaseSourceModel> models;
 
-    public SourceModel(BaseModel model) {
-      this.display = model.name;
-      this.region = model.region.name();
-      this.path = model.path;
-      this.supports = new ModelConstraints(model);
+    public SourceModel(Model model) {
+      this.display = model.label();
+      this.region = model.region().name();
       this.value = model.toString();
-      this.year = model.year;
+      this.year = model.year();
+      models = model.models().stream()
+          .map(m -> new BaseSourceModel(m))
+          .collect(Collectors.toList());
+    }
+  }
+
+  public static class BaseSourceModel {
+    String year;
+    String path;
+    ModelConstraints constraints;
+
+    BaseSourceModel(BaseModel model) {
+      year = model.year;
+      path = model.path;
+      constraints = new ModelConstraints(model);
     }
   }
 
@@ -207,7 +218,7 @@ public class SourceServices {
 
     @Override
     public JsonElement serialize(Region region, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject json = new JsonObject();
+      var json = new JsonObject();
 
       json.addProperty(Attributes.VALUE.toLowerCase(), region.name());
       json.addProperty(Attributes.DISPLAY.toLowerCase(), region.toString());
