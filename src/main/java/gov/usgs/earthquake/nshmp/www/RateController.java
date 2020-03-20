@@ -42,7 +42,7 @@ public class RateController {
   @Operation(
       summary = "Returns the earthquake rate service usage",
       description = "Returns the supported:\n * Cutoff distance\n * Longitude\n * Latitude",
-      operationId = "doGetUsageRate",
+      operationId = "rate_doGetUsageRate",
       tags = { "Rate Service" })
   @ApiResponse(
       description = "Earthquake rate usage",
@@ -64,7 +64,7 @@ public class RateController {
   @Operation(
       summary = "Compute earthquake annual-rates",
       description = "Compute incremental earthquake annual-rates at a location",
-      operationId = "doGetRate",
+      operationId = "rate_doGetRate",
       tags = { "Rate Service" })
   @ApiResponse(
       description = "Earthquake annual-rates",
@@ -86,9 +86,10 @@ public class RateController {
           required = true,
           minimum = "0.01",
           maximum = "1000") @QueryValue @Nullable Double distance) {
+    var service = Service.RATE;
     var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, distance, Optional.empty());
-    return RateService.handleDoGetCalc(Service.RATE, query, urlHelper);
+    var query = new Query(service, longitude, latitude, distance, Optional.empty());
+    return RateService.handleDoGetCalc(query, urlHelper);
   }
 
   /**
@@ -102,7 +103,7 @@ public class RateController {
   @Operation(
       summary = "Compute earthquake annual-rates",
       description = "Compute incremental earthquake annual-rates at a location",
-      operationId = "doGetRateSlash",
+      operationId = "rate_doGetRateSlash",
       tags = { "Rate Service" })
   @ApiResponse(
       description = "Earthquake annual-rates",
@@ -124,9 +125,10 @@ public class RateController {
           required = true,
           minimum = "0.01",
           maximum = "1000") @PathVariable @Nullable Double distance) {
+    var service = Service.RATE;
     var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, distance, Optional.empty());
-    return RateService.handleDoGetCalc(Service.RATE, query, urlHelper);
+    var query = new Query(service, longitude, latitude, distance, Optional.empty());
+    return RateService.handleDoGetCalc(query, urlHelper);
   }
 
   /**
@@ -138,7 +140,7 @@ public class RateController {
       summary = "Returns the earthquake probability service usage",
       description = "Returns the supported:\n " +
           "* Timespan\n * Cutoff distance\n * Longitude\n * Latitude",
-      operationId = "doGetProbabilityRate",
+      operationId = "probability_doGetProbabilityRate",
       tags = { "Probability Service" })
   @ApiResponse(
       description = "Earthquake probability usage",
@@ -161,7 +163,7 @@ public class RateController {
   @Operation(
       summary = "Compute earthquake probabilities",
       description = "Compute cumulative earthquake probabilities P(M ≥ x) at a location",
-      operationId = "doGetProbability",
+      operationId = "probability_doGetProbability",
       tags = { "Probability Service" })
   @ApiResponse(
       description = "Earthquake probabilities",
@@ -187,9 +189,10 @@ public class RateController {
           required = true,
           minimum = "1",
           maximum = "10000") @QueryValue @Nullable Double timespan) {
+    var service = Service.PROBABILITY;
     var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, distance, Optional.ofNullable(timespan));
-    return RateService.handleDoGetCalc(Service.PROBABILITY, query, urlHelper);
+    var query = new Query(service, longitude, latitude, distance, Optional.ofNullable(timespan));
+    return RateService.handleDoGetCalc(query, urlHelper);
   }
 
   /**
@@ -199,12 +202,12 @@ public class RateController {
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
    * @param distance Cutoff distance (in km) ([0.01, 1000])
-   * @param timespan Forcast time span (in years) ([1, 10000])
+   * @param timespan Forecast time span (in years) ([1, 10000])
    */
   @Operation(
       summary = "Compute earthquake probabilities",
       description = "Compute cumulative earthquake probabilities P(M ≥ x) at a location",
-      operationId = "doGetProbabilitySlash",
+      operationId = "probability_doGetProbabilitySlash",
       tags = { "Probability Service" })
   @ApiResponse(
       description = "Earthquake probabilities",
@@ -230,9 +233,10 @@ public class RateController {
           required = true,
           minimum = "1",
           maximum = "10000") @PathVariable @Nullable Double timespan) {
+    var service = Service.PROBABILITY;
     var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, distance, Optional.ofNullable(timespan));
-    return RateService.handleDoGetCalc(Service.PROBABILITY, query, urlHelper);
+    var query = new Query(service, longitude, latitude, distance, Optional.ofNullable(timespan));
+    return RateService.handleDoGetCalc(query, urlHelper);
   }
 
 }
