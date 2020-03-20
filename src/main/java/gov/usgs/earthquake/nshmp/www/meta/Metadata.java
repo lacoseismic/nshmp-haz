@@ -1,16 +1,9 @@
 package gov.usgs.earthquake.nshmp.www.meta;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 import com.google.common.base.Throwables;
-import com.google.common.collect.Sets;
 import com.google.gson.annotations.SerializedName;
 
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
-import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.www.meta.EnumParameter;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
@@ -23,32 +16,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 public final class Metadata {
 
   static final String NSHMP_HAZ_URL = "https://code.usgs.gov/ghsc/nshmp/nshmp-haz";
-
-  /*
-   * The hazard service needs to report the list of all possible IMTs supported
-   * even though what can actually be supported is dependent on Edition and
-   * Region. When the slash delimited service returns 'any', the same logic
-   * applied on the client needs to be applied on the server to determine what
-   * 'any' acutally means. See HazardService.buildRequest() methods. This field
-   * currently set to the IMTs supported by Region.WUS which we know to be the
-   * union of all periods currently supported by the models used.
-   */
-  private static final Set<Imt> HAZARD_IMTS = Region.WUS.imts;
-
-  private static final String URL_PREFIX = "%s";
-
-  public static final String HAZARD_USAGE = ServletUtil.GSON.toJson(
-      new Default(
-          "Compute hazard curve data at a location",
-          URL_PREFIX + "/hazard/{edition}/{region}/{longitude}/{latitude}/{imt}/{vs30}",
-          new HazardParameters()));
-
-  public static final String DEAGG_USAGE = ServletUtil.GSON.toJson(
-      new Deagg(
-          "Deaggregate hazard at a location",
-          URL_PREFIX +
-              "/deagg/{edition}/{region}/{longitude}/{latitude}/{imt}/{vs30}/{returnPeriod}",
-          new DeaggParameters()));
 
   @SuppressWarnings("unused")
   private static class Default {
@@ -141,50 +108,6 @@ public final class Metadata {
     }
   }
 
-  @SuppressWarnings("unused")
-  private static class HazardParameters extends DefaultParameters {
-
-    final EnumParameter<Imt> imt;
-    final EnumParameter<Vs30> vs30;
-
-    HazardParameters() {
-
-      imt = new EnumParameter<>(
-          "Intensity measure type",
-          ParamType.STRING,
-          HAZARD_IMTS);
-
-      vs30 = new EnumParameter<>(
-          "Site soil (Vs30)",
-          ParamType.STRING,
-          EnumSet.allOf(Vs30.class));
-    }
-  }
-
-  private static class Deagg extends Default {
-    private Deagg(
-        String description,
-        String syntax,
-        DeaggParameters parameters) {
-      super(description, syntax, parameters);
-    }
-  }
-
-  @SuppressWarnings("unused")
-  private static class DeaggParameters extends HazardParameters {
-
-    final DoubleParameter returnPeriod;
-
-    DeaggParameters() {
-
-      returnPeriod = new DoubleParameter(
-          "Return period (in years)",
-          ParamType.NUMBER,
-          1.0,
-          4000.0);
-    }
-  }
-
   public static String busyMessage(String url, long hits, long misses) {
     Busy busy = new Busy(url, hits, misses);
     return ServletUtil.GSON.toJson(busy);
@@ -225,10 +148,6 @@ public final class Metadata {
       }
       this.message = message;
     }
-  }
-
-  public static Set<Imt> commonImts(Edition edition, Region region) {
-    return Sets.intersection(edition.imts, region.imts);
   }
 
 }

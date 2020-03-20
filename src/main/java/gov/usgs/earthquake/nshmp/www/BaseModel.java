@@ -18,23 +18,15 @@ import static gov.usgs.earthquake.nshmp.gmm.Imt.SA2P0;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.SA3P0;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.SA4P0;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.SA5P0;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.AK;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.HI;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
 
 import java.nio.file.Paths;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.Parsing;
-import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
-import gov.usgs.earthquake.nshmp.www.meta.Region;
 
 public enum BaseModel {
 
@@ -80,25 +72,21 @@ public enum BaseModel {
   public final Set<Vs30> vs30s;
 
   public final String path;
-  public final String name;
-  public final Region region;
   public final String year;
 
   private BaseModel(Set<Imt> imts, Set<Vs30> vs30s) {
     this.imts = Sets.immutableEnumSet(imts);
     this.vs30s = Sets.immutableEnumSet(vs30s);
-    region = deriveRegion(name());
+    var region = deriveRegion(name());
     year = name().substring(name().lastIndexOf('_') + 1);
     path = Paths.get(MODEL_DIR)
-        .resolve(region.name().toLowerCase())
+        .resolve(region.toLowerCase())
         .resolve(year.toLowerCase())
         .toString();
-    name = Parsing.join(
-        ImmutableList.of(year, region.label, "Hazard Model"),
-        Delimiter.SPACE);
   }
 
-  private static Region deriveRegion(String s) {
-    return s.startsWith("AK") ? AK : s.startsWith("WUS") ? WUS : s.startsWith("HI") ? HI : CEUS;
+  private static String deriveRegion(String s) {
+    return s.startsWith("AK") ? "AK" : s.startsWith("WUS") ? "WUS"
+        : s.startsWith("HI") ? "HI" : "CEUS";
   }
 }

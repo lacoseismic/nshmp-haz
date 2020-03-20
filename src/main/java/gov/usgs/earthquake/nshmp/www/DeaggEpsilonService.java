@@ -41,7 +41,7 @@ import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTask;
+import gov.usgs.earthquake.nshmp.www.ServletUtil.TimedTaskContext;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices;
@@ -71,11 +71,11 @@ public final class DeaggEpsilonService extends NshmpServlet {
   public void init() throws ServletException {
 
     ServletContext context = getServletConfig().getServletContext();
-    // Object modelCache = context.getAttribute(MODEL_CACHE_CONTEXT_ID);
+    Object modelCache = context.getAttribute("");
     this.modelCache = (LoadingCache<Model, HazardModel>) modelCache;
 
     try (InputStream config =
-        DeaggService2.class.getResourceAsStream("/config.properties")) {
+        DeaggEpsilonService.class.getResourceAsStream("/config.properties")) {
 
       checkNotNull(config, "Missing config.properties");
 
@@ -173,7 +173,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
     return key.equals("PGA") || key.startsWith("SA");
   }
 
-  private class Deagg2Task extends TimedTask<Result> {
+  private class Deagg2Task extends TimedTaskContext<Result> {
 
     RequestData data;
 
@@ -183,7 +183,7 @@ public final class DeaggEpsilonService extends NshmpServlet {
     }
 
     @Override
-    Result calc() throws Exception {
+    public Result calc() throws Exception {
       Deaggregation deagg = calcDeagg(data);
 
       return new Result.Builder()

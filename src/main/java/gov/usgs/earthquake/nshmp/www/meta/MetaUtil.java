@@ -42,14 +42,11 @@ public final class MetaUtil {
     public JsonElement serialize(E src, Type type, JsonSerializationContext context) {
 
       String value = (src instanceof Vs30) ? src.name().substring(3) : src.name();
-      int displayOrder = (src instanceof Edition) ? ((Edition) src).displayOrder : src.ordinal();
+      int displayOrder = src.ordinal();
 
       JsonObject jObj = new JsonObject();
       jObj.addProperty("id", src.ordinal());
       jObj.addProperty("value", value);
-      if (src instanceof Edition) {
-        jObj.addProperty("version", ((Edition) src).version());
-      }
       jObj.addProperty("display", src.toString());
       jObj.addProperty("displayorder", displayOrder);
 
