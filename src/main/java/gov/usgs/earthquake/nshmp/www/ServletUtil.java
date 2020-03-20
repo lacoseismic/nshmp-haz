@@ -1,9 +1,6 @@
 package gov.usgs.earthquake.nshmp.www;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.CEUS;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.COUS;
-import static gov.usgs.earthquake.nshmp.www.meta.Region.WUS;
 import static java.lang.Runtime.getRuntime;
 
 import java.net.URI;
@@ -36,7 +33,6 @@ import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
-import gov.usgs.earthquake.nshmp.www.meta.Edition;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
 
@@ -61,7 +57,7 @@ public class ServletUtil {
       "yyyy-MM-dd'T'HH:mm:ssXXX");
 
   public static final ListeningExecutorService CALC_EXECUTOR;
-  static final ExecutorService TASK_EXECUTOR;
+  public static final ExecutorService TASK_EXECUTOR;
 
   public static final int THREAD_COUNT;
 
@@ -78,7 +74,6 @@ public class ServletUtil {
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Edition.class, new MetaUtil.EnumSerializer<Edition>())
         .registerTypeAdapter(Region.class, new MetaUtil.EnumSerializer<Region>())
         .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
         .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
@@ -194,19 +189,17 @@ public class ServletUtil {
     }
   }
 
-  abstract static class TimedTask<T> implements Callable<T> {
+  public abstract static class TimedTask<T> implements Callable<T> {
 
     final String url;
-    final ServletContext context;
     final Timer timer;
 
-    TimedTask(String url, ServletContext context) {
+    public TimedTask(String url) {
       this.url = url;
-      this.context = context;
       this.timer = ServletUtil.timer();
     }
 
-    abstract T calc() throws Exception;
+    public abstract T calc() throws Exception;
 
     @Override
     public T call() throws Exception {
@@ -215,19 +208,13 @@ public class ServletUtil {
     }
   }
 
-  /*
-   * For sites located west of -115 (in the WUS but not in the CEUS-WUS overlap
-   * zone) and site classes of vs30=760, client requests come in with
-   * region=COUS, thereby limiting the conversion of imt=any to the set of
-   * periods supported by both models. In order for the service to return what
-   * the client suggests should be returned, we need to do an addiitional
-   * longitude check. TODO clean; fix client eq-hazard-tool
-   */
-  static Region checkRegion(Region region, double lon) {
-    if (region == COUS) {
-      return (lon <= WUS.uimaxlongitude) ? WUS : (lon >= CEUS.uiminlongitude) ? CEUS : COUS;
+  public abstract static class TimedTaskContext<T> extends TimedTask<T> {
+    ServletContext context;
+
+    public TimedTaskContext(String url, ServletContext context) {
+      super(url);
+      this.context = context;
     }
-    return region;
   }
 
 }
