@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
+import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 
 /**
  * Service metadata, parameterization, and constraint strings, in JSON format.
