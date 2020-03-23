@@ -7,19 +7,16 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
-import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
 import gov.usgs.earthquake.nshmp.data.XySequence;
-import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.eq.model.SourceType;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
@@ -29,13 +26,11 @@ import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.HazardController;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
-import gov.usgs.earthquake.nshmp.www.WsUtil;
-import gov.usgs.earthquake.nshmp.www.WsUtil.Key;
-import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceQueryData;
-import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
+import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
@@ -70,10 +65,10 @@ public final class HazardService {
       var usage = new SourceServices.ResponseData();
       var response = new Response<>(Status.USAGE, NAME, urlHelper.url, usage, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(NAME + " - Response:\n" + ServletUtil.GSON.toJson(svcResponse));
+      LOGGER.info(NAME + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return WsUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
     }
   }
 
@@ -97,10 +92,10 @@ public final class HazardService {
       var data = new RequestData(query, Vs30.fromValue(query.vs30));
       var response = process(data, timer, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(NAME + " - Response:\n" + ServletUtil.GSON.toJson(svcResponse));
+      LOGGER.info(NAME + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return WsUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
     }
   }
 
@@ -108,7 +103,10 @@ public final class HazardService {
       RequestData data,
       Timer timer,
       UrlHelper urlHelper) throws InterruptedException, ExecutionException {
-    var hazard = calc(data);
+    var configFunction = new ConfigFunction();
+    var siteFunction = new SiteFunction(data);
+    var hazard = ServicesUtil.calcHazard(configFunction, siteFunction);
+
     return new ResultBuilder()
         .hazard(hazard)
         .requestData(data)
@@ -117,41 +115,31 @@ public final class HazardService {
         .build();
   }
 
-  static Hazard calc(RequestData data) throws InterruptedException, ExecutionException {
-    var futuresList = ServletUtil.installedModel().models().stream()
-        .map(baseModel -> calcHazard(baseModel, ServletUtil.hazardModels().get(baseModel), data))
-        .collect(Collectors.toList());
-
-    var hazardsFuture = CompletableFuture
-        .allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]))
-        .thenApply(v -> {
-          return futuresList.stream()
-              .map(future -> future.join())
-              .collect(Collectors.toList());
-        });
-
-    var hazards = hazardsFuture.get().toArray(new Hazard[] {});
-    return Hazard.merge(hazards);
+  static class ConfigFunction implements Function<BaseModel, CalcConfig> {
+    @Override
+    public CalcConfig apply(BaseModel baseModel) {
+      var hazardModel = ServletUtil.hazardModels().get(baseModel);
+      var configBuilder = CalcConfig.copyOf(hazardModel.config());
+      configBuilder.imts(baseModel.imts);
+      return configBuilder.build();
+    }
   }
 
-  static CompletableFuture<Hazard> calcHazard(
-      BaseModel baseModel,
-      HazardModel hazardModel,
-      RequestData data) {
-    var location = Location.create(data.latitude, data.longitude);
-    var configBuilder = CalcConfig.copyOf(hazardModel.config());
-    configBuilder.imts(baseModel.imts);
-    var config = configBuilder.build();
-    var site = Site.builder()
-        .basinDataProvider(config.siteData.basinDataProvider)
-        .location(location)
-        .vs30(data.vs30.value())
-        .build();
+  static class SiteFunction implements Function<CalcConfig, Site> {
+    final RequestData data;
 
-    return CompletableFuture
-        .supplyAsync(
-            () -> HazardCalcs.hazard(hazardModel, config, site, ServletUtil.CALC_EXECUTOR),
-            ServletUtil.TASK_EXECUTOR);
+    private SiteFunction(RequestData data) {
+      this.data = data;
+    }
+
+    @Override
+    public Site apply(CalcConfig config) {
+      return Site.builder()
+          .basinDataProvider(config.siteData.basinDataProvider)
+          .location(Location.create(data.latitude, data.longitude))
+          .vs30(data.vs30.value())
+          .build();
+    }
   }
 
   public static class Query extends ServiceQueryData {
@@ -174,7 +162,7 @@ public final class HazardService {
     }
   }
 
-  static final class RequestData extends ServiceRequestData {
+  static class RequestData extends ServiceRequestData {
     final Vs30 vs30;
 
     RequestData(Query query, Vs30 vs30) {

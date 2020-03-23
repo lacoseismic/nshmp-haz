@@ -23,8 +23,6 @@ import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.Model;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.WsUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
@@ -71,7 +69,7 @@ public class SourceServices {
       LOGGER.info(NAME + "- Response:\n" + jsonString);
       return HttpResponse.ok(jsonString);
     } catch (Exception e) {
-      return WsUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
     }
   }
 
