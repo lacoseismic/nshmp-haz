@@ -34,7 +34,7 @@ ENV LANG="en_US.UTF-8"
 
 ARG builder_workdir
 ARG libs_dir
-ARG jar_file
+ARG ws_file
 
 WORKDIR ${builder_workdir}
 
