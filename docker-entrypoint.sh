@@ -107,7 +107,7 @@ run_hazard() {
 
   # Run nshmp-haz
   java -Xms${JAVA_XMS} -Xmx${JAVA_XMX} \
-      -cp ${HAZ_HOME}/${PROJECT}.jar \
+      -cp /app/${PROJECT}.jar \
       gov.usgs.earthquake.nshmp.${nshmp_program} \
       "${nshmp_model_path}" \
       "${site_file}" \
@@ -130,9 +130,15 @@ run_hazard() {
 #   None
 ####
 run_ws() {
-  unpack_war;
   get_ws_models;
-  catalina.sh run 2>&1;
+
+  if [ -z ${CONTEXT_PATH} ]; then
+    CONTEXT_PATH="/nshmp/${MODEL}";
+  fi
+
+  java -jar ${PROJECT}-ws.jar \
+      "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
+      -model=/app/models
 }
 
 ####
@@ -508,34 +514,6 @@ move_to_output_volume() {
 
   # Copy output to volume output
   cp -r ${hazout}/* output/. 2> ${LOG_FILE};
-}
-
-####
-# Unpack war file into webapps/<CONTEXT_PATH>.
-# Globals:
-#   (string) CONTEXT_PATH - The context path for the web services
-#   (string) LOG_FILE - The log file
-#   (string) MODEL - The model to use
-#   (string) PROJECT - The project name
-#   (string) TOMCAT_WEBAPPS - The Tomcat webapps dir
-# Arguments:
-#   None
-# Returns:
-#   None
-####
-unpack_war() {
-  cd ${TOMCAT_WEBAPPS} 2> ${LOG_FILE};
-
-  if [ -z ${CONTEXT_PATH} ]; then
-    CONTEXT_PATH="nshmp/${MODEL}";
-  fi
-
-  CONTEXT_PATH=$(echo ${CONTEXT_PATH//\//#} | awk {'print tolower($0)'}) 2> ${LOG_FILE};
-  mkdir ${CONTEXT_PATH} 2> ${LOG_FILE};
-  cd ${CONTEXT_PATH} 2> ${LOG_FILE};
-  cp ${HAZ_HOME}/${PROJECT}.war . 2> ${LOG_FILE};
-  unzip ${PROJECT}.war 2> ${LOG_FILE} &> /dev/null;
-  rm ${PROJECT}.war 2> ${LOG_FILE};
 }
 
 ####

@@ -23,7 +23,7 @@ services:
     environment:
       RUN_HAZARD: 'false'
       MODEL: CONUS-2018
-      CONTEXT_PATH: nshmp/conus-2018
+      CONTEXT_PATH: /nshmp/conus-2018
 
   # # Deploy nshmp-haz with CONUS-2014
   # nshmp-haz-conus-2014:
