@@ -4,7 +4,6 @@ import java.util.EnumMap;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
@@ -34,7 +33,7 @@ public class DeaggEpsilonController {
   private NshmpMicronautServlet servlet;
 
   @EventListener
-  public void init(StartupEvent event) throws ServletException {
+  public void init(StartupEvent event) {
     DeaggEpsilonService.init();
   }
 

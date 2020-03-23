@@ -12,8 +12,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
@@ -50,7 +48,7 @@ public final class DeaggEpsilonService {
   private static final Logger LOGGER = Logger.getLogger(DeaggEpsilonService.class.getName());
   private static URL basinUrl;
 
-  public static void init() throws ServletException {
+  public static void init() {
     try (InputStream config = Resources.getResource("config.properties").openStream()) {
       checkNotNull(config, "Missing config.properties");
 
@@ -65,7 +63,7 @@ public final class DeaggEpsilonService {
         basinUrl = url;
       }
     } catch (IOException | NullPointerException e) {
-      throw new ServletException(e);
+      throw new RuntimeException(e);
     }
   }
 
