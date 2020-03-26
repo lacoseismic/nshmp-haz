@@ -21,15 +21,13 @@ import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.mfd.Mfds;
 import gov.usgs.earthquake.nshmp.www.RateController;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.ServletUtil.Timer;
-import gov.usgs.earthquake.nshmp.www.WsUtil;
-import gov.usgs.earthquake.nshmp.www.WsUtil.Key;
-import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceQueryData;
-import gov.usgs.earthquake.nshmp.www.WsUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
+import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
+import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 
 import io.micronaut.http.HttpResponse;
 
@@ -66,7 +64,7 @@ public final class RateService {
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(String.format(svcResponse, urlHelper.urlPrefix, urlHelper.urlPrefix));
     } catch (Exception e) {
-      return WsUtil.handleError(e, service.name, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, service.name, LOGGER, urlHelper);
     }
   }
 
@@ -98,7 +96,7 @@ public final class RateService {
       LOGGER.info(service.name + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return WsUtil.handleError(e, service.name, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, service.name, LOGGER, urlHelper);
     }
   }
 

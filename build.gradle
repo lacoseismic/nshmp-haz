@@ -63,10 +63,6 @@ repositories {
 dependencies {
   implementation project(":nshmp-lib")
 
-  // Tomcat
-  implementation "org.apache.tomcat:tomcat-catalina:8.0.45"
-  implementation "javax.websocket:javax.websocket-api:1.1"
-
   // AWS
   implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"
   implementation "com.amazonaws:aws-java-sdk-lambda:${awsLambdaVersion}"

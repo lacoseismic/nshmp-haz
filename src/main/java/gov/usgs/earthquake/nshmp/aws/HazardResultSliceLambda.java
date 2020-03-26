@@ -3,7 +3,7 @@ package gov.usgs.earthquake.nshmp.aws;
 import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.aws.Util.CURVES_FILE;
 import static gov.usgs.earthquake.nshmp.aws.Util.MAP_FILE;
-import static gov.usgs.earthquake.nshmp.www.ServletUtil.GSON;
+import static gov.usgs.earthquake.nshmp.www.services.ServletUtil.GSON;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -37,8 +37,8 @@ import gov.usgs.earthquake.nshmp.data.Interpolator;
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 
 /**
  * AWS Lambda function to read in a curves file from AWS S3 and create slices at

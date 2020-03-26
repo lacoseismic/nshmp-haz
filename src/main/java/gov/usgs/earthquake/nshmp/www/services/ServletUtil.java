@@ -1,6 +1,5 @@
-package gov.usgs.earthquake.nshmp.www;
+package gov.usgs.earthquake.nshmp.www.services;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Runtime.getRuntime;
 
 import java.net.URI;
@@ -14,12 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -33,6 +28,8 @@ import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
+import gov.usgs.earthquake.nshmp.www.BaseModel;
+import gov.usgs.earthquake.nshmp.www.Model;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
 
@@ -48,25 +45,25 @@ import io.micronaut.runtime.event.annotation.EventListener;
  */
 public class ServletUtil {
 
+  public static final Gson GSON;
+  public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd'T'HH:mm:ssXXX");
+
+  static final ListeningExecutorService CALC_EXECUTOR;
+  static final ExecutorService TASK_EXECUTOR;
+
+  static final int THREAD_COUNT;
+
+  /* Stateful flag to reject requests while a result is pending. */
+  static boolean uhtBusy = false;
+  static long hitCount = 0;
+  static long missCount = 0;
+
   @Value("${nshmp-haz.installed-model}")
   private Model model;
 
   private static Model INSTALLED_MODEL;
   private static Map<BaseModel, HazardModel> HAZARD_MODELS = new EnumMap<>(BaseModel.class);
-  public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
-      "yyyy-MM-dd'T'HH:mm:ssXXX");
-
-  public static final ListeningExecutorService CALC_EXECUTOR;
-  public static final ExecutorService TASK_EXECUTOR;
-
-  public static final int THREAD_COUNT;
-
-  public static final Gson GSON;
-
-  /* Stateful flag to reject requests while a result is pending. */
-  public static boolean uhtBusy = false;
-  public static long hitCount = 0;
-  public static long missCount = 0;
 
   static {
     /* TODO modified for deagg-epsilon branch; should be context var */
@@ -87,11 +84,11 @@ public class ServletUtil {
         .create();
   }
 
-  public static Model installedModel() {
+  static Model installedModel() {
     return INSTALLED_MODEL;
   }
 
-  public static Map<BaseModel, HazardModel> hazardModels() {
+  static Map<BaseModel, HazardModel> hazardModels() {
     return HAZARD_MODELS;
   }
 
@@ -157,11 +154,6 @@ public class ServletUtil {
     }
   }
 
-  static boolean emptyRequest(HttpServletRequest request) {
-    return isNullOrEmpty(request.getQueryString()) &&
-        (request.getPathInfo() == null || request.getPathInfo().equals("/"));
-  }
-
   public static Timer timer() {
     return new Timer();
   }
@@ -171,11 +163,10 @@ public class ServletUtil {
    * be started later.
    */
   public static final class Timer {
-
     Stopwatch servlet = Stopwatch.createStarted();
     Stopwatch calc = Stopwatch.createUnstarted();
 
-    Timer start() {
+    public Timer start() {
       calc.start();
       return this;
     }
@@ -186,34 +177,6 @@ public class ServletUtil {
 
     public String calcTime() {
       return calc.toString();
-    }
-  }
-
-  public abstract static class TimedTask<T> implements Callable<T> {
-
-    final String url;
-    final Timer timer;
-
-    public TimedTask(String url) {
-      this.url = url;
-      this.timer = ServletUtil.timer();
-    }
-
-    public abstract T calc() throws Exception;
-
-    @Override
-    public T call() throws Exception {
-      timer.start();
-      return calc();
-    }
-  }
-
-  public abstract static class TimedTaskContext<T> extends TimedTask<T> {
-    ServletContext context;
-
-    public TimedTaskContext(String url, ServletContext context) {
-      super(url);
-      this.context = context;
     }
   }
 

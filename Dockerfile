@@ -22,6 +22,8 @@
 ARG project=nshmp-haz-v2
 ARG builder_workdir=/app/${project}
 ARG libs_dir=${builder_workdir}/build/libs
+ARG jar_file=${libs_dir}/${project}.jar
+ARG ws_file=${libs_dir}/${project}-ws.jar
 
 ####
 # Builder image: Build jar and war file.
@@ -31,6 +33,8 @@ FROM usgs/centos:8 as builder
 ENV LANG="en_US.UTF-8"
 
 ARG builder_workdir
+ARG libs_dir
+ARG ws_file
 
 WORKDIR ${builder_workdir}
 
@@ -39,7 +43,8 @@ COPY . .
 RUN yum install -y java-11-openjdk-devel which git
 
 RUN mv nshmp-lib ../. \
-    && ./gradlew --no-daemon assemble
+    && ./gradlew --no-daemon assemble \
+    && mv ${libs_dir}/*-all.jar ${ws_file}
 
 ####
 # Application image: Run jar or war file.
@@ -51,13 +56,13 @@ LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@us
 ENV LANG="en_US.UTF-8"
 
 ARG libs_dir
+ARG ws_file
 ARG builder_workdir
 ARG project
-ARG TOMCAT_MAJOR=8
-ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.5.40
 
 ENV PROJECT ${project}
-ENV JAVA_XMX 8g
+ENV CONTEXT_PATH "/"
+ENV MODEL_PATH /app/models
 
 # Whether to run hazard jar file or web services war file
 ENV RUN_HAZARD true
@@ -72,30 +77,13 @@ ENV IML ""
 ENV CONFIG_FILE "config.json"
 VOLUME [ "/app/output" ]
 
-# Tomcat
-ENV CONTEXT_PATH ""
-ENV CATALINA_HOME /usr/local/tomcat
-ENV TOMCAT_WEBAPPS ${CATALINA_HOME}/webapps
-ENV PATH ${CATALINA_HOME}/bin:${PATH}
-ENV TOMCAT_SOURCE http://archive.apache.org/dist/tomcat
-ENV TOMCAT_URL ${TOMCAT_SOURCE}/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
-ENV JAVA_OPTS -Xmx${JAVA_XMX}
-
-ENV WS_HOME ${CATALINA_HOME}
-ENV HAZ_HOME /app
-
-WORKDIR ${HAZ_HOME}
+WORKDIR /app
 
 COPY --from=builder ${libs_dir}/* ./
 COPY docker-entrypoint.sh .
 
-WORKDIR ${WS_HOME}
-
 RUN yum update -y \
-    && yum install -y file jq zip java-11-openjdk-headless \
-    && curl -L ${TOMCAT_URL} | tar -xz --strip-components=1
-
-WORKDIR ${HAZ_HOME}
+    && yum install -y file jq zip java-11-openjdk-headless
 
 EXPOSE 8080
 ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
