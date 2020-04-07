@@ -132,10 +132,6 @@ run_hazard() {
 run_ws() {
   get_ws_models;
 
-  if [ -z ${CONTEXT_PATH} ]; then
-    CONTEXT_PATH="/nshmp/${MODEL}";
-  fi
-
   java -jar ${PROJECT}-ws.jar \
       "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
       -model=/app/models
