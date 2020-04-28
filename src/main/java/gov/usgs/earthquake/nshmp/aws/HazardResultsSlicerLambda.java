@@ -50,8 +50,8 @@ public class HazardResultsSlicerLambda implements RequestStreamHandler {
   private static final AmazonEC2 EC2 = AmazonEC2ClientBuilder.defaultClient();
   private static final AWSLambda LAMBDA_CLIENT = AWSLambdaClientBuilder.defaultClient();
 
-  private static final String LAMBDA_CALL = "nshmp-haz-result-slice";
-  private static final String ZIP_LAMBDA_CALL = "nshmp-haz-zip-results";
+  private static final String CURVE_SLICE_LAMBDA = System.getenv("CURVE_SLICE_LAMBDA_NAME");
+  private static final String ZIP_RESULTS_LAMBDA = System.getenv("ZIP_RESULTS_LAMBDA_NAME");
   private static final String INSTANCE_STATUS = "terminated";
 
   private static final int MAX_INSTANCE_CHECK = 100;
@@ -131,7 +131,7 @@ public class HazardResultsSlicerLambda implements RequestStreamHandler {
         .build();
 
     InvokeRequest invokeRequest = new InvokeRequest()
-        .withFunctionName(LAMBDA_CALL)
+        .withFunctionName(CURVE_SLICE_LAMBDA)
         .withPayload(GSON.toJson(lambdaRequest));
 
     return CompletableFuture.supplyAsync(() -> {
@@ -161,7 +161,7 @@ public class HazardResultsSlicerLambda implements RequestStreamHandler {
 
   private static void zipResults(RequestData request) throws InterruptedException {
     InvokeRequest invokeRequest = new InvokeRequest()
-        .withFunctionName(ZIP_LAMBDA_CALL)
+        .withFunctionName(ZIP_RESULTS_LAMBDA)
         .withPayload(GSON.toJson(request));
 
     InvokeResult result = LAMBDA_CLIENT.invoke(invokeRequest);
