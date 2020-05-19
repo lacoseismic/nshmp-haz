@@ -6,6 +6,11 @@ ext {
 
   propsPath = '/classes/java/main/service.properties'
 
+  nshmpLib = "libs/nshmp-haz-dep--nshmp-lib"
+  nshmpLibGradleDir = "${nshmpLib}/gradle"
+  spotbugsDir = "${nshmpLib}/gradle"
+  spotlessDir = "${nshmpLib}/src/main/resources"
+
   /* Multi-model repository paths for version tracking */
   repo_cous_2008 = '../nshm-cous-2008'
   repo_cous_2014 = '../nshm-cous-2014'

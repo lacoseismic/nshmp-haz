@@ -17,6 +17,9 @@
 #       -e RUN_HAZARD=false \
 #       -e MODEL=<COUS-20[08|14|18] | AK-2007 | HI-2020> \
 #       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#
+# Build locally:
+#   docker build --build-arg ssh_private_key="$(cat ~/.ssh/id_rsa)" -t nshmp-haz .
 ####
 
 ARG project=nshmp-haz-v2
@@ -35,15 +38,21 @@ ENV LANG="en_US.UTF-8"
 ARG builder_workdir
 ARG libs_dir
 ARG ws_file
+ARG ssh_private_key
 
 WORKDIR ${builder_workdir}
 
 COPY . .
 
-RUN yum install -y java-11-openjdk-devel which git
+RUN yum install -y java-11-openjdk-devel which git \
+    && eval $(ssh-agent -s) \
+    && mkdir -p ~/.ssh \
+    && chmod 700 ~/.ssh \
+    && echo "${ssh_private_key}" >> ~/.ssh/id_rsa \
+    && chmod 0600 ~/.ssh/id_rsa \
+    && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
-RUN mv nshmp-lib ../. \
-    && ./gradlew --no-daemon assemble \
+RUN ./gradlew --no-daemon assemble \
     && mv ${libs_dir}/*-all.jar ${ws_file}
 
 ####

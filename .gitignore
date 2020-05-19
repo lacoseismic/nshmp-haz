@@ -20,3 +20,4 @@ scratch*.html
 Scratch*.js
 webapp/config.json
 config.properties
+libs

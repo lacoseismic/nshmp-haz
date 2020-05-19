@@ -3,13 +3,9 @@ variables:
   CI_REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
   DOCKER_DIR: docker-images
   DOCKER_TAR: ${DOCKER_DIR}/app.tar
-  FAULT_SECTIONS: nshm-fault-sections
-  FAULT_SECTIONS_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${FAULT_SECTIONS}.git
   IMAGE_NAME: ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
-  NSHMP_LIB: nshmp-lib
-  NSHMP_LIB_GIT: https://gitlab-ci-token:${CI_JOB_TOKEN}@code.usgs.gov/ghsc/nshmp/${NSHMP_LIB}.git
 
 stages:
   - test
@@ -30,19 +26,16 @@ stages:
 #   - adjust-image-names: Update container image names
 ####
 .templates:
-  nshmp-lib: &nshmp-lib |-
-    cd ..;
-    rm -rf ${NSHMP_LIB};
-    git clone ${NSHMP_LIB_GIT};
-    cd ${CI_PROJECT_NAME};
-  fault-sections: &fault-sections |-
-    cd ..;
-    rm -rf ${FAULT_SECTIONS};
-    git clone ${FAULT_SECTIONS_GIT};
-    cd ${CI_PROJECT_NAME};
-  adjust-image-names: &adjust-image-names
+  adjust-image-names: &adjust-image-names |-
     IMAGE_NAME=${IMAGE_NAME/:master/:latest};
     INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME};
+  ssh-key: &ssh-key |-
+    eval $(ssh-agent -s);
+    mkdir -p ~/.ssh;
+    chmod 700 ~/.ssh;
+    echo "${SSH_PRIVATE_KEY}" >> ~/.ssh/id_rsa;
+    chmod 0600 ~/.ssh/id_rsa;
+    echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config;
 
 ####
 # Template: Deploy to Docker Swarm
@@ -96,11 +89,11 @@ Build Project:
   image: gradle:jdk11
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   before_script:
-    - *nshmp-lib
+    - *ssh-key
   script:
     - ./gradlew assemble
 
@@ -112,10 +105,10 @@ Spotless Check:
   image: gradle:jdk11
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
   before_script:
-    - *nshmp-lib
+    - *ssh-key
   script:
     - ./gradlew spotlessCheck;
 
@@ -127,10 +120,10 @@ Spotbugs Main:
   image: gradle:jdk11
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
   before_script:
-    - *nshmp-lib
+    - *ssh-key
   script:
     - ./gradlew spotbugsMain;
 
@@ -142,10 +135,10 @@ Spotbugs Test:
   image: gradle:jdk11
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
   before_script:
-    - *nshmp-lib
+    - *ssh-key
   script:
     - ./gradlew spotbugsTest;
 
@@ -160,13 +153,12 @@ Unit Tests:
   image: gradle:jdk11
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   coverage: '/Total.*?([0-9]{1,3})%/'
   before_script:
-    - *fault-sections
-    - *nshmp-lib
+    - *ssh-key
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
@@ -190,20 +182,17 @@ Build Image:
   image: docker:stable
   extends: .dev-tags
   only:
-    - merge_request
+    - branches
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   before_script:
     - *adjust-image-names
     - rm -rf ${DOCKER_DIR}
     - apk add git;
-    - *nshmp-lib
-    - mv ../${NSHMP_LIB} .
-    - *fault-sections
-    - mv ../${FAULT_SECTIONS} .
+    - *ssh-key
   script:
     - mkdir ${DOCKER_DIR}
-    - docker build -t local/${IMAGE_NAME} .
+    - docker build --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" -t local/${IMAGE_NAME} .
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
     paths:
