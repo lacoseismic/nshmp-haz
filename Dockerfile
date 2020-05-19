@@ -17,6 +17,9 @@
 #       -e RUN_HAZARD=false \
 #       -e MODEL=<COUS-20[08|14|18] | AK-2007 | HI-2020> \
 #       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#
+# Build locally:
+#   docker build --build-arg ssh_private_key="$(cat ~/.ssh/id_rsa)" -t nshmp-haz .
 ####
 
 ARG project=nshmp-haz-v2
