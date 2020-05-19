@@ -43,9 +43,6 @@ apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"
 apply from: "${projectDir}/gradle/javadoc.gradle"
 apply from: "${projectDir}/gradle/tasks.gradle"
-apply from: project(":nshmp-lib").file("gradle/git-hooks.gradle")
-apply from: project(":nshmp-lib").file("gradle/spotbugs.gradle")
-apply from: project(":nshmp-lib").file("gradle/spotless.gradle")
 
 sourceCompatibility = JavaVersion.VERSION_11
 compileJava.options.encoding = "UTF-8"
@@ -60,9 +57,18 @@ repositories {
   jcenter()
 }
 
-dependencies {
-  implementation project(":nshmp-lib")
+git {
+  implementation("git@code.usgs.gov:ghsc/nshmp/nshmp-lib.git", {
+    name "nshmp-haz-dep--nshmp-lib"
+    tag "v0.0.4"
+  })
+}
 
+apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
+apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
+apply from: "${nshmpLibGradleDir}/spotless.gradle"
+
+dependencies {
   // AWS
   implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"
   implementation "com.amazonaws:aws-java-sdk-lambda:${awsLambdaVersion}"
