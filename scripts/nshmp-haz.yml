@@ -21,7 +21,6 @@ services:
   nshmp-haz-conus-2018:
     <<: *app
     environment:
-      RUN_HAZARD: 'false'
       MODEL: CONUS-2018
       CONTEXT_PATH: /nshmp/ws/conus-2018
 
