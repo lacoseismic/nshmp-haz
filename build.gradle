@@ -188,7 +188,7 @@ spotless {
   format "xml", {
     target fileTree(".") {
       include "**/*.xml"
-      exclude "**/build/**", ".settings/**", "**/models/**"
+      exclude "**/build", ".settings", ".classpath", ".project", "tmp/**", ".gradle", "libs/**"
     }
   }
 }
