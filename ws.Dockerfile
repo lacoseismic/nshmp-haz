@@ -1,3 +1,10 @@
+####
+# Run hazard web services.
+#
+# Build locally:
+#   docker build --build-arg ssh_private_key="$(cat ~/.ssh/id_rsa)" -t nshmp-haz-ws .
+####
+
 ARG project=nshmp-haz-v2
 ARG builder_workdir=/app/${project}
 ARG libs_dir=${builder_workdir}/build/libs
@@ -8,12 +15,12 @@ ARG ws_file=${libs_dir}/${project}-ws.jar
 ####
 FROM usgs/centos:8 as builder
 
-ENV LANG="en_US.UTF-8"
-
 ARG builder_workdir
 ARG libs_dir
-ARG ws_file
 ARG ssh_private_key
+ARG ws_file
+
+ENV LANG="en_US.UTF-8"
 
 WORKDIR ${builder_workdir}
 
@@ -44,17 +51,17 @@ ARG ws_file
 ARG builder_workdir
 ARG project
 
+ENV DEBUG false
 ENV PROJECT ${project}
 ENV CONTEXT_PATH "/"
-ENV MODEL_PATH /app/models
 
 WORKDIR /app
 
 COPY --from=builder ${libs_dir}/* ./
-COPY docker-entrypoint.ws.sh .
+COPY scripts scripts
 
 RUN yum update -y \
-    && yum install -y file jq zip java-11-openjdk-headless
+    && yum install -y git java-11-openjdk-headless
 
 EXPOSE 8080
-ENTRYPOINT [ "bash", "docker-entrypoint.ws.sh" ]
+ENTRYPOINT [ "bash", "scripts/docker-entrypoint.ws.sh" ]
