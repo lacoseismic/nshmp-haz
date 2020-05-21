@@ -22,11 +22,12 @@ stages:
     - development
 
 .templates:
-  adjust-image-names: &adjust-image-names |-
-    IMAGE_NAME_HAZ=${IMAGE_NAME_HAZ/:master/:latest};
-    IMAGE_NAME_WS=${IMAGE_NAME_HAZ/:master/:latest};
-    INTERNAL_IMAGE_NAME_HAZ=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_HAZ};
-    INTERNAL_IMAGE_NAME_WS=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
+  adjust-image-names-haz: &adjust-image-names-haz |-
+    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
+  adjust-image-names-ws: &adjust-image-names-ws |-
+    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
   ssh-key: &ssh-key |-
     eval $(ssh-agent -s);
     mkdir -p ~/.ssh;
@@ -43,11 +44,9 @@ stages:
     - branches
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
-  before_script:
-    - *adjust-image-names
+  script:
     - apk add git;
     - *ssh-key
-  script:
     - mkdir ${DOCKER_DIR}
     - docker build --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" -t local/${IMAGE_NAME} .
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
@@ -60,8 +59,8 @@ stages:
   image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
   dependencies:
   before_script:
-    - *adjust-image-names
-    - docker pull ${INTERNAL_IMAGE_NAME_WS}
+    - *adjust-image-names-ws
+    - docker pull ${INTERNAL_IMAGE_NAME}
   script:
     - git clone ${GENERIC_SWARM_DEPLOY_REPO} generic-deploy
     - export REGISTRY=${CI_REGISTRY_IMAGE}
@@ -167,11 +166,15 @@ Unit Tests:
 
 Build Haz Image:
   extends: .docker-build
+  before_script:
+    - *adjust-image-names-haz
   variables:
     IMAGE_NAME: ${IMAGE_NAME_HAZ}
 
 Build WS Image:
   extends: .docker-build
+  before_script:
+    - *adjust-image-names-ws
   variables:
     IMAGE_NAME: ${IMAGE_NAME_WS}
 
