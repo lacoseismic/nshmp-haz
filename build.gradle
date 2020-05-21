@@ -28,14 +28,13 @@
  */
 
 plugins {
+  id "application"
+  id "com.diffplug.gradle.spotless" version "3.27.1"
+  id "com.github.spotbugs" version "3.0.0"
+  id "com.github.johnrengelman.shadow" version "5.2.0"
+  id "com.star-zero.gradle.githook" version "1.2.0"
   id "eclipse-wtp"
   id "jacoco"
-  id "war"
-  id "application"
-  id "com.star-zero.gradle.githook" version "1.2.0"
-  id "com.github.spotbugs" version "3.0.0"
-  id "com.diffplug.gradle.spotless" version "3.27.1"
-  id "com.github.johnrengelman.shadow" version "5.2.0"
   id "net.ltgt.apt-eclipse" version "0.21"
 }
 
@@ -136,61 +135,6 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(JavaExec) {
   jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
-}
-
-/**
- * Create war file with production models
- */
-war {
-  enabled = true
-  webAppDirName = "webapp"
-  dependsOn jar
-
-  /*
-   * Exclude existing models directory with symlinks
-   * to support Eclipse deployments.
-   */
-  exclude "models"
-
-  prod_models.each{model ->
-    from(model[0]) { into model[1] }
-  }
-
-  doFirst {
-    /* Record service and model versions */
-    writeProperties()
-  }
-}
-
-
-/**
- * Create properties file
- */
-def writeProperties() {
-  def props = new Properties()
-  def propsFile = new File(project.buildDir.toString() + propsPath)
-  propsFile.createNewFile()
-  props.setProperty('app.version', getGitTag('.'))
-  props.setProperty('E2007.version', getGitTag(repo_ak_2007))
-  props.setProperty('E2008.version', getGitTag(repo_cous_2008))
-  props.setProperty('E2014.version', getGitTag(repo_cous_2014))
-  props.setProperty('E2014B.version', getGitTag(repo_cous_2014b))
-  props.setProperty('E2018.version', getGitTag(repo_cous_2018))
-  props.setProperty('E2020.version', getGitTag(repo_hi_2020))
-  props.store(propsFile.newWriter(), null)
-}
-
-/*
- * Update XML formatting
- */
-spotless {
-  /* XML formatting */
-  format "xml", {
-    target fileTree(".") {
-      include "**/*.xml"
-      exclude "**/build/**", ".settings/**", "**/models/**"
-    }
-  }
 }
 
 /* Add HTML reports to SpotBugs */

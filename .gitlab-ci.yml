@@ -3,7 +3,8 @@ variables:
   CI_REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
   DOCKER_DIR: docker-images
   DOCKER_TAR: ${DOCKER_DIR}/app.tar
-  IMAGE_NAME: ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+  IMAGE_NAME_HAZ: nshmp-haz:${CI_COMMIT_REF_SLUG}
+  IMAGE_NAME_WS: nshmp-haz-ws:${CI_COMMIT_REF_SLUG}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
@@ -13,22 +14,20 @@ stages:
   - deploy
 
 ####
-# Template: GitLab runner tags
+# Templates
 ####
+
 .dev-tags:
   tags:
     - development
 
-####
-# Templates:
-#   - nshmp-lib: Download nshmp-lib repo
-#   - fault-sections: Download nshm-fault-sections repo
-#   - adjust-image-names: Update container image names
-####
 .templates:
-  adjust-image-names: &adjust-image-names |-
-    IMAGE_NAME=${IMAGE_NAME/:master/:latest};
-    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME};
+  adjust-image-names-haz: &adjust-image-names-haz |-
+    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
+  adjust-image-names-ws: &adjust-image-names-ws |-
+    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
   ssh-key: &ssh-key |-
     eval $(ssh-agent -s);
     mkdir -p ~/.ssh;
@@ -37,19 +36,46 @@ stages:
     chmod 0600 ~/.ssh/id_rsa;
     echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config;
 
-####
-# Template: Deploy to Docker Swarm
-# Globals:
-#   CODE_REGISTRY: Path to container registry
-#   GENERIC_SWARM_DEPLOY_REPO: Path to swarm deploy container
-#   CI_REGISTRY_IMAGE: Path to container image
-####
+.docker-build:
+  stage: test
+  image: docker:stable
+  extends: .dev-tags
+  only:
+    - branches
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - apk add git;
+    - *ssh-key
+    - mkdir ${DOCKER_DIR}
+    - docker build --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" -t local/${IMAGE_NAME} .
+    - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
+  artifacts:
+    paths:
+      - ${DOCKER_DIR}
+
+.docker-publish:
+  stage: publish
+  image: docker:stable
+  extends: .dev-tags
+  only:
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
+    - docker load -i ${DOCKER_TAR}
+    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
+    - docker push ${INTERNAL_IMAGE_NAME}
+    - docker image rm local/${IMAGE_NAME}
+    - docker image rm ${INTERNAL_IMAGE_NAME}
+    - rm -rf /root/.docker/config.json
+
 .deploy:
   cache: {}
   image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
   dependencies:
   before_script:
-    - *adjust-image-names
+    - *adjust-image-names-ws
     - docker pull ${INTERNAL_IMAGE_NAME}
   script:
     - git clone ${GENERIC_SWARM_DEPLOY_REPO} generic-deploy
@@ -82,8 +108,9 @@ stages:
     - staging02
 
 ####
-# Build jar file.
+# Stage: Test
 ####
+
 Build Project:
   stage: test
   image: gradle:jdk11
@@ -97,9 +124,6 @@ Build Project:
   script:
     - ./gradlew assemble
 
-####
-# Run Spotless check.
-####
 Spotless Check:
   stage: test
   image: gradle:jdk11
@@ -112,9 +136,6 @@ Spotless Check:
   script:
     - ./gradlew spotlessCheck;
 
-####
-# Run Spotbugs main.
-####
 Spotbugs Main:
   stage: test
   image: gradle:jdk11
@@ -127,9 +148,6 @@ Spotbugs Main:
   script:
     - ./gradlew spotbugsMain;
 
-####
-# Run Spotbugs test.
-####
 Spotbugs Test:
   stage: test
   image: gradle:jdk11
@@ -142,12 +160,6 @@ Spotbugs Test:
   script:
     - ./gradlew spotbugsTest;
 
-####
-# Run tests.
-# Globals:
-#   JACOCO_HTML_DIR - Directory of Jacoco html reports
-#   JUNIT_FILES - Path to all Junit html files
-####
 Unit Tests:
   stage: test
   image: gradle:jdk11
@@ -168,77 +180,46 @@ Unit Tests:
     reports:
       junit: ${JUNIT_FILES}
 
-####
-# Build Docker image.
-# Globals:
-#   DOCKER_DIR - The directory to put Docker image
-#   DOCKER_TAR - The path to the Docker image tar
-#   FAULT_SECTIONS - nshm-fault-sections repo name
-#   IMAGE_NAME - Docker image name
-#   NSHMP_LIB - nshmp-lib repo name
-####
-Build Image:
-  stage: test
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+Build Haz Image:
+  extends: .docker-build
   before_script:
-    - *adjust-image-names
-    - rm -rf ${DOCKER_DIR}
-    - apk add git;
-    - *ssh-key
-  script:
-    - mkdir ${DOCKER_DIR}
-    - docker build --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" -t local/${IMAGE_NAME} .
-    - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
-  artifacts:
-    paths:
-      - ${DOCKER_DIR}
+    - *adjust-image-names-haz
+  variables:
+    IMAGE_NAME: ${IMAGE_NAME_HAZ}
 
-####
-# Publish Docker image to GitLab registry.
-# Globals:
-#   CHS_PASSWORD - GitLab password
-#   CHS_USERNAME - GitLab username
-#   DOCKER_TAR - The path to the Docker image tar
-#   INTERNAL_IMAGE_NAME - GitLab registry Docker image name
-#   IMAGE_NAME - Docker image name
-####
-Publish Image:
-  stage: publish
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+Build WS Image:
+  extends: .docker-build
   before_script:
-    - *adjust-image-names
-  script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
-    - docker load -i ${DOCKER_TAR}
-    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
-    - docker push ${INTERNAL_IMAGE_NAME}
-    - docker image rm local/${IMAGE_NAME}
-    - docker image rm ${INTERNAL_IMAGE_NAME}
-    - rm -rf /root/.docker/config.json
+    - *adjust-image-names-ws
+  variables:
+    IMAGE_NAME: ${IMAGE_NAME_WS}
 
 ####
-# Deploy to stage01
+# Stage: Publish
 ####
-Staging 01:
-  extends:
-    - .deploy
-    - .staging
-    - .staging01
+
+Publish Haz Image:
+  extends: .docker-publish
+  before_script:
+    - *adjust-image-names-haz
+
+Publish WS Image:
+  extends: .docker-publish
+  before_script:
+    - *adjust-image-names-ws
 
 ####
-# Deploy to stage02
+# Stage: Deploy
 ####
-Staging 02:
-  extends:
-    - .deploy
-    - .staging
-    - .staging02
+
+# Staging 01:
+#   extends:
+#     - .deploy
+#     - .staging
+#     - .staging01
+
+# Staging 02:
+#   extends:
+#     - .deploy
+#     - .staging
+#     - .staging02

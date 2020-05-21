@@ -1,3 +1,6 @@
+#!/bin/bash
+# shellcheck disable=SC2140
+
 export SERVICE_MAP=(
   "/nshmp/ws/conus-2018":"nshmp-haz-conus-2018"
   # "/nshmp/conus-2014":"nshmp-haz-conus-2014"
