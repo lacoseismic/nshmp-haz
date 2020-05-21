@@ -54,6 +54,22 @@ stages:
     paths:
       - ${DOCKER_DIR}
 
+.docker-publish:
+  stage: publish
+  image: docker:stable
+  extends: .dev-tags
+  only:
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
+    - docker load -i ${DOCKER_TAR}
+    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
+    - docker push ${INTERNAL_IMAGE_NAME}
+    - docker image rm local/${IMAGE_NAME}
+    - docker image rm ${INTERNAL_IMAGE_NAME}
+    - rm -rf /root/.docker/config.json
+
 .deploy:
   cache: {}
   image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
@@ -182,23 +198,15 @@ Build WS Image:
 # Stage: Publish
 ####
 
-Publish Image:
-  stage: publish
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+Publish Haz Image:
+  extends: .docker-publish
   before_script:
-    - *adjust-image-names
-  script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
-    - docker load -i ${DOCKER_TAR}
-    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
-    - docker push ${INTERNAL_IMAGE_NAME}
-    - docker image rm local/${IMAGE_NAME}
-    - docker image rm ${INTERNAL_IMAGE_NAME}
-    - rm -rf /root/.docker/config.json
+    - *adjust-image-names-haz
+
+Publish WS Image:
+  extends: .docker-publish
+  before_script:
+    - *adjust-image-names-ws
 
 ####
 # Stage: Deploy
