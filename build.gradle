@@ -180,19 +180,6 @@ def writeProperties() {
   props.store(propsFile.newWriter(), null)
 }
 
-/*
- * Update XML formatting
- */
-spotless {
-  /* XML formatting */
-  format "xml", {
-    target fileTree(".") {
-      include "**/*.xml"
-      exclude "**/build", ".settings", ".classpath", ".project", "tmp/**", ".gradle", "libs/**"
-    }
-  }
-}
-
 /* Add HTML reports to SpotBugs */
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
   ignoreFailures = false // TODO remove when nshmp-lib is updated
