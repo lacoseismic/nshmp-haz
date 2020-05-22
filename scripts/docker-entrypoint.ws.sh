@@ -6,14 +6,14 @@ exit_status=${?};
 [ "${exit_status}" -eq 0 ] || exit "${exit_status}";
 
 # Download models to use
-get_models "${MODEL}" "${NSHM_VERSION}";
+model_path=$(get_models "${MODEL}" "${NSHM_VERSION}");
 exit_status=${?};
 check_exit_status ${exit_status};
 
 # Run web services
 java -jar "${PROJECT}-ws.jar" \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
-    --model="${MODEL}";
+    --models="${model_path}";
 exit_status=${?};
 check_exit_status ${exit_status};
 
