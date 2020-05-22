@@ -196,11 +196,13 @@ public class ServletUtil {
 
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-      if (MODEL_INFO.equals(path.getFileName().toString())) {
+      var fileName = path.getFileName();
+
+      if (fileName != null && fileName.toString().equals(MODEL_INFO)) {
         paths.add(path.getParent());
       }
-      return FileVisitResult.CONTINUE;
 
+      return FileVisitResult.CONTINUE;
     }
   }
 
