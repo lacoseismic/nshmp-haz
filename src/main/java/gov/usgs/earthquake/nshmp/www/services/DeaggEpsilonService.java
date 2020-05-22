@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
-import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
@@ -19,13 +18,13 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Deaggregation;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
+import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.DeaggEpsilonController;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
@@ -45,7 +44,6 @@ public final class DeaggEpsilonService {
   /* Developer notes: See HazardService. */
 
   private static final String NAME = "Epsilon Deaggregation";
-  private static final Logger LOGGER = Logger.getLogger(DeaggEpsilonService.class.getName());
   private static URL basinUrl;
 
   public static void init() {
@@ -77,7 +75,6 @@ public final class DeaggEpsilonService {
   public static HttpResponse<String> handleDoGetDeaggEpsilon(Query query, UrlHelper urlHelper) {
     try {
       var timer = ServletUtil.timer();
-      LOGGER.info(NAME + " - Request:\n" + ServletUtil.GSON.toJson(query));
 
       if (query.isNull()) {
         return HazardService.handleDoGetUsage(urlHelper);
@@ -87,10 +84,9 @@ public final class DeaggEpsilonService {
       var data = new RequestData(query, Vs30.fromValue(query.vs30));
       var response = process(data, timer, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(NAME + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, urlHelper);
     }
   }
 
@@ -155,12 +151,10 @@ public final class DeaggEpsilonService {
     }
   }
 
-  static class ConfigFunction implements Function<BaseModel, CalcConfig> {
+  static class ConfigFunction implements Function<HazardModel, CalcConfig> {
     @Override
-    public CalcConfig apply(BaseModel baseModel) {
-      var hazardModel = ServletUtil.hazardModels().get(baseModel);
-      var configBuilder = CalcConfig.copyOf(hazardModel.config());
-      configBuilder.imts(baseModel.imts);
+    public CalcConfig apply(HazardModel model) {
+      var configBuilder = CalcConfig.copyOf(model.config());
       return configBuilder.build();
     }
   }
@@ -206,7 +200,7 @@ public final class DeaggEpsilonService {
 
   @SuppressWarnings("unused")
   private static final class ResponseMetadata {
-    final SourceModel model;
+    final List<SourceModel> models;
     final double longitude;
     final double latitude;
     final String imt;
@@ -218,7 +212,7 @@ public final class DeaggEpsilonService {
     final Object εbins;
 
     ResponseMetadata(Deaggregation deagg, RequestData request, Imt imt) {
-      this.model = request.model;
+      this.models = request.models;
       this.longitude = request.longitude;
       this.latitude = request.latitude;
       this.imt = imt.toString();
