@@ -2,19 +2,25 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import static java.lang.Runtime.getRuntime;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -62,8 +68,13 @@ public class ServletUtil {
   @Value("${nshmp-haz.installed-model}")
   private Model model;
 
+  @Value("${nshmp-haz.model-path}")
+  private Path modelPath;
+
   private static Model INSTALLED_MODEL;
+  private static Path MODEL_PATH;
   private static Map<BaseModel, HazardModel> HAZARD_MODELS = new EnumMap<>(BaseModel.class);
+  private static final String MODEL_INFO = "model-info.json";
 
   static {
     /* TODO modified for deagg-epsilon branch; should be context var */
@@ -84,6 +95,10 @@ public class ServletUtil {
         .create();
   }
 
+  static Path model() {
+    return MODEL_PATH;
+  }
+
   static Model installedModel() {
     return INSTALLED_MODEL;
   }
@@ -100,13 +115,20 @@ public class ServletUtil {
 
   @EventListener
   void startup(StartupEvent event) {
-    INSTALLED_MODEL = model;
+    try {
+      var modelFinder = new ModelFinder();
+      Files.walkFileTree(modelPath, modelFinder);
+      INSTALLED_MODEL = model;
+      MODEL_PATH = modelPath;
 
-    model.models().forEach(baseModel -> {
-      HAZARD_MODELS.put(baseModel, loadModel(baseModel));
-    });
+      model.models().forEach(baseModel -> {
+        HAZARD_MODELS.put(baseModel, loadModel(baseModel));
+      });
 
-    HAZARD_MODELS = Map.copyOf(HAZARD_MODELS);
+      HAZARD_MODELS = Map.copyOf(HAZARD_MODELS);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private HazardModel loadModel(BaseModel model) {
@@ -177,6 +199,21 @@ public class ServletUtil {
 
     public String calcTime() {
       return calc.toString();
+    }
+  }
+
+  private static class ModelFinder extends SimpleFileVisitor<Path> {
+
+    @Override
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+      var logger = Logger.getAnonymousLogger();
+
+      if (MODEL_INFO.equals(path.getFileName().toString())) {
+        var dir = path.getParent();
+        logger.info(dir.toString());
+      }
+      return FileVisitResult.CONTINUE;
+
     }
   }
 
