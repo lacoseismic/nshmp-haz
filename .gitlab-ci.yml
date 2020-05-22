@@ -55,7 +55,7 @@ stages:
     - |
       docker build \
         --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" \
-        -f ${DOCKERFILE}
+        -f ${DOCKERFILE} \
         -t local/${IMAGE_NAME} .
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
@@ -70,7 +70,9 @@ stages:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
+    - |
+      echo "${CHS_PASSWORD}" | \
+          docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
     - docker load -i ${DOCKER_TAR}
     - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
     - docker push ${INTERNAL_IMAGE_NAME}
