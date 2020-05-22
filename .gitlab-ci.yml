@@ -23,10 +23,12 @@ stages:
 
 .templates:
   adjust-image-names-haz: &adjust-image-names-haz |-
+    DOCKERFILE="Dockerfile";
     IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
-    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
+    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_HAZ};
   adjust-image-names-ws: &adjust-image-names-ws |-
-    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
+    DOCKERFILE="ws.Dockerfile";
+    IMAGE_NAME=${IMAGE_NAME_WS/:master/:latest};
     INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
   ssh-key: &ssh-key |-
     eval $(ssh-agent -s);
@@ -50,7 +52,11 @@ stages:
     - apk add git;
     - *ssh-key
     - mkdir ${DOCKER_DIR}
-    - docker build --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" -t local/${IMAGE_NAME} .
+    - |
+      docker build \
+        --build-arg ssh_private_key="${SSH_PRIVATE_KEY}" \
+        -f ${DOCKERFILE} \
+        -t local/${IMAGE_NAME} .
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
     paths:
@@ -64,7 +70,9 @@ stages:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   script:
-    - echo "${CHS_PASSWORD}" | docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
+    - |
+      echo "${CHS_PASSWORD}" | \
+          docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
     - docker load -i ${DOCKER_TAR}
     - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
     - docker push ${INTERNAL_IMAGE_NAME}
@@ -186,15 +194,11 @@ Build Haz Image:
   extends: .docker-build
   before_script:
     - *adjust-image-names-haz
-  variables:
-    IMAGE_NAME: ${IMAGE_NAME_HAZ}
 
 Build WS Image:
   extends: .docker-build
   before_script:
     - *adjust-image-names-ws
-  variables:
-    IMAGE_NAME: ${IMAGE_NAME_WS}
 
 ####
 # Stage: Publish

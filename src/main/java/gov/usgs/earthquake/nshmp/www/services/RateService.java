@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -48,7 +47,6 @@ public final class RateService {
    * WUS models.
    */
 
-  private static final Logger LOGGER = Logger.getLogger(RateService.class.getName());
   private static final String TOTAL_KEY = "Total";
 
   /**
@@ -64,7 +62,7 @@ public final class RateService {
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(String.format(svcResponse, urlHelper.urlPrefix, urlHelper.urlPrefix));
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, service.name, urlHelper);
     }
   }
 
@@ -83,7 +81,6 @@ public final class RateService {
 
     try {
       var timer = ServletUtil.timer();
-      LOGGER.info(service.name + " - Request:\n" + ServletUtil.GSON.toJson(query));
 
       if (query.isNull()) {
         return handleDoGetUsage(service, urlHelper);
@@ -93,10 +90,9 @@ public final class RateService {
       var requestData = new RequestData(query);
       var response = processRequest(service, requestData, urlHelper, timer);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(service.name + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, service.name, urlHelper);
     }
   }
 
@@ -128,8 +124,8 @@ public final class RateService {
      * probability service has been called.
      */
 
-    for (var entry : ServletUtil.hazardModels().entrySet()) {
-      var rate = process(service, entry.getValue(), site, data.distance, data.timespan);
+    for (var model : ServletUtil.hazardModels()) {
+      var rate = process(service, model, site, data.distance, data.timespan);
       futureRates.add(rate);
     }
 

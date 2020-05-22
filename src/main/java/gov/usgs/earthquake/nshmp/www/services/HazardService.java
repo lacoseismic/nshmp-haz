@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
-import java.util.logging.Logger;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
@@ -17,6 +16,7 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
 import gov.usgs.earthquake.nshmp.data.XySequence;
+import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.eq.model.SourceType;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
@@ -24,7 +24,6 @@ import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.HazardController;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
@@ -51,7 +50,6 @@ public final class HazardService {
    */
 
   private static final String NAME = "Hazard Service";
-  private static final Logger LOGGER = Logger.getLogger(HazardService.class.getName());
 
   /**
    * Handler for {@link HazardController#doGetUsage}. Returns the usage for the
@@ -61,14 +59,12 @@ public final class HazardService {
    */
   public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
     try {
-      LOGGER.info(NAME + " - Request:\n" + urlHelper.url);
       var usage = new SourceServices.ResponseData();
       var response = new Response<>(Status.USAGE, NAME, urlHelper.url, usage, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(NAME + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, urlHelper);
     }
   }
 
@@ -82,7 +78,6 @@ public final class HazardService {
   public static HttpResponse<String> handleDoGetHazard(Query query, UrlHelper urlHelper) {
     try {
       var timer = ServletUtil.timer();
-      LOGGER.info(NAME + " - Request:\n" + ServletUtil.GSON.toJson(query));
 
       if (query.isNull()) {
         return handleDoGetUsage(urlHelper);
@@ -92,10 +87,9 @@ public final class HazardService {
       var data = new RequestData(query, Vs30.fromValue(query.vs30));
       var response = process(data, timer, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      LOGGER.info(NAME + " - Response:\n" + svcResponse);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, LOGGER, urlHelper);
+      return ServicesUtil.handleError(e, NAME, urlHelper);
     }
   }
 
@@ -115,12 +109,10 @@ public final class HazardService {
         .build();
   }
 
-  static class ConfigFunction implements Function<BaseModel, CalcConfig> {
+  static class ConfigFunction implements Function<HazardModel, CalcConfig> {
     @Override
-    public CalcConfig apply(BaseModel baseModel) {
-      var hazardModel = ServletUtil.hazardModels().get(baseModel);
-      var configBuilder = CalcConfig.copyOf(hazardModel.config());
-      configBuilder.imts(baseModel.imts);
+    public CalcConfig apply(HazardModel model) {
+      var configBuilder = CalcConfig.copyOf(model.config());
       return configBuilder.build();
     }
   }
@@ -173,7 +165,7 @@ public final class HazardService {
 
   @SuppressWarnings("unused")
   private static final class ResponseMetadata {
-    final SourceModel model;
+    final List<SourceModel> models;
     final double latitude;
     final double longitude;
     final Imt imt;
@@ -182,7 +174,7 @@ public final class HazardService {
     final String ylabel = "Annual Frequency of Exceedence";
 
     ResponseMetadata(RequestData request, Imt imt) {
-      model = new SourceModel(ServletUtil.installedModel());
+      models = SourceModel.getList();
       latitude = request.latitude;
       longitude = request.longitude;
       this.imt = imt;

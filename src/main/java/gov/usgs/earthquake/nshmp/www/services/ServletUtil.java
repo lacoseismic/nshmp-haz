@@ -2,17 +2,23 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import static java.lang.Runtime.getRuntime;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.format.DateTimeFormatter;
-import java.util.EnumMap;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,6 +27,10 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
@@ -28,8 +38,6 @@ import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
-import gov.usgs.earthquake.nshmp.www.BaseModel;
-import gov.usgs.earthquake.nshmp.www.Model;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Region;
 
@@ -59,11 +67,11 @@ public class ServletUtil {
   static long hitCount = 0;
   static long missCount = 0;
 
-  @Value("${nshmp-haz.installed-model}")
-  private Model model;
+  @Value("${nshmp-haz.model-path}")
+  private Path modelPath;
 
-  private static Model INSTALLED_MODEL;
-  private static Map<BaseModel, HazardModel> HAZARD_MODELS = new EnumMap<>(BaseModel.class);
+  private static List<HazardModel> HAZARD_MODELS = new ArrayList<>();
+  private static final String MODEL_INFO = "model-info.json";
 
   static {
     /* TODO modified for deagg-epsilon branch; should be context var */
@@ -78,18 +86,15 @@ public class ServletUtil {
         .registerTypeAdapter(Double.class, new MetaUtil.DoubleSerializer())
         .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
         .registerTypeAdapter(Site.class, new MetaUtil.SiteSerializer())
+        .registerTypeHierarchyAdapter(Path.class, new PathConverter())
         .disableHtmlEscaping()
         .serializeNulls()
         .setPrettyPrinting()
         .create();
   }
 
-  static Model installedModel() {
-    return INSTALLED_MODEL;
-  }
-
-  static Map<BaseModel, HazardModel> hazardModels() {
-    return HAZARD_MODELS;
+  static List<HazardModel> hazardModels() {
+    return List.copyOf(HAZARD_MODELS);
   }
 
   @EventListener
@@ -100,17 +105,16 @@ public class ServletUtil {
 
   @EventListener
   void startup(StartupEvent event) {
-    INSTALLED_MODEL = model;
-
-    model.models().forEach(baseModel -> {
-      HAZARD_MODELS.put(baseModel, loadModel(baseModel));
-    });
-
-    HAZARD_MODELS = Map.copyOf(HAZARD_MODELS);
+    try {
+      var modelFinder = new ModelFinder();
+      Files.walkFileTree(modelPath, modelFinder);
+      modelFinder.paths().forEach(path -> HAZARD_MODELS.add(loadModel(path)));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  private HazardModel loadModel(BaseModel model) {
-    Path path;
+  private HazardModel loadModel(Path path) {
     URL url;
     URI uri;
     String uriString;
@@ -118,7 +122,7 @@ public class ServletUtil {
     FileSystem fs;
 
     try {
-      url = Paths.get(model.path).toUri().toURL();
+      url = path.toUri().toURL();
       uri = new URI(url.toString().replace(" ", "%20"));
       uriString = uri.toString();
 
@@ -148,7 +152,6 @@ public class ServletUtil {
       }
 
       return HazardModel.load(path);
-
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -177,6 +180,40 @@ public class ServletUtil {
 
     public String calcTime() {
       return calc.toString();
+    }
+  }
+
+  private static class ModelFinder extends SimpleFileVisitor<Path> {
+    private List<Path> paths;
+
+    ModelFinder() {
+      paths = new ArrayList<>();
+    }
+
+    List<Path> paths() {
+      return List.copyOf(paths);
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+      var fileName = path.getFileName();
+
+      if (fileName != null && fileName.toString().equals(MODEL_INFO)) {
+        paths.add(path.getParent());
+      }
+
+      return FileVisitResult.CONTINUE;
+    }
+  }
+
+  private static class PathConverter implements JsonSerializer<Path> {
+
+    @Override
+    public JsonElement serialize(
+        Path path,
+        Type type,
+        JsonSerializationContext context) {
+      return new JsonPrimitive(path.toAbsolutePath().normalize().toString());
     }
   }
 

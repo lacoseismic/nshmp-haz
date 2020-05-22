@@ -97,6 +97,10 @@ public final class MetaUtil {
   public static final class DoubleSerializer implements JsonSerializer<Double> {
     @Override
     public JsonElement serialize(Double d, Type type, JsonSerializationContext context) {
+      if (Double.isNaN(d)) {
+        return null;
+      }
+
       double dOut = Double.valueOf(String.format("%.8g", d));
       return new JsonPrimitive(dOut);
     }

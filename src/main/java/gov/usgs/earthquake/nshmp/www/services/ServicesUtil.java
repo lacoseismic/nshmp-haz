@@ -1,9 +1,9 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.gson.GsonBuilder;
@@ -12,11 +12,11 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
+import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.www.BaseModel;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
@@ -26,25 +26,23 @@ class ServicesUtil {
   static HttpResponse<String> handleError(
       Throwable e,
       String name,
-      Logger logger,
       UrlHelper urlHelper) {
     var msg = e.getMessage() + " (see logs)";
     var svcResponse = new Response<>(Status.ERROR, name, urlHelper.url, msg, urlHelper);
     var gson = new GsonBuilder().setPrettyPrinting().create();
     var response = gson.toJson(svcResponse);
-    logger.severe(name + " -\n" + response);
     e.printStackTrace();
     return HttpResponse.serverError(response);
   }
 
   static Hazard calcHazard(
-      Function<BaseModel, CalcConfig> configFunction,
+      Function<HazardModel, CalcConfig> configFunction,
       Function<CalcConfig, Site> siteFunction) throws InterruptedException, ExecutionException {
-    var futuresList = ServletUtil.installedModel().models().stream()
-        .map(baseModel -> {
-          var config = configFunction.apply(baseModel);
+    var futuresList = ServletUtil.hazardModels().stream()
+        .map(model -> {
+          var config = configFunction.apply(model);
           var site = siteFunction.apply(config);
-          return calcHazard(baseModel, config, site);
+          return calcHazard(model, config, site);
         })
         .collect(Collectors.toList());
 
@@ -82,12 +80,12 @@ class ServicesUtil {
   }
 
   static class ServiceRequestData {
-    public final SourceModel model;
+    public final List<SourceModel> models;
     public final double longitude;
     public final double latitude;
 
     public ServiceRequestData(ServiceQueryData query) {
-      model = new SourceModel(ServletUtil.installedModel());
+      models = SourceModel.getList();
       longitude = query.longitude;
       latitude = query.latitude;
     }
@@ -126,13 +124,13 @@ class ServicesUtil {
   }
 
   private static CompletableFuture<Hazard> calcHazard(
-      BaseModel baseModel,
+      HazardModel model,
       CalcConfig config,
       Site site) {
     return CompletableFuture
         .supplyAsync(
             () -> HazardCalcs.hazard(
-                ServletUtil.hazardModels().get(baseModel), config, site, ServletUtil.CALC_EXECUTOR),
+                model, config, site, ServletUtil.CALC_EXECUTOR),
             ServletUtil.TASK_EXECUTOR);
   }
 
