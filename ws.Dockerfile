@@ -2,7 +2,12 @@
 # Run hazard web services.
 #
 # Build locally:
-#   docker build --build-arg ssh_private_key="$(cat ~/.ssh/id_rsa)" -t nshmp-haz-ws .
+#   docker build
+#       -f ws.Dockerfile
+#       --build-arg git_username=<user@name.com>
+#       --build-arg git_password=<git-api-token>
+#       -t nshmp-haz-ws .
+
 ####
 
 ARG project=nshmp-haz-v2
