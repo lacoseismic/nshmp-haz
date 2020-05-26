@@ -59,7 +59,7 @@ repositories {
 git {
   implementation("git@code.usgs.gov:ghsc/nshmp/nshmp-lib.git", {
     name "nshmp-haz-dep--nshmp-lib"
-    tag "v0.0.4"
+    tag "v0.0.5"
   })
 }
 
