@@ -12,7 +12,10 @@
 #       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
 #
 # Build locally:
-#   docker build --build-arg ssh_private_key="$(cat ~/.ssh/id_rsa)" -t nshmp-haz .
+#   docker build
+#       --build-arg git_username=<user@name.com>
+#       --build-arg git_password=<git-api-token>
+#       -t nshmp-haz .
 ####
 
 ARG project=nshmp-haz-v2
@@ -26,23 +29,19 @@ FROM usgs/centos:8 as builder
 
 ARG builder_workdir
 ARG libs_dir
-ARG ssh_private_key
+ARG git_username
+ARG git_password
 
-ENV LANG="en_US.UTF-8"
+ENV LANG "en_US.UTF-8"
+ENV GIT_NSHMP_USERNAME ${git_username}
+ENV GIT_NSHMP_PASSWORD ${git_password}
 
 WORKDIR ${builder_workdir}
 
 COPY . .
 
 RUN yum install -y java-11-openjdk-devel which git \
-    && eval $(ssh-agent -s) \
-    && mkdir -p ~/.ssh \
-    && chmod 700 ~/.ssh \
-    && echo "${ssh_private_key}" >> ~/.ssh/id_rsa \
-    && chmod 0600 ~/.ssh/id_rsa \
-    && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
-RUN ./gradlew --no-daemon assemble
+    && ./gradlew --no-daemon assemble
 
 ####
 # Application image: Run jar or war file.
@@ -60,7 +59,7 @@ ENV CONFIG_FILE ""
 ENV DEBUG false
 ENV IML ""
 ENV JAVA_XMX "8g"
-ENV LANG="en_US.UTF-8"
+ENV LANG "en_US.UTF-8"
 ENV MODEL ""
 ENV MOUNT_MODEL false
 ENV NSHM_VERSION master

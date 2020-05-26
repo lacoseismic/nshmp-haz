@@ -3,3 +3,7 @@ plugins {
 }
 
 rootProject.name = "nshmp-haz-v2"
+
+git {
+  defaultAuthGroup "nshmp"
+}
