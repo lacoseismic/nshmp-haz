@@ -3,10 +3,3 @@ plugins {
 }
 
 rootProject.name = "nshmp-haz-v2"
-
-git {
-  // Required for nshmp-lib tests
-  fetch ("git@code.usgs.gov:ghsc/nshmp/nshm-fault-sections.git", {
-    tag nshmFaultSectionsTag
-  })
-}
