@@ -29,13 +29,13 @@
 
 plugins {
   id "application"
-  id "com.diffplug.gradle.spotless" version "3.27.1"
-  id "com.github.spotbugs" version "3.0.0"
-  id "com.github.johnrengelman.shadow" version "5.2.0"
-  id "com.star-zero.gradle.githook" version "1.2.0"
+  id "com.diffplug.gradle.spotless" version "${spotlessVersion}"
+  id "com.github.spotbugs" version "${spotbugsVersion}"
+  id "com.github.johnrengelman.shadow" version "${shadowVersion}"
+  id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
   id "jacoco"
-  id "net.ltgt.apt-eclipse" version "0.21"
+  id "net.ltgt.apt-eclipse" version "${aptEclipseVersion}"
 }
 
 apply from: "${projectDir}/gradle/ext.gradle"
@@ -59,7 +59,7 @@ repositories {
 git {
   implementation("https://code.usgs.gov/ghsc/nshmp/nshmp-lib.git", {
     name "nshmp-haz-dep--nshmp-lib"
-    tag "v0.0.5"
+    tag "v0.1.1"
   })
 }
 
@@ -138,10 +138,11 @@ tasks.withType(JavaExec) {
 }
 
 /* Add HTML reports to SpotBugs */
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-  ignoreFailures = false // TODO remove when nshmp-lib is updated
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
   reports {
-    xml.enabled = false
-    html.enabled = true
+    html {
+      enabled true
+      stylesheet = 'fancy-hist.xsl'
+    }
   }
 }
