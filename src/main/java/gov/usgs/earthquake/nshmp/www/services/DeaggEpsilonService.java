@@ -68,7 +68,7 @@ public final class DeaggEpsilonService {
   /**
    * Handler for {@link DeaggEpsilonController#doGetDeaggEpsilon}. Returns the
    * usage or the deagg result.
-   * 
+   *
    * @param query The query
    * @param urlHelper The URL helper
    */
@@ -180,7 +180,7 @@ public final class DeaggEpsilonService {
     @Override
     public Site apply(CalcConfig config) {
       return Site.builder()
-          .location(Location.create(data.latitude, data.longitude))
+          .location(Location.create(data.longitude, data.latitude))
           .basinDataProvider(data.basin ? basinUrl : null)
           .vs30(data.vs30.value())
           .build();

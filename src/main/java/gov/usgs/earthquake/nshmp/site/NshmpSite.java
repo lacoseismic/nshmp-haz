@@ -324,7 +324,7 @@ public enum NshmpSite implements NamedLocation {
   private final String label;
 
   private NshmpSite(double lon, double lat) {
-    this.location = Location.create(lat, lon);
+    this.location = Location.create(lon, lat);
     this.state = UsRegion.valueOf(name().substring(name().lastIndexOf('_') + 1));
     this.label = createLabel();
   }

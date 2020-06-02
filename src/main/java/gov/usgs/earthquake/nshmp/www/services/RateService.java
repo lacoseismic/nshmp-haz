@@ -52,7 +52,7 @@ public final class RateService {
   /**
    * Handler for {@link RateController#doGetUsageRate} and
    * {@link RateController#doGetUsageProbability}.
-   * 
+   *
    * @param service The service
    * @param urlHelper The url helper
    */
@@ -70,7 +70,7 @@ public final class RateService {
    * Handler for {@link RateController#doGetProbability},
    * {@link RateController#doGetProbabilitySlash},
    * {@link RateController#doGetRate}, and {@link RateController#doGetRateSlash}
-   * 
+   *
    * @param service The service
    * @param query The query
    * @param urlHelper The url helper
@@ -114,7 +114,7 @@ public final class RateService {
 
   private static EqRate calc(Service service, RequestData data)
       throws InterruptedException, ExecutionException {
-    var location = Location.create(data.latitude, data.longitude);
+    var location = Location.create(data.longitude, data.latitude);
     var site = Site.builder().location(location).build();
     var futureRates = new ArrayList<ListenableFuture<EqRate>>();
 

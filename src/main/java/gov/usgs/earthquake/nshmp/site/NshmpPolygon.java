@@ -55,7 +55,7 @@ public enum NshmpPolygon {
   private static LocationList createPolygon(double[][] coords) {
     LocationList.Builder locs = LocationList.builder();
     for (double[] coord : coords) {
-      locs.add(coord[1], coord[0]);
+      locs.add(coord[0], coord[1]);
     }
     return locs.build();
   }

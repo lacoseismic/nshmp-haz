@@ -439,8 +439,8 @@ final class NshmpSiteFiles {
           @Override
           public Location location() {
             return Location.create(
-                Maths.round(input.location().latitude, 1),
-                Maths.round(input.location().longitude, 1));
+                Maths.round(input.location().longitude, 1),
+                Maths.round(input.location().latitude, 1));
           }
 
           @Override
