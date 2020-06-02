@@ -45,7 +45,7 @@ public class DeaggEpsilonController {
 
   /**
    * GET method to return usage or hazard curves, query based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
@@ -82,7 +82,7 @@ public class DeaggEpsilonController {
 
   /**
    * GET method to return usage or hazard curves, slash based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])

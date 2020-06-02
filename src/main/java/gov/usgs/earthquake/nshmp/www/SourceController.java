@@ -16,14 +16,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Source model service to return the current installed model.
- * 
+ *
  * <p> See src/main/resources/applicaiton.yml nshmp-haz.installed-model for
  * default model used
- * 
+ *
  * <p> To run the Micronaut jar file with a model: java -jar
  * path/to/nshmp-haz-v2-all.jar -model=<{@code Model}>
- * 
- * 
+ *
+ *
  * @author U.S. Geological Survey
  */
 @Tag(name = "Source Model")
@@ -35,7 +35,7 @@ public class SourceController {
 
   /**
    * GET method to return the source model usage
-   * 
+   *
    * @param request The HTTP request
    */
   @Operation(
