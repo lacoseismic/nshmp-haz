@@ -68,7 +68,7 @@ public class NshmpSiteTests {
   public final void methodsTest() {
     NshmpSite s = WASHINGTON_DC;
     assertEquals(s.state(), UsRegion.DC);
-    assertEquals(s.location(), Location.create(38.90, -77.05));
+    assertEquals(s.location(), Location.create(-77.05, 38.90));
     assertEquals(s.toString(), "Washington DC");
 
     s = MCGRATH_AK;

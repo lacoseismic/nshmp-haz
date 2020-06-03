@@ -23,9 +23,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 /**
  * Micronaut controller for rate and probability services.
- * 
+ *
  * @see RateService
- * 
+ *
  * @author U.S. Geological Survey
  */
 @Controller("/")
@@ -36,7 +36,7 @@ public class RateController {
 
   /**
    * GET method to return the usage information on the rate service.
-   * 
+   *
    * @param request The HTTP request
    */
   @Operation(
@@ -55,7 +55,7 @@ public class RateController {
 
   /**
    * GET method to compute annual-rate, query based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
@@ -94,7 +94,7 @@ public class RateController {
 
   /**
    * GET method to compute annual-rate, slash based
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
@@ -133,7 +133,7 @@ public class RateController {
 
   /**
    * GET method to return the usage information on the probability service.
-   * 
+   *
    * @param request The HTTP request
    */
   @Operation(
@@ -153,7 +153,7 @@ public class RateController {
 
   /**
    * GET method to compute probability, query based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
@@ -197,7 +197,7 @@ public class RateController {
 
   /**
    * GET method to compute probability, slash based
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])

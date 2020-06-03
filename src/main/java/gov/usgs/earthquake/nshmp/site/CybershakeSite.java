@@ -118,7 +118,7 @@ public enum CybershakeSite implements NamedLocation {
       double z1p0,
       double z2p5) {
 
-    this.loc = Location.create(lat, lon);
+    this.loc = Location.create(lon, lat);
     this.run = run;
     this.willsVs30 = willsVs30;
     this.cvmVs30 = cvmVs30;

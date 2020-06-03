@@ -36,7 +36,7 @@ import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 /**
  * AWS Lambda function to read in hazard results from S3 and to create slices of
  * return periods of interest.
- * 
+ *
  * @see HazardResultSliceLambda
  */
 @SuppressWarnings("unused")

@@ -54,7 +54,7 @@ public final class HazardService {
   /**
    * Handler for {@link HazardController#doGetUsage}. Returns the usage for the
    * hazard service.
-   * 
+   *
    * @param urlHelper The URL helper
    */
   public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
@@ -71,7 +71,7 @@ public final class HazardService {
   /**
    * Handler for {@link HazardController#doGetHazard}. Returns the usage or the
    * hazard result.
-   * 
+   *
    * @param query The query
    * @param urlHelper The URL helper
    */
@@ -128,7 +128,7 @@ public final class HazardService {
     public Site apply(CalcConfig config) {
       return Site.builder()
           .basinDataProvider(config.siteData.basinDataProvider)
-          .location(Location.create(data.latitude, data.longitude))
+          .location(Location.create(data.longitude, data.latitude))
           .vs30(data.vs30.value())
           .build();
     }

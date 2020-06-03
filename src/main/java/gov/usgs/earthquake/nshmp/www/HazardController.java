@@ -21,9 +21,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Micronaut controller for probabilistic seismic hazard calculations.
- * 
+ *
  * @see HazardService
- * 
+ *
  * @author U.S. Geological Survey
  */
 @Tag(
@@ -37,7 +37,7 @@ public class HazardController {
 
   /**
    * GET method to return the hazard usage.
-   * 
+   *
    * @param request The HTTP request
    */
   @Operation(
@@ -56,7 +56,7 @@ public class HazardController {
 
   /**
    * GET method to return usage or hazard curves, query based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])
@@ -88,7 +88,7 @@ public class HazardController {
 
   /**
    * GET method to return usage or hazard curves, slash based.
-   * 
+   *
    * @param request The HTTP request
    * @param longitude Longitude (in decimal degrees) ([-360, 360])
    * @param latitude Latitude (in decimal degrees) ([-90, 90])

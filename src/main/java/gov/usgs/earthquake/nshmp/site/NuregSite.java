@@ -26,7 +26,7 @@ public enum NuregSite implements NamedLocation {
   private final UsRegion state;
 
   private NuregSite(double lon, double lat) {
-    this.loc = Location.create(lat, lon);
+    this.loc = Location.create(lon, lat);
     this.state = UsRegion.valueOf(name().substring(name().lastIndexOf('_') + 1));
   }
 

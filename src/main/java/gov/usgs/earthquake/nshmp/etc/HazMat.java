@@ -12,7 +12,7 @@ public class HazMat {
 
   /*
    * Developer notes:
-   * 
+   *
    * Mathworks has gone out of its way to make it more and more difficult to use
    * Java in Matlab as time goes on, despite it being a first-class citizen.
    * Specifically, the Matlab classpath includes a dizzying number of 3rd party
@@ -26,14 +26,14 @@ public class HazMat {
    * it's dependency on Guava, but putting nshmp-haz early on the Matlab
    * classpath causes Matlab to crash as it can't find (now missing) methods in
    * Guava.
-   * 
+   *
    * The unsatisfactory but functional workaround is to use a custom class
    * loader that, once we want to use nshmp-haz classes, scans nshmp-haz.jar
    * before looking in the matlab classpath. This approach is messy in that the
    * sole point of entry is this class, which delegates to HazMatHelper (loaded
    * with the custom class loader) and the methods of which must be accessed via
    * reflection.
-   * 
+   *
    * Note that if nshmp-haz moves to Java 8, which will probably occur sooner
    * rather than later, the custom class loader will also have to have Java 8 on
    * it's classpath. Sigh.

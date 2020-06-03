@@ -43,7 +43,7 @@ import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 /**
  * AWS Lambda function to read in a curves file from AWS S3 and create slices at
  * return periods interest. <br>
- * 
+ *
  * The results are written to S3 as map.csv bucket.
  */
 @SuppressWarnings("unused")
@@ -174,7 +174,7 @@ public class HazardResultSliceLambda implements RequestStreamHandler {
     }
 
     return Site.builder()
-        .location(lat, lon)
+        .location(lon, lat)
         .name(name)
         .build();
   }
