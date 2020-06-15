@@ -104,6 +104,424 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-119.35, 35.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Bakersfield CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.75, 36.25]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Big Sur CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-115.55, 33.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Brawley CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.4, 34.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Century City CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-120.4, 36.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Coalinga CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.0, 37.95]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Concord CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.55, 34.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Cucamonga CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-116.85, 36.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Death Valley CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-120.85, 35.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Diablo Canyon CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-124.2, 40.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Eureka CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.75, 36.75]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Fresno CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.8, 33.65]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Irvine CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.2, 33.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Long Beach CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.25, 34.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Los Angeles CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.95, 34.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Malibu West CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.0, 37.65]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Mammoth Lakes CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.9, 36.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Monterey CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.65, 37.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Morgan Hill CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.55, 34.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Northridge CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.25, 37.8]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Oakland CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.0, 34.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Palmdale CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-116.55, 33.85]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Palm Springs CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.15, 34.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Pasadena CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.4, 40.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Redding CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.4, 33.95]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Riverside CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.5, 38.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Sacramento CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.7, 34.45]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Santa Barbara CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.05, 36.95]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Santa Cruz CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.7, 38.45]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Santa Rosa CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.3, 34.1]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Bernardino CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.15, 32.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Diego CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.4, 37.75]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Francisco CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.9, 37.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Jose CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-120.65, 35.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Luis Obispo CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.3, 37.55]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Mateo CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.55, 33.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "San Onofre CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.25, 38.1]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Vallejo CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.3, 34.3]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Ventura CA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-105.0, 39.75]
       },
       "properties": {
@@ -340,6 +758,17 @@
       "properties": {
         "marker-size": "small",
         "title": "Des Moines IA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-116.2, 43.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Boise ID"
       }
     },
     {
@@ -742,6 +1171,50 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [-119.75, 39.15]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Carson City NV"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-115.75, 40.85]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Elko NV"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-115.15, 36.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Las Vegas NV"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.8, 39.55]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Reno NV"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-78.2, 43.0]
       },
       "properties": {
@@ -824,6 +1297,127 @@
       "properties": {
         "marker-size": "small",
         "title": "Oklahoma City OK"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-123.85, 46.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Astoria OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.3, 44.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Bend OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-124.25, 42.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Brookings OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-124.2, 43.4]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Coos Bay OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-123.1, 44.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Eugene OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-121.8, 42.2]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Klamath Falls OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.9, 42.35]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Medford OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-124.05, 44.65]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Newport OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.8, 45.7]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Pendleton OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.65, 45.5]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Portland OR"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-123.05, 44.95]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Salem OR"
       }
     },
     {
@@ -1275,6 +1869,116 @@
       "properties": {
         "marker-size": "small",
         "title": "Burlington VT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-123.8, 47.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Aberdeen WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.5, 48.75]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Bellingham WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-120.55, 47.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Ellensburg WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.2, 48.0]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Everett WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.6, 46.55]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Hanford Site WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.9, 47.05]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Olympia WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.3, 47.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Seattle WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.4, 47.65]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Spokane WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.45, 47.25]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Tacoma WA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-120.5, 46.6]
+      },
+      "properties": {
+        "marker-size": "small",
+        "title": "Yakima WA"
       }
     },
     {

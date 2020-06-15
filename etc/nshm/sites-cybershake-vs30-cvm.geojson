@@ -5,7 +5,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-118.41302, 34.05489]
+        "coordinates": [-118.41302, 34.054886]
       },
       "properties": {
         "marker-size": "small",
@@ -75,7 +75,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-118.17119, 34.14843]
+        "coordinates": [-118.17119, 34.148426]
       },
       "properties": {
         "marker-size": "small",
@@ -145,7 +145,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-117.29201, 34.06499]
+        "coordinates": [-117.29201, 34.064986]
       },
       "properties": {
         "marker-size": "small",
@@ -187,7 +187,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-118.0653, 34.04182]
+        "coordinates": [-118.0653, 34.041824]
       },
       "properties": {
         "marker-size": "small",
@@ -593,7 +593,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-118.46393, 34.28563]
+        "coordinates": [-118.46393, 34.285625]
       },
       "properties": {
         "marker-size": "small",
@@ -607,7 +607,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-118.58717, 34.20995]
+        "coordinates": [-118.58717, 34.209946]
       },
       "properties": {
         "marker-size": "small",
