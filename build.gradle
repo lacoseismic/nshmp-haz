@@ -104,9 +104,6 @@ dependencies {
 
 test {
   useJUnitPlatform()
-  filter {
-    includeTestsMatching "gov.usgs.earthquake.nshmp.programs.*"
-  }
 }
 
 jacocoTestReport {
