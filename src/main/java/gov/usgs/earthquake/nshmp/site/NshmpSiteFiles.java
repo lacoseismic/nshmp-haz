@@ -6,6 +6,7 @@ import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CEUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONTERMINOUS_US;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CYBERSHAKE;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII_CLIP;
@@ -95,6 +96,13 @@ final class NshmpSiteFiles {
     Path wusOut = EXPORT_DIR.resolve("map-wus.geojson");
     LocationList wusBounds = WUS_CLIP.coordinates().bounds().toList();
     writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.1, wusBounds);
+
+    writePolyJson(
+        EXPORT_DIR.resolve("map-conus.geojson"),
+        CONTERMINOUS_US.toString(),
+        CONTERMINOUS_US.coordinates(),
+        0.1,
+        CONUS_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
         EXPORT_DIR.resolve("map-alaska.geojson"),
