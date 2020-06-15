@@ -367,7 +367,7 @@ public enum NshmpSite implements NamedLocation {
    * The set of sites used to test the Central &amp; Eastern US NSHM. This
    * includes all NSHMP sites east of -115.0°.
    */
-  public static EnumSet<NshmpSite> ceus() {
+  private static EnumSet<NshmpSite> ceus() {
     return filteredSet(
         site -> site.location.longitude >= -115.0);
   }
@@ -382,7 +382,7 @@ public enum NshmpSite implements NamedLocation {
    * The set of sites used to test the Western US NSHM. This includes all NSHMP
    * sites west of -100.0°.
    */
-  public static EnumSet<NshmpSite> wus() {
+  private static EnumSet<NshmpSite> wus() {
     return filteredSet(
         site -> site.location.longitude <= -100.0 &&
             site.location.longitude >= -125.0);
@@ -391,7 +391,7 @@ public enum NshmpSite implements NamedLocation {
   /**
    * The combination of CEUS and WUS
    */
-  public static EnumSet<NshmpSite> cous() {
+  public static EnumSet<NshmpSite> conus() {
     EnumSet<NshmpSite> cous = wus();
     cous.addAll(ceus());
     return cous;
