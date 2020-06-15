@@ -12,6 +12,7 @@ public enum NshmpPolygon {
 
   CEUS_CLIP(Data.CEUS_CLIP, "Central & Eastern US Map Extents"),
   WUS_CLIP(Data.WUS_CLIP, "Western US Map Extents"),
+  CONUS_CLIP(Data.CONUS_CLIP, "NSHMP Conterminus US Map Extents"),
   ALASKA_CLIP(Data.ALASKA_CLIP, "Alaska Map Extents"),
   HAWAII_CLIP(Data.HAWAII_CLIP, "Hawaii Map Extents"),
 
@@ -61,6 +62,11 @@ public enum NshmpPolygon {
   }
 
   private static class Data {
+
+    private static final double[][] CONUS_CLIP = {
+        { -125.0, 24.6 },
+        { -65.0, 50.0 }
+    };
 
     private static final double[][] CEUS_CLIP = {
         { -115.0, 24.6 },
