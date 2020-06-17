@@ -6,6 +6,7 @@ import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.ALASKA_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CEUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONTERMINOUS_US;
+import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CONUS_CLIP;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.CYBERSHAKE;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII;
 import static gov.usgs.earthquake.nshmp.site.NshmpPolygon.HAWAII_CLIP;
@@ -32,9 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Functions;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -77,7 +78,6 @@ final class NshmpSiteFiles {
     writeNshmpPolys();
     writeNshmpSummaryPoly();
     // writeNshmpSites_0p1();
-
   }
 
   /*
@@ -96,6 +96,13 @@ final class NshmpSiteFiles {
     Path wusOut = EXPORT_DIR.resolve("map-wus.geojson");
     LocationList wusBounds = WUS_CLIP.coordinates().bounds().toList();
     writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.1, wusBounds);
+
+    writePolyJson(
+        EXPORT_DIR.resolve("map-conus.geojson"),
+        CONTERMINOUS_US.toString(),
+        CONTERMINOUS_US.coordinates(),
+        0.1,
+        CONUS_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
         EXPORT_DIR.resolve("map-alaska.geojson"),
@@ -180,17 +187,17 @@ final class NshmpSiteFiles {
     Set<NshmpPolygon> polys = EnumSet.range(LA_BASIN, UCERF3_NSHM14);
     writePolysJson(
         EXPORT_DIR.resolve("map-nshmp-all.geojson"),
-        FluentIterable.from(polys)
-            .transform(Functions.toStringFunction())
-            .toList(),
-        FluentIterable.from(polys)
-            .transform(new Function<NshmpPolygon, LocationList>() {
+        polys.stream()
+            .map(Functions.toStringFunction())
+            .collect(Collectors.toList()),
+        polys.stream()
+            .map(new Function<NshmpPolygon, LocationList>() {
               @Override
               public LocationList apply(NshmpPolygon poly) {
                 return poly.coordinates();
               }
             }::apply)
-            .toList());
+            .collect(Collectors.toList()));
   }
 
   static void writePolysJson(
@@ -247,23 +254,16 @@ final class NshmpSiteFiles {
 
   static void writeNshmpSites_0p1() throws IOException {
     writeSites(
-        "ceus-0p1",
-        FluentIterable.from(NshmpSite.ceus())
-            .transform(adjustLocation_0p1()::apply)
-            .toList(),
-        DEC2_FMT);
-    writeSites(
-        "wus-0p1",
-        FluentIterable.from(NshmpSite.wus())
-            .transform(adjustLocation_0p1()::apply)
-            .toList(),
+        "conus-0p1",
+        NshmpSite.conus().stream()
+            .map(adjustLocation_0p1()::apply)
+            .collect(Collectors.toList()),
         DEC2_FMT);
   }
 
   static void writeNshmpSites() throws IOException {
     writeNshmpSites("nshmp", EnumSet.allOf(NshmpSite.class));
-    writeNshmpSites("ceus", NshmpSite.ceus());
-    writeNshmpSites("wus", NshmpSite.wus());
+    writeNshmpSites("conus", NshmpSite.conus());
     writeNshmpSites("nrc", NshmpSite.nrc());
     writeNshmpSites("alaska", NshmpSite.alaska());
     writeNshmpSites("hawaii", NshmpSite.hawaii());

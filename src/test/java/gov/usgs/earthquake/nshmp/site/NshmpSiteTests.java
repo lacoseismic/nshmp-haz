@@ -2,7 +2,6 @@ package gov.usgs.earthquake.nshmp.site;
 
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.ADAK_AK;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.BOISE_ID;
-import static gov.usgs.earthquake.nshmp.site.NshmpSite.BRADSHAW_AIRFIELD_HI;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.CENTURY_CITY_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.CHARLESTON_SC;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.CHICAGO_IL;
@@ -24,7 +23,6 @@ import static gov.usgs.earthquake.nshmp.site.NshmpSite.NORTHRIDGE_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.OAKLAND_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.PALO_VERDE_AZ;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.PORTLAND_OR;
-import static gov.usgs.earthquake.nshmp.site.NshmpSite.PUUWAI_HI;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.RENO_NV;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.RIVERSIDE_CA;
 import static gov.usgs.earthquake.nshmp.site.NshmpSite.SACRAMENTO_CA;
@@ -78,27 +76,16 @@ public class NshmpSiteTests {
   @Test
   public final void groupsTest() {
 
-    /* WUS */
+    /* CONUS */
     assertEquals(
-        NshmpSite.wus(),
+        NshmpSite.conus(),
         Sets.newEnumSet(Iterables.filter(
             EnumSet.allOf(NshmpSite.class),
             new Predicate<NshmpSite>() {
               @Override
               public boolean test(NshmpSite site) {
-                return site.location().longitude <= -100.0 && site.location().longitude >= -125.0;
-              }
-            }::test), NshmpSite.class));
-
-    /* CEUS */
-    assertEquals(
-        NshmpSite.ceus(),
-        Sets.newEnumSet(Iterables.filter(
-            EnumSet.allOf(NshmpSite.class),
-            new Predicate<NshmpSite>() {
-              @Override
-              public boolean test(NshmpSite site) {
-                return site.location().longitude >= -115.0;
+                return site.location().longitude >= -125.0 && site.location().longitude <= -65 &&
+                    site.location().latitude >= 24.6 && site.location().latitude <= 50.0;
               }
             }::test), NshmpSite.class));
 
@@ -110,7 +97,7 @@ public class NshmpSiteTests {
     /* Hawaii */
     assertEquals(
         NshmpSite.hawaii(),
-        EnumSet.range(BRADSHAW_AIRFIELD_HI, PUUWAI_HI));
+        EnumSet.range(NshmpSite.BARBERS_POINT_HI, NshmpSite.WAIPAHU_HI));
 
     /* NRC comparision sites */
     assertEquals(
