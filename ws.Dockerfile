@@ -34,7 +34,7 @@ ENV GIT_NSHMP_PASSWORD ${git_password}
 
 COPY . .
 RUN env
-RUN yum install -y java-11-openjdk-devel which git \
+RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \
     && ./gradlew --no-daemon assemble \
     && mv ${libs_dir}/*-all.jar ${ws_file}
 
