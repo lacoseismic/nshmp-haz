@@ -35,14 +35,13 @@ stages:
 
 .docker-build:
   stage: test
-  image: docker:dind
+  image: docker:stable
   extends: .dev-tags
   only:
     - branches
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   script:
-    - export LANG="en_US.UTF-8"
     - apk add git
     - mkdir ${DOCKER_DIR}
     - |
