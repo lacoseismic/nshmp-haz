@@ -42,14 +42,15 @@ stages:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   script:
-    - apk add git;
+    - export LANG="en_US.UTF-8"
+    - apk add git
     - mkdir ${DOCKER_DIR}
     - |
       docker build \
         --build-arg git_username="${GIT_NSHMP_USERNAME}" \
         --build-arg git_password="${GIT_NSHMP_PASSWORD}" \
         -f ${DOCKERFILE} \
-        -t local/${IMAGE_NAME} .
+        -t local/${IMAGE_NAME} .;
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
   artifacts:
     paths:
