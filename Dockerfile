@@ -40,8 +40,8 @@ WORKDIR ${builder_workdir}
 
 COPY . .
 
-RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \
-    && ./gradlew --no-daemon assemble
+RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git
+    # && ./gradlew --no-daemon assemble
 
 RUN locale
 
