@@ -40,44 +40,44 @@ WORKDIR ${builder_workdir}
 
 COPY . .
 
-RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git
-    # && ./gradlew --no-daemon assemble
+RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \
+    && ./gradlew --no-daemon assemble
 
 RUN locale
 
 ####
 # Application image: Run jar or war file.
 ####
-# FROM usgs/centos:8
+FROM usgs/centos:8
 
-# LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
+LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
-# ARG builder_workdir
-# ARG libs_dir
-# ARG project
-# ARG ws_file
+ARG builder_workdir
+ARG libs_dir
+ARG project
+ARG ws_file
 
-# ENV CONFIG_FILE ""
-# ENV DEBUG false
-# ENV IML ""
-# ENV JAVA_XMX "8g"
-# ENV LANG "en_US.UTF-8"
-# ENV MODEL ""
-# ENV MOUNT_MODEL false
-# ENV NSHM_VERSION master
-# ENV PROGRAM hazard
-# ENV PROJECT ${project}
-# ENV RETURN_PERIOD ""
+ENV CONFIG_FILE ""
+ENV DEBUG false
+ENV IML ""
+ENV JAVA_XMX "8g"
+ENV LANG "en_US.UTF-8"
+ENV MODEL ""
+ENV MOUNT_MODEL false
+ENV NSHM_VERSION master
+ENV PROGRAM hazard
+ENV PROJECT ${project}
+ENV RETURN_PERIOD ""
 
-# VOLUME [ "/app/output" ]
+VOLUME [ "/app/output" ]
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY --from=builder ${libs_dir}/* ./
-# COPY scripts scripts
+COPY --from=builder ${libs_dir}/* ./
+COPY scripts scripts
 
-# RUN yum update -y \
-#     && yum install -y jq git java-11-openjdk-headless
+RUN yum update -y \
+    && yum install -y jq git java-11-openjdk-headless
 
-# EXPOSE 8080
-# ENTRYPOINT [ "bash", "scripts/docker-entrypoint.sh" ]
+EXPOSE 8080
+ENTRYPOINT [ "bash", "scripts/docker-entrypoint.sh" ]
