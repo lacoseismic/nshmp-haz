@@ -214,6 +214,19 @@ Publish WS Image:
   before_script:
     - *adjust-image-names-ws
 
+Trigger nshmp-deploy:
+  stage: publish
+  only:
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - apk add curl
+    - |
+      curl -X POST \
+          -F token=${NSHMP_DEPLOY_TRIGGER_TOKEN} \
+          -F ref=master \
+          https://code.chs.usgs.gov/api/v4/projects/5047/trigger/pipeline
+
 ####
 # Stage: Deploy
 ####
