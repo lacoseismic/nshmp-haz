@@ -126,6 +126,7 @@ Build Lambda:
     - ./gradlew assemble
     - ./gradlew libs
   artifacts:
+    expire_in: 1 yr
     paths:
       - build/libs/nshmp-haz-v2.jar
       - build/libs/nshmp-haz-dependencies.zip
