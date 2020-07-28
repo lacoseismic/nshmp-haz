@@ -11,9 +11,16 @@ variables:
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
 stages:
+  - assemble
   - test
   - publish
   - deploy
+
+cache:
+  key: one-key-to-rule-them-all
+  paths:
+    - build
+    - .gradle
 
 ####
 # Templates
@@ -96,6 +103,9 @@ stages:
   variables:
     APP_NAME: nshmp-haz
     STACK_NAME: nshmp-haz
+  retry:
+    max: 2
+    when: 'always'
 
 .staging:
   only:
@@ -111,6 +121,24 @@ stages:
     - staging02
 
 ####
+# Stage: assemble
+####
+
+Build Project:
+  stage: assemble
+  image: gradle:jdk11
+  extends: .dev-tags
+  only:
+    - branches
+    - master@ghsc/nshmp/nshmp-haz-v2
+    - tags@ghsc/nshmp/nshmp-haz-v2
+  script:
+    - ./gradlew --build-cache --no-daemon assemble
+  retry:
+    max: 2
+    when: 'always'
+
+####
 # Stage: Test
 ####
 
@@ -123,54 +151,16 @@ Build Lambda:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
   script:
-    - ./gradlew assemble
-    - ./gradlew libs
+    - ./gradlew --no-daemon assemble
+    - ./gradlew --no-daemon libs
   artifacts:
     expire_in: 1 yr
     paths:
       - build/libs/nshmp-haz-v2.jar
       - build/libs/nshmp-haz-dependencies.zip
-
-Build Project:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - ./gradlew assemble
-
-Spotless Check:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - ./gradlew spotlessCheck;
-
-Spotbugs Main:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - ./gradlew spotbugsMain;
-
-Spotbugs Test:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - ./gradlew spotbugsTest;
+  retry:
+    max: 2
+    when: 'always'
 
 Unit Tests:
   stage: test
@@ -182,23 +172,32 @@ Unit Tests:
     - tags@ghsc/nshmp/nshmp-haz-v2
   coverage: '/Total.*?([0-9]{1,3})%/'
   script:
-    - ./gradlew check
+    - ./gradlew --no-daemon check
     - cat ${JACOCO_HTML_DIR}/index.html
   artifacts:
     paths:
       - ${JACOCO_HTML_DIR}
     reports:
       junit: ${JUNIT_FILES}
+  retry:
+    max: 2
+    when: 'always'
 
 Build Haz Image:
   extends: .docker-build
   before_script:
     - *adjust-image-names-haz
+  retry:
+    max: 2
+    when: 'always'
 
 Build WS Image:
   extends: .docker-build
   before_script:
     - *adjust-image-names-ws
+  retry:
+    max: 2
+    when: 'always'
 
 ####
 # Stage: Publish
@@ -208,11 +207,17 @@ Publish Haz Image:
   extends: .docker-publish
   before_script:
     - *adjust-image-names-haz
+  retry:
+    max: 2
+    when: 'always'
 
 Publish WS Image:
   extends: .docker-publish
   before_script:
     - *adjust-image-names-ws
+  retry:
+    max: 2
+    when: 'always'
 
 Trigger nshmp-deploy:
   stage: publish
