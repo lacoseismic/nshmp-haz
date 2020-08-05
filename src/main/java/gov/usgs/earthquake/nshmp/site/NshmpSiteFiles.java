@@ -218,7 +218,7 @@ final class NshmpSiteFiles {
           .properties(props.build())
           .build());
     }
-    b.write(out);
+    b.build().write(out);
   }
 
   static void writePolyJson(
@@ -249,6 +249,7 @@ final class NshmpSiteFiles {
     b.add(Feature.polygon(coords)
         .properties(polyProps)
         .build())
+        .build()
         .write(out);
   }
 
@@ -401,7 +402,7 @@ final class NshmpSiteFiles {
               .build())
           .build());
     }
-    b.write(out);
+    b.build().write(out);
   }
 
   private static void writeCybershakeJsonSites(
@@ -426,7 +427,7 @@ final class NshmpSiteFiles {
           .properties(props.build())
           .build());
     }
-    b.write(out);
+    b.build().write(out);
   }
 
   private static final Function<NamedLocation, NamedLocation> adjustLocation_0p1() {

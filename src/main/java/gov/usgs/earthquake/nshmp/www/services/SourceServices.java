@@ -89,7 +89,6 @@ public class SourceServices {
     List<SourceModel> models;
     EnumParameter<Region> region;
     DoubleParameter returnPeriod;
-    EnumParameter<Imt> imt;
     EnumParameter<Vs30> vs30;
 
     Parameters() {
@@ -107,6 +106,11 @@ public class SourceServices {
           ParamType.NUMBER,
           100.0,
           1e6);
+
+      vs30 = new EnumParameter<Vs30>(
+          "Vs30",
+          ParamType.STRING,
+          EnumSet.allOf(Vs30.class));
     }
   }
 
