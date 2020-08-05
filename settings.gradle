@@ -6,4 +6,9 @@ rootProject.name = "nshmp-haz-v2"
 
 git {
   defaultAuthGroup "nshmp"
+
+  fetch("https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018.git", {
+    name "nshmp-haz-dep--nshm-conus-2018"
+    tag "v0.0.1"
+  })
 }
