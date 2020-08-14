@@ -18,5 +18,5 @@ nshmp-haz:
   ##
   # The path to the models.
   # To specify the model to use:
-  #     java -jar build/libs/nshmp-haz-v2-all.jar --models=<path/to/models>
+  #     java -jar build/libs/nshmp-haz-v2.jar --models=<path/to/models>
   model-path: ${models:libs/nshmp-haz-dep--nshm-conus-2018}

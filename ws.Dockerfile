@@ -13,7 +13,7 @@
 ARG project=nshmp-haz-v2
 ARG builder_workdir=/app/${project}
 ARG libs_dir=${builder_workdir}/build/libs
-ARG ws_file=${libs_dir}/${project}-ws.jar
+ARG jar_file=${libs_dir}/${project}.jar
 
 ####
 # Builder image: Build jar and war file.
@@ -24,7 +24,7 @@ ARG builder_workdir
 ARG git_username
 ARG git_password
 ARG libs_dir
-ARG ws_file
+ARG jar_file
 
 ENV LANG="en_US.UTF-8"
 
@@ -33,10 +33,8 @@ ENV GIT_NSHMP_USERNAME ${git_username}
 ENV GIT_NSHMP_PASSWORD ${git_password}
 
 COPY . .
-RUN env
 RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \
-    && ./gradlew --no-daemon assemble \
-    && mv ${libs_dir}/*-all.jar ${ws_file}
+    && ./gradlew --no-daemon assemble
 
 ####
 # Application image: Run jar or war file.
@@ -48,7 +46,6 @@ LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@us
 ENV LANG="en_US.UTF-8"
 
 ARG libs_dir
-ARG ws_file
 ARG builder_workdir
 ARG project
 
