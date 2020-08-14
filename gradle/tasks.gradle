@@ -1,11 +1,4 @@
 
-task thinJar(type: Jar) {
-  doFirst {
-    thinJar = true
-  }
-  with jar
-}
-
 /*
  * Create a zip file of all dependencies
  */

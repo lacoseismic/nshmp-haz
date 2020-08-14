@@ -1,28 +1,17 @@
+apply plugin: "com.github.johnrengelman.shadow"
+
 /*
- * The default jar task automatically builds a fat jar and adds
- * a properties file with the application version. Note that
- * 'git describe' only works when running gradle from the command
+ * Possibly record app version. The creation of this file
+ * on each build causes the classpath to appear changed so
+ * Gradle reruns tests, even though no code has changed.
+ *
+ * Note that 'git describe' only works when running gradle from the command
  * line so version values in eclipse builds will empty. Use thinJar
  * task to skip dependencies.
  */
-jar {
+tasks.register("propertyFile") {
+  description = "Create a property file with application version"
   doFirst {
-    /* possible fat jar */
-    if (rootProject.name == projectName && !thinJar) {
-      from {
-        configurations.compileClasspath.collect {
-          it.isDirectory() ? it : zipTree(it).matching {
-            exclude { it.path.contains('META-INF') }
-          }
-        }
-      }
-    }
-
-    /*
-     * Possibly record app version. The creation of this file
-     * on each build causes the classpath to appear changed so
-     * Gradle reruns tests, even though no code has changed.
-     */
     def props = new Properties()
     def propsFile = new File(project.buildDir.toString() + propsPath)
     if (propsFile.exists()) {
@@ -35,4 +24,23 @@ jar {
       props.store(propsFile.newWriter(), null)
     }
   }
+}
+
+/*
+ * Build a thin jar and add a properties file with the application version.
+ */
+jar {
+  archiveBaseName = "${projectName}-thin"
+  dependsOn propertyFile
+}
+
+/*
+ * Build a fat jar to be used for running programs and Micronaut services.
+ */
+shadowJar {
+  dependsOn propertyFile
+  baseName = projectName
+  classifier = ''
+  archiveVersion = ''
+  mergeServiceFiles()
 }
