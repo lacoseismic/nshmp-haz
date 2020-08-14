@@ -11,7 +11,7 @@ exit_status=${?};
 check_exit_status ${exit_status};
 
 # Run web services
-java -jar "${PROJECT}-ws.jar" \
+java -jar "${PROJECT}.jar" \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
     --models="${model_path}";
 exit_status=${?};

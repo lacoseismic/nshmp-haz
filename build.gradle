@@ -22,7 +22,7 @@
  * Then build the JAR file: ./gradlew assemble
  *
  * One can then specify the model to run in the services:
- *    java -jar build/libs/nshmp-haz-v2-all.jar -model=<MODEL>
+ *    java -jar build/libs/nshmp-haz-v2.jar -model=<MODEL>
  *
  * Where <MODEL> is one of the model enums in nshmp.www.Model
  */
@@ -120,10 +120,6 @@ jacocoTestReport {
   }
 }
 check.dependsOn jacocoTestReport
-
-shadowJar {
-  mergeServiceFiles()
-}
 
 tasks.withType(JavaCompile) {
   options.encoding = "UTF-8"
