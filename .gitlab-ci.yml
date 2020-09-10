@@ -54,6 +54,8 @@ cache:
     - |
       docker build \
         --build-arg ci_job_token="${CI_JOB_TOKEN}" \
+        --build-arg git_username="${GIT_NSHMP_USERNAME}" \
+        --build-arg git_password="${GIT_NSHMP_PASSWORD}" \
         -f ${DOCKERFILE} \
         -t local/${IMAGE_NAME} .;
     - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
