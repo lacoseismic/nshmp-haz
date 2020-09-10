@@ -53,6 +53,7 @@ cache:
     - mkdir ${DOCKER_DIR}
     - |
       docker build \
+        --build-arg ci_job_token="${CI_JOB_TOKEN}" \
         --build-arg git_username="${GIT_NSHMP_USERNAME}" \
         --build-arg git_password="${GIT_NSHMP_PASSWORD}" \
         -f ${DOCKERFILE} \
@@ -218,6 +219,15 @@ Publish WS Image:
   retry:
     max: 2
     when: 'always'
+
+Maven:
+  image: gradle:jdk11
+  stage: publish
+  extends: .dev-tags
+  only:
+    - tags@ghsc/nshmp/nshmp-ws
+  script:
+    - ./gradlew publish -P version=${CI_COMMIT_TAG}
 
 Trigger nshmp-deploy:
   stage: publish

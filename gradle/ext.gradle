@@ -6,7 +6,8 @@ ext {
 
   propsPath = '/classes/java/main/service.properties'
 
-  nshmpLib = "libs/nshmp-haz-dep--nshmp-lib"
+  libsDir = "libs"
+  nshmpLib = "${libsDir}/nshmp-lib-artifacts"
   nshmpLibGradleDir = "${nshmpLib}/gradle"
   spotbugsDir = "${nshmpLib}/gradle"
   spotlessDir = "${nshmpLib}/src/main/resources"

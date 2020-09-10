@@ -22,7 +22,7 @@
  * Then build the JAR file: ./gradlew assemble
  *
  * One can then specify the model to run in the services:
- *    java -jar build/libs/nshmp-haz-v2.jar -model=<MODEL>
+ *    java -jar build/libs/nshmp-haz-v2.jar --models=/path/to/models
  *
  * Where <MODEL> is one of the model enums in nshmp.www.Model
  */
@@ -35,12 +35,19 @@ plugins {
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
   id "jacoco"
+  id "maven-publish"
   id "net.ltgt.apt-eclipse" version "${aptEclipseVersion}"
 }
 
+configurations {
+  nshmp
+}
+
+apply from: "${projectDir}/gradle/dependencies.gradle"
 apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"
 apply from: "${projectDir}/gradle/javadoc.gradle"
+apply from: "${projectDir}/gradle/repositories.gradle"
 apply from: "${projectDir}/gradle/tasks.gradle"
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -50,56 +57,6 @@ mainClassName = "gov.usgs.earthquake.nshmp.www.Application"
 
 jacoco {
   toolVersion = "0.8.4"
-}
-
-repositories {
-  jcenter()
-}
-
-git {
-  implementation("https://code.usgs.gov/ghsc/nshmp/nshmp-lib.git", {
-    name "nshmp-haz-dep--nshmp-lib"
-    tag "v0.1.2"
-  })
-}
-
-apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
-apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
-apply from: "${nshmpLibGradleDir}/spotless.gradle"
-
-dependencies {
-  // AWS
-  implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"
-  implementation "com.amazonaws:aws-java-sdk-lambda:${awsLambdaVersion}"
-  implementation "com.amazonaws:aws-java-sdk-s3:${awsS3Version}"
-  implementation "com.amazonaws:aws-java-sdk-ec2:${awsEc2Version}"
-
-  // Micronaut
-  annotationProcessor platform("io.micronaut:micronaut-bom:${mnVersion}")
-  annotationProcessor "io.micronaut:micronaut-inject-java"
-  annotationProcessor "io.micronaut:micronaut-validation"
-  implementation platform("io.micronaut:micronaut-bom:${mnVersion}")
-  implementation "io.micronaut:micronaut-http-client"
-  implementation "io.micronaut:micronaut-inject"
-  implementation "io.micronaut:micronaut-validation"
-  implementation "io.micronaut:micronaut-runtime"
-  implementation "io.micronaut:micronaut-http-server-netty"
-  implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:${jacksonVersion}"
-  runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
-
-  // Swagger
-  annotationProcessor("io.micronaut.configuration:micronaut-openapi:${mnOpenAPIVersion}")
-  implementation("io.swagger.core.v3:swagger-annotations:${swaggerVersion}")
-  implementation("io.swagger.core.v3:swagger-models:${swaggerVersion}")
-
-  // junit
-  testAnnotationProcessor "io.micronaut:micronaut-inject-java:${mnVersion}"
-  testImplementation platform("io.micronaut:micronaut-bom:${mnVersion}")
-  testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
-  testImplementation "org.junit.jupiter:junit-jupiter-api"
-  testImplementation "io.micronaut.test:micronaut-test-junit5"
-  testImplementation "io.micronaut.test:micronaut-test-spock"
-  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
 test {
@@ -138,4 +95,21 @@ tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
       stylesheet = 'fancy-hist.xsl'
     }
   }
+}
+
+task libsClean(type: Delete) {
+  delete libsDir
+}
+clean.dependsOn libsClean
+
+gradle.afterProject {
+  copy {
+    from {
+      configurations.nshmp.collect { zipTree(it) }
+    }
+    into nshmpLib
+  }
+  apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
+  apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
+  apply from: "${nshmpLibGradleDir}/spotless.gradle"
 }
