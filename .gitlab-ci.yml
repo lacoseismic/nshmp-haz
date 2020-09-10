@@ -3,6 +3,8 @@ variables:
   CI_REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
   DOCKER_DIR: docker-images
   DOCKER_TAR: ${DOCKER_DIR}/app.tar
+  GIT_NSHMP_PASSWORD: ${GITLAB_API_TOKEN}
+  GIT_NSHMP_USERNAME: ${GITLAB_USER_EMAIL}
   IMAGE_NAME_HAZ: nshmp-haz:${CI_COMMIT_REF_SLUG}
   IMAGE_NAME_WS: nshmp-haz-ws:${CI_COMMIT_REF_SLUG}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
