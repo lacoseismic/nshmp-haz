@@ -4,8 +4,7 @@
 # Build locally:
 #   docker build
 #       -f ws.Dockerfile
-#       --build-arg git_username=<user@name.com>
-#       --build-arg git_password=<git-api-token>
+#       --build-arg gitlab_token=<git-api-token>
 #       -t nshmp-haz-ws .
 
 ####
@@ -21,16 +20,16 @@ ARG jar_file=${libs_dir}/${project}.jar
 FROM usgs/centos:8 as builder
 
 ARG builder_workdir
-ARG git_username
-ARG git_password
 ARG libs_dir
 ARG jar_file
+ARG gitlab_token=null
+ARG ci_job_token=nul
 
 ENV LANG="en_US.UTF-8"
+ENV GITLAB_TOKEN ${gitlab_token}
+ENV CI_JOB_TOKEN ${ci_job_token
 
 WORKDIR ${builder_workdir}
-ENV GIT_NSHMP_USERNAME ${git_username}
-ENV GIT_NSHMP_PASSWORD ${git_password}
 
 COPY . .
 RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \

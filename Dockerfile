@@ -13,8 +13,7 @@
 #
 # Build locally:
 #   docker build
-#       --build-arg git_username=<user@name.com>
-#       --build-arg git_password=<git-api-token>
+#       --build-arg gitlab_token=<git-api-token>
 #       -t nshmp-haz .
 ####
 
@@ -29,12 +28,12 @@ FROM usgs/centos:8 as builder
 
 ARG builder_workdir
 ARG libs_dir
-ARG git_username
-ARG git_password
+ARG gitlab_token=null
+ARG ci_job_token=nul
 
 ENV LANG "en_US.UTF-8"
-ENV GIT_NSHMP_USERNAME ${git_username}
-ENV GIT_NSHMP_PASSWORD ${git_password}
+ENV GITLAB_TOKEN ${gitlab_token}
+ENV CI_JOB_TOKEN ${ci_job_token
 
 WORKDIR ${builder_workdir}
 
