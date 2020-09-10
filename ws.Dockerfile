@@ -27,7 +27,7 @@ ARG ci_job_token=nul
 
 ENV LANG="en_US.UTF-8"
 ENV GITLAB_TOKEN ${gitlab_token}
-ENV CI_JOB_TOKEN ${ci_job_token
+ENV CI_JOB_TOKEN ${ci_job_token}
 
 WORKDIR ${builder_workdir}
 
