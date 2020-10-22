@@ -30,12 +30,12 @@ import com.google.common.base.Throwables;
 
 import gov.usgs.earthquake.nshmp.aws.Util.LambdaHelper;
 import gov.usgs.earthquake.nshmp.calc.DataType;
-import gov.usgs.earthquake.nshmp.eq.model.SourceType;
 import gov.usgs.earthquake.nshmp.gmm.Gmm;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
+import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 

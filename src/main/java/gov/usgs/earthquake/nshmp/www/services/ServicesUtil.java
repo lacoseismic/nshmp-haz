@@ -12,11 +12,11 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
+import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;

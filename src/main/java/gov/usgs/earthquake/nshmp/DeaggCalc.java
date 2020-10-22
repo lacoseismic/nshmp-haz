@@ -24,8 +24,8 @@ import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
-import gov.usgs.earthquake.nshmp.eq.model.HazardModel;
 import gov.usgs.earthquake.nshmp.internal.Logging;
+import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
  * Deaggregate probabilisitic seismic hazard at a return period of interest.
