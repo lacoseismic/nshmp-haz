@@ -21,3 +21,5 @@ Scratch*.js
 webapp/config.json
 config.properties
 libs
+.factorypath
+.apt_generated*
