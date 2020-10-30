@@ -140,9 +140,9 @@ Build WS Image:
 ####
 
 Maven:
-  image: gradle:jdk11
+  extends:
+    .gradle
   stage: publish
-  extends: .dev-tags
   only:
     - tags@ghsc/nshmp/nshmp-ws
   script:
