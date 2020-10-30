@@ -119,6 +119,7 @@ Build Haz Image:
   extends:
     - .docker-build
   before_script:
+    - env
     - apk add git
     - *adjust-ref
   variables:
