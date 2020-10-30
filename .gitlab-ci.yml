@@ -12,7 +12,7 @@ include:
     file: 'templates/library.yml'
 
 stages:
-  - test
+  - build
   - publish
   - deploy
 
