@@ -2,7 +2,7 @@ version: "3.7"
 
 # General deployment config
 x-app: &app
-  image: ${REGISTRY}/${IMAGE_NAME}
+  image: ${REGISTRY}/nshmp-haz-ws:${CI_COMMIT_REF_SLUG}
   deploy:
     restart_policy:
       condition: any
