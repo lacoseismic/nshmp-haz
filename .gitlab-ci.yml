@@ -128,9 +128,8 @@ Build WS Image:
   extends:
     - .docker-build
   before_script:
-    - ls
     - mv Dockerfile haz.Dockerfile
-    - mv Dockerfile ws.Dockerfile Dockerfile
+    - mv ws.Dockerfile Dockerfile
     - *adjust-ref
     - apk add git
   variables:
