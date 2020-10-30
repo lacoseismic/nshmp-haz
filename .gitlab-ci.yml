@@ -1,8 +1,4 @@
 variables:
-  CI_REGISTRY: ${CODE_REGISTRY}
-  CI_REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
-  DOCKER_DIR: docker-images
-  DOCKER_TAR: ${DOCKER_DIR}/app.tar
   GIT_NSHMP_PASSWORD: ${GITLAB_API_TOKEN}
   GIT_NSHMP_USERNAME: ${GITLAB_USER_EMAIL}
   IMAGE_NAME_HAZ: nshmp-haz:${CI_COMMIT_REF_SLUG}
@@ -10,87 +6,55 @@ variables:
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
+include:
+  - project: 'ghsc/hazdev/pipeline-build-template'
+    ref: '1.1.3'
+    file: 'templates/library.yml'
+
 stages:
-  - assemble
   - test
   - publish
   - deploy
-
-cache:
-  key: one-key-to-rule-them-all
-  paths:
-    - build
-    - .gradle
 
 ####
 # Templates
 ####
 
-.dev-tags:
-  tags:
-    - development
-
-.templates:
-  adjust-image-names-haz: &adjust-image-names-haz |-
-    DOCKERFILE="Dockerfile";
-    IMAGE_NAME=${IMAGE_NAME_HAZ/:master/:latest};
-    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_HAZ};
-  adjust-image-names-ws: &adjust-image-names-ws |-
-    DOCKERFILE="ws.Dockerfile";
-    IMAGE_NAME=${IMAGE_NAME_WS/:master/:latest};
-    INTERNAL_IMAGE_NAME=${CI_REGISTRY_IMAGE}/${IMAGE_NAME_WS};
+.gradle:
+  extends:
+    - .tags::development
+  stage: build
+  image: ${DEVOPS_REGISTRY}usgs/java:11
 
 .docker-build:
-  stage: test
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - apk add git
-    - mkdir ${DOCKER_DIR}
-    - |
-      docker build \
-        --build-arg ci_job_token="${CI_JOB_TOKEN}" \
-        --build-arg git_username="${GIT_NSHMP_USERNAME}" \
-        --build-arg git_password="${GIT_NSHMP_PASSWORD}" \
-        -f ${DOCKERFILE} \
-        -t local/${IMAGE_NAME} .;
-    - docker save local/${IMAGE_NAME} > ${DOCKER_TAR}
-  artifacts:
-    paths:
-      - ${DOCKER_DIR}
+  extends:
+    - .build
+  variables:
+    DOCKER_BUILD_ARGS: |
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      ci_job_token: ${CI_JOB_TOKEN}
+      git_username: ${GIT_NSHMP_USERNAME}
+      git_password: ${GIT_NSHMP_PASSWORD}
 
-.docker-publish:
-  stage: publish
-  image: docker:stable
-  extends: .dev-tags
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
-  script:
-    - |
-      echo "${CHS_PASSWORD}" | \
-          docker login --username ${CHS_USERNAME} --password-stdin ${CODE_REGISTRY}
-    - docker load -i ${DOCKER_TAR}
-    - docker tag local/${IMAGE_NAME} ${INTERNAL_IMAGE_NAME}
-    - docker push ${INTERNAL_IMAGE_NAME}
-    - docker image rm local/${IMAGE_NAME}
-    - docker image rm ${INTERNAL_IMAGE_NAME}
-    - rm -rf /root/.docker/config.json
+.templates:
+  adjust-ref: &adjust-ref |
+    if [[ \
+      ${CI_COMMIT_REF_SLUG} == "master" || \
+      ${CI_COMMIT_REF_SLUG} == "production" || \
+      -n "${CI_COMMIT_TAG}" \
+    ]]; then
+      CI_COMMIT_REF_SLUG="latest";
+    fi
 
 .deploy:
   cache: {}
   image: ${CODE_REGISTRY}/ghsc/hazdev/cloud-formation/hazdev-build-runner:latest
   dependencies:
-  before_script:
-    - *adjust-image-names-ws
-    - docker pull ${INTERNAL_IMAGE_NAME}
   script:
+    - *adjust-ref
     - git clone ${GENERIC_SWARM_DEPLOY_REPO} generic-deploy
-    - export REGISTRY=${CI_REGISTRY_IMAGE}
+    - export REGISTRY=${CODE_REGISTRY_IMAGE}
     - cp -v
       generic-deploy/default.config.sh
       generic-deploy/default.funcs.sh
@@ -104,11 +68,8 @@ cache:
   variables:
     APP_NAME: nshmp-haz
     STACK_NAME: nshmp-haz
-  retry:
-    max: 2
-    when: 'always'
 
-.staging:
+.onprem-staging:
   only:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2
@@ -122,35 +83,18 @@ cache:
     - staging02
 
 ####
-# Stage: assemble
+# Stage: build
 ####
 
 Build Project:
-  stage: assemble
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+  extends:
+    - .gradle
   script:
-    - ./gradlew --build-cache --no-daemon assemble
-  retry:
-    max: 2
-    when: 'always'
-
-####
-# Stage: Test
-####
+    - ./gradlew assemble
 
 Build Lambda:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+  extends:
+    - .gradle
   script:
     - ./gradlew --no-daemon assemble
     - ./gradlew --no-daemon libs
@@ -159,18 +103,10 @@ Build Lambda:
     paths:
       - build/libs/nshmp-haz-v2.jar
       - build/libs/nshmp-haz-dependencies.zip
-  retry:
-    max: 2
-    when: 'always'
 
 Unit Tests:
-  stage: test
-  image: gradle:jdk11
-  extends: .dev-tags
-  only:
-    - branches
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+  extends:
+    - .gradle
   coverage: '/Total.*?([0-9]{1,3})%/'
   script:
     - ./gradlew --no-daemon check
@@ -180,45 +116,28 @@ Unit Tests:
       - ${JACOCO_HTML_DIR}
     reports:
       junit: ${JUNIT_FILES}
-  retry:
-    max: 2
-    when: 'always'
 
 Build Haz Image:
-  extends: .docker-build
+  extends:
+    - .docker-build
   before_script:
-    - *adjust-image-names-haz
-  retry:
-    max: 2
-    when: 'always'
+    - apk add git
+    - *adjust-ref
 
 Build WS Image:
-  extends: .docker-build
+  extends:
+    - .docker-build
   before_script:
-    - *adjust-image-names-ws
-  retry:
-    max: 2
-    when: 'always'
+    - apk add git
+    - mv Dockerfile haz.Dockerfile
+    - mv Dockerfile ws.Dockerfile Dockerfile
+    - *adjust-ref
+  variables:
+    CI_PROJECT_NAME: nshmp-haz-ws
 
 ####
 # Stage: Publish
 ####
-
-Publish Haz Image:
-  extends: .docker-publish
-  before_script:
-    - *adjust-image-names-haz
-  retry:
-    max: 2
-    when: 'always'
-
-Publish WS Image:
-  extends: .docker-publish
-  before_script:
-    - *adjust-image-names-ws
-  retry:
-    max: 2
-    when: 'always'
 
 Maven:
   image: gradle:jdk11

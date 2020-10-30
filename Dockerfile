@@ -17,14 +17,17 @@
 #       -t nshmp-haz .
 ####
 
+ARG BUILD_IMAGE=usgs/java:11
+ARG FROM_IMAGE=usgs/java:11
+
 ARG project=nshmp-haz-v2
 ARG builder_workdir=/app/${project}
 ARG libs_dir=${builder_workdir}/build/libs
 
 ####
-# Builder image: Build jar and war file.
+# Builder image: Build jar file.
 ####
-FROM usgs/centos:8 as builder
+FROM ${BUILD_IMAGE} as builder
 
 ARG builder_workdir
 ARG libs_dir
@@ -33,7 +36,6 @@ ARG git_password
 ARG gitlab_token=null
 ARG ci_job_token=nul
 
-ENV LANG "en_US.UTF-8"
 ENV GIT_NSHMP_USERNAME ${git_username}
 ENV GIT_NSHMP_PASSWORD ${git_password}
 ENV GITLAB_TOKEN ${gitlab_token}
@@ -43,15 +45,12 @@ WORKDIR ${builder_workdir}
 
 COPY . .
 
-RUN yum install -y glibc-langpack-en java-11-openjdk-devel which git \
-    && ./gradlew --no-daemon assemble
-
-RUN locale
+RUN ./gradlew assemble
 
 ####
-# Application image: Run jar or war file.
+# Application image: Run jar file.
 ####
-FROM usgs/centos:8
+FROM ${FROM_IMAGE}
 
 LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
@@ -64,7 +63,6 @@ ENV CONFIG_FILE ""
 ENV DEBUG false
 ENV IML ""
 ENV JAVA_XMX "8g"
-ENV LANG "en_US.UTF-8"
 ENV MODEL ""
 ENV MOUNT_MODEL false
 ENV NSHM_VERSION master
@@ -79,8 +77,7 @@ WORKDIR /app
 COPY --from=builder ${libs_dir}/* ./
 COPY scripts scripts
 
-RUN yum update -y \
-    && yum install -y jq git java-11-openjdk-headless
+RUN yum install -y jq
 
 EXPOSE 8080
 ENTRYPOINT [ "bash", "scripts/docker-entrypoint.sh" ]
