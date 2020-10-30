@@ -41,7 +41,9 @@ stages:
       ${CI_COMMIT_REF_SLUG} == "production" || \
       -n "${CI_COMMIT_TAG}" \
     ]]; then
-      CI_COMMIT_REF_SLUG="latest";
+      CI_COMMIT_REF_SLUG="beta";
+    else
+      CI_COMMIT_REF_SLUG="beta--${CI_COMMIT_REF_SLUG}"
     fi
 
 .deploy:
