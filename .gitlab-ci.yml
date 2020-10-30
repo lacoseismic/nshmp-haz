@@ -35,6 +35,7 @@ stages:
       git_password=${GITLAB_API_TOKEN}
 
 .templates:
+  # TODO: Remove tag "beta" when ready
   adjust-ref: &adjust-ref |
     if [[ \
       ${CI_COMMIT_REF_SLUG} == "master" || \
