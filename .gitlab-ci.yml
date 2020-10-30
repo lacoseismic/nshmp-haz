@@ -33,9 +33,9 @@ stages:
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      ci_job_token: ${CI_JOB_TOKEN}
-      git_username: ${GIT_NSHMP_USERNAME}
-      git_password: ${GIT_NSHMP_PASSWORD}
+      ci_job_token=${CI_JOB_TOKEN}
+      git_username=${GIT_NSHMP_USERNAME}
+      git_password=${GIT_NSHMP_PASSWORD}
 
 .templates:
   adjust-ref: &adjust-ref |
@@ -123,6 +123,8 @@ Build Haz Image:
   before_script:
     - apk add git
     - *adjust-ref
+  variables:
+    CI_PROJECT_NAME: nshmp-haz
 
 Build WS Image:
   extends:
