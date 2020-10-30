@@ -31,13 +31,11 @@ repositories {
     url "https://code.usgs.gov/api/v4/groups/160/-/packages/maven"
     name "GitLab"
     if (System.getenv("CI_JOB_TOKEN") != "null") {
-      print "CI_JOB_TOKEN: " + System.getenv("CI_JOB_TOKEN")
       credentials(HttpHeaderCredentials) {
         name = "Job-Token"
         value = System.getenv("CI_JOB_TOKEN")
       }
     } else {
-      print "GITLAB_TOKEN: " + System.getenv("GITLAB_TOKEN")
       credentials(HttpHeaderCredentials) {
         name = "Private-Token"
         value = System.getenv("GITLAB_TOKEN")

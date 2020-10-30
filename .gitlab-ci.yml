@@ -9,7 +9,6 @@ include:
 
 stages:
   - build
-  - publish
   - deploy
 
 ####
@@ -92,8 +91,8 @@ Build Lambda:
   extends:
     - .gradle
   script:
-    - ./gradlew --no-daemon assemble
-    - ./gradlew --no-daemon libs
+    - ./gradlew assemble
+    - ./gradlew libs
   artifacts:
     expire_in: 1 yr
     paths:
@@ -105,7 +104,7 @@ Unit Tests:
     - .gradle
   coverage: '/Total.*?([0-9]{1,3})%/'
   script:
-    - ./gradlew --no-daemon check
+    - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
   artifacts:
     paths:
@@ -140,14 +139,14 @@ Build WS Image:
 Maven:
   extends:
     .gradle
-  stage: publish
+  stage: deploy
   only:
     - tags@ghsc/nshmp/nshmp-ws
   script:
     - ./gradlew publish -P version=${CI_COMMIT_TAG}
 
 Trigger nshmp-deploy:
-  stage: publish
+  stage: deploy
   only:
     - master@ghsc/nshmp/nshmp-haz-v2
     - tags@ghsc/nshmp/nshmp-haz-v2

@@ -37,6 +37,7 @@ ENV CI_JOB_TOKEN ${ci_job_token}
 WORKDIR ${builder_workdir}
 
 COPY . .
+
 RUN ./gradlew assemble
 
 ####
