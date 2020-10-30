@@ -1,6 +1,8 @@
 variables:
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
+  GIT_NSHMP_USERNAME=${GITLAB_USER_EMAIL}
+  GIT_NSHMP_PASSWORD=${GITLAB_API_TOKEN}
 
 include:
   - project: 'ghsc/hazdev/pipeline-build-template'
