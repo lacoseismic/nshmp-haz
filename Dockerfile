@@ -45,6 +45,7 @@ WORKDIR ${builder_workdir}
 
 COPY . .
 
+RUN env
 RUN ./gradlew assemble
 
 ####

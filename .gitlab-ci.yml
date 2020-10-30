@@ -1,6 +1,4 @@
 variables:
-  GIT_NSHMP_PASSWORD: ${GITLAB_API_TOKEN}
-  GIT_NSHMP_USERNAME: ${GITLAB_USER_EMAIL}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
@@ -32,8 +30,8 @@ stages:
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       ci_job_token=${CI_JOB_TOKEN}
-      git_username=${GIT_NSHMP_USERNAME}
-      git_password=${GIT_NSHMP_PASSWORD}
+      git_username=${GITLAB_USER_EMAIL}
+      git_password=${GITLAB_API_TOKEN}
 
 .templates:
   adjust-ref: &adjust-ref |
