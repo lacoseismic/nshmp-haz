@@ -34,7 +34,7 @@ ARG libs_dir
 ARG git_username
 ARG git_password
 ARG gitlab_token=null
-ARG ci_job_token=nul
+ARG ci_job_token=null
 
 ENV GIT_NSHMP_USERNAME ${git_username}
 ENV GIT_NSHMP_PASSWORD ${git_password}
