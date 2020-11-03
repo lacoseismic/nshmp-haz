@@ -30,16 +30,18 @@ repositories {
   maven {
     url "https://code.usgs.gov/api/v4/groups/160/-/packages/maven"
     name "GitLab"
-    if (System.getenv("CI_JOB_TOKEN") != "null") {
+    if (System.getenv("CI_JOB_TOKEN") && System.getenv("CI_JOB_TOKEN") != "null") {
       credentials(HttpHeaderCredentials) {
         name = "Job-Token"
         value = System.getenv("CI_JOB_TOKEN")
       }
-    } else {
+    } else if (System.getenv("GITLAB_TOKEN") && System.getenv("GITLAB_TOKEN") != "null") {
       credentials(HttpHeaderCredentials) {
         name = "Private-Token"
         value = System.getenv("GITLAB_TOKEN")
       }
+    } else {
+      throw new GradleException("CI_JOB_TOKEN or GITLAB_TOKEN environmental variable must be set")
     }
     authentication {
       header(HttpHeaderAuthentication)
