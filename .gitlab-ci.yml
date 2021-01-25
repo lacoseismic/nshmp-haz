@@ -26,6 +26,10 @@ stages:
     - .dind
     - .tags::build
   script:
+    - ls
+    - pwd
+    - ls scripts
+    - ls scripts/gitlab-ci
     - scripts/gitlab-ci/docker-build.sh
   stage: build
   variables:
