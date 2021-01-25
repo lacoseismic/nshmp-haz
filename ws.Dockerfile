@@ -58,7 +58,6 @@ ENV CONTEXT_PATH "/"
 WORKDIR /app
 
 COPY --from=builder ${libs_dir}/* ./
-COPY scripts scripts
 
 VOLUME [ "/models" ]
 
