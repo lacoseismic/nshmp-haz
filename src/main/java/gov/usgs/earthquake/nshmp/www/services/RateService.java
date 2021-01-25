@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import gov.usgs.earthquake.nshmp.Maths;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -17,7 +18,6 @@ import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.mfd.Mfds;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
@@ -350,8 +350,8 @@ public final class RateService {
       timespan = new DoubleParameter(
           "Forecast time span (in years)",
           ParamType.NUMBER,
-          Mfds.TIMESPAN_RANGE.lowerEndpoint(),
-          Mfds.TIMESPAN_RANGE.upperEndpoint());
+          Maths.TIMESPAN_RANGE.lowerEndpoint(),
+          Maths.TIMESPAN_RANGE.upperEndpoint());
     }
   }
 
