@@ -14,8 +14,8 @@ docker build \
     "${BUILD_ARGS}" \
     --pull \
     --tag "${CODE_REGISTRY_IMAGE}/${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}" \
-    --file "${CI_PROJECT_DIR}/${DOCKERFILE}" \
-    "${CI_PROJECT_DIR}/.";
+    --file "${DOCKERFILE}" \
+    .;
 
 # Push image to internal registry
 docker push "${CODE_REGISTRY_IMAGE}/${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}";
