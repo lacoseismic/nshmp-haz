@@ -3,8 +3,6 @@
 # Script to build Docker image and push to internal registry.
 ##
 
-set -x;
-
 BUILD_ARGS="";
 
 for arg in ${DOCKER_BUILD_ARGS}; do
@@ -14,6 +12,7 @@ done
 echo "${BUILD_ARGS}";
 
 # Build Docker image
+# shellcheck disable=SC2086
 docker build \
     ${BUILD_ARGS} \
     --pull \
