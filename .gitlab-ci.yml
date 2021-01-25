@@ -26,8 +26,8 @@ stages:
     - .dind
     - .tags::build
   script:
-    - cp scripts/gitlab-ci/* .
-    - docker-build.sh
+    - apk add bash
+    - scripts/gitlab-ci/docker-build.sh
   stage: build
   variables:
     DOCKER_BUILD_ARGS: |
