@@ -86,7 +86,7 @@ error_exit() {
 }
 
 ####
-# Returns the model path and.
+# Returns the model path.
 #
 # @param $1 nshm {String}
 #     The NSHM to download.
