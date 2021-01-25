@@ -1,6 +1,5 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import java.lang.reflect.Type;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -8,10 +7,6 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Vs30;
@@ -26,7 +21,6 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.Region;
 
 import io.micronaut.http.HttpResponse;
 
@@ -51,7 +45,6 @@ public class SourceServices {
         .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
         .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
         .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
-        .registerTypeAdapter(Region.class, new RegionSerializer())
         .disableHtmlEscaping()
         .serializeNulls()
         .setPrettyPrinting()
@@ -87,7 +80,6 @@ public class SourceServices {
 
   static class Parameters {
     List<SourceModel> models;
-    EnumParameter<Region> region;
     DoubleParameter returnPeriod;
     EnumParameter<Vs30> vs30;
 
@@ -95,11 +87,6 @@ public class SourceServices {
       models = ServletUtil.hazardModels().stream()
           .map(SourceModel::new)
           .collect(Collectors.toList());
-
-      region = new EnumParameter<>(
-          "Region",
-          ParamType.STRING,
-          EnumSet.allOf(Region.class));
 
       returnPeriod = new DoubleParameter(
           "Return period (in years)",
@@ -162,26 +149,4 @@ public class SourceServices {
       return name().toLowerCase();
     }
   }
-
-  // TODO align with enum serializer if possible; consider service attribute
-  // enum
-  // TODO test removal of ui-min/max-lon/lat
-  static final class RegionSerializer implements JsonSerializer<Region> {
-
-    @Override
-    public JsonElement serialize(Region region, Type typeOfSrc, JsonSerializationContext context) {
-      var json = new JsonObject();
-
-      json.addProperty(Attributes.VALUE.toLowerCase(), region.name());
-      json.addProperty(Attributes.DISPLAY.toLowerCase(), region.toString());
-
-      json.addProperty(Attributes.MINLATITUDE.toLowerCase(), region.minlatitude);
-      json.addProperty(Attributes.MAXLATITUDE.toLowerCase(), region.maxlatitude);
-      json.addProperty(Attributes.MINLONGITUDE.toLowerCase(), region.minlongitude);
-      json.addProperty(Attributes.MAXLONGITUDE.toLowerCase(), region.maxlongitude);
-
-      return json;
-    }
-  }
-
 }

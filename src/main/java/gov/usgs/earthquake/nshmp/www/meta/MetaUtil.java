@@ -50,19 +50,6 @@ public final class MetaUtil {
       jObj.addProperty("display", src.toString());
       jObj.addProperty("displayorder", displayOrder);
 
-      if (src instanceof Region) {
-        Region region = (Region) src;
-        jObj.addProperty("minlatitude", region.minlatitude);
-        jObj.addProperty("maxlatitude", region.maxlatitude);
-        jObj.addProperty("minlongitude", region.minlongitude);
-        jObj.addProperty("maxlongitude", region.maxlongitude);
-
-        jObj.addProperty("uiminlatitude", region.uiminlatitude);
-        jObj.addProperty("uimaxlatitude", region.uimaxlatitude);
-        jObj.addProperty("uiminlongitude", region.uiminlongitude);
-        jObj.addProperty("uimaxlongitude", region.uimaxlongitude);
-      }
-
       if (src instanceof Constrained) {
         Constrained cSrc = (Constrained) src;
         jObj.add("supports", context.serialize(cSrc.constraints()));

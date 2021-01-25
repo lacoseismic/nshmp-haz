@@ -39,7 +39,6 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
-import gov.usgs.earthquake.nshmp.www.meta.Region;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
@@ -79,7 +78,6 @@ public class ServletUtil {
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Region.class, new MetaUtil.EnumSerializer<Region>())
         .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
         .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
         .registerTypeAdapter(ValueFormat.class, new MetaUtil.EnumSerializer<ValueFormat>())
