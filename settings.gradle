@@ -4,11 +4,22 @@ plugins {
 
 rootProject.name = "nshmp-haz-v2"
 
+/**
+ * Download default model, nshm-conus-2018.
+ *
+ * To download the model set environmnet variables:
+ *    - GIT_NSHMP_USERNAME="The GitLab user name"
+ *    - GIT_NSHMP_PASSWORD="The GitLab API token"
+ */
 git {
   defaultAuthGroup "nshmp"
+  def user = System.getenv("GIT_NSHMP_USERNAME")
+  def pass = System.getenv("GIT_NSHMP_PASSWORD")
 
-  fetch("https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018.git", {
-    name "nshmp-haz-dep--nshm-conus-2018"
-    tag "0.2.0"
-  })
+  if (user && pass) {
+    fetch("https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018.git", {
+      name "nshmp-haz-dep--nshm-conus-2018"
+      tag "0.2.0"
+    })
+  }
 }

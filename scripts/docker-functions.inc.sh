@@ -86,7 +86,7 @@ error_exit() {
 }
 
 ####
-# Returns the model path for deagg-epsilon and hazard-2018.
+# Returns the model path and.
 #
 # @param $1 nshm {String}
 #     The NSHM to download.
@@ -226,58 +226,6 @@ get_model_path() {
   exit_status=${?};
 
   echo "${nshmp_model_path}";
-  return ${exit_status};
-}
-
-####
-# Get NSHMs for web services.
-#
-# @param $1 nshm {String}
-#     The NSHM to download.
-# @param $1 nshm_version {String}
-#     The version to download from GitHub.
-#
-# @return String
-#     The path to the model directory
-# @status Integer
-#     The result for get_model
-####
-get_models() {
-  local nshm=${1};
-  local nshm_version=${2};
-  local model_base_path="models";
-  local nshm_name;
-  local exit_status;
-
-  if [ ! -d "${model_base_path}" ]; then
-    mkdir ${model_base_path};
-  fi
-
-  cd ${model_base_path} || error_exit "Could not change directory [${model_base_path}]" 1;
-  nshm_name=$(get_model "${nshm}" "${nshm_version}");
-  exit_status=${?};
-
-  if [ ${exit_status} -eq 0 ]; then
-    local model;
-    local year;
-    model="$(echo "${nshm}" | cut -d _ -f1 | awk \{'print tolower($0)'\})";
-    year="$(echo "${nshm}" | cut -d _ -f2 | awk \{'print tolower($0)'\})";
-
-    if [ "${model}" == 'conus' ]; then
-      [[ -d wus ]] || mkdir wus;
-      [[ -d ceus ]]|| mkdir ceus;
-      mv "${nshm_name}/${CEUS}" "ceus/${year}";
-      mv "${nshm_name}/${WUS}" "wus/${year}";
-      rm -r "${nshm_name}";
-    else
-      mkdir "${model}";
-      mv "${nshm_name}" "${model}/${year}";
-    fi
-  fi
-
-  cd ../;
-
-  echo ${model_base_path};
   return ${exit_status};
 }
 
