@@ -9,6 +9,8 @@ for arg in ${DOCKER_BUILD_ARGS}; do
   BUILD_ARGS="${BUILD_ARGS} --build-arg ${arg}";
 done
 
+echo "${BUILD_ARGS}";
+
 # Build Docker image
 docker build \
     "${BUILD_ARGS}" \
