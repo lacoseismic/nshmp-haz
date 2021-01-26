@@ -1,24 +1,19 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import java.util.EnumSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import gov.usgs.earthquake.nshmp.calc.CalcConfig;
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.Gmm;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
+import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
-import gov.usgs.earthquake.nshmp.internal.www.meta.EnumParameter;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 
@@ -30,7 +25,6 @@ import io.micronaut.http.HttpResponse;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("unused")
 public class SourceServices {
 
   private static final String NAME = "Source Model";
@@ -44,7 +38,6 @@ public class SourceServices {
     GSON = new GsonBuilder()
         .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
         .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
-        .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
         .disableHtmlEscaping()
         .serializeNulls()
         .setPrettyPrinting()
@@ -69,54 +62,55 @@ public class SourceServices {
   public static class ResponseData {
     final String description;
     final Object server;
-    final Parameters parameters;
+    // final Parameters parameters;
 
     public ResponseData() {
       this.description = "Installed source model listing";
       this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
-      this.parameters = new Parameters();
+      // this.parameters = new Parameters();
     }
   }
 
-  static class Parameters {
-    List<SourceModel> models;
-    DoubleParameter returnPeriod;
-    EnumParameter<Vs30> vs30;
-
-    Parameters() {
-      models = ServletUtil.hazardModels().stream()
-          .map(SourceModel::new)
-          .collect(Collectors.toList());
-
-      returnPeriod = new DoubleParameter(
-          "Return period (in years)",
-          ParamType.NUMBER,
-          100.0,
-          1e6);
-
-      vs30 = new EnumParameter<Vs30>(
-          "Vs30",
-          ParamType.STRING,
-          EnumSet.allOf(Vs30.class));
-    }
-  }
+  // static class Parameters {
+  // List<SourceModel> models;
+  // DoubleParameter returnPeriod;
+  // DoubleParameter vs30;
+  //
+  // Parameters() {
+  // models = ServletUtil.hazardModels().stream()
+  // .map(SourceModel::new)
+  // .collect(Collectors.toList());
+  //
+  // returnPeriod = new DoubleParameter(
+  // "Return period",
+  // "years",
+  // 100.0,
+  // 1e6);
+  //
+  // vs30 = new DoubleParameter(
+  // "Vs30",
+  // "m/s",
+  // 150,
+  // 1500);
+  // }
+  // }
 
   public static class SourceModel {
-    String display;
+    String name;
     Set<Gmm> gmms;
-    CalcConfig config;
+    Map<NehrpSiteClass, Double> siteClasses;
 
-    private SourceModel(HazardModel model) {
-      display = model.name();
+    SourceModel(HazardModel model) {
+      name = model.name();
       gmms = model.gmms();
-      config = model.config();
+      siteClasses = model.siteClasses();
     }
 
-    public static List<SourceModel> getList() {
-      return ServletUtil.hazardModels().stream()
-          .map(SourceModel::new)
-          .collect(Collectors.toList());
-    }
+    // public static List<SourceModel> getList() {
+    // return ServletUtil.hazardModels().stream()
+    // .map(SourceModel::new)
+    // .collect(Collectors.toList());
+    // }
   }
 
   enum Attributes {

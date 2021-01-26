@@ -16,7 +16,6 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
@@ -124,10 +123,11 @@ public final class RateService {
      * probability service has been called.
      */
 
-    for (var model : ServletUtil.hazardModels()) {
-      var rate = process(service, model, site, data.distance, data.timespan);
-      futureRates.add(rate);
-    }
+    // for (var model : ServletUtil.hazardModels()) {
+    var model = ServletUtil.model();
+    var rate = process(service, model, site, data.distance, data.timespan);
+    futureRates.add(rate);
+    // }
 
     var rates = futureRates.stream()
         .map((future) -> {
@@ -235,7 +235,6 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseMetadata {
     final double latitude;
     final double longitude;
@@ -255,7 +254,6 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseData {
     final Object server;
     final ResponseMetadata metadata;
@@ -300,7 +298,6 @@ public final class RateService {
    * TODO would rather use this a general container for mfds and hazard curves.
    * See HazardService.Curve
    */
-  @SuppressWarnings("unused")
   private static class Sequence {
     final String component;
     final List<Double> xvalues;
@@ -313,7 +310,6 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static class Usage {
     final String description;
     final List<String> syntax;
@@ -328,28 +324,26 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static class RateParameters extends DefaultParameters {
     final DoubleParameter distance;
 
     RateParameters() {
       super();
       distance = new DoubleParameter(
-          "Cutoff distance (in km)",
-          ParamType.NUMBER,
+          "Cutoff distance",
+          "km",
           0.01,
           1000.0);
     }
   }
 
-  @SuppressWarnings("unused")
   private static class ProbabilityParameters extends RateParameters {
     final DoubleParameter timespan;
 
     ProbabilityParameters() {
       timespan = new DoubleParameter(
-          "Forecast time span (in years)",
-          ParamType.NUMBER,
+          "Forecast time span",
+          "years",
           Maths.TIMESPAN_RANGE.lowerEndpoint(),
           Maths.TIMESPAN_RANGE.upperEndpoint());
     }

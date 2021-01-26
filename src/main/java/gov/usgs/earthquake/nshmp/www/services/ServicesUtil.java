@@ -1,10 +1,10 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.GsonBuilder;
 
@@ -38,7 +38,8 @@ class ServicesUtil {
   static Hazard calcHazard(
       Function<HazardModel, CalcConfig> configFunction,
       Function<CalcConfig, Site> siteFunction) throws InterruptedException, ExecutionException {
-    var futuresList = ServletUtil.hazardModels().stream()
+    // TODO reduce for singleton model
+    var futuresList = Stream.of(ServletUtil.model())
         .map(model -> {
           var config = configFunction.apply(model);
           var site = siteFunction.apply(config);
@@ -80,12 +81,12 @@ class ServicesUtil {
   }
 
   static class ServiceRequestData {
-    public final List<SourceModel> models;
+    public final SourceModel model;
     public final double longitude;
     public final double latitude;
 
     public ServiceRequestData(ServiceQueryData query) {
-      models = SourceModel.getList();
+      model = new SourceModel(ServletUtil.model());
       longitude = query.longitude;
       latitude = query.latitude;
     }

@@ -17,7 +17,6 @@ import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.Maths;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput.Field;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
@@ -41,14 +40,11 @@ public final class MetaUtil {
     @Override
     public JsonElement serialize(E src, Type type, JsonSerializationContext context) {
 
-      String value = (src instanceof Vs30) ? src.name().substring(3) : src.name();
-      int displayOrder = src.ordinal();
-
       JsonObject jObj = new JsonObject();
       jObj.addProperty("id", src.ordinal());
-      jObj.addProperty("value", value);
+      jObj.addProperty("value", src.name());
       jObj.addProperty("display", src.toString());
-      jObj.addProperty("displayorder", displayOrder);
+      jObj.addProperty("displayorder", src.ordinal());
 
       if (src instanceof Constrained) {
         Constrained cSrc = (Constrained) src;

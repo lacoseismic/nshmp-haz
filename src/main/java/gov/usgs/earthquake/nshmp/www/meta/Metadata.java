@@ -4,7 +4,6 @@ import com.google.common.base.Throwables;
 import com.google.gson.annotations.SerializedName;
 
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
@@ -95,14 +94,14 @@ public final class Metadata {
       // EnumSet.allOf(Region.class));
 
       longitude = new DoubleParameter(
-          "Longitude (in decimal degrees)",
-          ParamType.NUMBER,
+          "Longitude",
+          "°",
           Coordinates.LON_RANGE.lowerEndpoint(),
           Coordinates.LON_RANGE.upperEndpoint());
 
       latitude = new DoubleParameter(
-          "Latitude (in decimal degrees)",
-          ParamType.NUMBER,
+          "Latitude",
+          "°",
           Coordinates.LAT_RANGE.lowerEndpoint(),
           Coordinates.LAT_RANGE.upperEndpoint());
     }

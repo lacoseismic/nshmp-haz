@@ -1,29 +1,16 @@
 package gov.usgs.earthquake.nshmp.www.meta;
 
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
-
-@SuppressWarnings({ "javadoc", "unused" })
 public final class DoubleParameter {
 
-  private final String label;
-  private final ParamType type;
-  private final Values values;
+  private final String name;
+  private final String units;
+  private final double min;
+  private final double max;
 
-  public DoubleParameter(String label, ParamType type, double min, double max) {
-    this.label = label;
-    this.type = type;
-    this.values = new Values(min, max);
+  public DoubleParameter(String name, String units, double min, double max) {
+    this.name = name;
+    this.units = units;
+    this.min = min;
+    this.max = max;
   }
-
-  private final static class Values {
-
-    final double minimum;
-    final double maximum;
-
-    Values(double min, double max) {
-      this.minimum = min;
-      this.maximum = max;
-    }
-  }
-
 }

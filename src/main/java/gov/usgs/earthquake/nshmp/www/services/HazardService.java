@@ -13,9 +13,9 @@ import java.util.function.Function;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
 import gov.usgs.earthquake.nshmp.data.XySequence;
+import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
@@ -25,6 +25,7 @@ import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.HazardController;
+import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
@@ -59,7 +60,7 @@ public final class HazardService {
    */
   public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
     try {
-      var usage = new SourceServices.ResponseData();
+      var usage = new RequestMetadata(ServletUtil.model());// SourceServices.ResponseData();
       var response = new Response<>(Status.USAGE, NAME, urlHelper.url, usage, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
@@ -84,7 +85,7 @@ public final class HazardService {
       }
 
       query.checkValues();
-      var data = new RequestData(query, Vs30.fromValue(query.vs30));
+      var data = new RequestData(query, query.vs30);
       var response = process(data, timer, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
@@ -129,7 +130,7 @@ public final class HazardService {
       return Site.builder()
           .basinDataProvider(config.siteData.basinDataProvider)
           .location(Location.create(data.longitude, data.latitude))
-          .vs30(data.vs30.value())
+          .vs30(data.vs30)
           .build();
     }
   }
@@ -154,27 +155,57 @@ public final class HazardService {
     }
   }
 
-  static class RequestData extends ServiceRequestData {
-    final Vs30 vs30;
+  /* Service request and model metadata */
+  static class RequestMetadata {
 
-    RequestData(Query query, Vs30 vs30) {
+    final SourceModel model;
+    final DoubleParameter longitude;
+    final DoubleParameter latitude;
+    final DoubleParameter vs30;
+
+    RequestMetadata(HazardModel model) {
+      this.model = new SourceModel(model);
+      // TODO need min max from model
+      longitude = new DoubleParameter(
+          "Longitude",
+          "°",
+          Coordinates.LON_RANGE.lowerEndpoint(),
+          Coordinates.LON_RANGE.upperEndpoint());
+
+      latitude = new DoubleParameter(
+          "Latitude",
+          "°",
+          Coordinates.LAT_RANGE.lowerEndpoint(),
+          Coordinates.LAT_RANGE.upperEndpoint());
+
+      vs30 = new DoubleParameter(
+          "Latitude",
+          "m/s",
+          150,
+          1500);
+    }
+  }
+
+  static class RequestData extends ServiceRequestData {
+    final double vs30; // TODO bad bad bad replacement for Vs30 enum
+
+    RequestData(Query query, double vs30) {
       super(query);
       this.vs30 = vs30;
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseMetadata {
-    final List<SourceModel> models;
+    final SourceModel models;
     final double latitude;
     final double longitude;
     final Imt imt;
-    final Vs30 vs30;
+    final double vs30;
     final String xlabel = "Ground Motion (g)";
     final String ylabel = "Annual Frequency of Exceedence";
 
     ResponseMetadata(RequestData request, Imt imt) {
-      models = SourceModel.getList();
+      models = new SourceModel(ServletUtil.model());
       latitude = request.latitude;
       longitude = request.longitude;
       this.imt = imt;
@@ -182,7 +213,6 @@ public final class HazardService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseData {
     final Object server;
     final List<HazardResponse> hazards;
@@ -193,7 +223,6 @@ public final class HazardService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class HazardResponse {
     final ResponseMetadata metadata;
     final List<Curve> data;
@@ -204,7 +233,6 @@ public final class HazardService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class Curve {
     final String component;
     final XySequence values;

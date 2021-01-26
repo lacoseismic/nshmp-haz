@@ -46,21 +46,23 @@ public class HazardCalc {
    * At a minimum, the path to a model directory and the site(s) at which to
    * perform calculations must be specified. Under the 2-argument scenario,
    * model initialization and calculation configuration settings are drawn from
-   * the config file that <i>must</i> reside at the root of the model directory.
-   * Sites may be defined as a string, a CSV file, or a GeoJSON file.
+   * the deafult configuration accompanying and located at the root of the model
+   * directory. Sites may be defined as a string, a CSV file, or a GeoJSON file.
    *
    * <p>To override any default or calculation configuration settings included
    * with the model, supply the path to another configuration file as a third
    * argument.
    *
-   * <p>Please refer to the nshmp-haz <a
-   * href="https://github.com/usgs/nshmp-haz/wiki" target="_top">wiki</a> for
-   * comprehensive descriptions of source models, configuration files, site
-   * files, and hazard calculations.
+   * <p>Refer to the nshmp-haz <a
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/wikis"
+   * target="_top">wiki</a> for comprehensive descriptions of source models,
+   * configuration files, site files, and hazard calculations.
    *
-   * @see <a href="https://github.com/usgs/nshmp-haz/wiki/Building-&-Running"
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/wikis/Building-&-Running"
    *      target="_top"> nshmp-haz wiki</a>
-   * @see <a href="https://github.com/usgs/nshmp-haz/tree/master/etc/examples"
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples"
    *      target="_top"> example calculations</a>
    */
   public static void main(String[] args) {
