@@ -6,6 +6,11 @@
 #       -f ws.Dockerfile
 #       --build-arg gitlab_token=<git-api-token>
 #       -t nshmp-haz-ws .
+#
+# Run locally:
+#   docker run -p 8080:8080
+#       -v "path/to/models:/models"
+#       nshmp-haz-ws
 ####
 
 ARG BUILD_IMAGE=usgs/java:11
@@ -17,20 +22,16 @@ ARG libs_dir=${builder_workdir}/build/libs
 ARG jar_file=${libs_dir}/${project}.jar
 
 ####
-# Builder image: Build war file.
+# Builder image: Build jar file.
 ####
 FROM ${BUILD_IMAGE} as builder
 
 ARG builder_workdir
-ARG libs_dir
-ARG jar_file
-ARG git_username
-ARG git_password
+
+# TODO
+# Remove once nshmp-lib is public
 ARG gitlab_token=null
 ARG ci_job_token=null
-
-ENV GIT_NSHMP_USERNAME ${git_username}
-ENV GIT_NSHMP_PASSWORD ${git_password}
 ENV GITLAB_TOKEN ${gitlab_token}
 ENV CI_JOB_TOKEN ${ci_job_token}
 
@@ -41,7 +42,7 @@ COPY . .
 RUN ./gradlew assemble
 
 ####
-# Application image: Run war file.
+# Application image: Run jar file.
 ####
 FROM ${FROM_IMAGE}
 
@@ -51,14 +52,19 @@ ARG libs_dir
 ARG builder_workdir
 ARG project
 
-ENV DEBUG false
 ENV PROJECT ${project}
 ENV CONTEXT_PATH "/"
+ENV BASIN_SERVICE_URL "https://staging-earthquake.usgs.gov/nshmp/ws/data/basin"
 
 WORKDIR /app
 
 COPY --from=builder ${libs_dir}/* ./
-COPY scripts scripts
+
+VOLUME [ "/models" ]
 
 EXPOSE 8080
-ENTRYPOINT [ "bash", "scripts/docker-entrypoint.ws.sh" ]
+
+ENTRYPOINT java -jar "${PROJECT}.jar" \
+    "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
+    --basin-service-url="${BASIN_SERVICE_URL}" \
+    --models="/models";

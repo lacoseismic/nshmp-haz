@@ -11,7 +11,6 @@ import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService;
 import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService.Query;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
 
-import io.micronaut.context.event.StartupEvent;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -19,7 +18,6 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.runtime.event.annotation.EventListener;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,11 +29,6 @@ public class DeaggEpsilonController {
 
   @Inject
   private NshmpMicronautServlet servlet;
-
-  @EventListener
-  public void init(StartupEvent event) {
-    DeaggEpsilonService.init();
-  }
 
   @Get(uri = "/usage", produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {

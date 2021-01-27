@@ -1,19 +1,13 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Deaggregation;
@@ -30,6 +24,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
+import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
@@ -43,26 +38,9 @@ public final class DeaggEpsilonService {
   /* Developer notes: See HazardService. */
 
   private static final String NAME = "Epsilon Deaggregation";
+
+  @Value("${nshmp-haz.basin-service-url}")
   private static URL basinUrl;
-
-  public static void init() {
-    try (InputStream config = Resources.getResource("config.properties").openStream()) {
-      checkNotNull(config, "Missing config.properties");
-
-      Properties props = new Properties();
-      props.load(config);
-      if (props.containsKey("basin_host")) {
-        /*
-         * TODO Site builder tests if service is working, which may be
-         * inefficient for single call services.
-         */
-        var url = new URL(props.getProperty("basin_host") + "/nshmp/ws/data/basin");
-        basinUrl = url;
-      }
-    } catch (IOException | NullPointerException e) {
-      throw new RuntimeException(e);
-    }
-  }
 
   /**
    * Handler for {@link DeaggEpsilonController#doGetDeaggEpsilon}. Returns the
