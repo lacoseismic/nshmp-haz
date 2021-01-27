@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import gov.usgs.earthquake.nshmp.Maths;
@@ -25,7 +26,6 @@ import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 
 import io.micronaut.http.HttpResponse;
 
@@ -87,7 +87,7 @@ public final class RateService {
 
       query.checkValues();
       var requestData = new RequestData(query);
-      var response = processRequest(service, requestData, urlHelper, timer);
+      var response = processRequest(service, requestData, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
@@ -104,8 +104,8 @@ public final class RateService {
   static Response<RequestData, ResponseData> processRequest(
       Service service,
       RequestData data,
-      UrlHelper urlHelper,
-      Timer timer) throws InterruptedException, ExecutionException {
+      UrlHelper urlHelper) throws InterruptedException, ExecutionException {
+    var timer = Stopwatch.createStarted();
     var rates = calc(service, data);
     var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
     return new Response<>(Status.SUCCESS, service.name, data, responseData, urlHelper);
@@ -259,7 +259,7 @@ public final class RateService {
     final ResponseMetadata metadata;
     final List<Sequence> data;
 
-    ResponseData(ResponseMetadata metadata, EqRate rates, Timer timer) {
+    ResponseData(ResponseMetadata metadata, EqRate rates, Stopwatch timer) {
       server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
@@ -319,7 +319,7 @@ public final class RateService {
     private Usage(Service service, DefaultParameters parameters) {
       description = service.description;
       this.syntax = service.syntax;
-      server = Metadata.serverData(1, ServletUtil.timer());
+      server = Metadata.serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
   }

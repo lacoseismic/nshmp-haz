@@ -1,5 +1,6 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 
@@ -7,8 +8,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+
+import com.google.common.base.Stopwatch;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
@@ -27,10 +31,8 @@ import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.HazardController;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
@@ -76,17 +78,17 @@ public final class HazardService {
    * @param query The query
    * @param urlHelper The URL helper
    */
-  public static HttpResponse<String> handleDoGetHazard(Query query, UrlHelper urlHelper) {
-    try {
-      var timer = ServletUtil.timer();
+  public static HttpResponse<String> handleDoGetHazard(
+      QueryParameters query,
+      UrlHelper urlHelper) {
 
-      if (query.isNull()) {
+    try {
+      if (query.isEmpty()) {
         return handleDoGetUsage(urlHelper);
       }
-
-      query.checkValues();
-      var data = new RequestData(query, query.vs30);
-      var response = process(data, timer, urlHelper);
+      query.checkParameters();
+      var data = new RequestData(query);
+      var response = process(data, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
@@ -96,16 +98,18 @@ public final class HazardService {
 
   static Response<RequestData, ResponseData> process(
       RequestData data,
-      Timer timer,
-      UrlHelper urlHelper) throws InterruptedException, ExecutionException {
+      UrlHelper urlHelper)
+      throws InterruptedException, ExecutionException {
+
     var configFunction = new ConfigFunction();
     var siteFunction = new SiteFunction(data);
+    var stopwatch = Stopwatch.createStarted();
     var hazard = ServicesUtil.calcHazard(configFunction, siteFunction);
 
     return new ResultBuilder()
         .hazard(hazard)
         .requestData(data)
-        .timer(timer)
+        .timer(stopwatch)
         .urlHelper(urlHelper)
         .build();
   }
@@ -135,24 +139,36 @@ public final class HazardService {
     }
   }
 
-  public static class Query extends ServiceQueryData {
-    Integer vs30;
+  public static class QueryParameters {
 
-    public Query(Double longitude, Double latitude, Integer vs30) {
-      super(longitude, latitude);
+    Optional<Double> longitude;
+    Optional<Double> latitude;
+    Optional<Integer> vs30;
+
+    public QueryParameters(
+        Optional<Double> longitude,
+        Optional<Double> latitude,
+        Optional<Integer> vs30) {
+
+      this.longitude = longitude;
+      this.latitude = latitude;
       this.vs30 = vs30;
     }
 
-    @Override
-    public boolean isNull() {
-      return super.isNull() && vs30 == null;
+    public boolean isEmpty() {
+      return longitude.isEmpty() && latitude.isEmpty() && vs30.isEmpty();
     }
 
-    @Override
-    public void checkValues() {
-      super.checkValues();
-      WsUtils.checkValue(Key.VS30, vs30);
+    public void checkParameters() {
+      checkParameter(longitude, "longitude");
+      checkParameter(latitude, "latitude");
+      checkParameter(vs30, "vs30");
     }
+  }
+
+  private static void checkParameter(Object param, String id) {
+    checkNotNull(param, "Missing parameter: %s", id);
+    // TODO check range here
   }
 
   /* Service request and model metadata */
@@ -186,30 +202,53 @@ public final class HazardService {
     }
   }
 
-  static class RequestData extends ServiceRequestData {
-    final double vs30; // TODO bad bad bad replacement for Vs30 enum
+  static class RequestData {
 
-    RequestData(Query query, double vs30) {
-      super(query);
-      this.vs30 = vs30;
+    final double longitude;
+    final double latitude;
+    final double vs30;
+
+    RequestData(QueryParameters query) {
+      this.longitude = query.longitude.orElseThrow();
+      this.latitude = query.latitude.orElseThrow();
+      this.vs30 = query.vs30.orElseThrow();
     }
   }
 
   private static final class ResponseMetadata {
-    final SourceModel models;
-    final double latitude;
-    final double longitude;
-    final Imt imt;
-    final double vs30;
+    // final SourceModel model;
+    // final double latitude;
+    // final double longitude;
+    // final double vs30;
+    final String imt;
     final String xlabel = "Ground Motion (g)";
     final String ylabel = "Annual Frequency of Exceedence";
 
-    ResponseMetadata(RequestData request, Imt imt) {
-      models = new SourceModel(ServletUtil.model());
-      latitude = request.latitude;
-      longitude = request.longitude;
-      this.imt = imt;
-      vs30 = request.vs30;
+    ResponseMetadata(Imt imt) {
+      // model = new SourceModel(ServletUtil.model());
+      // latitude = data.latitude;
+      // longitude = data.longitude;
+      // vs30 = data.vs30;
+      this.imt = imtShortLabel(imt);
+    }
+  }
+
+  private static String imtShortLabel(Imt imt) {
+    if (imt.equals(Imt.PGA) || imt.equals(Imt.PGV)) {
+      return imt.name();
+    } else if (imt.isSA()) {
+      return imt.period() + " s";
+    }
+    return imt.toString();
+  }
+
+  @Deprecated
+  static class RequestDataOld extends ServiceRequestData {
+    final double vs30;
+
+    RequestDataOld(Query query, double vs30) {
+      super(query);
+      this.vs30 = vs30;
     }
   }
 
@@ -246,14 +285,16 @@ public final class HazardService {
   private static final String TOTAL_KEY = "Total";
 
   private static final class ResultBuilder {
+
     UrlHelper urlHelper;
-    Timer timer;
+    Stopwatch timer;
     RequestData request;
 
     Map<Imt, Map<SourceType, MutableXySequence>> componentMaps;
     Map<Imt, MutableXySequence> totalMap;
 
     ResultBuilder hazard(Hazard hazardResult) {
+      // TODO necessary??
       checkState(totalMap == null, "Hazard has already been added to this builder");
 
       componentMaps = new EnumMap<>(Imt.class);
@@ -262,10 +303,11 @@ public final class HazardService {
       var typeTotalMaps = curvesBySource(hazardResult);
 
       for (var imt : hazardResult.curves().keySet()) {
-        // total curve
+
+        /* Total curve for IMT. */
         XySequence.addToMap(imt, totalMap, hazardResult.curves().get(imt));
 
-        // component curves
+        /* Source component curves for IMT. */
         var typeTotalMap = typeTotalMaps.get(imt);
         var componentMap = componentMaps.get(imt);
 
@@ -287,7 +329,7 @@ public final class HazardService {
       return this;
     }
 
-    ResultBuilder timer(Timer timer) {
+    ResultBuilder timer(Stopwatch timer) {
       this.timer = timer;
       return this;
     }
@@ -301,7 +343,7 @@ public final class HazardService {
       var hazards = new ArrayList<HazardResponse>();
 
       for (Imt imt : totalMap.keySet()) {
-        var responseData = new ResponseMetadata(request, imt);
+        var responseData = new ResponseMetadata(imt);
         var curves = new ArrayList<Curve>();
 
         // total curve
@@ -322,4 +364,26 @@ public final class HazardService {
       return new Response<>(Status.SUCCESS, NAME, request, response, urlHelper);
     }
   }
+
+  @Deprecated
+  public static class Query extends ServiceQueryData {
+    Integer vs30;
+
+    public Query(Double longitude, Double latitude, Integer vs30) {
+      super(longitude, latitude);
+      this.vs30 = vs30;
+    }
+
+    @Override
+    public boolean isNull() {
+      return super.isNull() && vs30 == null;
+    }
+
+    @Override
+    public void checkValues() {
+      super.checkValues();
+      WsUtils.checkValue(ServicesUtil.Key.VS30, vs30);
+    }
+  }
+
 }

@@ -43,7 +43,6 @@ import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
  * AWS Lambda function to list all hazard results in the nshmp-hazout S3 bucket
  * that contain a map.csv file.
  */
-@SuppressWarnings("unused")
 public class HazardResultsMetadataLambda implements RequestStreamHandler {
 
   private static final AmazonS3 S3 = AmazonS3ClientBuilder.defaultClient();

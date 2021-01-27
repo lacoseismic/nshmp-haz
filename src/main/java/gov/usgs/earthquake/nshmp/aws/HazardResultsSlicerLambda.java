@@ -39,7 +39,6 @@ import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
  *
  * @see HazardResultSliceLambda
  */
-@SuppressWarnings("unused")
 public class HazardResultsSlicerLambda implements RequestStreamHandler {
 
   private static final AmazonS3 S3 = AmazonS3ClientBuilder.defaultClient();

@@ -1,22 +1,19 @@
 package gov.usgs.earthquake.nshmp.www.meta;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
-import com.google.gson.annotations.SerializedName;
 
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 
 /**
  * Service metadata, parameterization, and constraint strings, in JSON format.
  */
-@SuppressWarnings("javadoc")
 public final class Metadata {
 
   static final String NSHMP_HAZ_URL = "https://code.usgs.gov/ghsc/nshmp/nshmp-haz";
 
-  @SuppressWarnings("unused")
   private static class Default {
 
     final String status;
@@ -32,48 +29,43 @@ public final class Metadata {
       this.status = Status.USAGE.toString();
       this.description = description;
       this.syntax = syntax;
-      this.server = serverData(1, new Timer());
+      this.server = serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
   }
 
-  public static Object serverData(int threads, Timer timer) {
+  public static Object serverData(int threads, Stopwatch timer) {
     return new Server(threads, timer);
   }
 
-  @SuppressWarnings("unused")
   private static class Server {
 
     final int threads;
-    final String servlet;
-    final String calc;
+    final String timer;
+    final String version;
 
-    @SerializedName("nshmp-haz")
-    final Component nshmpHaz = NSHMP_HAZ_COMPONENT;
-
-    Server(int threads, Timer timer) {
+    Server(int threads, Stopwatch timer) {
       this.threads = threads;
-      this.servlet = timer.servletTime();
-      this.calc = timer.calcTime();
+      this.timer = timer.toString();
+      this.version = "TODO where to get version?";
     }
 
-    static Component NSHMP_HAZ_COMPONENT = new Component(
-        NSHMP_HAZ_URL,
-        Versions.NSHMP_HAZ_VERSION);
-
-    static final class Component {
-
-      final String url;
-      final String version;
-
-      Component(String url, String version) {
-        this.url = url;
-        this.version = version;
-      }
-    }
+    // static Component NSHMP_HAZ_COMPONENT = new Component(
+    // NSHMP_HAZ_URL,
+    // Versions.NSHMP_HAZ_VERSION);
+    //
+    // static final class Component {
+    //
+    // final String url;
+    // final String version;
+    //
+    // Component(String url, String version) {
+    // this.url = url;
+    // this.version = version;
+    // }
+    // }
   }
 
-  @SuppressWarnings("unused")
   public static class DefaultParameters {
 
     // final EnumParameter<Edition> edition;
@@ -132,7 +124,6 @@ public final class Metadata {
     return ServletUtil.GSON.toJson(error);
   }
 
-  @SuppressWarnings("unused")
   private static class Error {
 
     final String status = Status.ERROR.toString();

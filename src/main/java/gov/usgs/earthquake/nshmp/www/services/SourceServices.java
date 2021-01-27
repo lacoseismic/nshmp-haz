@@ -3,6 +3,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -66,7 +67,7 @@ public class SourceServices {
 
     public ResponseData() {
       this.description = "Installed source model listing";
-      this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, ServletUtil.timer());
+      this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, Stopwatch.createStarted());
       // this.parameters = new Parameters();
     }
   }

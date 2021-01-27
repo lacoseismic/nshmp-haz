@@ -17,7 +17,6 @@ import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpResponse;
 
@@ -59,7 +58,9 @@ class ServicesUtil {
     return Hazard.merge(hazards);
   }
 
+  @Deprecated
   static class ServiceQueryData implements ServiceQuery {
+
     public final Double longitude;
     public final Double latitude;
 
@@ -80,13 +81,13 @@ class ServicesUtil {
     }
   }
 
+  @Deprecated
   static class ServiceRequestData {
-    public final SourceModel model;
+
     public final double longitude;
     public final double latitude;
 
     public ServiceRequestData(ServiceQueryData query) {
-      model = new SourceModel(ServletUtil.model());
       longitude = query.longitude;
       latitude = query.latitude;
     }
@@ -118,6 +119,7 @@ class ServicesUtil {
     }
   }
 
+  @Deprecated
   private static interface ServiceQuery {
     boolean isNull();
 

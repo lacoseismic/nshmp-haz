@@ -162,6 +162,7 @@ public class ServletUtil {
    * Simple timer object. The servlet timer just runs. The calculation timer can
    * be started later.
    */
+  @Deprecated
   public static final class Timer {
     Stopwatch servlet = Stopwatch.createStarted();
     Stopwatch calc = Stopwatch.createUnstarted();

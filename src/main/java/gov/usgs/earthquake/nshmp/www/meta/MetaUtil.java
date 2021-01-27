@@ -21,7 +21,6 @@ import gov.usgs.earthquake.nshmp.gmm.GmmInput;
 import gov.usgs.earthquake.nshmp.gmm.GmmInput.Field;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 
-@SuppressWarnings("javadoc")
 public final class MetaUtil {
 
   public static <E extends Enum<E>> List<String> enumsToNameList(
@@ -46,10 +45,10 @@ public final class MetaUtil {
       jObj.addProperty("display", src.toString());
       jObj.addProperty("displayorder", src.ordinal());
 
-      if (src instanceof Constrained) {
-        Constrained cSrc = (Constrained) src;
-        jObj.add("supports", context.serialize(cSrc.constraints()));
-      }
+      // if (src instanceof Constrained) {
+      // Constrained cSrc = (Constrained) src;
+      // jObj.add("supports", context.serialize(cSrc.constraints()));
+      // }
 
       return jObj;
     }

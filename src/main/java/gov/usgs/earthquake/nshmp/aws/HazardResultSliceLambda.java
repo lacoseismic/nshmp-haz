@@ -46,7 +46,6 @@ import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
  *
  * The results are written to S3 as map.csv bucket.
  */
-@SuppressWarnings("unused")
 public class HazardResultSliceLambda implements RequestStreamHandler {
 
   private static final AmazonS3 S3 = AmazonS3ClientBuilder.defaultClient();

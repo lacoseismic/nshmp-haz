@@ -1,11 +1,13 @@
 package gov.usgs.earthquake.nshmp.www;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
-import gov.usgs.earthquake.nshmp.www.services.HazardService.Query;
+import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -69,21 +71,24 @@ public class HazardController {
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200")
-  @Get(uri = "{?longitude,latitude,vs30}")
+  @Get // (uri = "{?longitude,latitude,vs30}")
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> request,
       @Schema(
           required = true,
           minimum = "-360",
-          maximum = "360") @QueryValue @Nullable Double longitude,
+          maximum = "360") @QueryValue @Nullable Optional<Double> longitude,
       @Schema(
           required = true,
           minimum = "-90",
-          maximum = "90") @QueryValue @Nullable Double latitude,
-      @Schema(required = true) @QueryValue @Nullable Integer vs30) {
-    var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, vs30);
-    return HazardService.handleDoGetHazard(query, urlHelper);
+          maximum = "90") @QueryValue @Nullable Optional<Double> latitude,
+      @Schema(
+          required = true) @QueryValue @Nullable Optional<Integer> vs30) {
+
+    var query = new QueryParameters(longitude, latitude, vs30);
+    return HazardService.handleDoGetHazard(
+        query,
+        servlet.urlHelper(request));
   }
 
   /**
@@ -107,15 +112,17 @@ public class HazardController {
       @Schema(
           required = true,
           minimum = "-360",
-          maximum = "360") @PathVariable @Nullable Double longitude,
+          maximum = "360") @PathVariable @Nullable Optional<Double> longitude,
       @Schema(
           required = true,
           minimum = "-90",
-          maximum = "90") @PathVariable @Nullable Double latitude,
-      @Schema(required = true) @PathVariable @Nullable Integer vs30) {
-    var urlHelper = servlet.urlHelper(request);
-    var query = new Query(longitude, latitude, vs30);
-    return HazardService.handleDoGetHazard(query, urlHelper);
-  }
+          maximum = "90") @PathVariable @Nullable Optional<Double> latitude,
+      @Schema(
+          required = true) @PathVariable @Nullable Optional<Integer> vs30) {
 
+    var query = new QueryParameters(longitude, latitude, vs30);
+    return HazardService.handleDoGetHazard(
+        query,
+        servlet.urlHelper(request));
+  }
 }
