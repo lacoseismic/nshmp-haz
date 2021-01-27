@@ -27,7 +27,6 @@ package gov.usgs.earthquake.nshmp;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public class NshmTestsSmall {
 
   // /*

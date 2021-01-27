@@ -44,7 +44,6 @@ package gov.usgs.earthquake.nshmp;
  * @see NshmTestsSmall
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public class NshmTestsLarge {
 
   // private static final List<String> COUS_REGION_IDS = ImmutableList.of("wus",

@@ -8,7 +8,6 @@ import gov.usgs.earthquake.nshmp.geo.Location;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public enum CybershakeSite implements NamedLocation {
 
   /*

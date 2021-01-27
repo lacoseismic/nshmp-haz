@@ -11,7 +11,6 @@ import gov.usgs.earthquake.nshmp.internal.UsRegion;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public enum NuregSite implements NamedLocation {
 
   CENTRAL_IL(-90.000, 40.000),

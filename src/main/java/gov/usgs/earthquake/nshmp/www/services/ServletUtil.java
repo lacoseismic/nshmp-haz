@@ -2,23 +2,16 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import static java.lang.Runtime.getRuntime;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,12 +27,10 @@ import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
-import gov.usgs.earthquake.nshmp.www.meta.Region;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
@@ -70,7 +61,9 @@ public class ServletUtil {
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
 
-  private static List<HazardModel> HAZARD_MODELS = new ArrayList<>();
+  // private static List<HazardModel> HAZARD_MODELS = new ArrayList<>();
+
+  private static HazardModel HAZARD_MODEL;
   private static final String MODEL_INFO = "model-info.json";
 
   static {
@@ -79,9 +72,7 @@ public class ServletUtil {
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Region.class, new MetaUtil.EnumSerializer<Region>())
         .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
-        .registerTypeAdapter(Vs30.class, new MetaUtil.EnumSerializer<Vs30>())
         .registerTypeAdapter(ValueFormat.class, new MetaUtil.EnumSerializer<ValueFormat>())
         .registerTypeAdapter(Double.class, new MetaUtil.DoubleSerializer())
         .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
@@ -93,8 +84,12 @@ public class ServletUtil {
         .create();
   }
 
-  static List<HazardModel> hazardModels() {
-    return List.copyOf(HAZARD_MODELS);
+  // static List<HazardModel> hazardModels() {
+  // return List.copyOf(HAZARD_MODELS);
+  // }
+
+  static HazardModel model() {
+    return HAZARD_MODEL;
   }
 
   @EventListener
@@ -105,13 +100,15 @@ public class ServletUtil {
 
   @EventListener
   void startup(StartupEvent event) {
-    try {
-      var modelFinder = new ModelFinder();
-      Files.walkFileTree(modelPath, modelFinder);
-      modelFinder.paths().forEach(path -> HAZARD_MODELS.add(loadModel(path)));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    HAZARD_MODEL = loadModel(modelPath);
+    // TODO should model path just be libs/model
+    // try {
+    // var modelFinder = new ModelFinder();
+    // Files.walkFileTree(modelPath, modelFinder);
+    // modelFinder.paths().forEach(path -> HAZARD_MODELS.add(loadModel(path)));
+    // } catch (IOException e) {
+    // throw new RuntimeException(e);
+    // }
   }
 
   private HazardModel loadModel(Path path) {
@@ -165,6 +162,7 @@ public class ServletUtil {
    * Simple timer object. The servlet timer just runs. The calculation timer can
    * be started later.
    */
+  @Deprecated
   public static final class Timer {
     Stopwatch servlet = Stopwatch.createStarted();
     Stopwatch calc = Stopwatch.createUnstarted();
@@ -183,28 +181,28 @@ public class ServletUtil {
     }
   }
 
-  private static class ModelFinder extends SimpleFileVisitor<Path> {
-    private List<Path> paths;
-
-    ModelFinder() {
-      paths = new ArrayList<>();
-    }
-
-    List<Path> paths() {
-      return List.copyOf(paths);
-    }
-
-    @Override
-    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-      var fileName = path.getFileName();
-
-      if (fileName != null && fileName.toString().equals(MODEL_INFO)) {
-        paths.add(path.getParent());
-      }
-
-      return FileVisitResult.CONTINUE;
-    }
-  }
+  // private static class ModelFinder extends SimpleFileVisitor<Path> {
+  // private List<Path> paths;
+  //
+  // ModelFinder() {
+  // paths = new ArrayList<>();
+  // }
+  //
+  // List<Path> paths() {
+  // return List.copyOf(paths);
+  // }
+  //
+  // @Override
+  // public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+  // var fileName = path.getFileName();
+  //
+  // if (fileName != null && fileName.toString().equals(MODEL_INFO)) {
+  // paths.add(path.getParent());
+  // }
+  //
+  // return FileVisitResult.CONTINUE;
+  // }
+  // }
 
   private static class PathConverter implements JsonSerializer<Path> {
 

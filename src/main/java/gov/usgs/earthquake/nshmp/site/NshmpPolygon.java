@@ -7,7 +7,6 @@ import gov.usgs.earthquake.nshmp.geo.LocationList;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public enum NshmpPolygon {
 
   CEUS_CLIP(Data.CEUS_CLIP, "Central & Eastern US Map Extents"),

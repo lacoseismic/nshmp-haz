@@ -18,7 +18,6 @@ import gov.usgs.earthquake.nshmp.internal.UsRegion;
  *
  * @author U.S. Geological Survey
  */
-@SuppressWarnings("javadoc")
 public enum NshmpSite implements NamedLocation {
 
   // TODO move this and other nshmp specific classes to nshmp-haz

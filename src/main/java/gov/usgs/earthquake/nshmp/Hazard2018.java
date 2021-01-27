@@ -42,6 +42,7 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
  *
  * @author U.S. Geological Survey
  */
+@Deprecated
 public class Hazard2018 {
 
   /**

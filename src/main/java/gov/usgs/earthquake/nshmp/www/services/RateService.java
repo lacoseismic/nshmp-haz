@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import gov.usgs.earthquake.nshmp.Maths;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -15,9 +17,7 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
 import gov.usgs.earthquake.nshmp.internal.www.Response;
 import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
-import gov.usgs.earthquake.nshmp.mfd.Mfds;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
@@ -26,7 +26,6 @@ import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 
 import io.micronaut.http.HttpResponse;
 
@@ -88,7 +87,7 @@ public final class RateService {
 
       query.checkValues();
       var requestData = new RequestData(query);
-      var response = processRequest(service, requestData, urlHelper, timer);
+      var response = processRequest(service, requestData, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
@@ -105,8 +104,8 @@ public final class RateService {
   static Response<RequestData, ResponseData> processRequest(
       Service service,
       RequestData data,
-      UrlHelper urlHelper,
-      Timer timer) throws InterruptedException, ExecutionException {
+      UrlHelper urlHelper) throws InterruptedException, ExecutionException {
+    var timer = Stopwatch.createStarted();
     var rates = calc(service, data);
     var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
     return new Response<>(Status.SUCCESS, service.name, data, responseData, urlHelper);
@@ -124,10 +123,11 @@ public final class RateService {
      * probability service has been called.
      */
 
-    for (var model : ServletUtil.hazardModels()) {
-      var rate = process(service, model, site, data.distance, data.timespan);
-      futureRates.add(rate);
-    }
+    // for (var model : ServletUtil.hazardModels()) {
+    var model = ServletUtil.model();
+    var rate = process(service, model, site, data.distance, data.timespan);
+    futureRates.add(rate);
+    // }
 
     var rates = futureRates.stream()
         .map((future) -> {
@@ -235,7 +235,6 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseMetadata {
     final double latitude;
     final double longitude;
@@ -255,13 +254,12 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseData {
     final Object server;
     final ResponseMetadata metadata;
     final List<Sequence> data;
 
-    ResponseData(ResponseMetadata metadata, EqRate rates, Timer timer) {
+    ResponseData(ResponseMetadata metadata, EqRate rates, Stopwatch timer) {
       server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
@@ -300,7 +298,6 @@ public final class RateService {
    * TODO would rather use this a general container for mfds and hazard curves.
    * See HazardService.Curve
    */
-  @SuppressWarnings("unused")
   private static class Sequence {
     final String component;
     final List<Double> xvalues;
@@ -313,7 +310,6 @@ public final class RateService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static class Usage {
     final String description;
     final List<String> syntax;
@@ -323,35 +319,33 @@ public final class RateService {
     private Usage(Service service, DefaultParameters parameters) {
       description = service.description;
       this.syntax = service.syntax;
-      server = Metadata.serverData(1, ServletUtil.timer());
+      server = Metadata.serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
   }
 
-  @SuppressWarnings("unused")
   private static class RateParameters extends DefaultParameters {
     final DoubleParameter distance;
 
     RateParameters() {
       super();
       distance = new DoubleParameter(
-          "Cutoff distance (in km)",
-          ParamType.NUMBER,
+          "Cutoff distance",
+          "km",
           0.01,
           1000.0);
     }
   }
 
-  @SuppressWarnings("unused")
   private static class ProbabilityParameters extends RateParameters {
     final DoubleParameter timespan;
 
     ProbabilityParameters() {
       timespan = new DoubleParameter(
-          "Forecast time span (in years)",
-          ParamType.NUMBER,
-          Mfds.TIMESPAN_RANGE.lowerEndpoint(),
-          Mfds.TIMESPAN_RANGE.upperEndpoint());
+          "Forecast time span",
+          "years",
+          Maths.TIMESPAN_RANGE.lowerEndpoint(),
+          Maths.TIMESPAN_RANGE.upperEndpoint());
     }
   }
 

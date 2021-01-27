@@ -11,13 +11,13 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Deaggregation;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Vs30;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
@@ -28,7 +28,6 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.DeaggEpsilonController;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil.Timer;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpRequest;
@@ -81,8 +80,8 @@ public final class DeaggEpsilonService {
       }
 
       query.checkValues();
-      var data = new RequestData(query, Vs30.fromValue(query.vs30));
-      var response = process(data, timer, urlHelper);
+      var data = new RequestData(query, query.vs30);
+      var response = process(data, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
@@ -109,11 +108,11 @@ public final class DeaggEpsilonService {
 
   private static Response<RequestData, ResponseData> process(
       RequestData data,
-      Timer timer,
       UrlHelper urlHelper)
       throws InterruptedException, ExecutionException {
     var configFunction = new ConfigFunction();
     var siteFunction = new SiteFunction(data);
+    var timer = Stopwatch.createStarted();
     var hazard = ServicesUtil.calcHazard(configFunction, siteFunction);
     var deagg = Deaggregation.atImls(hazard, data.imtImls, ServletUtil.CALC_EXECUTOR);
     return new ResultBuilder()
@@ -182,37 +181,36 @@ public final class DeaggEpsilonService {
       return Site.builder()
           .location(Location.create(data.longitude, data.latitude))
           .basinDataProvider(data.basin ? basinUrl : null)
-          .vs30(data.vs30.value())
+          .vs30(data.vs30)
           .build();
     }
   }
 
-  static final class RequestData extends HazardService.RequestData {
+  static final class RequestData extends HazardService.RequestDataOld {
     final EnumMap<Imt, Double> imtImls;
     final boolean basin;
 
-    RequestData(Query query, Vs30 vs30) {
+    RequestData(Query query, double vs30) {
       super(query, vs30);
       imtImls = query.imtImls;
       basin = query.basin;
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseMetadata {
-    final List<SourceModel> models;
+    final SourceModel models;
     final double longitude;
     final double latitude;
     final String imt;
     final double iml;
-    final Vs30 vs30;
+    final double vs30;
     final String rlabel = "Closest Distance, rRup (km)";
     final String mlabel = "Magnitude (Mw)";
     final String εlabel = "% Contribution to Hazard";
     final Object εbins;
 
     ResponseMetadata(Deaggregation deagg, RequestData request, Imt imt) {
-      this.models = request.models;
+      this.models = new SourceModel(ServletUtil.model());
       this.longitude = request.longitude;
       this.latitude = request.latitude;
       this.imt = imt.toString();
@@ -222,7 +220,6 @@ public final class DeaggEpsilonService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class ResponseData {
     final Object server;
     final List<DeaggResponse> deaggs;
@@ -233,7 +230,6 @@ public final class DeaggEpsilonService {
     }
   }
 
-  @SuppressWarnings("unused")
   private static final class DeaggResponse {
     final ResponseMetadata metadata;
     final Object data;
@@ -246,7 +242,7 @@ public final class DeaggEpsilonService {
 
   static final class ResultBuilder {
     UrlHelper urlHelper;
-    Timer timer;
+    Stopwatch timer;
     RequestData request;
     Deaggregation deagg;
 
@@ -260,7 +256,7 @@ public final class DeaggEpsilonService {
       return this;
     }
 
-    ResultBuilder timer(Timer timer) {
+    ResultBuilder timer(Stopwatch timer) {
       this.timer = timer;
       return this;
     }
