@@ -19,7 +19,7 @@ git {
   if (user && pass) {
     fetch("https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018.git", {
       name "nshmp-haz-dep--nshm-conus-2018"
-      tag "0.2.3"
+      tag "0.2.4"
     })
   }
 }
