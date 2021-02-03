@@ -247,11 +247,11 @@ public final class HazardService {
 
   private static final class ResponseData {
     final ResponseMetadata metadata;
-    final List<HazardResponse> hazards;
+    final List<HazardResponse> hazardCurves;
 
-    ResponseData(ResponseMetadata metadata, List<HazardResponse> hazards) {
+    ResponseData(ResponseMetadata metadata, List<HazardResponse> hazardCurves) {
       this.metadata = metadata;
-      this.hazards = hazards;
+      this.hazardCurves = hazardCurves;
     }
   }
 
