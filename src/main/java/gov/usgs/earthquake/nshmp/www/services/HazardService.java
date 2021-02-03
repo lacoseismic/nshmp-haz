@@ -31,6 +31,7 @@ import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.HazardController;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
@@ -216,20 +217,12 @@ public final class HazardService {
   }
 
   private static final class ResponseMetadata {
-    // final SourceModel model;
-    // final double latitude;
-    // final double longitude;
-    // final double vs30;
-    final String imt;
     final String xlabel = "Ground Motion (g)";
     final String ylabel = "Annual Frequency of Exceedence";
+    final Object server;
 
-    ResponseMetadata(Imt imt) {
-      // model = new SourceModel(ServletUtil.model());
-      // latitude = data.latitude;
-      // longitude = data.longitude;
-      // vs30 = data.vs30;
-      this.imt = imtShortLabel(imt);
+    ResponseMetadata(Object server) {
+      this.server = server;
     }
   }
 
@@ -253,21 +246,21 @@ public final class HazardService {
   }
 
   private static final class ResponseData {
-    final Object server;
-    final List<HazardResponse> hazards;
+    final ResponseMetadata metadata;
+    final List<HazardResponse> hazardCurves;
 
-    ResponseData(Object server, List<HazardResponse> hazards) {
-      this.server = server;
-      this.hazards = hazards;
+    ResponseData(ResponseMetadata metadata, List<HazardResponse> hazardCurves) {
+      this.metadata = metadata;
+      this.hazardCurves = hazardCurves;
     }
   }
 
   private static final class HazardResponse {
-    final ResponseMetadata metadata;
+    final Parameter imt;
     final List<Curve> data;
 
-    HazardResponse(ResponseMetadata metadata, List<Curve> data) {
-      this.metadata = metadata;
+    HazardResponse(Imt imt, List<Curve> data) {
+      this.imt = new Parameter(imtShortLabel(imt), imt.name());
       this.data = data;
     }
   }
@@ -343,7 +336,6 @@ public final class HazardService {
       var hazards = new ArrayList<HazardResponse>();
 
       for (Imt imt : totalMap.keySet()) {
-        var responseData = new ResponseMetadata(imt);
         var curves = new ArrayList<Curve>();
 
         // total curve
@@ -355,11 +347,11 @@ public final class HazardService {
           curves.add(new Curve(type.toString(), typeMap.get(type)));
         }
 
-        hazards.add(new HazardResponse(responseData, List.copyOf(curves)));
+        hazards.add(new HazardResponse(imt, List.copyOf(curves)));
       }
 
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
-      var response = new ResponseData(server, List.copyOf(hazards));
+      var response = new ResponseData(new ResponseMetadata(server), List.copyOf(hazards));
 
       return new Response<>(Status.SUCCESS, NAME, request, response, urlHelper);
     }
