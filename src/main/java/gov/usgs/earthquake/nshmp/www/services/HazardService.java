@@ -271,7 +271,9 @@ public final class HazardService {
 
     Curve(String component, XySequence values) {
       this.component = component;
-      this.values = values;
+      this.values = XySequence.create(
+          values.xValues().map(Math::exp).toArray(),
+          values.yValues().toArray());
     }
   }
 
