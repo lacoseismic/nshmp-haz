@@ -33,7 +33,7 @@ public class DeaggEpsilonController {
   @Get(uri = "/usage", produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
     var urlHelper = servlet.urlHelper(request);
-    return HazardService.handleDoGetUsage(urlHelper);
+    return HazardService.handleDoGetMetadata(urlHelper);
   }
 
   /**

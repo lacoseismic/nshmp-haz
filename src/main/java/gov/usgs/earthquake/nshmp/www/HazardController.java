@@ -1,7 +1,5 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import java.util.Optional;
-
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
@@ -11,7 +9,6 @@ import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -25,104 +22,59 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * Micronaut controller for probabilistic seismic hazard calculations.
  *
  * @see HazardService
- *
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Hazard Service",
-    description = "USGS NSHMP Hazard Curve Calculator")
+    name = "Hazard",
+    description = "USGS NSHMP hazard calculation service")
 @Controller("/hazard")
 public class HazardController {
 
   @Inject
   private NshmpMicronautServlet servlet;
 
-  /**
-   * GET method to return the hazard usage.
-   *
-   * @param request The HTTP request
-   */
   @Operation(
-      summary = "Returns the hazard service usage",
-      description = "Returns the installed model and supported:\n" +
-          "* Region bounds\n * Return periods\n * Vs30s",
-      operationId = "hazard_doGetUsage")
+      summary = "Hazard model and service metadata",
+      description = "Returns details of the installed model and service request parameters",
+      operationId = "hazard_doGetMetadata")
   @ApiResponse(
-      description = "Hazard usage",
+      description = "Hazard service metadata",
       responseCode = "200")
-  @Get(uri = "/usage", produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
+  @Get
+  public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
     var urlHelper = servlet.urlHelper(request);
-    return HazardService.handleDoGetUsage(urlHelper);
+    return HazardService.handleDoGetMetadata(urlHelper);
   }
 
   /**
-   * GET method to return usage or hazard curves, query based.
-   *
-   * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
-   * @param vs30 The site soil class
+   * @param longitude Longitude in decimal degrees [-360..360]
+   * @param latitude Latitude in decimal degrees [-90..90]
+   * @param vs30 Site Vs30 value in m/s [150..3000]
+   * @param truncate Truncate curves at return periods below ~10,000 years
+   * @param maxdir Apply max-direction scaling
    */
   @Operation(
-      summary = "Compute hazards",
-      description = "Compute hazard curves given longitude, latitude, and Vs30",
+      summary = "Compute probabilisitic hazard at a site",
+      description = "Returns hazard curves computed from the installed model",
       operationId = "hazard_doGetHazard")
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200")
-  @Get // (uri = "{?longitude,latitude,vs30}")
+  @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir}")
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> request,
-      @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @QueryValue @Nullable Optional<Double> longitude,
-      @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @QueryValue @Nullable Optional<Double> latitude,
-      @Schema(
-          required = true) @QueryValue @Nullable Optional<Integer> vs30) {
+      @Schema(minimum = "-360", maximum = "360") @PathVariable double longitude,
+      @Schema(minimum = "-90", maximum = "90") @PathVariable double latitude,
+      @Schema(minimum = "150", maximum = "3000") @PathVariable int vs30,
+      @QueryValue(defaultValue = "false") @Nullable boolean truncate,
+      @QueryValue(defaultValue = "false") @Nullable boolean maxdir) {
 
-    var query = new QueryParameters(longitude, latitude, vs30);
-    return HazardService.handleDoGetHazard(
-        query,
-        servlet.urlHelper(request));
-  }
+    /*
+     * @Schema annotation parameter constraints only affect Swagger service
+     * index page behavior; still need to validate against model. TODO
+     */
 
-  /**
-   * GET method to return usage or hazard curves, slash based.
-   *
-   * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
-   * @param vs30 The site soil class
-   */
-  @Operation(
-      summary = "Compute hazards",
-      description = "Compute hazard curves given longitude, latitude, and Vs30",
-      operationId = "hazard_doGetHazardSlash")
-  @ApiResponse(
-      description = "Hazard curves",
-      responseCode = "200")
-  @Get(uri = "{/longitude}{/latitude}{/vs30}")
-  public HttpResponse<String> doGetHazardSlash(
-      HttpRequest<?> request,
-      @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @PathVariable @Nullable Optional<Double> longitude,
-      @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @PathVariable @Nullable Optional<Double> latitude,
-      @Schema(
-          required = true) @PathVariable @Nullable Optional<Integer> vs30) {
-
-    var query = new QueryParameters(longitude, latitude, vs30);
-    return HazardService.handleDoGetHazard(
-        query,
-        servlet.urlHelper(request));
+    var query = new QueryParameters(longitude, latitude, vs30, truncate, maxdir);
+    return HazardService.handleDoGetHazard(query, servlet.urlHelper(request));
   }
 }

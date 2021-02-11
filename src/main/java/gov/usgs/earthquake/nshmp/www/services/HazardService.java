@@ -1,14 +1,13 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -46,22 +45,10 @@ import io.micronaut.http.HttpResponse;
  */
 public final class HazardService {
 
-  /*
-   * Developer notes:
-   *
-   * Calculations are designed to leverage all available processors by default,
-   * distributing work using the ServletUtil.CALC_EXECUTOR.
-   */
-
   private static final String NAME = "Hazard Service";
 
-  /**
-   * Handler for {@link HazardController#doGetUsage}. Returns the usage for the
-   * hazard service.
-   *
-   * @param urlHelper The URL helper
-   */
-  public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
+  /** HazardController.doGetUsage() handler. */
+  public static HttpResponse<String> handleDoGetMetadata(UrlHelper urlHelper) {
     try {
       var usage = new RequestMetadata(ServletUtil.model());// SourceServices.ResponseData();
       var response = new Response<>(Status.USAGE, NAME, urlHelper.url, usage, urlHelper);
@@ -72,22 +59,17 @@ public final class HazardService {
     }
   }
 
-  /**
-   * Handler for {@link HazardController#doGetHazard}. Returns the usage or the
-   * hazard result.
-   *
-   * @param query The query
-   * @param urlHelper The URL helper
-   */
+  /** HazardController.doGetHazard() handler. */
   public static HttpResponse<String> handleDoGetHazard(
       QueryParameters query,
       UrlHelper urlHelper) {
 
     try {
-      if (query.isEmpty()) {
-        return handleDoGetUsage(urlHelper);
-      }
-      query.checkParameters();
+      // TODO still need to validate
+      // if (query.isEmpty()) {
+      // return handleDoGetUsage(urlHelper);
+      // }
+      // query.checkParameters();
       var data = new RequestData(query);
       var response = process(data, urlHelper);
       var svcResponse = ServletUtil.GSON.toJson(response);
@@ -142,35 +124,37 @@ public final class HazardService {
 
   public static class QueryParameters {
 
-    Optional<Double> longitude;
-    Optional<Double> latitude;
-    Optional<Integer> vs30;
+    final double longitude;
+    final double latitude;
+    final int vs30;
+    final boolean truncate;
+    final boolean maxdir;
 
     public QueryParameters(
-        Optional<Double> longitude,
-        Optional<Double> latitude,
-        Optional<Integer> vs30) {
+        double longitude,
+        double latitude,
+        int vs30,
+        boolean truncate,
+        boolean maxdir) {
 
       this.longitude = longitude;
       this.latitude = latitude;
       this.vs30 = vs30;
+      this.truncate = truncate;
+      this.maxdir = maxdir;
     }
 
-    public boolean isEmpty() {
-      return longitude.isEmpty() && latitude.isEmpty() && vs30.isEmpty();
-    }
-
-    public void checkParameters() {
-      checkParameter(longitude, "longitude");
-      checkParameter(latitude, "latitude");
-      checkParameter(vs30, "vs30");
-    }
+    // void checkParameters() {
+    // checkParameter(longitude, "longitude");
+    // checkParameter(latitude, "latitude");
+    // checkParameter(vs30, "vs30");
+    // }
   }
 
-  private static void checkParameter(Object param, String id) {
-    checkNotNull(param, "Missing parameter: %s", id);
-    // TODO check range here
-  }
+  // private static void checkParameter(Object param, String id) {
+  // checkNotNull(param, "Missing parameter: %s", id);
+  // // TODO check range here
+  // }
 
   /* Service request and model metadata */
   static class RequestMetadata {
@@ -208,11 +192,15 @@ public final class HazardService {
     final double longitude;
     final double latitude;
     final double vs30;
+    final boolean truncate;
+    final boolean maxdir;
 
     RequestData(QueryParameters query) {
-      this.longitude = query.longitude.orElseThrow();
-      this.latitude = query.latitude.orElseThrow();
-      this.vs30 = query.vs30.orElseThrow();
+      this.longitude = query.longitude;
+      this.latitude = query.latitude;
+      this.vs30 = query.vs30;
+      this.truncate = query.truncate;
+      this.maxdir = query.maxdir;
     }
   }
 
@@ -271,9 +259,7 @@ public final class HazardService {
 
     Curve(String component, XySequence values) {
       this.component = component;
-      this.values = XySequence.create(
-          values.xValues().map(Math::exp).toArray(),
-          values.yValues().toArray());
+      this.values = values;
     }
   }
 
@@ -341,12 +327,16 @@ public final class HazardService {
         var curves = new ArrayList<Curve>();
 
         // total curve
-        curves.add(new Curve(TOTAL_KEY, totalMap.get(imt)));
+        curves.add(new Curve(
+            TOTAL_KEY,
+            updateCurve(request, totalMap.get(imt), imt)));
 
         // component curves
         var typeMap = componentMaps.get(imt);
         for (SourceType type : typeMap.keySet()) {
-          curves.add(new Curve(type.toString(), typeMap.get(type)));
+          curves.add(new Curve(
+              type.toString(),
+              updateCurve(request, typeMap.get(type), imt)));
         }
 
         hazards.add(new HazardResponse(imt, List.copyOf(curves)));
@@ -357,6 +347,44 @@ public final class HazardService {
 
       return new Response<>(Status.SUCCESS, NAME, request, response, urlHelper);
     }
+  }
+
+  private static final double TRUNCATION_LIMIT = 1e-4;
+
+  /* Convert to linear and possibly truncate and scale to max-direction. */
+  private static XySequence updateCurve(
+      RequestData request,
+      XySequence curve,
+      Imt imt) {
+
+    /*
+     * If entire curve is <1e-4, this method will return a curve consisting of
+     * just the first point in the supplied curve.
+     *
+     * TODO We probably want to move the TRUNCATION_LIMIT out to a config.
+     */
+
+    double[] yValues = curve.yValues().toArray();
+    int limit = request.truncate ? truncationLimit(yValues) : yValues.length;
+    yValues = Arrays.copyOf(yValues, limit);
+
+    double scale = request.maxdir ? MaxDirection.FACTORS.get(imt) : 1.0;
+    double[] xValues = curve.xValues()
+        .limit(yValues.length)
+        .map(Math::exp)
+        .map(x -> x * scale)
+        .toArray();
+
+    return XySequence.create(xValues, yValues);
+  }
+
+  private static int truncationLimit(double[] yValues) {
+    int limit = 1;
+    double y = yValues[0];
+    while (y >= TRUNCATION_LIMIT && limit < yValues.length) {
+      y = yValues[limit++];
+    }
+    return limit;
   }
 
   @Deprecated
