@@ -54,7 +54,7 @@ public final class DeaggEpsilonService {
       var timer = ServletUtil.timer();
 
       if (query.isNull()) {
-        return HazardService.handleDoGetUsage(urlHelper);
+        return HazardService.handleDoGetMetadata(urlHelper);
       }
 
       query.checkValues();

@@ -6,9 +6,8 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(
     info = @Info(
-        title = "NSHMP NSHM Services",
-        description = "### Services related to National Seismic Hazard Models:\n" +
-            "* Source Model: Get the metadata about current installed NSHM"))
+        title = "USGS NSHM Services",
+        description = "National Seismic Hazard Model (NSHM) hazard calculations and queries."))
 public class Application {
 
   public static void main(String[] args) {
