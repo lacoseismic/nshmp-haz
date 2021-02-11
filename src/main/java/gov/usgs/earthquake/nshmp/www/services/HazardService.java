@@ -381,7 +381,7 @@ public final class HazardService {
   private static int truncationLimit(double[] yValues) {
     int limit = 1;
     double y = yValues[0];
-    while (y >= TRUNCATION_LIMIT && limit < yValues.length) {
+    while (y > TRUNCATION_LIMIT && limit < yValues.length) {
       y = yValues[limit++];
     }
     return limit;
