@@ -1,7 +1,4 @@
-## nshmp-haz
-
-![pipeline](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/badges/master/pipeline.svg)
-![coverage](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/badges/master/coverage.svg)
+# nshmp-haz
 
 U.S. Geological Survey ([USGS](https://www.usgs.gov)) National Seismic Hazard Mapping Project
 ([NSHMP](https://earthquake.usgs.gov/hazards/)) code for performing probabilistic seismic hazard
