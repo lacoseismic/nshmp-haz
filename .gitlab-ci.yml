@@ -55,7 +55,6 @@ Image:
       allow_failure: true
       when: manual
   script:
-    - env
     - |
       docker build \
         --build-arg FROM_IMAGE=${DEVOPS_REGISTRY}usgs/node:12 \
@@ -144,20 +143,17 @@ Build WS Image:
 # Stage: Publish
 ####
 
-Maven:
-  extends:
-    .gradle
-  stage: publish
-  only:
-    - tags@ghsc/nshmp/nshmp-ws
-  script:
-    - ./gradlew publish -P version=${CI_COMMIT_TAG}
-
-Trigger nshmp-deploy:
-  stage: publish
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+Trigger AWS nshmp-haz:
+  # only:
+  #   - master@ghsc/nshmp/nshmp-haz-v2
+  #   - tags@ghsc/nshmp/nshmp-haz-v2
+  rules:
+    -
+      if: '$CI_PROJECT_NAMESPACE == "ghsc/nshmp" && $CI_COMMIT_TAG'
+    -
+      changes:
+        - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
+        - 'gradle/dependencies.gradle'
   script:
     - apk add curl
     - |
@@ -165,3 +161,4 @@ Trigger nshmp-deploy:
           -F token=${NSHMP_DEPLOY_TRIGGER_TOKEN} \
           -F ref=master \
           https://code.chs.usgs.gov/api/v4/projects/5047/trigger/pipeline
+  stage: publish
