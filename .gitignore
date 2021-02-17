@@ -23,3 +23,7 @@ config.properties
 libs
 .factorypath
 .apt_generated*
+
+# Node
+node_modules
+package-lock.json

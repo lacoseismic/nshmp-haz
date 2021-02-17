@@ -1,4 +1,5 @@
 variables:
+  IMAGE_NAME: ${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
 
@@ -8,6 +9,7 @@ include:
     file: 'templates/library.yml'
 
 stages:
+  - image
   - build
   - publish
 
@@ -19,7 +21,7 @@ stages:
   extends:
     - .tags::development
   stage: build
-  image: ${DEVOPS_REGISTRY}usgs/java:11
+  image: ${IMAGE_NAME}
 
 .docker-build:
   extends:
@@ -38,39 +40,91 @@ stages:
     IMAGE_NAME: ${CI_PROJECT_NAME}
 
 ####
+# Stage: image
+####
+
+Image:
+  extends:
+    - .dind
+  rules:
+    -
+      changes:
+        - .gitlab/Dockerfile
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - |
+      docker build \
+        --build-arg FROM_IMAGE=${DEVOPS_REGISTRY}usgs/node:12 \
+        --file ".gitlab/Dockerfile" \
+        --pull \
+        --tag ${IMAGE_NAME} \
+        .
+    - docker push ${IMAGE_NAME}
+  stage: image
+  tags:
+    - build
+
+####
 # Stage: build
 ####
 
 Build Project:
   extends:
     - .gradle
+  rules:
+    -
+      changes:
+        - '**/*.java'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
   script:
     - ./gradlew assemble
 
 Build Lambda:
-  extends:
-    - .gradle
-  script:
-    - ./gradlew assemble
-    - ./gradlew libs
   artifacts:
     expire_in: 1 yr
     paths:
       - build/libs/nshmp-haz-v2.jar
       - build/libs/nshmp-haz-dependencies.zip
-
-Unit Tests:
   extends:
     - .gradle
-  coverage: '/Total.*?([0-9]{1,3})%/'
+  rules:
+    -
+      changes:
+        - '**/*.java'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
   script:
-    - ./gradlew check
-    - cat ${JACOCO_HTML_DIR}/index.html
+    - ./gradlew assemble
+    - ./gradlew libs
+
+Unit Tests:
   artifacts:
     paths:
       - ${JACOCO_HTML_DIR}
     reports:
       junit: ${JUNIT_FILES}
+  coverage: '/Total.*?([0-9]{1,3})%/'
+  extends:
+    - .gradle
+  rules:
+    -
+      changes:
+        - '**/*.java'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - ./gradlew check
+    - cat ${JACOCO_HTML_DIR}/index.html
 
 Build Haz Image:
   extends:
@@ -89,20 +143,14 @@ Build WS Image:
 # Stage: Publish
 ####
 
-Maven:
-  extends:
-    .gradle
-  stage: publish
-  only:
-    - tags@ghsc/nshmp/nshmp-ws
-  script:
-    - ./gradlew publish -P version=${CI_COMMIT_TAG}
-
-Trigger nshmp-deploy:
-  stage: publish
-  only:
-    - master@ghsc/nshmp/nshmp-haz-v2
-    - tags@ghsc/nshmp/nshmp-haz-v2
+Trigger AWS nshmp-haz:
+  rules:
+    -
+      if: '$CI_PROJECT_NAMESPACE == "ghsc/nshmp" && $CI_COMMIT_TAG'
+    -
+      changes:
+        - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
+        - 'gradle/dependencies.gradle'
   script:
     - apk add curl
     - |
@@ -110,3 +158,4 @@ Trigger nshmp-deploy:
           -F token=${NSHMP_DEPLOY_TRIGGER_TOKEN} \
           -F ref=master \
           https://code.chs.usgs.gov/api/v4/projects/5047/trigger/pipeline
+  stage: publish

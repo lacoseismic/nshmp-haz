@@ -30,8 +30,9 @@
 plugins {
   id "application"
   id "com.diffplug.gradle.spotless" version "${spotlessVersion}"
-  id "com.github.spotbugs" version "${spotbugsVersion}"
   id "com.github.johnrengelman.shadow" version "${shadowVersion}"
+  id "com.github.node-gradle.node" version "${nodeVersion}"
+  id "com.github.spotbugs" version "${spotbugsVersion}"
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
   id "jacoco"
@@ -109,7 +110,8 @@ gradle.afterProject {
     }
     into nshmpLib
   }
-  apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
   apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
+  apply from: "${nshmpLibGradleDir}/markdownlint.gradle"
+  apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
   apply from: "${nshmpLibGradleDir}/spotless.gradle"
 }
