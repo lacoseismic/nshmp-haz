@@ -187,7 +187,6 @@ Trigger AWS nshmp-haz:
   rules:
     -
       if: '$CI_PROJECT_NAMESPACE == "ghsc/nshmp" && $CI_COMMIT_TAG'
-    -
       changes:
         - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
         - 'gradle/dependencies.gradle'
