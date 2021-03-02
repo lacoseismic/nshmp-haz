@@ -111,7 +111,7 @@ gradle.afterProject {
     into nshmpLib
   }
   apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
-  apply from: "${nshmpLibGradleDir}/markdownlint.gradle"
+  apply from: "${nshmpLibGradleDir}/node.gradle"
   apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
   apply from: "${nshmpLibGradleDir}/spotless.gradle"
 }
