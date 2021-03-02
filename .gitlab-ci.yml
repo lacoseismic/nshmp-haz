@@ -1,4 +1,5 @@
 variables:
+  GRADLE_USER_HOME: ${CI_PROJECT_DIR}/tmp/.gradle
   IMAGE_NAME: ${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}
   JACOCO_HTML_DIR: build/reports/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
@@ -9,9 +10,15 @@ include:
     file: 'templates/library.yml'
 
 stages:
-  - image
+  - init
   - build
   - publish
+
+# Do not run for merge requests
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
 
 ####
 # Templates
@@ -40,50 +47,35 @@ stages:
     IMAGE_NAME: ${CI_PROJECT_NAME}
 
 ####
-# Stage: image
+# Stage: init
 ####
 
-Image:
+Init:
+  artifacts:
+    paths:
+      - '${GRADLE_USER_HOME}'
   extends:
-    - .dind
-  rules:
-    -
-      changes:
-        - .gitlab/Dockerfile
-      when: on_success
-    -
-      allow_failure: true
-      when: manual
+    - .gradle
   script:
-    - |
-      docker build \
-        --build-arg FROM_IMAGE=${DEVOPS_REGISTRY}usgs/node:12 \
-        --file ".gitlab/Dockerfile" \
-        --pull \
-        --tag ${IMAGE_NAME} \
-        .
-    - docker push ${IMAGE_NAME}
-  stage: image
-  tags:
-    - build
+    - ./gradlew dependencies
+  stage: init
 
 ####
 # Stage: build
 ####
 
-Build Project:
+Build Image Haz:
   extends:
-    - .gradle
-  rules:
-    -
-      changes:
-        - '**/*.java'
-      when: on_success
-    -
-      allow_failure: true
-      when: manual
-  script:
-    - ./gradlew assemble
+    - .docker-build
+  variables:
+    IMAGE_NAME: nshmp-haz
+
+Build Image WS:
+  extends:
+    - .docker-build
+  variables:
+    IMAGE_NAME: nshmp-haz-ws
+    DOCKERFILE: ws.Dockerfile
 
 Build Lambda:
   artifacts:
@@ -96,7 +88,8 @@ Build Lambda:
   rules:
     -
       changes:
-        - '**/*.java'
+        - 'src/**'
+        - '*gradle*'
       when: on_success
     -
       allow_failure: true
@@ -104,6 +97,65 @@ Build Lambda:
   script:
     - ./gradlew assemble
     - ./gradlew libs
+
+Build Project:
+  extends:
+    - .gradle
+  rules:
+    -
+      changes:
+        - 'src/**'
+        - '*gradle*'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - ./gradlew assemble
+
+Markdown Lint:
+  extends:
+    - .gradle
+  rules:
+    -
+      changes:
+        - '**/*.md'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - ./gradlew markdownlint;
+
+Spotbugs Main:
+  extends:
+    - .gradle
+  rules:
+    -
+      changes:
+        - 'src/**'
+        - '*gradle*'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - ./gradlew spotbugsMain;
+
+Spotbugs Test:
+  extends:
+    - .gradle
+  rules:
+    -
+      changes:
+        - 'src/**'
+        - '*gradle*'
+      when: on_success
+    -
+      allow_failure: true
+      when: manual
+  script:
+    - ./gradlew spotbugsTest;
 
 Unit Tests:
   artifacts:
@@ -117,7 +169,8 @@ Unit Tests:
   rules:
     -
       changes:
-        - '**/*.java'
+        - 'src/**'
+        - '*gradle*'
       when: on_success
     -
       allow_failure: true
@@ -125,19 +178,6 @@ Unit Tests:
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
-
-Build Haz Image:
-  extends:
-    - .docker-build
-  variables:
-    IMAGE_NAME: nshmp-haz
-
-Build WS Image:
-  extends:
-    - .docker-build
-  variables:
-    IMAGE_NAME: nshmp-haz-ws
-    DOCKERFILE: ws.Dockerfile
 
 ####
 # Stage: Publish
