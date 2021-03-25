@@ -211,6 +211,7 @@ Trigger nshmp-haz CDK:
       changes:
         - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
         - 'gradle/dependencies.gradle'
+      when: on_success
   script:
     - apk add curl
     - |
@@ -230,6 +231,7 @@ Trigger nshmp-haz-ws CDK:
           || $CI_COMMIT_BRANCH == 'production'
           || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
         )
+      when: on_success
   script:
     - apk add curl
     - |
