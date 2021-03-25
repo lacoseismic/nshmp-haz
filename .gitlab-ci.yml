@@ -226,7 +226,7 @@ Trigger nshmp-haz-ws CDK:
   rules:
     -
       if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
+        $CI_PROJECT_PATH == 'ghsc/users/bclayton/nshmp/nshmp-haz-v2'
         && (
           $CI_COMMIT_BRANCH == 'master'
           || $CI_COMMIT_BRANCH == 'production'
