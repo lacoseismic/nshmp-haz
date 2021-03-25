@@ -64,8 +64,8 @@ public class HazardController {
       @Schema(minimum = "-360", maximum = "360") @PathVariable double longitude,
       @Schema(minimum = "-90", maximum = "90") @PathVariable double latitude,
       @Schema(minimum = "150", maximum = "3000") @PathVariable int vs30,
-      @QueryValue(defaultValue = "false") @Nullable Boolean truncate,
-      @QueryValue(defaultValue = "false") @Nullable Boolean maxdir) {
+      @QueryValue(defaultValue = "false") @Nullable boolean truncate,
+      @QueryValue(defaultValue = "false") @Nullable boolean maxdir) {
 
     /*
      * @Schema annotation parameter constraints only affect Swagger service
