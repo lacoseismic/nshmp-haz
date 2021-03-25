@@ -55,8 +55,8 @@ ARG project
 ENV PROJECT ${project}
 ENV CONTEXT_PATH "/"
 ENV BASIN_SERVICE_URL "https://staging-earthquake.usgs.gov/nshmp/ws/data/basin"
-ENV JAVA_XMX="8g"
 ENV JAVA_XMS="2g"
+ENV JAVA_XMX="8g"
 
 WORKDIR /app
 
