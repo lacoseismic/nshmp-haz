@@ -57,6 +57,7 @@ Init:
   extends:
     - .gradle
   script:
+    - env
     - ./gradlew dependencies
   stage: init
 
@@ -202,7 +203,7 @@ Trigger nshmp-haz CDK:
   rules:
     -
       if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp'
+        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
         && (
           $CI_COMMIT_BRANCH == 'master'
           || $CI_COMMIT_BRANCH == 'production'
@@ -225,7 +226,7 @@ Trigger nshmp-haz-ws CDK:
   rules:
     -
       if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp'
+        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
         && (
           $CI_COMMIT_BRANCH == 'master'
           || $CI_COMMIT_BRANCH == 'production'
