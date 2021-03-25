@@ -2,7 +2,6 @@ package gov.usgs.earthquake.nshmp.www;
 
 import javax.inject.Inject;
 
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices;
 
 import io.micronaut.http.HttpRequest;
@@ -48,8 +47,7 @@ public class SourceController {
       responseCode = "200")
   @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
-    var urlHelper = servlet.urlHelper(request);
-    return SourceServices.handleDoGetUsage(urlHelper);
+    return SourceServices.handleDoGetUsage(request);
   }
 
 }
