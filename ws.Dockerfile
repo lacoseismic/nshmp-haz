@@ -55,6 +55,8 @@ ARG project
 ENV PROJECT ${project}
 ENV CONTEXT_PATH "/"
 ENV BASIN_SERVICE_URL "https://staging-earthquake.usgs.gov/nshmp/ws/data/basin"
+ENV JAVA_XMX="8g"
+ENV JAVA_XMS="2g"
 
 WORKDIR /app
 
@@ -65,6 +67,8 @@ VOLUME [ "/models" ]
 EXPOSE 8080
 
 ENTRYPOINT java -jar "${PROJECT}.jar" \
+    "-Xms${JAVA_XMS}" \
+    "-Xmx${JAVA_XMX}" \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
     --basin-service-url="${BASIN_SERVICE_URL}" \
     --models="/models";
