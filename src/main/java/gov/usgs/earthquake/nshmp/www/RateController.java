@@ -2,14 +2,13 @@ package gov.usgs.earthquake.nshmp.www;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.RateService;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Query;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Service;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -49,8 +48,7 @@ public class RateController {
       responseCode = "200")
   @Get(uri = "/rate/usage", produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsageRate(HttpRequest<?> request) {
-    var urlHelper = servlet.urlHelper(request);
-    return RateService.handleDoGetUsage(Service.RATE, urlHelper);
+    return RateService.handleDoGetUsage(request, Service.RATE);
   }
 
   /**
@@ -87,9 +85,8 @@ public class RateController {
           minimum = "0.01",
           maximum = "1000") @QueryValue @Nullable Double distance) {
     var service = Service.RATE;
-    var urlHelper = servlet.urlHelper(request);
     var query = new Query(service, longitude, latitude, distance, Optional.empty());
-    return RateService.handleDoGetCalc(query, urlHelper);
+    return RateService.handleDoGetCalc(request, query);
   }
 
   /**
@@ -126,9 +123,8 @@ public class RateController {
           minimum = "0.01",
           maximum = "1000") @PathVariable @Nullable Double distance) {
     var service = Service.RATE;
-    var urlHelper = servlet.urlHelper(request);
     var query = new Query(service, longitude, latitude, distance, Optional.empty());
-    return RateService.handleDoGetCalc(query, urlHelper);
+    return RateService.handleDoGetCalc(request, query);
   }
 
   /**
@@ -147,8 +143,7 @@ public class RateController {
       responseCode = "200")
   @Get(uri = "/probability/usage", produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsageProbability(HttpRequest<?> request) {
-    var urlHelper = servlet.urlHelper(request);
-    return RateService.handleDoGetUsage(Service.PROBABILITY, urlHelper);
+    return RateService.handleDoGetUsage(request, Service.PROBABILITY);
   }
 
   /**
@@ -190,9 +185,8 @@ public class RateController {
           minimum = "1",
           maximum = "10000") @QueryValue @Nullable Double timespan) {
     var service = Service.PROBABILITY;
-    var urlHelper = servlet.urlHelper(request);
     var query = new Query(service, longitude, latitude, distance, Optional.ofNullable(timespan));
-    return RateService.handleDoGetCalc(query, urlHelper);
+    return RateService.handleDoGetCalc(request, query);
   }
 
   /**
@@ -234,9 +228,8 @@ public class RateController {
           minimum = "1",
           maximum = "10000") @PathVariable @Nullable Double timespan) {
     var service = Service.PROBABILITY;
-    var urlHelper = servlet.urlHelper(request);
     var query = new Query(service, longitude, latitude, distance, Optional.ofNullable(timespan));
-    return RateService.handleDoGetCalc(query, urlHelper);
+    return RateService.handleDoGetCalc(request, query);
   }
 
 }

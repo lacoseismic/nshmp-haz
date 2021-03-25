@@ -14,19 +14,19 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
-import gov.usgs.earthquake.nshmp.internal.www.Response;
-import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
-import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
+import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
+import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
 /**
@@ -55,13 +55,13 @@ public final class RateService {
    * @param service The service
    * @param urlHelper The url helper
    */
-  public static HttpResponse<String> handleDoGetUsage(Service service, UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request, Service service) {
     try {
-      var response = metadata(service, urlHelper);
+      var response = metadata(request, service);
       var svcResponse = ServletUtil.GSON.toJson(response);
-      return HttpResponse.ok(String.format(svcResponse, urlHelper.urlPrefix, urlHelper.urlPrefix));
+      return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, urlHelper);
+      return ServicesUtil.handleError(e, service.name, request.getUri().getPath());
     }
   }
 
@@ -75,40 +75,47 @@ public final class RateService {
    * @param urlHelper The url helper
    * @return
    */
-  public static HttpResponse<String> handleDoGetCalc(Query query, UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetCalc(HttpRequest<?> request, Query query) {
     var service = query.service;
 
     try {
       var timer = ServletUtil.timer();
 
       if (query.isNull()) {
-        return handleDoGetUsage(service, urlHelper);
+        return handleDoGetUsage(request, service);
       }
 
       query.checkValues();
       var requestData = new RequestData(query);
-      var response = processRequest(service, requestData, urlHelper);
+      var response = processRequest(request, service, requestData);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, urlHelper);
+      return ServicesUtil.handleError(e, service.name, request.getUri().getPath());
     }
   }
 
-  static Response<String, Usage> metadata(Service service, UrlHelper urlHelper) {
+  static Response<String, Usage> metadata(HttpRequest<?> request, Service service) {
     var parameters = service == Service.RATE ? new RateParameters() : new ProbabilityParameters();
     var usage = new Usage(service, parameters);
-    return new Response<>(Status.USAGE, service.name, urlHelper.url, usage, urlHelper);
+    var url = request.getUri().getPath();
+    return new Response<>(Status.USAGE, service.name, url, usage, url);
   }
 
   static Response<RequestData, ResponseData> processRequest(
+      HttpRequest<?> request,
       Service service,
-      RequestData data,
-      UrlHelper urlHelper) throws InterruptedException, ExecutionException {
+      RequestData data) throws InterruptedException, ExecutionException {
     var timer = Stopwatch.createStarted();
     var rates = calc(service, data);
     var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
-    return new Response<>(Status.SUCCESS, service.name, data, responseData, urlHelper);
+    return Response.<RequestData, ResponseData> builder()
+        .success()
+        .name(service.name)
+        .request(data)
+        .response(responseData)
+        .url(request.getUri().getPath())
+        .build();
   }
 
   private static EqRate calc(Service service, RequestData data)

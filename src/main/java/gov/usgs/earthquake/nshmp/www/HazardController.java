@@ -1,12 +1,11 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
 import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -42,8 +41,7 @@ public class HazardController {
       responseCode = "200")
   @Get
   public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
-    var urlHelper = servlet.urlHelper(request);
-    return HazardService.handleDoGetMetadata(urlHelper);
+    return HazardService.handleDoGetMetadata(request);
   }
 
   /**
@@ -75,6 +73,6 @@ public class HazardController {
      */
 
     var query = new QueryParameters(longitude, latitude, vs30, truncate, maxdir);
-    return HazardService.handleDoGetHazard(query, servlet.urlHelper(request));
+    return HazardService.handleDoGetHazard(request, query);
   }
 }

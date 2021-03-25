@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
-import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
 
 /**
