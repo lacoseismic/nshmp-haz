@@ -198,10 +198,16 @@ Unit Tests:
 # Stage: Publish
 ####
 
-Trigger AWS nshmp-haz:
+Trigger nshmp-haz CDK:
   rules:
     -
-      if: '$CI_PROJECT_NAMESPACE == "ghsc/nshmp" && $CI_COMMIT_TAG'
+      if: >
+        $CI_PROJECT_PATH == 'ghsc/nshmp'
+        && (
+          $CI_COMMIT_BRANCH == 'master'
+          || $CI_COMMIT_BRANCH == 'production'
+          || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
+        )
       changes:
         - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
         - 'gradle/dependencies.gradle'
@@ -209,7 +215,26 @@ Trigger AWS nshmp-haz:
     - apk add curl
     - |
       curl -X POST \
-          -F token=${NSHMP_DEPLOY_TRIGGER_TOKEN} \
+          -F token=${NSHMP_HAZ_CDK_TRIGGER_TOKEN} \
           -F ref=master \
           https://code.chs.usgs.gov/api/v4/projects/5047/trigger/pipeline
+  stage: publish
+
+Trigger nshmp-haz-ws CDK:
+  rules:
+    -
+      if: >
+        $CI_PROJECT_PATH == 'ghsc/nshmp'
+        && (
+          $CI_COMMIT_BRANCH == 'master'
+          || $CI_COMMIT_BRANCH == 'production'
+          || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
+        )
+  script:
+    - apk add curl
+    - |
+      curl -X POST \
+          -F token=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN} \
+          -F ref=master \
+          https://code.chs.usgs.gov/api/v4/projects/6614/trigger/pipeline
   stage: publish
