@@ -2,15 +2,14 @@ package gov.usgs.earthquake.nshmp.www;
 
 import java.util.EnumMap;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService;
 import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService.Query;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -32,8 +31,7 @@ public class DeaggEpsilonController {
 
   @Get(uri = "/usage", produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
-    var urlHelper = servlet.urlHelper(request);
-    return HazardService.handleDoGetMetadata(urlHelper);
+    return HazardService.handleDoGetMetadata(request);
   }
 
   /**
@@ -68,9 +66,8 @@ public class DeaggEpsilonController {
       @Schema(
           defaultValue = "{\"SA0P01\": 0.01}",
           required = true) @QueryValue @Nullable EnumMap<Imt, Double> imtImls) {
-    var urlHelper = servlet.urlHelper(request);
     var query = new Query(request, longitude, latitude, vs30, basin);
-    return DeaggEpsilonService.handleDoGetDeaggEpsilon(query, urlHelper);
+    return DeaggEpsilonService.handleDoGetDeaggEpsilon(request, query);
   }
 
   /**

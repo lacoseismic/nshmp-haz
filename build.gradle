@@ -35,9 +35,9 @@ plugins {
   id "com.github.spotbugs" version "${spotbugsVersion}"
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
+  id "io.micronaut.application" version "${mnPluginVersion}"
   id "jacoco"
   id "maven-publish"
-  id "net.ltgt.apt-eclipse" version "${aptEclipseVersion}"
 }
 
 configurations {

@@ -28,8 +28,8 @@ import com.google.gson.JsonSerializer;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 
 import io.micronaut.context.annotation.Value;
@@ -72,10 +72,9 @@ public class ServletUtil {
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
-        .registerTypeAdapter(ValueFormat.class, new MetaUtil.EnumSerializer<ValueFormat>())
-        .registerTypeAdapter(Double.class, new MetaUtil.DoubleSerializer())
-        .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
+        .registerTypeAdapter(Imt.class, new WsUtils.EnumSerializer<Imt>())
+        .registerTypeAdapter(ValueFormat.class, new WsUtils.EnumSerializer<ValueFormat>())
+        .registerTypeAdapter(Double.class, new WsUtils.DoubleSerializer())
         .registerTypeAdapter(Site.class, new MetaUtil.SiteSerializer())
         .registerTypeHierarchyAdapter(Path.class, new PathConverter())
         .disableHtmlEscaping()

@@ -10,14 +10,13 @@ import com.google.gson.GsonBuilder;
 import gov.usgs.earthquake.nshmp.gmm.Gmm;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
-import gov.usgs.earthquake.nshmp.internal.www.Response;
-import gov.usgs.earthquake.nshmp.internal.www.meta.ParamType;
-import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
+import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.meta.Status;
 
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
 /**
@@ -37,22 +36,22 @@ public class SourceServices {
 
   static {
     GSON = new GsonBuilder()
-        .registerTypeAdapter(Imt.class, new MetaUtil.EnumSerializer<Imt>())
-        .registerTypeAdapter(ParamType.class, new MetaUtil.ParamTypeSerializer())
+        .registerTypeAdapter(Imt.class, new WsUtils.EnumSerializer<Imt>())
         .disableHtmlEscaping()
         .serializeNulls()
         .setPrettyPrinting()
         .create();
   }
 
-  public static HttpResponse<String> handleDoGetUsage(UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
+    var url = request.getUri().getPath();
     try {
       var response = new Response<>(
-          Status.USAGE, NAME, urlHelper.url, new ResponseData(), urlHelper);
+          Status.USAGE, NAME, url, new ResponseData(), url);
       var jsonString = GSON.toJson(response);
       return HttpResponse.ok(jsonString);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, urlHelper);
+      return ServicesUtil.handleError(e, NAME, url);
     }
   }
 

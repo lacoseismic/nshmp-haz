@@ -14,13 +14,12 @@ import gov.usgs.earthquake.nshmp.calc.Deaggregation;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
-import gov.usgs.earthquake.nshmp.internal.www.Response;
-import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
-import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.DeaggEpsilonController;
+import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
@@ -49,21 +48,21 @@ public final class DeaggEpsilonService {
    * @param query The query
    * @param urlHelper The URL helper
    */
-  public static HttpResponse<String> handleDoGetDeaggEpsilon(Query query, UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetDeaggEpsilon(HttpRequest<?> request, Query query) {
     try {
       var timer = ServletUtil.timer();
 
       if (query.isNull()) {
-        return HazardService.handleDoGetMetadata(urlHelper);
+        return HazardService.handleDoGetMetadata(request);
       }
 
       query.checkValues();
       var data = new RequestData(query, query.vs30);
-      var response = process(data, urlHelper);
+      var response = process(request, data);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, urlHelper);
+      return ServicesUtil.handleError(e, NAME, request.getUri().getPath());
     }
   }
 
@@ -85,8 +84,8 @@ public final class DeaggEpsilonService {
   }
 
   private static Response<RequestData, ResponseData> process(
-      RequestData data,
-      UrlHelper urlHelper)
+      HttpRequest<?> request,
+      RequestData data)
       throws InterruptedException, ExecutionException {
     var configFunction = new ConfigFunction();
     var siteFunction = new SiteFunction(data);
@@ -97,7 +96,7 @@ public final class DeaggEpsilonService {
         .deagg(deagg)
         .requestData(data)
         .timer(timer)
-        .urlHelper(urlHelper)
+        .url(request)
         .build();
   }
 
@@ -219,7 +218,7 @@ public final class DeaggEpsilonService {
   }
 
   static final class ResultBuilder {
-    UrlHelper urlHelper;
+    String url;
     Stopwatch timer;
     RequestData request;
     Deaggregation deagg;
@@ -229,8 +228,8 @@ public final class DeaggEpsilonService {
       return this;
     }
 
-    ResultBuilder urlHelper(UrlHelper urlHelper) {
-      this.urlHelper = urlHelper;
+    ResultBuilder url(HttpRequest<?> request) {
+      url = request.getUri().getPath();
       return this;
     }
 
@@ -258,7 +257,7 @@ public final class DeaggEpsilonService {
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       var response = new ResponseData(server, responseList);
 
-      return new Response<>(Status.SUCCESS, NAME, request, response, urlHelper);
+      return new Response<>(Status.SUCCESS, NAME, request, response, url);
     }
   }
 

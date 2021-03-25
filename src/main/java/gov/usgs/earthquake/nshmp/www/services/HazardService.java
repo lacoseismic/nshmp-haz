@@ -21,20 +21,20 @@ import gov.usgs.earthquake.nshmp.data.XySequence;
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.www.NshmpMicronautServlet.UrlHelper;
-import gov.usgs.earthquake.nshmp.internal.www.Response;
-import gov.usgs.earthquake.nshmp.internal.www.WsUtils;
-import gov.usgs.earthquake.nshmp.internal.www.meta.Status;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.HazardController;
+import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
+import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
 /**
@@ -48,21 +48,22 @@ public final class HazardService {
   private static final String NAME = "Hazard Service";
 
   /** HazardController.doGetUsage() handler. */
-  public static HttpResponse<String> handleDoGetMetadata(UrlHelper urlHelper) {
+  public static HttpResponse<String> handleDoGetMetadata(HttpRequest<?> request) {
+    var url = request.getUri().getPath();
     try {
       var usage = new RequestMetadata(ServletUtil.model());// SourceServices.ResponseData();
-      var response = new Response<>(Status.USAGE, NAME, urlHelper.url, usage, urlHelper);
+      var response = new Response<>(Status.USAGE, NAME, url, usage, url);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, urlHelper);
+      return ServicesUtil.handleError(e, NAME, url);
     }
   }
 
   /** HazardController.doGetHazard() handler. */
   public static HttpResponse<String> handleDoGetHazard(
-      QueryParameters query,
-      UrlHelper urlHelper) {
+      HttpRequest<?> request,
+      QueryParameters query) {
 
     try {
       // TODO still need to validate
@@ -71,17 +72,17 @@ public final class HazardService {
       // }
       // query.checkParameters();
       var data = new RequestData(query);
-      var response = process(data, urlHelper);
+      var response = process(request, data);
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, urlHelper);
+      return ServicesUtil.handleError(e, NAME, request.getUri().getPath());
     }
   }
 
   static Response<RequestData, ResponseData> process(
-      RequestData data,
-      UrlHelper urlHelper)
+      HttpRequest<?> request,
+      RequestData data)
       throws InterruptedException, ExecutionException {
 
     var configFunction = new ConfigFunction();
@@ -93,7 +94,7 @@ public final class HazardService {
         .hazard(hazard)
         .requestData(data)
         .timer(stopwatch)
-        .urlHelper(urlHelper)
+        .url(request)
         .build();
   }
 
@@ -267,7 +268,7 @@ public final class HazardService {
 
   private static final class ResultBuilder {
 
-    UrlHelper urlHelper;
+    String url;
     Stopwatch timer;
     RequestData request;
 
@@ -305,8 +306,8 @@ public final class HazardService {
       return this;
     }
 
-    ResultBuilder urlHelper(UrlHelper urlHelper) {
-      this.urlHelper = urlHelper;
+    ResultBuilder url(HttpRequest<?> request) {
+      url = request.getUri().getPath();
       return this;
     }
 
@@ -345,7 +346,7 @@ public final class HazardService {
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       var response = new ResponseData(new ResponseMetadata(server), List.copyOf(hazards));
 
-      return new Response<>(Status.SUCCESS, NAME, request, response, urlHelper);
+      return new Response<>(Status.SUCCESS, NAME, request, response, url);
     }
   }
 
