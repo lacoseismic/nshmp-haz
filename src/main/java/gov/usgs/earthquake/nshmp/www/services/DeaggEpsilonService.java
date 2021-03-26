@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import javax.inject.Singleton;
+
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 
@@ -32,6 +34,7 @@ import io.micronaut.http.HttpResponse;
  *
  * @author U.S. Geological Survey
  */
+@Singleton
 public final class DeaggEpsilonService {
 
   /* Developer notes: See HazardService. */

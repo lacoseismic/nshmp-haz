@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.inject.Singleton;
+
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -42,6 +44,7 @@ import io.micronaut.runtime.event.annotation.EventListener;
  *
  * @author U.S. Geological Survey
  */
+@Singleton
 public class ServletUtil {
 
   public static final Gson GSON;

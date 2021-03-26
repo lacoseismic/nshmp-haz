@@ -3,6 +3,8 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Singleton;
+
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,6 +27,7 @@ import io.micronaut.http.HttpResponse;
  *
  * @author U.S. Geological Survey
  */
+@Singleton
 public class SourceServices {
 
   private static final String NAME = "Source Model";
