@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javax.inject.Singleton;
+
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -35,6 +37,7 @@ import io.micronaut.http.HttpResponse;
  *
  * @author U.S. Geological Survey
  */
+@Singleton
 public final class RateService {
 
   /*

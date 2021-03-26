@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import javax.inject.Singleton;
+
 import com.google.common.base.Stopwatch;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
@@ -43,6 +45,7 @@ import io.micronaut.http.HttpResponse;
  *
  * @author U.S. Geological Survey
  */
+@Singleton
 public final class HazardService {
 
   private static final String NAME = "Hazard Service";
