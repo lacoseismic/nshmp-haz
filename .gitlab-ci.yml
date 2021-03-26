@@ -212,6 +212,11 @@ Trigger nshmp-haz CDK:
         - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
         - 'gradle/dependencies.gradle'
       when: on_success
+    -
+      if: >
+        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
+      allow_failure: true
+      when: manual
   script:
     - apk add curl
     - |
@@ -232,6 +237,11 @@ Trigger nshmp-haz-ws CDK:
           || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
         )
       when: on_success
+    -
+      if: >
+        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
+      allow_failure: true
+      when: manual
   script:
     - apk add curl
     - |
