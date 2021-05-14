@@ -91,17 +91,17 @@ final class NshmpSiteFiles {
 
     Path ceusOut = EXPORT_DIR.resolve("map-ceus.geojson");
     LocationList ceusBounds = CEUS_CLIP.coordinates().bounds().toList();
-    writePolyJson(ceusOut, "NSHMP Central & Eastern US", usCoords, 0.1, ceusBounds);
+    writePolyJson(ceusOut, "NSHMP Central & Eastern US", usCoords, 0.05, ceusBounds);
 
     Path wusOut = EXPORT_DIR.resolve("map-wus.geojson");
     LocationList wusBounds = WUS_CLIP.coordinates().bounds().toList();
-    writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.1, wusBounds);
+    writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.05, wusBounds);
 
     writePolyJson(
         EXPORT_DIR.resolve("map-conus.geojson"),
         CONTERMINOUS_US.toString(),
         CONTERMINOUS_US.coordinates(),
-        0.1,
+        0.05,
         CONUS_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
