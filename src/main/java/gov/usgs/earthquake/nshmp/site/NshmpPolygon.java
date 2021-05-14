@@ -9,15 +9,15 @@ import gov.usgs.earthquake.nshmp.geo.LocationList;
  */
 public enum NshmpPolygon {
 
-  CEUS_CLIP(Data.CEUS_CLIP, "Central & Eastern US Map Extents"),
-  WUS_CLIP(Data.WUS_CLIP, "Western US Map Extents"),
-  CONUS_CLIP(Data.CONUS_CLIP, "NSHMP Conterminus US Map Extents"),
-  ALASKA_CLIP(Data.ALASKA_CLIP, "Alaska Map Extents"),
-  HAWAII_CLIP(Data.HAWAII_CLIP, "Hawaii Map Extents"),
+  CEUS_CLIP(Data.CEUS_CLIP, "NSHMP Central & Eastern US Map Extents"),
+  WUS_CLIP(Data.WUS_CLIP, "NSHMP Western US Map Extents"),
+  CONUS_CLIP(Data.CONUS_CLIP, "NSHMP Conterminous US Map Extents"),
+  ALASKA_CLIP(Data.ALASKA_CLIP, "NSHMP Alaska Map Extents"),
+  HAWAII_CLIP(Data.HAWAII_CLIP, "NSHMP Hawaii Map Extents"),
 
-  ALASKA(Data.ALASKA, "Alaska"),
-  HAWAII(Data.HAWAII, "Hawaii"),
-  CONTERMINOUS_US(Data.CONTERMINOUS, "Conterminous US"),
+  ALASKA(Data.ALASKA, "NSHMP Alaska"),
+  HAWAII(Data.HAWAII, "NSHMP Hawaii"),
+  CONTERMINOUS_US(Data.CONTERMINOUS, "NSHMP Conterminous US"),
 
   LA_BASIN(Data.WG_07_LA, "Los Angeles Basin – WGCEP 2007"),
   SF_BAY(Data.WG_02_SF, "San Francisco Bay Area – WGCEP 2002"),
@@ -63,17 +63,17 @@ public enum NshmpPolygon {
   private static class Data {
 
     private static final double[][] CONUS_CLIP = {
-        { -125.0, 24.6 },
+        { -125.0, 24.4 },
         { -65.0, 50.0 }
     };
 
     private static final double[][] CEUS_CLIP = {
-        { -115.0, 24.6 },
+        { -115.0, 24.4 },
         { -65.0, 50.0 }
     };
 
     private static final double[][] WUS_CLIP = {
-        { -125.0, 24.6 },
+        { -125.0, 24.4 },
         { -100.0, 50.0 }
     };
 
@@ -111,8 +111,8 @@ public enum NshmpPolygon {
     };
 
     private static final double[][] HAWAII_CLIP = {
-        { -161.0, 18.0 },
-        { -154.0, 23.0 }
+        { -160.5, 18.6 },
+        { -154.3, 22.5 }
     };
 
     private static final double[][] HAWAII = {
@@ -154,7 +154,7 @@ public enum NshmpPolygon {
         { -155.34, 20.34 },
         { -155.56, 20.46 },
         { -155.71, 20.61 },
-        { -155.76, 20.78 },
+        { -155.74, 20.78 },
         { -155.82, 20.95 },
         { -156.02, 21.07 },
         { -156.29, 21.18 },
@@ -172,7 +172,7 @@ public enum NshmpPolygon {
         { -159.63, 22.39 },
         { -159.88, 22.23 },
         { -160.15, 22.11 },
-        { -160.35, 21.99 },
+        { -160.34, 21.99 },
         { -160.39, 21.74 }
     };
 
