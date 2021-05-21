@@ -91,17 +91,17 @@ final class NshmpSiteFiles {
 
     Path ceusOut = EXPORT_DIR.resolve("map-ceus.geojson");
     LocationList ceusBounds = CEUS_CLIP.coordinates().bounds().toList();
-    writePolyJson(ceusOut, "NSHMP Central & Eastern US", usCoords, 0.1, ceusBounds);
+    writePolyJson(ceusOut, "NSHMP Central & Eastern US", usCoords, 0.05, ceusBounds);
 
     Path wusOut = EXPORT_DIR.resolve("map-wus.geojson");
     LocationList wusBounds = WUS_CLIP.coordinates().bounds().toList();
-    writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.1, wusBounds);
+    writePolyJson(wusOut, "NSHMP Western US", usCoords, 0.05, wusBounds);
 
     writePolyJson(
         EXPORT_DIR.resolve("map-conus.geojson"),
         CONTERMINOUS_US.toString(),
         CONTERMINOUS_US.coordinates(),
-        0.1,
+        0.05,
         CONUS_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
@@ -115,35 +115,35 @@ final class NshmpSiteFiles {
         EXPORT_DIR.resolve("map-hawaii.geojson"),
         HAWAII.toString(),
         HAWAII.coordinates(),
-        0.1,
+        0.02,
         HAWAII_CLIP.coordinates().bounds().toList());
 
     writePolyJson(
         EXPORT_DIR.resolve("map-la-basin.geojson"),
         LA_BASIN.toString(),
         LA_BASIN.coordinates(),
-        0.05,
+        0.01,
         null);
 
     writePolyJson(
         EXPORT_DIR.resolve("map-sf-bay.geojson"),
         SF_BAY.toString(),
         SF_BAY.coordinates(),
-        0.05,
+        0.01,
         null);
 
     writePolyJson(
         EXPORT_DIR.resolve("map-puget.geojson"),
         PUGET.toString(),
         PUGET.coordinates(),
-        0.05,
+        0.01,
         null);
 
     writePolyJson(
         EXPORT_DIR.resolve("map-wasatch.geojson"),
         WASATCH.toString(),
         WASATCH.coordinates(),
-        0.05,
+        0.01,
         null);
 
     writePolyJson(

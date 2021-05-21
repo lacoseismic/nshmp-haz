@@ -9,9 +9,9 @@
         "coordinates": [
           [
             [-200.0, 48.0],
-            [-200.0, 72.0],
-            [-125.0, 72.0],
             [-125.0, 48.0],
+            [-125.0, 72.0],
+            [-200.0, 72.0],
             [-200.0, 48.0]
           ]
         ]
@@ -19,7 +19,7 @@
       "properties": {
         "fill": "#AA0078",
         "stroke": "#AA0078",
-        "title": "Alaska Map Extents"
+        "title": "NSHMP Alaska Map Extents"
       }
     },
     {
@@ -58,7 +58,7 @@
       },
       "properties": {
         "spacing": 0.1,
-        "title": "Alaska"
+        "title": "NSHMP Alaska"
       }
     }
   ]

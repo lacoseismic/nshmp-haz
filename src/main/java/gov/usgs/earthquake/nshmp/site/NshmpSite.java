@@ -369,7 +369,7 @@ public enum NshmpSite implements NamedLocation {
   }
 
   /**
-   * The set of sites used to test the COnterminus US NSHM.
+   * The set of sites used to test the Conterminous US NSHM.
    */
   public static EnumSet<NshmpSite> conus() {
     var coords = NshmpPolygon.CONUS_CLIP.coordinates();
