@@ -32,7 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
-import gov.usgs.earthquake.nshmp.calc.Deaggregation;
+import gov.usgs.earthquake.nshmp.calc.Disaggregation;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -110,11 +110,11 @@ public class DeaggEpsilon {
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
         wusConfig = CalcConfig.copyOf(wusModel.config())
-            .extend(CalcConfig.fromFile(userConfigPath))
+            .extend(CalcConfig.from(userConfigPath))
             .imts(EnumSet.copyOf(imts))
             .build();
         ceusConfig = CalcConfig.copyOf(ceusModel.config())
-            .extend(CalcConfig.fromFile(userConfigPath))
+            .extend(CalcConfig.from(userConfigPath))
             .imts(EnumSet.copyOf(imts))
             .build();
       }
@@ -240,7 +240,7 @@ public class DeaggEpsilon {
               ? wusHazard
               : Hazard.merge(wusHazard, ceusHazard);
 
-      Deaggregation deagg = Deaggregation.atImls(cousHazard, spectrum, exec);
+      Disaggregation disagg = Disaggregation.atImls(cousHazard, spectrum, exec);
 
       List<Response> responses = new ArrayList<>(spectrum.size());
       for (Imt imt : wusConfig.hazard.imts) {
@@ -249,7 +249,7 @@ public class DeaggEpsilon {
             site,
             imt,
             spectrum.get(imt));
-        Response response = new Response(imtMetadata, deagg.toJsonCompact(imt));
+        Response response = new Response(imtMetadata, disagg.toJsonCompact(imt));
         responses.add(response);
       }
       Result result = new Result(responses);

@@ -87,7 +87,7 @@ public class Hazard2018 {
       CalcConfig wusConfig = wusModel.config();
       CalcConfig ceusConfig = ceusModel.config();
       if (argCount == 3) {
-        CalcConfig.Builder userConfig = CalcConfig.fromFile(Paths.get(args[2]));
+        CalcConfig.Builder userConfig = CalcConfig.from(Paths.get(args[2]));
         wusConfig = CalcConfig.copyOf(wusModel.config())
             .extend(userConfig)
             .build();

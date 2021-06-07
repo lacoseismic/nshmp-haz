@@ -119,7 +119,7 @@ public final class HazardService {
     @Override
     public Site apply(CalcConfig config) {
       return Site.builder()
-          .basinDataProvider(config.siteData.basinDataProvider)
+          .dataService(config.siteData.service)
           .location(Location.create(data.longitude, data.latitude))
           .vs30(data.vs30)
           .build();

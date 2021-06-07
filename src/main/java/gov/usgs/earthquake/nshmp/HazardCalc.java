@@ -101,7 +101,7 @@ public class HazardCalc {
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
         config = CalcConfig.copyOf(model.config())
-            .extend(CalcConfig.fromFile(userConfigPath))
+            .extend(CalcConfig.from(userConfigPath))
             .build();
       }
       log.info(config.toString());

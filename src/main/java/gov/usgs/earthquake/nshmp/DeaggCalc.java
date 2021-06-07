@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
-import gov.usgs.earthquake.nshmp.calc.Deaggregation;
+import gov.usgs.earthquake.nshmp.calc.Disaggregation;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
@@ -89,7 +89,7 @@ public class DeaggCalc {
       if (argCount == 4) {
         Path userConfigPath = Paths.get(args[3]);
         config = CalcConfig.copyOf(model.config())
-            .extend(CalcConfig.fromFile(userConfigPath))
+            .extend(CalcConfig.from(userConfigPath))
             .build();
       }
       log.info(config.toString());
@@ -145,8 +145,8 @@ public class DeaggCalc {
 
     for (Site site : sites) {
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
-      Deaggregation deagg = HazardCalcs.deaggReturnPeriod(hazard, returnPeriod, exec);
-      handler.write(hazard, Optional.of(deagg));
+      Disaggregation disagg = HazardCalcs.disaggReturnPeriod(hazard, returnPeriod, exec);
+      handler.write(hazard, Optional.of(disagg));
       log.fine(hazard.toString());
     }
     handler.expire();
