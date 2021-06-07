@@ -3,6 +3,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -12,7 +13,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
-import gov.usgs.earthquake.nshmp.calc.Deaggregation;
+import gov.usgs.earthquake.nshmp.calc.Disaggregation;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
@@ -24,7 +25,6 @@ import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -94,7 +94,7 @@ public final class DeaggEpsilonService {
     var siteFunction = new SiteFunction(data);
     var timer = Stopwatch.createStarted();
     var hazard = ServicesUtil.calcHazard(configFunction, siteFunction);
-    var deagg = Deaggregation.atImls(hazard, data.imtImls, ServletUtil.CALC_EXECUTOR);
+    var deagg = Disaggregation.atImls(hazard, data.imtImls, ServletUtil.CALC_EXECUTOR);
     return new ResultBuilder()
         .deagg(deagg)
         .requestData(data)
@@ -160,7 +160,7 @@ public final class DeaggEpsilonService {
     public Site apply(CalcConfig config) {
       return Site.builder()
           .location(Location.create(data.longitude, data.latitude))
-          .basinDataProvider(data.basin ? basinUrl : null)
+          .dataService(data.basin ? Optional.of(basinUrl) : Optional.empty())
           .vs30(data.vs30)
           .build();
     }
@@ -189,7 +189,7 @@ public final class DeaggEpsilonService {
     final String εlabel = "% Contribution to Hazard";
     final Object εbins;
 
-    ResponseMetadata(Deaggregation deagg, RequestData request, Imt imt) {
+    ResponseMetadata(Disaggregation deagg, RequestData request, Imt imt) {
       this.models = new SourceModel(ServletUtil.model());
       this.longitude = request.longitude;
       this.latitude = request.latitude;
@@ -224,9 +224,9 @@ public final class DeaggEpsilonService {
     String url;
     Stopwatch timer;
     RequestData request;
-    Deaggregation deagg;
+    Disaggregation deagg;
 
-    ResultBuilder deagg(Deaggregation deagg) {
+    ResultBuilder deagg(Disaggregation deagg) {
       this.deagg = deagg;
       return this;
     }
