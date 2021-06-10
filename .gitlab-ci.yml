@@ -1,64 +1,35 @@
-variables:
-  GRADLE_USER_HOME: ${CI_PROJECT_DIR}/tmp/.gradle
-  IMAGE_NAME: ${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}
-  JACOCO_HTML_DIR: build/reports/jacoco/test/html
-  JUNIT_FILES: build/test-results/test/TEST-*.xml
-
-include:
-  - project: 'ghsc/hazdev/pipeline-build-template'
-    ref: '1.1.3'
-    file: 'templates/library.yml'
-
-stages:
-  - init
-  - build
-  - publish
-
 # Do not run for merge requests
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH
 
+include:
+  - project: 'ghsc/nshmp/nshmp-pipeline-templates'
+    ref: 'main'
+    file: 'templates/library.yml'
+
+stages:
+  - init
+  - build
+
 ####
 # Templates
 ####
 
 .gradle:
-  extends:
-    - .tags::development
+  image: ${DEVOPS_REGISTRY}usgs/java:11-jdk
   stage: build
-  image: ${IMAGE_NAME}
-
-.docker-build:
-  extends:
-    - .dind
-    - .tags::build
-  script:
-    - apk add bash
-    - scripts/gitlab-ci/docker-build.sh
-  stage: build
-  variables:
-    DOCKER_BUILD_ARGS: |
-      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      ci_job_token=${CI_JOB_TOKEN}
-    DOCKERFILE: Dockerfile
-    IMAGE_NAME: ${CI_PROJECT_NAME}
+  tags:
+    - development
 
 ####
 # Stage: init
 ####
 
 Init:
-  artifacts:
-    paths:
-      - '${GRADLE_USER_HOME}'
   extends:
-    - .gradle
-  script:
-    - ./gradlew dependencies
-  stage: init
+    - .gradle-init
 
 ####
 # Stage: build
@@ -68,13 +39,13 @@ Build Image Haz:
   extends:
     - .docker-build
   variables:
-    IMAGE_NAME: nshmp-haz
+    CI_PROJECT_NAME: nshmp-haz
 
 Build Image WS:
   extends:
     - .docker-build
   variables:
-    IMAGE_NAME: nshmp-haz-ws
+    CI_PROJECT_NAME: nshmp-haz-ws
     DOCKERFILE: ws.Dockerfile
 
 Build Lambda:
@@ -127,51 +98,6 @@ Markdown Lint:
   script:
     - ./gradlew markdownlint;
 
-Spotbugs Main:
-  extends:
-    - .gradle
-  rules:
-    -
-      changes:
-        - 'src/**'
-        - '*gradle*'
-      when: on_success
-    -
-      allow_failure: true
-      when: manual
-  script:
-    - ./gradlew spotbugsMain;
-
-Spotbugs Test:
-  extends:
-    - .gradle
-  rules:
-    -
-      changes:
-        - 'src/**'
-        - '*gradle*'
-      when: on_success
-    -
-      allow_failure: true
-      when: manual
-  script:
-    - ./gradlew spotbugsTest;
-
-Spotless:
-  extends:
-    - .gradle
-  rules:
-    -
-      changes:
-        - 'src/**'
-        - '*gradle*'
-      when: on_success
-    -
-      allow_failure: true
-      when: manual
-  script:
-    - ./gradlew spotlessCheck;
-
 Unit Tests:
   artifacts:
     paths:
@@ -193,60 +119,3 @@ Unit Tests:
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
-
-####
-# Stage: Publish
-####
-
-Trigger nshmp-haz CDK:
-  rules:
-    -
-      if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
-        && (
-          $CI_COMMIT_BRANCH == 'master'
-          || $CI_COMMIT_BRANCH == 'production'
-          || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
-        )
-      changes:
-        - 'src/main/java/gov/usgs/earthquake/nshmp/aws/**/*.java'
-        - 'gradle/dependencies.gradle'
-      when: on_success
-    -
-      if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
-      allow_failure: true
-      when: manual
-  script:
-    - apk add curl
-    - |
-      curl -X POST \
-          -F token=${NSHMP_HAZ_CDK_TRIGGER_TOKEN} \
-          -F ref=master \
-          https://code.chs.usgs.gov/api/v4/projects/5047/trigger/pipeline
-  stage: publish
-
-Trigger nshmp-haz-ws CDK:
-  rules:
-    -
-      if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
-        && (
-          $CI_COMMIT_BRANCH == 'master'
-          || $CI_COMMIT_BRANCH == 'production'
-          || ( $CI_COMMIT_TAG && $CI_COMMIT_TAG != '' )
-        )
-      when: on_success
-    -
-      if: >
-        $CI_PROJECT_PATH == 'ghsc/nshmp/nshmp-haz-v2'
-      allow_failure: true
-      when: manual
-  script:
-    - apk add curl
-    - |
-      curl -X POST \
-          -F token=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN} \
-          -F ref=master \
-          https://code.chs.usgs.gov/api/v4/projects/6614/trigger/pipeline
-  stage: publish
