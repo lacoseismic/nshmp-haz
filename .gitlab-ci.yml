@@ -40,12 +40,20 @@ Build Image Haz:
     - .docker-build
   variables:
     CI_PROJECT_NAME: nshmp-haz
+    DOCKER_BUILD_ARGS: |
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      ci_job_token=${CI_JOB_TOKEN}
 
 Build Image WS:
   extends:
     - .docker-build
   variables:
     CI_PROJECT_NAME: nshmp-haz-ws
+    DOCKER_BUILD_ARGS: |
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      ci_job_token=${CI_JOB_TOKEN}
     DOCKERFILE: ws.Dockerfile
 
 Build Lambda:
