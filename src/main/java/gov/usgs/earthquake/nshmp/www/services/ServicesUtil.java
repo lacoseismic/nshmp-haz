@@ -19,9 +19,9 @@ import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 import io.micronaut.http.HttpResponse;
 
-class ServicesUtil {
+public class ServicesUtil {
 
-  static HttpResponse<String> handleError(
+  public static HttpResponse<String> handleError(
       Throwable e,
       String name,
       String url) {
