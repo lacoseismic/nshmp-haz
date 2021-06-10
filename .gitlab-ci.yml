@@ -44,6 +44,7 @@ Build Image Haz:
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       ci_job_token=${CI_JOB_TOKEN}
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
 
 Build Image WS:
   extends:
@@ -55,6 +56,7 @@ Build Image WS:
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       ci_job_token=${CI_JOB_TOKEN}
     DOCKERFILE: ws.Dockerfile
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
 
 Build Lambda:
   artifacts:
