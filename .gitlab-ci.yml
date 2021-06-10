@@ -56,6 +56,8 @@ Build Lambda:
       - build/libs/nshmp-haz-dependencies.zip
   extends:
     - .gradle
+  needs:
+    - Init
   rules:
     -
       changes:
@@ -72,6 +74,8 @@ Build Lambda:
 Build Project:
   extends:
     - .gradle
+  needs:
+    - Init
   rules:
     -
       changes:
@@ -87,6 +91,8 @@ Build Project:
 Markdown Lint:
   extends:
     - .gradle
+  needs:
+    - Init
   rules:
     -
       changes:
@@ -107,6 +113,8 @@ Unit Tests:
   coverage: '/Total.*?([0-9]{1,3})%/'
   extends:
     - .gradle
+  needs:
+    - Init
   rules:
     -
       changes:
