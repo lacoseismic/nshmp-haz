@@ -5,10 +5,6 @@ micronaut:
       restart: true
   router:
     static-resources:
-      swagger-yml:
-        enabled: true
-        paths: classpath:META-INF/swagger
-        mapping: /swagger/**
       swagger:
         enabled: true
         paths: classpath:swagger
