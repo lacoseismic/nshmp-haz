@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,11 +90,7 @@ public class DeaggEpsilon {
 
       log.info(PROGRAM + ": " + HazardCalc.VERSION);
       Path modelPath = Paths.get(args[0]);
-      Path wusPath = modelPath.resolve("Western US");
-      Path ceusPath = modelPath.resolve("Central & Eastern US");
-
-      HazardModel wusModel = HazardModel.load(wusPath);
-      HazardModel ceusModel = HazardModel.load(ceusPath);
+      HazardModel model = HazardModel.load(modelPath);
 
       log.info("");
       Path siteFile = Paths.get(args[1]);
@@ -105,22 +100,16 @@ public class DeaggEpsilon {
       int colsToSkip = headerCount(siteFile);
       List<Imt> imts = readImtList(siteFile, colsToSkip);
 
-      CalcConfig wusConfig = wusModel.config();
-      CalcConfig ceusConfig = ceusModel.config();
+      CalcConfig config = model.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
-        wusConfig = CalcConfig.copyOf(wusModel.config())
+        config = CalcConfig.copyOf(model.config())
             .extend(CalcConfig.from(userConfigPath))
-            .imts(EnumSet.copyOf(imts))
-            .build();
-        ceusConfig = CalcConfig.copyOf(ceusModel.config())
-            .extend(CalcConfig.from(userConfigPath))
-            .imts(EnumSet.copyOf(imts))
             .build();
       }
-      log.info(wusConfig.toString());
+      log.info(config.toString());
 
-      List<Site> sites = ImmutableList.copyOf(Sites.fromCsv(siteFile, wusConfig, true));
+      List<Site> sites = ImmutableList.copyOf(Sites.fromCsv(siteFile, config, true));
       log.info("Sites: " + sites.size());
 
       log.info("Site data columns: " + colsToSkip);
@@ -129,14 +118,14 @@ public class DeaggEpsilon {
 
       checkArgument(sites.size() == imtImlMaps.size(), "Sites and spectra lists different sizes");
 
-      Path out = calc(wusModel, wusConfig, ceusModel, ceusConfig, sites, imtImlMaps, log);
+      Path out = calc(model, config, sites, imtImlMaps, log);
 
       log.info(PROGRAM + ": finished");
 
       /* Transfer log and write config, windows requires fh.close() */
       fh.close();
       Files.move(tmpLog, out.resolve(PROGRAM + ".log"));
-      wusConfig.write(out);
+      config.write(out);
 
       return Optional.empty();
 
@@ -196,16 +185,14 @@ public class DeaggEpsilon {
    * HazardCalc.calc() that will trigger deaggregations if the value is present.
    */
   private static Path calc(
-      HazardModel wusModel,
-      CalcConfig wusConfig,
-      HazardModel ceusModel,
-      CalcConfig ceusConfig,
+      HazardModel model,
+      CalcConfig config,
       List<Site> sites,
       List<Map<Imt, Double>> rtrSpectra,
       Logger log) throws IOException {
 
     ExecutorService exec = null;
-    ThreadCount threadCount = wusConfig.performance.threadCount;
+    ThreadCount threadCount = config.performance.threadCount;
     if (threadCount == ThreadCount.ONE) {
       exec = MoreExecutors.newDirectExecutorService();
       log.info("Threads: Running on calling thread");
@@ -215,7 +202,7 @@ public class DeaggEpsilon {
     }
 
     log.info(PROGRAM + ": calculating ...");
-    Path outDir = createOutputDir(wusConfig.output.directory);
+    Path outDir = createOutputDir(config.output.directory);
     Path siteDir = outDir.resolve("vs30-" + (int) sites.get(0).vs30);
     Files.createDirectory(siteDir);
 
@@ -226,24 +213,11 @@ public class DeaggEpsilon {
       Site site = sites.get(i);
       Map<Imt, Double> spectrum = rtrSpectra.get(i);
 
-      Hazard wusHazard = null;
-      if (site.location.longitude <= -100.0) {
-        wusHazard = HazardCalcs.hazard(wusModel, wusConfig, site, exec);
-      }
-      Hazard ceusHazard = null;
-      if (site.location.longitude > -115.0) {
-        ceusHazard = HazardCalcs.hazard(ceusModel, ceusConfig, site, exec);
-      }
-      Hazard cousHazard = (wusHazard == null)
-          ? ceusHazard
-          : (ceusHazard == null)
-              ? wusHazard
-              : Hazard.merge(wusHazard, ceusHazard);
-
-      Disaggregation disagg = Disaggregation.atImls(cousHazard, spectrum, exec);
+      Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
+      Disaggregation disagg = Disaggregation.atImls(hazard, spectrum, exec);
 
       List<Response> responses = new ArrayList<>(spectrum.size());
-      for (Imt imt : wusConfig.hazard.imts) {
+      for (Imt imt : config.hazard.imts) {
         ResponseData imtMetadata = new ResponseData(
             ImmutableList.of(),
             site,
