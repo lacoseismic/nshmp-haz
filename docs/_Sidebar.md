@@ -1,3 +1,5 @@
+# Sidebar
+
 [Home](home)  
 [Building & Running](building-&-running)  
 &nbsp;&nbsp;&nbsp;– [Configuration](calculation-configuration)  
@@ -13,6 +15,6 @@
 [API Docs](http://usgs.github.io/nshmp-haz/javadoc)  
 [License](https://github.com/usgs/nshmp-haz/blob/master/LICENSE.md)
 
-[<img valign="middle" src="images/usgs-icon.png">](https://www.usgs.gov) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

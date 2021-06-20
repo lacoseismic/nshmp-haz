@@ -6,7 +6,7 @@ TODO
 
 ## Build & Run Options
 
-* [Build and run locally](#build-and-run-locally) 
+* [Build and run locally](#build-and-run-locally)
 * [Run with Docker](#run-with-docker)
 
 ## Build and Run Locally
@@ -74,14 +74,14 @@ docker pull usgs/nshmp-haz
 
 ### Docker Memory on Mac
 
-By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz*, the 
+By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz*, the
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
 ### Running
 
 The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
-Git, Java, or other dependencies besides Docker. A public image is available on 
+Git, Java, or other dependencies besides Docker. A public image is available on
 Docker hub at [https://hub.docker.com/r/usgs/nshmp-haz](https://hub.docker.com/r/usgs/nshmp-haz)
 which can be run with:
 
@@ -118,8 +118,8 @@ Where: (TODO links below need checking)
 
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
 
-* Other arguments: 
-  * (required) The absolute path to a GeoJSON or CSV [site(s)](site-specification) file 
+* Other arguments:
+  * (required) The absolute path to a GeoJSON or CSV [site(s)](site-specification) file
     * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
   * (optional) The absolute path to a [configuration](calculation-configuration) file
@@ -144,4 +144,3 @@ Where:
 
 * `JAVA_XMS` is the intial memory for the JVM (default: system)
 * `JAVA_XMX` is the maximum memory for the JVM (default: 8g)
-

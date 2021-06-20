@@ -47,6 +47,7 @@ __`performance`__
 &nbsp;&nbsp;&nbsp;`.threadCount`           |`String`   | `ALL`                     | [`ThreadCount`](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/calc/ThreadCount.html)
 
 ## Notes
+
 1. `hazard.truncationLevel`: This value is only used if the `hazard.exceedanceModel` requires a
    limit (e.g. `TRUNCATION_UPPER_ONLY`)
 2. `hazard.gmmUncertainty`: If values for additional epistemic uncertainty on ground motion have
@@ -76,7 +77,8 @@ __`performance`__
 
 ## Default Intensity Measure Levels (IMLs)
 
-Units of PGV IMLs are cm/s; all other IMTs are in units of g. Spectral acceleration IMTs that are not listed use the values of the next highest spectral period.
+Units of PGV IMLs are cm/s; all other IMTs are in units of g. Spectral acceleration IMTs that are
+not listed use the values of the next highest spectral period.
 
 IMT        | IMLs
 -----------|-----

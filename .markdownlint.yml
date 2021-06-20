@@ -14,3 +14,6 @@ MD013:
   heading_line_length: 100
   # Number of characters for code blocks
   code_block_line_length: 100
+  # Line length requirement disabled for
+  code_blocks: false
+  tables: false
