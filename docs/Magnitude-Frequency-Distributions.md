@@ -254,3 +254,30 @@ anywhere in the file heirarchy and may be overridden in nested directories.
 Depending on the types of MFDs being modeled, a rate file may contain Gutenberg-Richter a-values
 or magnitude-specific rates. The branches of a rate-tree commonly have the generic ID's:
 `[R1, R2, R3, ...]` to support matching rate-trees across source-tree branches.
+
+```xml
+        <!-- (optional) A magnitude uncertainty model that will be
+             applied to every source:
+               - <Epistemic/> varies mMax and scales variant rates by
+                 the supplied weights; it is only ever applied to SINGLE
+                 and GR MFDs.
+               - 'cutoff' is magnitude below which uncertainty will be
+                 disabled.
+               - <Aleatory/> applies a (possibly moment-balanced) ±2σ
+                 Gaussian distribution to mMax; it is only ever applied
+                 to SINGLE MFDs (possibly in conjunction with epistemic).
+               - 'count' is the number of magnitude bins spanned by
+                 the distribution.
+               - <Aleatory/> or '<Epistemic/>', or the entire block
+                 may be omitted. -->
+        <MagUncertainty>
+            <Epistemic cutoff="6.5" 
+                deltas="[-0.2, 0.0, 0.2]" weights="[0.2, 0.6, 0.2]" />
+            <Aleatory cutoff="6.5" 
+                moBalance="true" sigma="0.12" count="11" />
+        </MagUncertainty>
+
+        <SourceProperties ruptureScaling="NSHM_FAULT_WC94_LENGTH" />
+
+    </Settings>
+```

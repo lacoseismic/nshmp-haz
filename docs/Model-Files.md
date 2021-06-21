@@ -53,7 +53,9 @@ Depending on context, value can be a number, string, or object. For example:
 ```
 
 If the `value` member is absent, then the branch `id` is also the `value`. Logic tree weights must
-sum to one. Examples of logic trees present in a hazard model are described below.
+sum to one. Examples of logic trees present in a hazard model are described below. An `id` or
+`value` member value in ALL_CAPS indicates the value is one of a fixed number of options commonly
+referred to as an enum.
 
 ### Source Model Logic Trees
 
