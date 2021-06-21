@@ -12,7 +12,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
 
 ## Table of Contents
 
-* [About the NSHMP](docs/pages/About-the-NSHMP.md)
+* [About the NSHMP](pages/About-the-NSHMP.md)
 * [Building & Running](pages/Building-&-Running.md)
   * [Developer Basics](pages/Developer-Basics.md)
   * [Calculation Configuration](pages/Calculation-Configuration.md)
