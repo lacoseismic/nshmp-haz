@@ -2,12 +2,12 @@
 
 Rupture scaling models describe relationships between rupture geometry and magnitude. Such models
 are used in a NSHM to:
+
 * Compute an expected magnitude from a rupture geometry.
 * Compute the size (length or area) of a rupture from a magnitude.
 * Compute point-source distance corrections (optimization for unknown strike)
 
-Rupture scaling model implementations typically impose restrictions on rupture aspect ratio. For
-more details see the [rupture scaling implementation]() reference.
+Rupture scaling model implementations typically impose restrictions on rupture aspect ratio.
 
 ## Magnitude-Scaling Relationships
 
@@ -24,7 +24,6 @@ more details see the [rupture scaling implementation]() reference.
 | Murotani-08        | Murotani et al. (2008)     | subduction   | magnitude-length |
 | Papazachos-04      | Papazachos et al. (2004)   | subduction   | magnitude-length |
 | Youngs-97          | Youngs et al. (1997)       | subduction   | magnitude-length |
-
 
 ¹ UCERF3 uses rupture scaling relationships to also balance slip rate when computing rupture
 rates. These models consider alternative slip-length scaling relations relative to the default

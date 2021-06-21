@@ -17,15 +17,24 @@ configuration files are provided with each [source type](source-types) descripti
 files must be fully specified with `null` JSON member values used to specify 'do nothing' where
 appropriate.
 
-Source models for use with *nshmp-haz* are defined using [JSON](https://www.json.org) and [GeoJSON](https://geojson.org). *nshmp-haz* makes determinations about how to represent a source based on a GeoJSON geometry type in conjunction with supporting JSON configuration files.
+Source models for use with *nshmp-haz* are defined using [JSON](https://www.json.org) and
+[GeoJSON](https://geojson.org). *nshmp-haz* makes determinations about how to represent a source
+based on a GeoJSON geometry type in conjunction with supporting JSON configuration files.
 
-Values in source model files in ALL_CAPS generally map to enum types, [for example](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/gmm/Gmm.html).
+Values in source model files in ALL_CAPS generally map to enum types,
+[for example](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/gmm/Gmm.html).
 
-__Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed ranges `[-360°‥360°]` and `[-90°‥90°]`. Note, however, that mixing site and/or source coordinates across the antimeridian (the -180° to 180° transition) will yield unexpected results. For Pacific models and calculations, always use positive or negative longitudes exclusively.
+__Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed ranges
+`[-360°‥360°]` and `[-90°‥90°]`. Note, however, that mixing site and/or source coordinates across
+the antimeridian (the -180° to 180° transition) will yield unexpected results. For Pacific models
+and calculations, always use positive or negative longitudes exclusively.
 
-### Model Initialization Parameters
+## Model Initialization Parameters
 
-Model initialization parameters *must* be supplied; there are no default values. In addition, these parameters may *not* be overridden once a model has been initialized in memory. However, one can configure parts of a model differently, [for example](/usgs/nshmp-model-cous-2014/blob/master/Western%20US/Interface/config.json).
+Model initialization parameters *must* be supplied; there are no default values. In addition,
+these parameters may *not* be overridden once a model has been initialized in memory. However,
+one can configure parts of a model differently,
+[for example](/usgs/nshmp-model-cous-2014/blob/master/Western%20US/Interface/config.json).
 
 Parameter | Type | Notes |
 --------- | ---- | ----- |
@@ -37,8 +46,7 @@ __`model`__ |
 &nbsp;&nbsp;&nbsp;`.pointSourceType`    |`String`  |[PointSourceType](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/eq/model/PointSourceType.html)
 &nbsp;&nbsp;&nbsp;`.areaGridScaling`    |`String`  |[AreaSource.GridScaling](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/eq/model/AreaSource.GridScaling.html)
 
-
-### Outline
+## Outline
 
 * [Area Sources](#area-sources)
 * [Cluster Sources](#cluster-sources)
@@ -50,7 +58,8 @@ __`model`__ |
 
 * Basic source types
 * Fault Modeling Approaches
-  * cluster models are a source model specialization; currently used in both cratonic and active crustal environments.
+  * cluster models are a source model specialization; currently used in both cratonic and active
+    crustal environments.
   * system
 
 ### Zone Sources
@@ -155,7 +164,7 @@ smaller events) during earthquakes. Smaller events are modeled as 'floating'
 ruptures; they occur in multiple locations on the fault surface with
 appropriately scaled rates.
 
-Many fault-based earthquake sources are strightforward to model using a single geojson file that 
+Many fault-based earthquake sources are strightforward to model using a single geojson file that
 
 ```json
 {
@@ -181,7 +190,7 @@ MFDs associated with finite fault models may be explicitely defined or or derive
 ]
 ```
 
-##### Geodetic slip variants
+#### Geodetic slip variants
 
 ```json
 "rateModels": [
@@ -215,7 +224,7 @@ MFDs associated with finite fault models may be explicitely defined or or derive
 ]
 ```
 
-##### `fault-config.json`
+#### `fault-config.json`
 
 ```json
 {
@@ -229,7 +238,6 @@ MFDs associated with finite fault models may be explicitely defined or or derive
   ]
 }
 ```
-
 
 ### Fault Zone (Area) Sources
 
@@ -347,7 +355,8 @@ It is not uncommon for rupture models to be defined by complex logic trees. In t
 
 expectation that all MFDs are some flavor of GR*
 
-Always floats when used for a fault source; never floats for grid sources. 'a' is the incremental log10(number of M=0 events).
+Always floats when used for a fault source; never floats for grid sources. 'a' is the incremental
+log10(number of M=0 events).
 
 grid polygons generally offset (expanded) due to includes() operations on grid nodes.
 
@@ -355,7 +364,8 @@ grid sources must define a rate-tree, even if it is a singleton.
 
 ANy grid sources/rates defined outside grid polygon are skipped.
 
-No `mfd-config` for grid, slab, or zone sources at this time. (implies we don't use epi or aleatory variability in grid-based source MFDs)
+No `mfd-config` for grid, slab, or zone sources at this time. (implies we don't use epi or
+aleatory variability in grid-based source MFDs)
 
 ...tapered GR  Currently only used for grid sources.
 
@@ -421,7 +431,7 @@ No `mfd-config` for grid, slab, or zone sources at this time. (implies we don't 
 </GridSourceSet>
 ```
 
-##### `grid-config.json`
+#### `grid-config.json`
 
 ```json
 {
@@ -451,7 +461,10 @@ No `mfd-config` for grid, slab, or zone sources at this time. (implies we don't 
 }
 ```
 
-A `grid-depth-map` defines a mapping of magnitude ranges to logic trees of depth distributions. The map can use arbitrary names as keys, but the magnitude ranges defined by each member must be non-overlapping. The magnitude ranges are interpreted as closed (inclusive) – open (exclusive), e.g. [mMin..mMax).
+A `grid-depth-map` defines a mapping of magnitude ranges to logic trees of depth distributions.
+The map can use arbitrary names as keys, but the magnitude ranges defined by each member must
+be non-overlapping. The magnitude ranges are interpreted as closed (inclusive) – open (exclusive),
+e.g. [mMin..mMax).
 
 ## Grid Data Files (*.csv)
 
@@ -461,7 +474,6 @@ Gridded data are stored in comma-delimited files that are usually sorted by incr
 then latitude (lower-left to upper-right). While most gridded rate files contain columns of
 longitude, latitude, and rate, some may contain depth values (intraslab sources), maximum
 magnitude caps, or other values.
-
 
 ### Subduction Interface Sources
 
@@ -516,7 +528,7 @@ magnitude caps, or other values.
 </SubductionSourceSet>
 ```
 
-##### `interface-config.json`
+#### `interface-config.json`
 
 ```json
 {
@@ -530,7 +542,7 @@ magnitude caps, or other values.
 
 Subduction intraslab sources are currently specified the same way as [Grid Sources](#grid-sources).
 
-##### `slab-config.json`
+#### `slab-config.json`
 
 ```json
 {
@@ -551,7 +563,9 @@ Fault system source sets require three files:
 * `fault_ruptures.xml`
 * `grid_sources.xml`
 
-that are placed together within a _source group_ folder. Fault system source sets represent a single logic-tree branch or an average over a group of branches and has a gridded (or smoothed seismicity) source component that is coupled with the fault-based rates in the model.
+that are placed together within a _source group_ folder. Fault system source sets represent a
+single logic-tree branch or an average over a group of branches and has a gridded (or smoothed
+seismicity) source component that is coupled with the fault-based rates in the model.
 
 `fault_sections.xml` defines the geometry of a fault network as a set of indexed fault sections:
 

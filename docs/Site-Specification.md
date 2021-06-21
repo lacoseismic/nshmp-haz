@@ -36,13 +36,13 @@ it's 'default' basin depth scale factor.
 
 ## Comma-Delimited Format (\*.csv)
 
-* Header row must identify columns.  
-* Valid and [optional] column names are:  
+* Header row must identify columns.
+* Valid and [optional] column names are:
   `[name,] lon, lat [, vs30] [, vsInf] [, z1p0] [, z2p5]`  
-* At a minimum, `lon` and `lat` must be defined.  
-* Columns can be in any order and any missing fields will be populated with the default values 
-  listed above.  
-* If a site `name` is supplied, it is included in the first column of any output curve files.  
+* At a minimum, `lon` and `lat` must be defined.
+* Columns can be in any order and any missing fields will be populated with the default values
+  listed above.
+* If a site `name` is supplied, it is included in the first column of any output curve files.
 
 ## GeoJSON Format (\*.geojson)
 
@@ -90,7 +90,6 @@ may be used to improve rendering in mapping applications. For a fully fledged ex
 GeoJSON is also used to define *nshmp-haz* map regions. For example, see the file that defines a
 region commonly used when creating hazard and other maps for the
 [Los Angeles basin](/usgs/nshmp-haz/blob/master/etc/nshm/map-la-basin.geojson).
-
 
 A map region is expected as a `Polygon` `FeatureCollection`. Currently, *nshmp-haz* only supports
 a `FeatureCollection` with 1 or 2 polygons. When a single polygon is defined, it must consist of a

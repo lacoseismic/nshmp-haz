@@ -56,5 +56,5 @@ Eclipse provides automatic compilation, syntax highlighting, and integration wit
 other useful features. To build or modify *nshmp-haz* using [Eclipse](http://www.eclipse.org/),
 install the [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/packages/) or
 [Eclipse IDE for Enterprise Java and Web Developers](https://www.eclipse.org/downloads/packages/),
-if you plan on developing web services. Import the project into Eclipse: `File > Import > 
+if you plan on developing web services. Import the project into Eclipse: `File > Import >
 Gradle > Existing Gradle Project`

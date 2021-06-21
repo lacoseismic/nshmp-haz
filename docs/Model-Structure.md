@@ -99,7 +99,7 @@ See also: [Finite Fault Source Type](source-types#finite-fault-sources)
 
 ## Crustal Grid Sources
 
-*TODO this isn't quite right, needs conus-2018 refactor for verification*
+TODO this isn't quite right, needs conus-2018 refactor for verification
 
 Grid sources are based on smoothed seismicity or other spatially varying rate model and may be
 defined as either single source features, each within its own directory, or as more complex logic

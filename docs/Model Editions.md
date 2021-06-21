@@ -57,7 +57,7 @@ the Atkinson & Boore (2003) model does not support long periods (see the
 Moving forward, we will continue to include the original dynamic version of the 2014 model
 (v4.1.4) in the UHT. However, we recommend that users consider the updated model (4.2.0).
 
-### Static vs. Dynamic
+## Static vs. Dynamic
 
 Historically, the USGS NSHMP has produced static datasets of hazard curves that accompany the
 'official' release or update to a model. In the context of providing interactive web services,
@@ -89,7 +89,7 @@ Dynamic editions are supported through web-services provided by the `nshmp-haz-w
 (this repository). Static editions are supported via a separate set of services. Both are
 documented on the [web services](web-services) page.
 
-### Region specific changes
+## Region specific changes
 
 Changes between editions in model regions are documented in the release notes of the individual
 model repositories.
@@ -97,4 +97,3 @@ model repositories.
 * [Conterminous US (2014)](/usgs/nshmp-model-cous-2014/wiki)  
 * [Conterminous US (2008)](/usgs/nshmp-model-cous-2008/wiki)  
 * [Alaska (2007)](/usgs/nshmp-model-ak-2007/wiki)  
-

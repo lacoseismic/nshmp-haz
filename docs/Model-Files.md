@@ -135,14 +135,12 @@ using the same MFDs on multiple branches of a source tree.
 How MFDs are intialized (or realized) depends on the presence and contents of `mfd-config.json` and
 `rate-tree.json` files. See the
 [magnitude frequency distributions](magnitude-frequency-distributions) page for details on these
-files and the types of MFDs supported in _nshmp-haz_. 
+files and the types of MFDs supported in _nshmp-haz_.
 
 ## Rupture Sets
 
-A `rupture-set` is the terminal file of a source-tree branch and defines the fault sections and
-MFD's required to intialize a source.
-
-**rupture-set.json**
+**rupture-set.json**: A `rupture-set` is the terminal file of a source-tree branch and defines the
+fault sections and MFD's required to intialize a source.
 
 ```json
 {
@@ -160,11 +158,10 @@ case, `mfd-tree` points to a named tree that will be present in an `mfd-map.json
 the source-tree. The `sections` member may be absent. In this case, the `id` of the rupture-set
 is the same as the single, associated fault section.
 
-**cluster-set.json**
-
-Fault sources also support cluster models where the total hazard is computed from the probability
-of exceeding some ground motion level is conditioned on the occurrence of 2 or more, roughly
-contemporaneous events. A cluster-set is composed of an array of rupture-sets.
+**cluster-set.json**: A specialized form of a rupture set. Fault sources also support cluster
+models where the total hazard is computed from the probability of exceeding some ground motion
+level is conditioned on the occurrence of 2 or more, roughly contemporaneous events. A cluster-set
+is composed of an array of rupture-sets.
 
 ```json
 {

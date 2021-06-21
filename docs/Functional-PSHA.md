@@ -1,4 +1,6 @@
-### Abstract
+# Functional PSHA
+
+## Abstract
 
 Probabilistic seismic hazard analysis (PSHA; Cornell, 1968) is elegant in its relative simplicity.
 However, in the more than 40-years since its publication, the methodology has come to be applied
@@ -18,7 +20,7 @@ intermediate results as immutable objects, making it easier to: chain actions to
 intermediate data or results that may still be relevant (e.g. as in a deaggregation); and leverage
 the concurrency supported by many modern programming languages.
 
-#### Traditional PSHA formulation (after Baker, 2013):
+## Traditional PSHA formulation (after Baker, 2013)
 
 ![image](images/psha-formula.png "PSHA formulation of Baker (2013)")
 Briefly, the rate, *λ*, of exceeding an intensity measure, *IM*, level may be computed as a
@@ -39,7 +41,7 @@ more than magnitude and distance, including, but not limited to:
 * __Fault geometry__ (e.g. dip, width, rupture depth, hypocentral depth)
 * __Site characteristics__ (e.g. basin depth terms, site type or Vs30 value)
 
-#### Simple, yes, but used for so much more…
+## Simple, yes, but used for so much more…
 
 While this formulation is relatively straightforward and is typically presented with examples for
 a single site, using a single GMM, and a nominal number of sources, modern PSHAs commonly include:
@@ -56,7 +58,7 @@ a single site, using a single GMM, and a nominal number of sources, modern PSHAs
 * Source models that do not adhere to the traditional formulation (e.g. cluster models of the NSHM).
 * Logic trees of ground motion models.
 
-#### And further extended to support…
+## And further extended to support…
 
 * Response Spectra, Conditional Mean Spectra – multiple intensity measure types (IMTs; e.g. PGA,
   PGD, PGV, multiple SAs)
@@ -65,11 +67,12 @@ a single site, using a single GMM, and a nominal number of sources, modern PSHAs
 * Maps – many thousands of sites
 * Uncertainty analyses
 
-#### How are such calculations managed?
+## How are such calculations managed?
 
 * PSHA codes typically compute hazard in a linear fashion, looping over all relevant sources for
   a site.
 * Adding additional GMMs, logic trees, IMT’s, and sites is addressed with more, outer loops:
+
 ```PHP
 foreach IMT {
     foreach Site {
@@ -83,10 +86,11 @@ foreach IMT {
     }
 }
 ```
+
 * Support for secondary analyses, such as deaggregation is supplied by a separate code or codes
   and can require repeating many of the steps performed to generate an initial hazard curve.
 
-#### What about scaleability, maintenance, and performance?
+## What about scaleability, maintenance, and performance?
 
 * Although scaleability can be addressed for secondary products, such as maps, by distributing
   individual site calculations over multiple processors and threads, it is often difficult to
@@ -98,9 +102,9 @@ foreach IMT {
 * Multiple codes repeating identical tasks invite error and complicate maintenance by multiple
   individuals.
 
-#### Enter functional programming…
+## Enter functional programming…
 
-* http://en.wikipedia.org/wiki/Functional_programming
+* <http://en.wikipedia.org/wiki/Functional_programming>
 * Functional programming languages have been around for some time (e.g. Haskell, Lisp, R), and
   fundamental aspects of functional programming/design are common in many languages. For example,
   a cornerstone of the functional paradigm is the anonymous (or lambda) function; in Matlab, one
@@ -110,7 +114,7 @@ foreach IMT {
   popularity of the functional style, Java 8 recently added constructs in the form of the function
   and streaming APIs, and libraries exists for other languages.
 
-#### How do PSHA and related calculations leverage such an approach?
+## How do PSHA and related calculations leverage such an approach?
 
 Break the traditional PSHA formulation down into discrete steps and preserve the data associated
 with each step:
@@ -132,7 +136,7 @@ The functional pipeline can be processed stepwise:
 
 **Need a response spectra?** Spawn more calculations, one for each IMT, at step 2.
 
-#### Benefits:
+## Benefits
 
 * It’s possible to build a single calculation pipeline that will handle a standard hazard curve
   calculation and all of its extensions without repetition.
@@ -141,12 +145,12 @@ The functional pipeline can be processed stepwise:
 * Can add or remove transforms or data at any point in the pipeline, or build new pipelines
   without adversely affecting existing code.
 
-#### Drawbacks:
+## Drawbacks
 
 * Greater memory requirements.
 * Additional (processor) work to manage the flow of calculation steps.
 
-#### References
+## References
 
 * Baker J.W. (2013). An Introduction to Probabilistic Seismic Hazard Analysis (PSHA), White Paper,
   Version 2.0, 79 pp.

@@ -17,7 +17,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
   * [Developer Basics](developer-basics)
   * [Calculation Configuration](calculation-configuration)
   * [Site Specification](site-specification)
-  * [Examples](/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples)
+  * [Examples](/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples)
 * [Hazard Model](hazard-model)
   * [Model Structure](model-structure)
   * [Model Files](model-files)
@@ -31,8 +31,12 @@ to use *nshmp-haz* as well as underlying model implementation details.
 
 ## Other Pages & References
 
-  * [nshmp-lib](/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
-  * [Functional PSHA](functional-psha)
-  * [Probabilistic Seismic Hazard Analysis, a Primer [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf) by Edward Field  
-  * [An Introduction to Probabilistic Seismic Hazard Analysis [PDF]](http://web.stanford.edu/~bakerjw/Publications/Baker_(2015)_Intro_to_PSHA.pdf) by Jack Baker  
-  * [License](../LICENSE.md)
+* [nshmp-lib](/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
+* [Functional PSHA](functional-psha)
+* [Probabilistic Seismic Hazard Analysis, a Primer
+  [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf)
+  by Edward Field  
+* [An Introduction to Probabilistic Seismic Hazard Analysis
+  [PDF]](http://web.stanford.edu/~bakerjw/Publications/Baker_(2015)_Intro_to_PSHA.pdf)
+  by Jack Baker  
+* [License](../LICENSE.md)
