@@ -12,27 +12,27 @@ to use *nshmp-haz* as well as underlying model implementation details.
 
 ## Table of Contents
 
-* [About the NSHMP](pages/about-the-nshmp)
-* [Building & Running](pages/building-&-running)
-  * [Developer Basics](pages/developer-basics)
-  * [Calculation Configuration](pages/calculation-configuration)
-  * [Site Specification](pages/site-specification)
+* [About the NSHMP](pages/About-the-NSHMP.md)
+* [Building & Running](pages/Building-&-Running.md)
+  * [Developer Basics](pages/Developer-Basics.md)
+  * [Calculation Configuration](pages/Calculation-Configuration.md)
+  * [Site Specification](pages/Site-Specification.md)
   * [Examples](/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples)
-* [Hazard Model](pages/hazard-model)
-  * [Model Structure](pages/model-structure)
-  * [Model Files](pages/model-files)
-  * [Source Types](pages/source-types)
-  * [Magnitude Frequency Distributions (MFDs)](pages/magnitude-frequency-distributions)
-  * [Rupture Scaling Relations](pages/rupture-scaling-relations)
-  * [Ground Motion Models (GMMs)](pages/ground-motion-models)
-* [USGS Models](pages/usgs-models)
-  * [Model Editions](pages/model-editions)
-  * [Logic Trees & Uncertainty](pages/logic-trees-&-uncertainty)
+* [Hazard Model](pages/Hazard-Model.md)
+  * [Model Structure](pages/Model-Structure.md)
+  * [Model Files](pages/Model-Files.md)
+  * [Source Types](pages/Source-Types.md)
+  * [Magnitude Frequency Distributions (MFDs)](pages/Magnitude-Frequency-Distributions.md)
+  * [Rupture Scaling Relations](pages/Rupture-Scaling-Relations.md)
+  * [Ground Motion Models (GMMs)](pages/Ground-Motion-Models.md)
+* [USGS Models](pages/USGS-Models.md)
+  * [Model Editions](pages/Model-Editions.md)
+  * [Logic Trees & Uncertainty](pages/Logic-Trees-&-Uncertainty.md)
 
 ## Other Pages & References
 
 * [nshmp-lib](/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
-* [Functional PSHA](pages/functional-psha)
+* [Functional PSHA](pages/Functional-PSHA.md)
 * [Probabilistic Seismic Hazard Analysis, a Primer
   [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf)
   by Edward Field  

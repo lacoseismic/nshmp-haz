@@ -30,7 +30,7 @@ Each model region has a dedicated repository with version tags marking different
 * [Model Editions](model-editions)
 * [Logic Trees & Uncertainty](logic-trees-&-uncertainty)
 
-[**Documentation Index**](../readme)
+[**Documentation Index**](docs)
 
 ---
 ![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
