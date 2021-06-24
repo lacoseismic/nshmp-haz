@@ -12,15 +12,15 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/blob/master/LICENSE.md"
+          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/LICENSE.md"
         }
       ]
     },
 
     "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/",
     "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/docs",
-    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/releases/tag/v#.#.#",
-    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/blob/master/DISCLAIMER.md",
+    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/releases/tag/v#.#.#",
+    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/DISCLAIMER.md",
     "vcs": "git",
 
     "laborHours": 1200,
@@ -31,6 +31,7 @@
       "Earthquake Hazards",
       "Geologic Hazards Science Center",
       "psha",
+      "nshmp-haz",
       "seismic-hazard",
       "seismic-source",
       "earthquake-hazard",
