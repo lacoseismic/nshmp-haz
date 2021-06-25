@@ -48,6 +48,8 @@ tree of rates for a source is also present in a model. Example:
 
 ## Tapered Gutenberg–Richter
 
+TODO: Need a new link for tapered GR MFD
+
 A [tapered Gutenberg-Richter](http://scec.ess.ucla.edu/~ykagan/moms_index.html) MFD is similar to
 Gutenberg-Richter, above, but with an exponential taper applied with a corner magnitude of `mCut`.
 The `a`-value member is optional when a logic tree of rates for a source is also present in a
@@ -97,8 +99,6 @@ example:
   ],
 }
 ```
-
-**mfd-config.json:**
 
 MFD confguration files:
 
@@ -254,6 +254,8 @@ anywhere in the file heirarchy and may be overridden in nested directories.
 Depending on the types of MFDs being modeled, a rate file may contain Gutenberg-Richter a-values
 or magnitude-specific rates. The branches of a rate-tree commonly have the generic ID's:
 `[R1, R2, R3, ...]` to support matching rate-trees across source-tree branches.
+
+TODO: convert example to JSON format (or see `mfd-config.json` section above)
 
 ```xml
         <!-- (optional) A magnitude uncertainty model that will be

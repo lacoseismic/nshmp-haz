@@ -1,9 +1,9 @@
 # Documentation: nshmp-haz
 
-***nshmp-haz*** is a USGS developed software stack that supports probabilistic seismic hazard
-(PSHA) and related analyses. It is maintained by the National Seismic Hazard Model Project
-([NSHMP](https://earthquake.usgs.gov/hazards/)) within the U.S. Geological Survey's
-([USGS](https://www.usgs.gov)) earthquake hazards program ([EHP](http://earthquake.usgs.gov)).
+***nshmp-haz*** is a U.S. Geological Survey ([USGS](https://www.usgs.gov)) developed software stack
+that supports probabilistic seismic hazard (PSHA) and related analyses. It is maintained by the
+National Seismic Hazard Model Project ([NSHMP](https://earthquake.usgs.gov/hazards/)) within the
+USGS's earthquake hazards program ([EHP](http://earthquake.usgs.gov)).
 
 *nshmp-haz* supports high performance seismic hazard calculations required to generate detailed
 maps over large areas and supports a variety of USGS web services and applications related to
@@ -31,7 +31,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
 
 ## Other Pages & References
 
-* [nshmp-lib](/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
+* [nshmp-lib](https://code.usgs.gov/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
 * [Functional PSHA](pages/Functional-PSHA.md)
 * [Probabilistic Seismic Hazard Analysis, a Primer
   [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf)

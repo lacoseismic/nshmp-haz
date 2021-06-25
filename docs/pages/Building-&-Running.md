@@ -40,15 +40,16 @@ measures. For example:
 java -cp path/to/nshmp-haz.jar gov.usgs.earthquake.nshmp.HazardCalc model sites [config]
 ```
 
-At a minimum, the hazard source [model](hazard-model) and the [site](site-specification)(s) at
+At a minimum, the hazard source [model](Hazard-Model.md) and the [site](Site-Specification.md)(s) at
 which to perform calculations must be specified. The source model should specified a path to a
 directory. A single site may be specified with a string; multiple sites must be specified using
 either a comma-delimited (CSV) or [GeoJSON](http://geojson.org) file. The path to a custom
-[configuration](calculation-configuration) file containing user-specific settings may optionally
+[configuration](Calculation-Configuration.md) file containing user-specific settings may optionally
 be supplied as a third argument. It can be used to override any calculation settings; if absent
-[default](calculation-configuration) values are used.
+[default](Calculation-Configuration.md) values are used.
 
-See the [examples](/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples) directory for more details.
+See the [examples](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples)
+directory for more details.
 
 ### Computing Disaggregations
 
@@ -62,7 +63,7 @@ java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites returnPe
 
 Disaggregations build on and output `HazardCalc` results along with other disaggregation specific
 files. Disaggregations also have some independent
-[configuration](calculation-configuration#config-disagg) options.
+[configuration](Calculation-Configuration.md#config-disagg) options.
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
@@ -112,17 +113,17 @@ Where: (TODO links below need checking)
   * hazard = `HazardCalc`
   * rate = `RateCalc`
 
-* `MODEL` is the [USGS model (NSHM)](usgs-models) to run:
-  * CONUS-2018: [Conterminous U.S. 2018](https://github.com/usgs/nshm-conus)
+* `MODEL` is the [USGS model (NSHM)](USGS-Models.md) to run:
+  * CONUS-2018: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
   * HAWAII-2021: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
 
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
 
 * Other arguments:
-  * (required) The absolute path to a GeoJSON or CSV [site(s)](site-specification) file
+  * (required) The absolute path to a GeoJSON or CSV [site(s)](Site-Specification.md) file
     * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
-  * (optional) The absolute path to a [configuration](calculation-configuration) file
+  * (optional) The absolute path to a [configuration](Calculation-Configuration.md) file
     * Example: `$(pwd)/my-custom-config.json:/app/config.json`
   * (required) The absolute path to an output directory
     * Example: `$(pwd)/my-hazard-output:/app/output`
