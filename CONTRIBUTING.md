@@ -10,6 +10,6 @@ If you have direct contributions you would like considered for incorporation
 into the project you can [fork this repository][2] and
 [submit a merge request][3] for review.
 
-[1]: https://code.usgs.gov/ghsc/nshmp/nshm-fault-sections/issues
+[1]: https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/issues
 [2]: https://docs.gitlab.com/ee/gitlab-basics/fork-project.html
 [3]: https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html

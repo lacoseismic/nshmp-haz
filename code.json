@@ -1,47 +1,54 @@
-{
-  "version": "2.0.0",
-  "measurementType": {},
-  "agency": "U.S. Department of Interior",
-  "releases": [
-    {
-      "name": "nshmp-haz",
-      "description": "National Seismic Hazard Mapping Project (NSHMP) Code",
-      "version": "1.0.0",
-      "status": "Production",
-      "organization": "U.S. Geological Survey",
-      "vcs": "git",
-      "repositoryURL": "https://github.com/usgs/nshmp-haz",
-      "homepageURL": "https://github.com/usgs/nshmp-haz/wiki",
-      "downloadURL": "https://github.com/usgs/nshmp-haz/releases/tag/v1.0.0",
-      "disclaimerURL": "https://github.com/usgs/nshmp-haz/blob/master/DISCLAIMER.md",
-      "permissions": {
-        "licenses": [
-          {
-            "name": "Public Domain",
-            "URL": "https://github.com/usgs/nshmp-haz/blob/master/LICENSE.md"
-          }
-        ],
-        "usageType": "openSource",
-        "exemptionText": null
-      },
-      "laborHours": 1200,
-      "languages": [ "Java" ],
-      "tags": [
-        "psha",
-        "seismic-hazard",
-        "seismic-source",
-        "earthquake-hazard",
-        "earthquake-source",
-        "hazard-curve",
-        "deaggregation"
-      ],
-      "contact": {
-        "name": "Peter Powers",
-        "email": "pmpowers@usgs.gov"
-      },
-      "date": {
-        "metadataLastUpdated": "2017-09-18"
-      }
+[
+  {
+    "name": "nshmp-haz-v2",
+    "organization": "U.S. Geological Survey",
+    "description": "National Seismic Hazard Mapping Project (NSHMP) software stack",
+    "version": "#.#.#",
+    "status": "Production",
+    "doi": "doi:###TBD###",
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain, CC0-1.0",
+          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/LICENSE.md"
+        }
+      ]
+    },
+
+    "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/",
+    "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/docs",
+    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/releases/tag/v#.#.#",
+    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/DISCLAIMER.md",
+    "vcs": "git",
+
+    "laborHours": 1200,
+
+    "languages": [ "Java" ],
+
+    "tags": [
+      "Earthquake Hazards",
+      "Geologic Hazards Science Center",
+      "psha",
+      "nshmp-haz",
+      "seismic-hazard",
+      "seismic-source",
+      "earthquake-hazard",
+      "earthquake-source",
+      "hazard-curve",
+      "disaggregation",
+      "deaggregation",
+      "doi|###TBD###"
+    ],
+
+    "contact": {
+      "name": "Peter Powers",
+      "email": "pmpowers@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2021-06-##"
     }
-  ]
-}
+  }
+]
