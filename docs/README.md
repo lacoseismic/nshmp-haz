@@ -17,7 +17,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
   * [Developer Basics](pages/Developer-Basics.md)
   * [Calculation Configuration](pages/Calculation-Configuration.md)
   * [Site Specification](pages/Site-Specification.md)
-  * [Examples](/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples)
+  * [Examples](/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples)
 * [Hazard Model](pages/Hazard-Model.md)
   * [Model Structure](pages/Model-Structure.md)
   * [Model Files](pages/Model-Files.md)
@@ -40,3 +40,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
   [PDF]](http://web.stanford.edu/~bakerjw/Publications/Baker_(2015)_Intro_to_PSHA.pdf)
   by Jack Baker  
 * [License](../LICENSE.md)
+
+---
+![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))
