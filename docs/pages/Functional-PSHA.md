@@ -158,3 +158,11 @@ The functional pipeline can be processed stepwise:
   pp. 973-987.
 * Cornell, C.A., 1968, Engineering seismic risk analysis, *Bulletin of the Seismological Society
   of America*, Vol. 58, No. 5, pp. 1583-1606.
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

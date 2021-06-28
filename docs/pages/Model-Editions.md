@@ -94,6 +94,16 @@ documented on the [web services](web-services) page.
 Changes between editions in model regions are documented in the release notes of the individual
 model repositories.
 
+TODO: Update model links
+
 * [Conterminous US (2014)](/usgs/nshmp-model-cous-2014/wiki)  
 * [Conterminous US (2008)](/usgs/nshmp-model-cous-2008/wiki)  
 * [Alaska (2007)](/usgs/nshmp-model-ak-2007/wiki)  
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

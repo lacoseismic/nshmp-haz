@@ -67,3 +67,11 @@ the San Francisco Bay region: 2002– 2031, U.S. Geol. Surv. Open-File Report 20
 
 Youngs RR, Chiou B-SJ, Silva WJ, and Humphrey JR (1997) Strong ground motion attenuation
 relationships for subduction zone earthquakes. Seismological Research Letters 68(?): 58–73.
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

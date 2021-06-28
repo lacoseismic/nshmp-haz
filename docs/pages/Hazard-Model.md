@@ -31,3 +31,11 @@ support modeling of complex logic trees.
   territories. Although hazard close to the borders can be useful for comparison to other models,
   the further one drifts from the U.S. border, the more incomplete the underlying earthquake
   source model will be.
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

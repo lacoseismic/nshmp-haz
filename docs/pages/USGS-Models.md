@@ -25,6 +25,8 @@ Each model region has a dedicated repository with version tags marking different
 * Puerto Rico & U.S. Virgin Islands - _update not yet published_  
 * Samoa & Pacific Islands - _update not yet published_  
 
+---
+
 ## Related Pages
 
 * [Model Editions](model-editions.md)

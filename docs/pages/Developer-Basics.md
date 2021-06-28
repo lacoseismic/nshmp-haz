@@ -58,3 +58,11 @@ install the [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/
 [Eclipse IDE for Enterprise Java and Web Developers](https://www.eclipse.org/downloads/packages/),
 if you plan on developing web services. Import the project into Eclipse: `File > Import >
 Gradle > Existing Gradle Project`
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

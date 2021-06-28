@@ -21,3 +21,11 @@ An NSHM defines the set of likely earthquake sources and their rates in a partic
 parameters of the earhtquake source and a site of interest, ground motion models (GMMs) are used
 to estimate ground shaking from the set of earthquakes. The NSHMP routinely updates NSHMs for the
 U.S. and its territories to consider the best available science.
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

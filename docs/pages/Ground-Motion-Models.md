@@ -158,3 +158,11 @@ modify model output.
 |:---------:|:-------:|:---------:|:------|
 | [Rezaeian et al., 2014](http://dx.doi.org/10.1193/100512EQS298M) | Damping scaling factor | Average horizontal component | No effect if supplied damping ratio is 5% |
 | USGS PGV | Conditional PGV for crustal earthquakes | Horizontal component | Conditional model for vertical component not yet implemented |
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

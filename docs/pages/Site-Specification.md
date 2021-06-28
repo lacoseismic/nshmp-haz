@@ -108,3 +108,11 @@ parallel to lines of latitude and longitude. Any points in the 'calculation' pol
 outside the 'calculation' polygon are set to zero. For an example, see the
 [NSHMP Western US](/usgs/nshmp-haz/blob/master/etc/nshm/map-wus.geojson) map site file.
 (TODO This needs updating; link to conus-2018 active crust map-region.geojson).
+
+---
+
+[**Documentation Index**](docs/README.md)
+
+---
+![USGS logo](images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))
