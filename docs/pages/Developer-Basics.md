@@ -53,7 +53,7 @@ git clone https://code.usgs.gov/ghsc/nshmp/nshmp-haz.git
 ## Eclipse Integration (Optional)
 
 Eclipse provides automatic compilation, syntax highlighting, and integration with Git, among
-other useful features. To build or modify *nshmp-haz* using [Eclipse](http://www.eclipse.org/),
+other useful features. To build or modify *nshmp-haz-v2* using [Eclipse](http://www.eclipse.org/),
 install the [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/packages/) or
 [Eclipse IDE for Enterprise Java and Web Developers](https://www.eclipse.org/downloads/packages/),
 if you plan on developing web services. Import the project into Eclipse: `File > Import >
@@ -61,8 +61,14 @@ Gradle > Existing Gradle Project`
 
 ---
 
-[**Documentation Index**](docs/README.md)
+* [**Documentation Index**](../README.md)
+* [Building & Running](./Building-&-Running.md)
+  * [Developer Basics](./Developer-Basics.md)
+  * [Calculation Configuration](./Calculation-Configuration.md)
+  * [Site Specification](./Site-Specification.md)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
 
 ---
-![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

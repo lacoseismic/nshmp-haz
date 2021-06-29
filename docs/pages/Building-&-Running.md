@@ -2,7 +2,12 @@
 
 ## Related Pages
 
-TODO
+* Building & Running
+  * [Developer Basics](./Developer-Basics.md)
+  * [Calculation Configuration](./Calculation-Configuration.md)
+  * [Site Specification](./Site-Specification.md)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
 
 ## Build & Run Options
 
@@ -11,12 +16,12 @@ TODO
 
 ## Build and Run Locally
 
-Building and running *nshmp-haz* requires prior installation of Git and Java. Please see the
-[developer basics](developer-basics) page for system configuration guidance.  
+Building and running *nshmp-haz-v2* requires prior installation of Git and Java. Please see the
+[developer basics](./Developer-Basics.md) page for system configuration guidance.  
 
 ### Building
 
-Navigate to a location on your system where you want *nshmp-haz* code to reside, clone the
+Navigate to a location on your system where you want *nshmp-haz-v2* code to reside, clone the
 repository, and compile:
 
 ```bash
@@ -40,16 +45,16 @@ measures. For example:
 java -cp path/to/nshmp-haz.jar gov.usgs.earthquake.nshmp.HazardCalc model sites [config]
 ```
 
-At a minimum, the hazard source [model](Hazard-Model.md) and the [site](Site-Specification.md)(s) at
-which to perform calculations must be specified. The source model should specified a path to a
+At a minimum, the hazard source [model](./Hazard-Model.md) and the [site](./Site-Specification.md)(s)
+at which to perform calculations must be specified. The source model should specified a path to a
 directory. A single site may be specified with a string; multiple sites must be specified using
 either a comma-delimited (CSV) or [GeoJSON](http://geojson.org) file. The path to a custom
-[configuration](Calculation-Configuration.md) file containing user-specific settings may optionally
+[configuration](./Calculation-Configuration.md) file containing user-specific settings may optionally
 be supplied as a third argument. It can be used to override any calculation settings; if absent
-[default](Calculation-Configuration.md) values are used.
+[default](./Calculation-Configuration.md) values are used.
 
-See the [examples](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples)
-directory for more details.
+See the [examples](../../etc/examples/README.md) directory for more details (or
+[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
 
 ### Computing Disaggregations
 
@@ -63,11 +68,11 @@ java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites returnPe
 
 Disaggregations build on and output `HazardCalc` results along with other disaggregation specific
 files. Disaggregations also have some independent
-[configuration](Calculation-Configuration.md#config-disagg) options.
+[configuration](./Calculation-Configuration.md#config-disagg) options.
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-To ensure you are have the latest *nshmp-haz* update, always first pull the image from Docker:
+To ensure you are have the latest *nshmp-haz-v2* update, always first pull the image from Docker:
 
 ```bash
 docker pull usgs/nshmp-haz
@@ -75,13 +80,15 @@ docker pull usgs/nshmp-haz
 
 ### Docker Memory on Mac
 
-By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz*, the
+By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz-v2*, the
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
 ### Running
 
-The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
+TODO: is there a Docker image for nshmp-haz-v2?
+
+The *nshmp-haz-v2* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
 Docker hub at [https://hub.docker.com/r/usgs/nshmp-haz](https://hub.docker.com/r/usgs/nshmp-haz)
 which can be run with:
@@ -113,24 +120,26 @@ Where: (TODO links below need checking)
   * hazard = `HazardCalc`
   * rate = `RateCalc`
 
-* `MODEL` is the [USGS model (NSHM)](USGS-Models.md) to run:
+* `MODEL` is the [USGS model (NSHM)](./USGS-Models.md) to run:
   * CONUS-2018: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
   * HAWAII-2021: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
 
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
 
+TODO: what should these examples point to? links to example files? or where to look for the samples?
+
 * Other arguments:
-  * (required) The absolute path to a GeoJSON or CSV [site(s)](Site-Specification.md) file
-    * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
+  * (required) The absolute path to a GeoJSON or CSV [site(s)](./Site-Specification.md) file
+    * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv` [`sites.csv`](../../etc/examples/3-sites-file/sites.csv)
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
-  * (optional) The absolute path to a [configuration](Calculation-Configuration.md) file
+  * (optional) The absolute path to a [configuration](./Calculation-Configuration.md) file
     * Example: `$(pwd)/my-custom-config.json:/app/config.json`
   * (required) The absolute path to an output directory
     * Example: `$(pwd)/my-hazard-output:/app/output`
 
 ### Run Customization
 
-When running *nshmp-haz* with Docker the initial (Xms) and maximum (Xmx) JVM memory sizes can
+When running *nshmp-haz-v2* with Docker the initial (Xms) and maximum (Xmx) JVM memory sizes can
 be set with the environment flag (-e, -env):
 
 ```bash
@@ -148,8 +157,8 @@ Where:
 
 ---
 
-[**Documentation Index**](docs/README.md)
+* [**Documentation Index**](../README.md)
 
 ---
-![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

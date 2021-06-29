@@ -6,7 +6,7 @@ years. This window is narrowing, however, and updates are also being undertaken 
 models for states and territories outside the conterminous U.S. These pages describe the models
 that are available and some of the history and versions of each. The models are intended for use
 with the  USGS probabilistic earthquake hazard codebase:
-[*nshmp-haz*](https://github.com/usgs/nshmp-haz).
+[*nshmp-haz-v2*](https://github.com/usgs/nshmp-haz).
 
 As specified in this documentation, NSHM files are organized by tectonic setting and then further
 by source type. For larger models, such as that of the conterminous U.S., sources are commonly
@@ -32,8 +32,8 @@ Each model region has a dedicated repository with version tags marking different
 * [Model Editions](model-editions.md)
 * [Logic Trees & Uncertainty](logic-trees-&-uncertainty.md)
 
-[**Documentation Index**](docs/README.md)
+[**Documentation Index**](../README.md)
 
 ---
-![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

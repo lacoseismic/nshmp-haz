@@ -17,8 +17,8 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
   * [Developer Basics](./pages/Developer-Basics.md)
   * [Calculation Configuration](./pages/Calculation-Configuration.md)
   * [Site Specification](./pages/Site-Specification.md)
-  * Examples [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples)
-    or [in a local copy](../etc/examples/README.md)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
 * [Hazard Model](./pages/Hazard-Model.md)
   * [Model Structure](./pages/Model-Structure.md)
   * [Model Files](./pages/Model-Files.md)

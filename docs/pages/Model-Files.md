@@ -186,8 +186,8 @@ is composed of an array of rupture-sets.
 
 ---
 
-[**Documentation Index**](docs/README.md)
+[**Documentation Index**](../README.md)
 
 ---
-![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))
