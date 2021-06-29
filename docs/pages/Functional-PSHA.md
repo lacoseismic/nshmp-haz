@@ -111,7 +111,7 @@ foreach IMT {
   may write [sqr = @(x) x.^2;].
 * In Matlab, one may pass function ‘handles’ (references) to other functions as arguments. This
   is also possible in Javascript, where such handles serve as callbacks. Given the rise in
-  popularity of the functional style, Java 8 recently added constructs in the form of the function
+  popularity of the functional style, Java 8 added constructs in the form of the function
   and streaming APIs, and libraries exists for other languages.
 
 ## How do PSHA and related calculations leverage such an approach?
@@ -161,8 +161,8 @@ The functional pipeline can be processed stepwise:
 
 ---
 
-[**Documentation Index**](docs/README.md)
+[**Documentation Index**](../README.md)
 
 ---
-![USGS logo](docs/pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
 National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))
