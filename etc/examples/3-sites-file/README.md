@@ -38,4 +38,4 @@ __Results directory structure:__
 ```
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 4 – A simple hazard map](../4-hazard-map)
+#### Next: [Example 4 – A simple hazard map](../4-hazard-map/README.md)

@@ -66,4 +66,4 @@ __Results directory structure:__
 ```
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 6 – Enhanced output](../6-enhanced-output)
+#### Next: [Example 6 – Enhanced output](../6-enhanced-output/README.md)

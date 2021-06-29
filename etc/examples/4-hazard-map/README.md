@@ -27,4 +27,4 @@ __Results directory structure:__
 ```
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 5 – A more complex model](../5-complex-model)
+#### Next: [Example 5 – A more complex model](../5-complex-model/README.md)
