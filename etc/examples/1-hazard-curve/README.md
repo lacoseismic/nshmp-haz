@@ -45,3 +45,7 @@ In the next example, we'll override the model supplied configuration with a cust
 
 <!-- markdownlint-disable MD001 -->
 #### Next: [Example 2 – A custom configuration](../2-custom-config/README.md)
+
+---
+
+* [**Documentation Index**](../../../docs/README.md)

@@ -12,3 +12,7 @@ Because each example builds on prior concepts, it is best step through all the e
 
 <!-- markdownlint-disable MD001 -->
 #### Start: [Example 1 – A simple hazard calculation](1-hazard-curve/README.md)
+
+---
+
+* [**Documentation Index**](../../docs/README.md)

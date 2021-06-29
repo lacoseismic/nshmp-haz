@@ -89,3 +89,7 @@ empty results will not be saved.
 
 <!-- markdownlint-disable MD001 -->
 #### Next: [Example 8 – Earthquake probabilities and rates](../8-probabilities/README.md)
+
+---
+
+* [**Documentation Index**](../../../docs/README.md)

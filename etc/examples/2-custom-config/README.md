@@ -38,3 +38,7 @@ __Results directory structure:__
 
 <!-- markdownlint-disable MD001 -->
 #### Next: [Example 3 – Using a custom sites file](../3-sites-file/README.md)
+
+---
+
+* [**Documentation Index**](../../../docs/README.md)

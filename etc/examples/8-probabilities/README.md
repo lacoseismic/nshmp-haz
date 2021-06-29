@@ -47,3 +47,7 @@ __Results directory structure:__
       ├─ RateCalc.log
       └─ probs.csv
 ```
+
+---
+
+* [**Documentation Index**](../../../docs/README.md)
