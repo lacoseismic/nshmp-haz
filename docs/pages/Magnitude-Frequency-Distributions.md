@@ -246,7 +246,7 @@ ID's: `[M1, M2, M3, ...]` to support mfd-tree matching across source-tree branch
 
 How MFDs are actually built depends on the settings in a `mfd-config.json` file and rates. For more
 details on MFDs and their configuration see the
-[magnitude frequency distributions](magnitude-frequency-distributions) section.
+[magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) section.
 
 An `mfd-config.json` is currently only required for finite fault sources. It can be located
 anywhere in the file heirarchy and may be overridden in nested directories.
@@ -286,7 +286,16 @@ TODO: convert example to JSON format (or see `mfd-config.json` section above)
 
 ---
 
-[**Documentation Index**](../README.md)
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

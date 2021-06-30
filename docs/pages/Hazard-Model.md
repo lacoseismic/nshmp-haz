@@ -11,15 +11,6 @@ Epistemic uncertainty in source and ground motion models is represented with log
 file formats and structure adopted here leverage the heirarchical organization of file systems to
 support modeling of complex logic trees.
 
-## Related Pages
-
-* [Model Structure](model-structure)  
-* [Model Files](model-files)  
-* [Source Types](source-types)  
-* [Magnitude-Frequency Distributions (MFDs)](magnitude-frequency-distributions-mfds)  
-* [Rupture-Scaling Relations](magnitude-scaling-relations)  
-* [Ground Motion Models (GMMs)](ground-motion-models-gmms)  
-
 ## Model Applicability
 
 * NOTE FOR HAZARD CURVE DATA: While the gridded hazard curve data includes ground motions at long
@@ -34,7 +25,16 @@ support modeling of complex logic trees.
 
 ---
 
-[**Documentation Index**](../README.md)
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
