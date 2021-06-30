@@ -1,6 +1,5 @@
 # Site Specification
 
-
 The sites at which to perform hazard and related calculations may be defined in a variety of
 ways. Examples of the file formats described below are available in the resource directory:
 [`etc/nshm`](../../etc/nshm/README.md).
@@ -20,7 +19,7 @@ entire string in double quotes.
 
 For any site parameter values that are not supplied on the command line or in the file formats
 below, the following defaults are used (see the `site` member of the
-[configuration](./Calculation-Configuration.md) file):
+[configuration parameter](./Calculation-Configuration.md#calculation-configuration-parameters) table):
 
 ```text
     name: Unnamed

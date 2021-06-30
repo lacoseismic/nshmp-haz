@@ -29,6 +29,7 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
 * [USGS Models](./pages/USGS-Models.md)
   * [Model Editions](./pages/Model-Editions.md)
   * [Logic Trees & Uncertainty](./pages/Logic-Trees-&-Uncertainty.md)
+* [NSHMP Web Services](./pages/NSHMP-Web-Services.md#nshmp-web-services)
 
 ## Other Pages & References
 

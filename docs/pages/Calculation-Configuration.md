@@ -51,7 +51,7 @@ __`performance`__
 [url-datatype]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/DataType.html
 [url-sheets]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/ThreadCount.html
 
-## Notes
+### Notes
 
 1. `hazard.truncationLevel`: This value is only used if the `hazard.exceedanceModel` requires a
    limit (e.g. `TRUNCATION_UPPER_ONLY`)
@@ -59,7 +59,7 @@ __`performance`__
    been defined, this value en/disables this feature.
 3. `hazard.customImls`: Hazard is computed at default intensity measure levels (IMLs) for every
    supported intenisty measure type (IMT), but a user can specify different IMLs as needed (see
-   this [example](../../etc/examples/2-custom-config/README.md) and the
+   [example 2](../../etc/examples/2-custom-config/README.md) and the
    table of default IMLs, below).
 4. `disagg.bins`: This field maps to a data container that specifies the following default ranges
    and intervals for distance, magnitude, and epsilon binning: `"bins": { "rMin": 0.0, "rMax":

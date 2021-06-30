@@ -6,7 +6,7 @@ years. This window is narrowing, however, and updates are also being undertaken 
 models for states and territories outside the conterminous U.S. These pages describe the models
 that are available and some of the history and versions of each. The models are intended for use
 with the  USGS probabilistic earthquake hazard codebase:
-[*nshmp-haz-v2*](https://github.com/usgs/nshmp-haz).
+[*nshmp-haz-v2*](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2).
 
 As specified in this documentation, NSHM files are organized by tectonic setting and then further
 by source type. For larger models, such as that of the conterminous U.S., sources are commonly
@@ -18,8 +18,8 @@ page for links to all published models.
 
 Each model region has a dedicated repository with version tags marking different model editions:
 
-* [Conterminous U.S.](/ghsc/nshmp/nshm-conus)
-* [Hawaii](/ghsc/nshmp/nshm-hawaii)  
+* [Conterminous U.S.](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
+* [Hawaii](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)  
 * Alaska - _update not yet published_
 * Guam & Marianas - _update not yet published_  
 * Puerto Rico & U.S. Virgin Islands - _update not yet published_  
@@ -29,10 +29,10 @@ Each model region has a dedicated repository with version tags marking different
 
 ## Related Pages
 
-* [Model Editions](model-editions.md)
-* [Logic Trees & Uncertainty](logic-trees-&-uncertainty.md)
-
-[**Documentation Index**](../README.md)
+* [USGS Models](./USGS-Models.md#usgs-models)
+  * [Model Editions](./Model-Editions.md#model-editions)
+  * [Logic Trees & Uncertainty](./Logic-Trees-&-Uncertainty.md#logic-trees-&-uncertainty)
+* [**Documentation Index**](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
