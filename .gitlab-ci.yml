@@ -1,3 +1,6 @@
+variables:
+  IMAGE_NAME: ${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+
 # Do not run for merge requests
 workflow:
   rules:
@@ -12,6 +15,7 @@ include:
 stages:
   - init
   - build
+  - trigger
 
 ####
 # Templates
@@ -43,7 +47,7 @@ Build Image Haz:
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      ci_job_token=${CI_JOB_TOKEN}
+      CI_JOB_TOKEN=${CI_JOB_TOKEN}
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
 
 Build Image WS:
@@ -54,7 +58,7 @@ Build Image WS:
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      ci_job_token=${CI_JOB_TOKEN}
+      CI_JOB_TOKEN=${CI_JOB_TOKEN}
     DOCKERFILE: ws.Dockerfile
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
 
@@ -137,3 +141,38 @@ Unit Tests:
   script:
     - ./gradlew check
     - cat ${JACOCO_HTML_DIR}/index.html
+
+####
+# Stage: trigger
+####
+
+Trigger nshmp-haz CDK:
+  needs:
+    - Build Image
+  rules:
+    -
+      if: !reference [.development-env, if]
+      variables: !reference [.development-env, variables]
+      when: manual
+      allow_failure: true
+    - !reference [.staging-env]
+    - !reference [.production-env]
+  script:
+    - apk add curl
+    - |
+      if [ "${ENVIRONMENT}" == 'production' ]; then
+        REF="production";
+      fi
+    - |
+      curl --request POST \
+        --form token=${NSHMP_HAZ_CDK_TRIGGER_TOKEN} \
+        --form ref=${REF} \
+        --form "variables[description]=Triggered by nshmp-haz" \
+        --form "variables[ENVIRONMENT]=${ENVIRONMENT}" \
+        --form "variables[NSHMP_HAZ_IMAGE]=${IMAGE_NAME}" \
+        --form "variables[TRIGGER_PASSCODE]=${NSHMP_HAZ_CDK_TRIGGER_TOKEN}" \
+        "https://${PRIVATE_GITLAB}/api/v4/projects/${NSHMP_HAZ_CDK_PROJECT_ID}/trigger/pipeline"
+  stage: trigger
+  variables:
+    REF: main
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
