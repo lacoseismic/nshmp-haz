@@ -2,10 +2,6 @@
 
 (TODO update etc and/or javadoc links)
 
-~~TODO: add README for `etc/nshm` directory so it can be linked here~~
-
-TODO: where is `etc/peer`? is it needed?
-
 The sites at which to perform hazard and related calculations may be defined in a variety of
 ways. Examples of the file formats described below are available in the resource directory:
 [`etc/nshm`](../../etc/nshm/README.md).
@@ -112,7 +108,7 @@ parallel to lines of latitude and longitude. Any points in the 'calculation' pol
 outside the 'calculation' polygon are set to zero. For an example, see the
 [NSHMP Western US](../../etc/nshm/map-wus.geojson) map site file.
 
-(TODO This needs updating; link to conus-2018 active crust map-region.geojson).
+TODO This needs updating; link to conus-2018 active crust map-region.geojson.
 
 ---
 

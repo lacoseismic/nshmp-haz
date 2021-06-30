@@ -7,18 +7,24 @@ GMMs, as published, support both interface and intraslab events.
 
 [[_TOC_]]
 
-* How to add links to javadocs? ...not possible in wiki (separate repo)? except with external
-  http gitlab urls?
-* include NSHM that used each model?
-* save horizontal space in table by moving notes to table footnotes. this has to be done manually
-  (see NGA-East model IDs), since markdown footnotes always appear at the bottom of the page
+TODO: add links to GMM javadocs?
 
-**gmm-config.json** Required adjacent to any `gmm-tree.json`. This file specifies the applicability
-distance of the associated GMM's and any additional epistemic uncertainty model and properties to
-apply to median ground motions derived from the GMM's. This uncertainty is distinct from the
-built-in aleatory variability (standard deviation or sigma) of the GMM's themselves. Use `null`
-values to indicate that no additional uncertainty model should be applied. Supported uncertainty
-models are detailed in the [ground motion models](ground-motion-models) section. For example:
+TODO: list NSHMs that used each model?
+
+TODO: save horizontal space in table by moving notes to table footnotes (must be done manually because
+markdown footnotes are always at the bottom of the page)
+
+## GMM Configuration
+
+A **gmm-config.json** file governs how GMMs are applied in a NSHM and is required adjacent to any
+`gmm-tree.json` file. It specifies a maximum distance at which associated GMMs are applicable. It
+may also specify a model of additional epistemic uncertainty and the logic tree used to apply it to
+median ground motions derived from the GMMs. If no such model is required, the `epistemic-model` and
+`epistemic-tree` members must be `null`. This uncertainty is disctinct from the built-in aleatory
+variability (standard deviation or sigma) of the GMMs themselves. See [GMM Uncertainty Models](#gmm-uncertainty-models)
+for details on additional epistemic uncertainty in GMMs.
+
+A sample `gmm-config.json` file that specifies no additional epistemic uncertainty model:
 
 ```json
 {
@@ -28,13 +34,7 @@ models are detailed in the [ground motion models](ground-motion-models) section.
 }
 ```
 
-## GMM Configuration
-
-A `gmm-config.json` file governs how GMMs are applied in a NSHM. It specifies a maximum distance
-at which a GMM is applicable. It may also specify a model of additional epistemic uncertainty and
-the logic tree used to apply it. If no such model is required, the `epistemic-model` and
-`epistemic-tree` members must be `null`. See [Uncertainties in NSHMs](uncertainties-in-nshms) for
-details on additional epistemic uncertainty in GMMs.
+The following sample `gmm-config.json` file applies the NGA-West 2 epistemic uncertainty model:
 
 ```json
 {
@@ -50,13 +50,26 @@ details on additional epistemic uncertainty in GMMs.
 
 ## GMM Uncertainty Models
 
-TODO
+TODO: GMM uncertainty models (tables of values not necessary?)
+
+*nshmp-haz-v2* supports two models of additional epistemic uncertainty, derived from the PEER
+NGA-West 1 and NGA-West 2 projects.
+
+NGA-West 1  | Rrup < 10 | 10 <= Rrup < 30 | 30 <= Rrup
+:---:|:---|:---|:---
+**5 <= M < 6** | 0.375 | 0.21  | 0.245
+**6 <= M < 7** | 0.23  | 0.225 | 0.23
+**7 <= M**     | 0.40  | 0.36  | 0.31
 
 ## GMM Post Processors
 
-TODO
+TODO: GMM post processors (currently tabulated in "Auxiliary GMMs" section below)
 
-## Active Crust GMMs
+## GMMs By Tectonic Setting
+
+GMMs available in *nshmp-haz-v2* are tabulated by tectonic setting below.
+
+### Active Crust GMMs
 
 | Reference | ID | Component | Notes |
 |:---------:|:--:|:---------:|:------|
@@ -79,7 +92,7 @@ TODO
 | [Sadigh et al., 1997](http://dx.doi.org/10.1785/gssrl.68.1.180) | SADIGH_97 | Geometric mean of two horizontal components | Also used for interface sources in 2007 Alaska NSHM |
 | [Zhao et al., 2016](http://dx.doi.org/10.1785/0120150063) | ZHAO_16_SHALLOW_CRUST<br>ZHAO_16_UPPER_MANTLE | Geometric mean of two randomly oriented horizontal components |  |
 
-## Stable Crust GMMs
+### Stable Crust GMMs
 
 | Reference | ID | Component | Notes |
 |:---------:|:--:|:---------:|:------|
@@ -108,7 +121,7 @@ TODO
    NGA_EAST_SEED_PEER_EX, NGA_EAST_SEED_PEER_GP, NGA_EAST_SEED_PZCT15_M1SS,
    NGA_EAST_SEED_PZCT15_M2ES, NGA_EAST_SEED_SP15, NGA_EAST_SEED_SP16, NGA_EAST_SEED_YA15
 
-## Subduction GMMs  
+### Subduction GMMs  
 
 | Reference | ID | Component | Notes |
 |:---------:|:--:|:---------:|:------|
@@ -121,7 +134,7 @@ TODO
 | [Zhao et al., 2006](http://dx.doi.org/10.1785/0120050122) | ZHAO_06_INTERFACE<br>ZHAO_06_INTERFACE_BASIN<br>ZHAO_06_SLAB<br>ZHAO_06_SLAB_BASIN | Geometric mean of two horizontal components |  |
 | [Zhao et al., 2016](http://dx.doi.org/10.1785/0120150034)<br>[Zhao et al., 2016](http://dx.doi.org/10.1785/0120150056) | ZHAO_16_INTERFACE<br>ZHAO_16_SLAB<br>*ZHAO_16_UPPER_MANTLE* | Geometric mean of two randomly oriented horizontal components | Subduction Slab and Interface |
 
-## Regional and Specialized GMMs
+### Regional and Specialized GMMs
 
 | Reference | ID | Component | Notes |
 |:---------:|:--:|:---------:|:------|
@@ -149,9 +162,9 @@ TODO
 | [Atkinson, 2015](http://dx.doi.org/10.1785/0120140142) | ATKINSON_15 | orientation-independent horizontal |  |
 -->
 
-## Auxilliary Models
+### Auxiliary Models
 
-Auxilliary models are not used directly, they can be used by concrete implementations of GMMs to
+Auxiliary models are not used directly, they can be used by concrete implementations of GMMs to
 modify model output.
 
 | Reference | Purpose | Component | Notes |

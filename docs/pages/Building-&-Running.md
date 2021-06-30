@@ -84,9 +84,12 @@ By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *ns
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
-### Running
+### Run in Docker
 
-TODO: is there a Docker image for nshmp-haz-v2?
+TODO: Docker scripts currently only get models from github (XML models), so nshmp-haz-v2 run fails
+to parse the models (CONUS_2018 or HAWAII_2021), need to at least update `nshmp-haz-v2/scripts/docker-functions.inc.sh`.
+
+TODO: Model identifiers need to be synced between here and the docker scripts (e.g. `HI-2020` vs `HAWAII_2021`).
 
 The *nshmp-haz-v2* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
@@ -106,14 +109,14 @@ docker run \
 # Example
 docker run \
     -e PROGRAM=hazard \
-    -e MODEL=CONUS-2018 \
+    -e MODEL=CONUS_2018 \
     -v $(pwd)/sites.geojson:/app/sites.geojson \
     -v $(pwd)/config.json:/app/config.json \
     -v $(pwd)/hazout:/app/output \
     usgs/nshmp-haz
 ```
 
-Where: (TODO links below need checking)
+Where:
 
 * `PROGRAM` is the nshmp-haz program to run:
   * disagg = `DisaggCalc`
@@ -121,16 +124,14 @@ Where: (TODO links below need checking)
   * rate = `RateCalc`
 
 * `MODEL` is the [USGS model (NSHM)](./USGS-Models.md) to run:
-  * CONUS-2018: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
-  * HAWAII-2021: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
+  * `CONUS_2018`: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
+  * `HAWAII_2021`: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
 
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
 
-TODO: what should these examples point to? links to example files? or where to look for the samples?
-
-* Other arguments:
+* Other arguments (local files mapped to files within the Docker container with `:/app/...`):
   * (required) The absolute path to a GeoJSON or CSV [site(s)](./Site-Specification.md) file
-    * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv` [`sites.csv`](../../etc/examples/3-sites-file/sites.csv)
+    * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
   * (optional) The absolute path to a [configuration](./Calculation-Configuration.md) file
     * Example: `$(pwd)/my-custom-config.json:/app/config.json`
