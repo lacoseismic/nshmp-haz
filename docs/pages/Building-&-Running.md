@@ -2,10 +2,10 @@
 
 ## Related Pages
 
-* Building & Running
-  * [Developer Basics](./Developer-Basics.md)
-  * [Calculation Configuration](./Calculation-Configuration.md)
-  * [Site Specification](./Site-Specification.md)
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
     [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
 

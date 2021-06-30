@@ -101,13 +101,15 @@ T ≤ 10 s   | 0.000333, 0.000499, 0.000749, 0.00112, 0.00169, 0.00253, <br>0.00
 
 ---
 
-* [**Documentation Index**](../README.md)
-* [Building & Running](./Building-&-Running.md)
-  * [Developer Basics](./Developer-Basics.md)
-  * [Calculation Configuration](./Calculation-Configuration.md)
-  * [Site Specification](./Site-Specification.md)
+## Related Pages
+
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
     [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+* [**Documentation Index**](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

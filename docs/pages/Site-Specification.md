@@ -1,6 +1,5 @@
 # Site Specification
 
-(TODO update etc and/or javadoc links)
 
 The sites at which to perform hazard and related calculations may be defined in a variety of
 ways. Examples of the file formats described below are available in the resource directory:
@@ -112,13 +111,15 @@ TODO This needs updating; link to conus-2018 active crust map-region.geojson.
 
 ---
 
-* [**Documentation Index**](../README.md)
-* [Building & Running](./Building-&-Running.md)
-  * [Developer Basics](./Developer-Basics.md)
-  * [Calculation Configuration](./Calculation-Configuration.md)
-  * [Site Specification](./Site-Specification.md)
+## Related Pages
+
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
     [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+* [**Documentation Index**](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
