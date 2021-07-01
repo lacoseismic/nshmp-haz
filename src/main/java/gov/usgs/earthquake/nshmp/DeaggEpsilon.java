@@ -217,7 +217,7 @@ public class DeaggEpsilon {
       Disaggregation disagg = Disaggregation.atImls(hazard, spectrum, exec);
 
       List<Response> responses = new ArrayList<>(spectrum.size());
-      for (Imt imt : config.hazard.imts) {
+      for (Imt imt : spectrum.keySet()) {
         ResponseData imtMetadata = new ResponseData(
             ImmutableList.of(),
             site,
