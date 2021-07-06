@@ -2,14 +2,14 @@
 # Run hazard jar file.
 #
 # Running Hazard:
-#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz;
 #   docker run \
 #       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
 #       -e MODEL=<WUS_20[08|14|18] | CEUS_20[08|14|18] | COUS_20[08|14|18] | AK_2007 | HI_2020> \
 #       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
 #       -v /absolute/path/to/config/file:/app/config.json \
 #       -v /absolute/path/to/output:/app/output \
-#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz-v2;
+#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz;
 #
 # Build locally:
 #   docker build
@@ -20,7 +20,7 @@
 ARG BUILD_IMAGE=usgs/java:11
 ARG FROM_IMAGE=usgs/java:11
 
-ARG project=nshmp-haz-v2
+ARG project=nshmp-haz
 ARG builder_workdir=/app/${project}
 ARG libs_dir=${builder_workdir}/build/libs
 

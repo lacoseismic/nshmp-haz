@@ -22,7 +22,7 @@
  * Then build the JAR file: ./gradlew assemble
  *
  * One can then specify the model to run in the services:
- *    java -jar build/libs/nshmp-haz-v2.jar --models=/path/to/models
+ *    java -jar build/libs/nshmp-haz.jar --models=/path/to/models
  *
  * Where <MODEL> is one of the model enums in nshmp.www.Model
  */

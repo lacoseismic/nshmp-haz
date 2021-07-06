@@ -2,7 +2,7 @@
  * Extra properties config.
  */
 ext {
-  projectName = 'nshmp-haz-v2'
+  projectName = 'nshmp-haz'
 
   propsPath = '/classes/java/main/service.properties'
 

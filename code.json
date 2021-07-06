@@ -1,6 +1,6 @@
 [
   {
-    "name": "nshmp-haz-v2",
+    "name": "nshmp-haz",
     "organization": "U.S. Geological Survey",
     "description": "National Seismic Hazard Mapping Project (NSHMP) software stack",
     "version": "#.#.#",
@@ -12,15 +12,15 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/LICENSE.md"
+          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/master/LICENSE.md"
         }
       ]
     },
 
-    "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/",
-    "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/docs",
-    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/releases/tag/v#.#.#",
-    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/blob/master/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/",
+    "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/docs",
+    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/releases/tag/v#.#.#",
+    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/master/DISCLAIMER.md",
     "vcs": "git",
 
     "laborHours": 1200,
