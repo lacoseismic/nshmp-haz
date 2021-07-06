@@ -146,9 +146,9 @@ Unit Tests:
 # Stage: trigger
 ####
 
-Trigger nshmp-haz CDK:
+Trigger nshmp-haz-ws CDK:
   needs:
-    - Build Image
+    - Build Image WS
   rules:
     -
       if: !reference [.development-env, if]
