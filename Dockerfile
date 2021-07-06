@@ -31,15 +31,16 @@ FROM ${BUILD_IMAGE} as builder
 
 ARG builder_workdir
 ARG libs_dir
+
+# TODO
+# Remove once nshmp-lib is public
 ARG git_username
 ARG git_password
-ARG gitlab_token=null
-ARG ci_job_token=null
+ARG GITLAB_TOKEN=null
+ARG CI_JOB_TOKEN=null
 
 ENV GIT_NSHMP_USERNAME ${git_username}
 ENV GIT_NSHMP_PASSWORD ${git_password}
-ENV GITLAB_TOKEN ${gitlab_token}
-ENV CI_JOB_TOKEN ${ci_job_token}
 
 WORKDIR ${builder_workdir}
 
