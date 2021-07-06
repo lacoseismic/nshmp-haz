@@ -49,13 +49,13 @@ ENV MODELS_DIRECTORY="/models"
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/nshmp-haz-v2.jar .
+COPY --from=builder /app/build/libs/nshmp-haz.jar .
 
 VOLUME [ "${MODELS_DIRECTORY}" ]
 
 EXPOSE 8080
 
-ENTRYPOINT java -jar nshmp-haz-v2.jar \
+ENTRYPOINT java -jar nshmp-haz.jar \
     "-Xms${JAVA_XMS}" \
     "-Xmx${JAVA_XMX}" \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \

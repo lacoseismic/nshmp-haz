@@ -14,11 +14,11 @@ nshmp-haz:
   ##
   # The basin service url
   # To specify the url to use:
-  #     java -jar build/libs/nshmp-haz-v2.jar --basin-service-url=
+  #     java -jar build/libs/nshmp-haz.jar --basin-service-url=
   basin-service-url: ${basin-service-url:https://staging-earthquake.usgs.gov/nshmp/ws/data/basin}
 
   ##
   # The path to the models.
   # To specify the model to use:
-  #     java -jar build/libs/nshmp-haz-v2.jar --models=<path/to/models>
+  #     java -jar build/libs/nshmp-haz.jar --models=<path/to/models>
   model-path: ${models:libs/nshmp-haz-dep--nshm-conus-2018}

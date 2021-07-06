@@ -54,15 +54,15 @@ public class HazardCalc {
    * argument.
    *
    * <p>Refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/wikis"
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/wikis"
    * target="_top">wiki</a> for comprehensive descriptions of source models,
    * configuration files, site files, and hazard calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/wikis/Building-&-Running"
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/wikis/Building-&-Running"
    *      target="_top"> nshmp-haz wiki</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples"
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples"
    *      target="_top"> example calculations</a>
    */
   public static void main(String[] args) {

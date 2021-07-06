@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * default model used
  *
  * <p> To run the Micronaut jar file with a model: java -jar
- * path/to/nshmp-haz-v2.jar -model=<{@code Model}>
+ * path/to/nshmp-haz.jar -model=<{@code Model}>
  *
  *
  * @author U.S. Geological Survey

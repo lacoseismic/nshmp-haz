@@ -1,4 +1,4 @@
-## nshmp-haz-v2 Ground Motion Model (GMM) batch processing example script
+## nshmp-haz Ground Motion Model (GMM) batch processing example script
 
 import requests
 
@@ -35,7 +35,7 @@ file.close()
 # All GMM services are available to call for batch processing.
 host = 'http://localhost:8080'
 
-service = '/nshmp-haz-v2/gmm/spectra'
+service = '/nshmp-haz/gmm/spectra'
 
 url = host + service
 

@@ -48,7 +48,7 @@ either a comma-delimited (CSV) or [GeoJSON](http://geojson.org) file. The path t
 be supplied as a third argument. It can be used to override any calculation settings; if absent
 [default](calculation-configuration) values are used.
 
-See the [examples](/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples) directory for more details.
+See the [examples](/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples) directory for more details.
 
 ### Computing Disaggregations
 

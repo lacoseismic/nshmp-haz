@@ -48,7 +48,7 @@ Build Image Haz:
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
-    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Build Image WS:
   extends:
@@ -60,13 +60,13 @@ Build Image WS:
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
     DOCKERFILE: ws.Dockerfile
-    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Build Lambda:
   artifacts:
     expire_in: 1 yr
     paths:
-      - build/libs/nshmp-haz-v2.jar
+      - build/libs/nshmp-haz.jar
       - build/libs/nshmp-haz-dependencies.zip
   extends:
     - .gradle
@@ -175,4 +175,4 @@ Trigger nshmp-haz-ws CDK:
   stage: trigger
   variables:
     REF: main
-    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz-v2
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
