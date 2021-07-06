@@ -165,13 +165,13 @@ Trigger nshmp-haz-ws CDK:
       fi
     - |
       curl --request POST \
-        --form token=${NSHMP_HAZ_CDK_TRIGGER_TOKEN} \
+        --form token=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN} \
         --form ref=${REF} \
         --form "variables[description]=Triggered by nshmp-haz" \
         --form "variables[ENVIRONMENT]=${ENVIRONMENT}" \
-        --form "variables[NSHMP_HAZ_IMAGE]=${IMAGE_NAME}" \
-        --form "variables[TRIGGER_PASSCODE]=${NSHMP_HAZ_CDK_TRIGGER_TOKEN}" \
-        "https://${PRIVATE_GITLAB}/api/v4/projects/${NSHMP_HAZ_CDK_PROJECT_ID}/trigger/pipeline"
+        --form "variables[NSHMP_HAZ_WS_IMAGE]=${IMAGE_NAME}" \
+        --form "variables[TRIGGER_PASSCODE]=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN}" \
+        "https://${PRIVATE_GITLAB}/api/v4/projects/${NSHMP_HAZ_WS_CDK_PROJECT_ID}/trigger/pipeline"
   stage: trigger
   variables:
     REF: main
