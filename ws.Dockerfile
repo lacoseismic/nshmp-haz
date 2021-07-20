@@ -43,8 +43,7 @@ LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@us
 
 ENV CONTEXT_PATH="/"
 ENV BASIN_SERVICE_URL="https://earthquake.usgs.gov/nshmp/ws/data/basin"
-ENV JAVA_XMS="2g"
-ENV JAVA_XMX="8g"
+ENV JAVA_OPTS="-Xms2g -Xmx8g"
 ENV MODELS_DIRECTORY="/models"
 
 WORKDIR /app
@@ -56,8 +55,7 @@ VOLUME [ "${MODELS_DIRECTORY}" ]
 EXPOSE 8080
 
 ENTRYPOINT java -jar nshmp-haz.jar \
-    "-Xms${JAVA_XMS}" \
-    "-Xmx${JAVA_XMX}" \
+    ${JAVA_OPTS} \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
     --basin-service-url="${BASIN_SERVICE_URL}" \
     --models="${MODELS_DIRECTORY}";
