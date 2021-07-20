@@ -54,8 +54,10 @@ VOLUME [ "${MODELS_DIRECTORY}" ]
 
 EXPOSE 8080
 
-ENTRYPOINT java -jar nshmp-haz.jar \
+ENTRYPOINT java \
     ${JAVA_OPTS} \
+    -jar \
+    nshmp-haz.jar \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
     --basin-service-url="${BASIN_SERVICE_URL}" \
     --models="${MODELS_DIRECTORY}";
