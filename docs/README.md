@@ -31,9 +31,14 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
   * [Logic Trees & Uncertainty](./pages/Logic-Trees-&-Uncertainty.md)
 * [NSHMP Web Services](./pages/NSHMP-Web-Services.md#nshmp-web-services)
 
-## Other Pages & References
+## Related Information
 
 * [nshmp-lib](https://code.usgs.gov/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
+  * [nshmp-lib JavaDocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/)
+* [*nshmp-haz-v2* License](../LICENSE.md)
+
+## References
+
 * [Functional PSHA](./pages/Functional-PSHA.md)
 * [Probabilistic Seismic Hazard Analysis, a Primer
   [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf)
@@ -41,7 +46,6 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
 * [An Introduction to Probabilistic Seismic Hazard Analysis
   [PDF]](http://web.stanford.edu/~bakerjw/Publications/Baker_(2015)_Intro_to_PSHA.pdf)
   by Jack Baker  
-* [*nshmp-haz-v2* License](../LICENSE.md)
 
 ---
 ![USGS logo](./pages/images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

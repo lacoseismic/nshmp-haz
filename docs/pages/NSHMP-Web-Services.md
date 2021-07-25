@@ -1,7 +1,12 @@
 # NSHMP Web Services
 
-TODO: this page is referenced in [`Model-Editions.md`](./Model-Editions.md#static-vs-dynamic). Need
-a description of the available web services and static data.
+A number of USGS web applications and web services are available to access static data, perform
+dynamic calculations, interact with ground motion models, and access other NSHMP data.
+
+* Hazard tools web application: [NSHM Hazard Tool](https://earthquake.usgs.gov/nshmp/)
+* Static hazard curve data:
+  * [CONUS 2018 NSHM](https://earthquake.usgs.gov/ws/nshmp/conus-2018/static/)
+* Non-NSHM web services: [https://earthquake.usgs.gov/ws/nshmp/data/](https://earthquake.usgs.gov/ws/nshmp/data/)
 
 ---
 
