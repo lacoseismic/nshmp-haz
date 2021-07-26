@@ -16,11 +16,6 @@
 ARG BUILD_IMAGE=usgs/java:11
 ARG FROM_IMAGE=usgs/java:11
 
-ARG project=nshmp-haz-v2
-ARG builder_workdir=/app/${project}
-ARG libs_dir=${builder_workdir}/build/libs
-ARG jar_file=${libs_dir}/${project}.jar
-
 ####
 # Builder image: Build jar file.
 ####
@@ -30,12 +25,10 @@ ARG builder_workdir
 
 # TODO
 # Remove once nshmp-lib is public
-ARG gitlab_token=null
-ARG ci_job_token=null
-ENV GITLAB_TOKEN ${gitlab_token}
-ENV CI_JOB_TOKEN ${ci_job_token}
+ARG GITLAB_TOKEN=null
+ARG CI_JOB_TOKEN=null
 
-WORKDIR ${builder_workdir}
+WORKDIR /app
 
 COPY . .
 
@@ -48,27 +41,23 @@ FROM ${FROM_IMAGE}
 
 LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
-ARG libs_dir
-ARG builder_workdir
-ARG project
-
-ENV PROJECT ${project}
-ENV CONTEXT_PATH "/"
-ENV BASIN_SERVICE_URL "https://staging-earthquake.usgs.gov/nshmp/ws/data/basin"
-ENV JAVA_XMS="2g"
-ENV JAVA_XMX="8g"
+ENV CONTEXT_PATH="/"
+ENV BASIN_SERVICE_URL="https://earthquake.usgs.gov/nshmp/ws/data/basin"
+ENV JAVA_OPTS="-Xms2g -Xmx8g"
+ENV MODELS_DIRECTORY="/models"
 
 WORKDIR /app
 
-COPY --from=builder ${libs_dir}/* ./
+COPY --from=builder /app/build/libs/nshmp-haz.jar .
 
-VOLUME [ "/models" ]
+VOLUME [ "${MODELS_DIRECTORY}" ]
 
 EXPOSE 8080
 
-ENTRYPOINT java -jar "${PROJECT}.jar" \
-    "-Xms${JAVA_XMS}" \
-    "-Xmx${JAVA_XMX}" \
+ENTRYPOINT java \
+    ${JAVA_OPTS} \
+    -jar \
+    nshmp-haz.jar \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
     --basin-service-url="${BASIN_SERVICE_URL}" \
-    --models="/models";
+    --models="${MODELS_DIRECTORY}";
