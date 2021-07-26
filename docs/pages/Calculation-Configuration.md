@@ -108,7 +108,7 @@ T ≤ 10 s   | 0.000333, 0.000499, 0.000749, 0.00112, 0.00169, 0.00253, <br>0.00
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---

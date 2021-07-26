@@ -7,7 +7,7 @@
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 
 ## Build & Run Options
 
@@ -16,12 +16,12 @@
 
 ## Build and Run Locally
 
-Building and running *nshmp-haz-v2* requires prior installation of Git and Java. Please see the
+Building and running *nshmp-haz* requires prior installation of Git and Java. Please see the
 [developer basics](./Developer-Basics.md) page for system configuration guidance.  
 
 ### Building
 
-Navigate to a location on your system where you want *nshmp-haz-v2* code to reside, clone the
+Navigate to a location on your system where you want *nshmp-haz* code to reside, clone the
 repository, and compile:
 
 ```bash
@@ -54,7 +54,7 @@ be supplied as a third argument. It can be used to override any calculation sett
 [default](./Calculation-Configuration.md) values are used.
 
 See the [examples](../../etc/examples/README.md) directory for more details (or
-[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 
 ### Computing Disaggregations
 
@@ -72,7 +72,7 @@ files. Disaggregations also have some independent
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-To ensure you are have the latest *nshmp-haz-v2* update, always first pull the image from Docker:
+To ensure you are have the latest *nshmp-haz* update, always first pull the image from Docker:
 
 ```bash
 docker pull usgs/nshmp-haz
@@ -80,18 +80,18 @@ docker pull usgs/nshmp-haz
 
 ### Docker Memory on Mac
 
-By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz-v2*, the
+By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *nshmp-haz*, the
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
 ### Run in Docker
 
-TODO: Docker scripts currently only get models from github (XML models), so nshmp-haz-v2 run fails
-to parse the models (CONUS_2018 or HAWAII_2021), need to at least update `nshmp-haz-v2/scripts/docker-functions.inc.sh`.
+TODO: Docker scripts currently only get models from github (XML models), so nshmp-haz run fails
+to parse the models (CONUS_2018 or HAWAII_2021), need to at least update `nshmp-haz/scripts/docker-functions.inc.sh`.
 
 TODO: Model identifiers need to be synced between here and the docker scripts (e.g. `HI-2020` vs `HAWAII_2021`).
 
-The *nshmp-haz-v2* application may be run as a Docker container which mitigates the need to install
+The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
 Docker hub at [https://hub.docker.com/r/usgs/nshmp-haz](https://hub.docker.com/r/usgs/nshmp-haz)
 which can be run with:
@@ -140,7 +140,7 @@ Where:
 
 ### Run Customization
 
-When running *nshmp-haz-v2* with Docker the initial (Xms) and maximum (Xmx) JVM memory sizes can
+When running *nshmp-haz* with Docker the initial (Xms) and maximum (Xmx) JVM memory sizes can
 be set with the environment flag (-e, -env):
 
 ```bash

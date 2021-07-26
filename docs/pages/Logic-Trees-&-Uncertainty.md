@@ -1,7 +1,7 @@
 # USGS Models: Logic Trees & Uncertainty
 
 The following page details the logic trees of epistemic uncertainty considered in NSHMs supported
-by *nshmp-haz-v2*. Logic trees are represented in a NSHM using files ending in `-tree.json`.
+by *nshmp-haz*. Logic trees are represented in a NSHM using files ending in `-tree.json`.
 
 [[_TOC_]]
 

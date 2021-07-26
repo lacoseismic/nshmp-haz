@@ -113,7 +113,7 @@ For example:
 ```
 
 See the [ground motion models](./Ground-Motion-Models.md) page for details on GMMs supported in
-_nshmp-haz-v2_ and the related `gmm-config.json` files that governs GMM behavior.
+_nshmp-haz_ and the related `gmm-config.json` files that governs GMM behavior.
 
 ### MFD Logic Trees
 

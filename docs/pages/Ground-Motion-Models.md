@@ -43,7 +43,7 @@ The following sample `gmm-config.json` file applies the NGA-West 2 epistemic unc
 
 ## GMM Uncertainty Models
 
-*nshmp-haz-v2* supports additional epistemic uncertainty models derived from the PEER NGA-West 1
+*nshmp-haz* supports additional epistemic uncertainty models derived from the PEER NGA-West 1
 and PEER NGA-West 2 projects. These models both have factors for distance (`Rrup`) bins
 Rrup < 10 km, 10 km <= Rrup, < 30 km, and 30 km <= Rrup, and for magnitude bins M < 6.0, 6.0 <=
 M < 7.0, and 7.0 <= M. These models can be applied within the `gmm-config.json` file as shown in
@@ -61,7 +61,7 @@ GMMs to modify model output.
 
 ## GMMs By Tectonic Setting
 
-GMMs available in *nshmp-haz-v2* are tabulated by tectonic setting below. See the javadocs for the
+GMMs available in *nshmp-haz* are tabulated by tectonic setting below. See the javadocs for the
 [GMM Package](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/package-summary.html)
 for implementation details of each GMM and comprehensive lists of GMM IDs.
 

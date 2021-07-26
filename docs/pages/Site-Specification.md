@@ -4,14 +4,14 @@ The sites at which to perform hazard and related calculations may be defined in 
 ways. Examples of the file formats described below are available in the resource directory:
 [`etc/nshm`](../../etc/nshm/README.md).
 
-__Note on Coordinates:__ *nshmp-haz-v2* supports longitude and latitude values in the closed
+__Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed
 ranges `[-360° ‥ 360°]` and `[-90° ‥ 90°]`. Note, however, that mixing site and/or source
 coordinates across the antimeridian (the -180° to 180° transition) will yield unexpected results.
 For Pacific models and calculations, always use positive or negative longitudes exclusively.
 
 ## Site String
 
-For the case of running a single site of interest, most *nshmp-haz-v2* programs accept a
+For the case of running a single site of interest, most *nshmp-haz* programs accept a
 comma-delimited string of the form: `name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]`, where `vs30`, `vsInf`,
 `z1p0`, and `z2p5` are optional. Note that if `vs30` is supplied, so too must `vsInf`. Likewise if
 `z1p0` is supplied, so too must `z2p5`. If the string contains any spaces, escape them or wrap the
@@ -45,7 +45,7 @@ it's 'default' basin depth scale factor.
 ## GeoJSON Format (\*.geojson)
 
 Although more verbose than the comma-delimited format, [GeoJSON](http://geojson.org) is a more
-versatile format for encoding geographic data. *nshmp-haz-v2* uses GeoJSON for both lists of sites
+versatile format for encoding geographic data. *nshmp-haz* uses GeoJSON for both lists of sites
 and to define map regions. If you encounter problems when formatting JSON files, use
 [JSONLint](http://jsonlint.com) or [GeoJSONLint](http://geojsonlint.com) for validation.
 
@@ -77,7 +77,7 @@ A site list is expected as a `FeatureCollection` of `Point` features. For exampl
 
 As with the CSV format, the minimum required data is a `geometry` `coordinates` array. All
 `properties` are optional. When using GeoJSON, the `title` property maps to the name of the site.
-Additional properties, if present, are ignored by *nshmp-haz-v2* but permitted as they may be
+Additional properties, if present, are ignored by *nshmp-haz* but permitted as they may be
 relevant for other applications. For example, [styling
 properties](https://help.github.com/articles/mapping-geojson-files-on-github/#styling-features)
 may be used to improve rendering in mapping applications. For a fully fledged example, see the
@@ -85,11 +85,11 @@ may be used to improve rendering in mapping applications. For a fully fledged ex
 
 ### Map Regions
 
-GeoJSON is also used to define *nshmp-haz-v2* map regions. For example, see the file that defines a
+GeoJSON is also used to define *nshmp-haz* map regions. For example, see the file that defines a
 region commonly used when creating hazard and other maps for the
 [Los Angeles basin](../../etc/nshm/map-la-basin.geojson).
 
-A map region is expected as a `Polygon` `FeatureCollection`. Currently, *nshmp-haz-v2* only supports
+A map region is expected as a `Polygon` `FeatureCollection`. Currently, *nshmp-haz* only supports
 a `FeatureCollection` with 1 or 2 polygons. When a single polygon is defined, it must consist of a
 single, simple closed loop. Additional arrays that define holes in the polygon (per the GeoJSON
 spec) are not processed and results are undefined for self-intersecting coordinate arrays. This
@@ -117,7 +117,7 @@ TODO This needs updating; link to conus-2018 active crust map-region.geojson.
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---

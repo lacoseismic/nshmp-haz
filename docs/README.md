@@ -1,14 +1,14 @@
 # Documentation: nshmp-haz
 
-***nshmp-haz-v2*** is a U.S. Geological Survey ([USGS](https://www.usgs.gov)) developed software stack
+***nshmp-haz*** is a U.S. Geological Survey ([USGS](https://www.usgs.gov)) developed software stack
 that supports probabilistic seismic hazard (PSHA) and related analyses. It is maintained by the
 National Seismic Hazard Model Project ([NSHMP](https://earthquake.usgs.gov/hazards/)) within the
 USGS's earthquake hazards program ([EHP](http://earthquake.usgs.gov)).
 
-*nshmp-haz-v2* supports high performance seismic hazard calculations required to generate detailed
+*nshmp-haz* supports high performance seismic hazard calculations required to generate detailed
 maps over large areas and supports a variety of USGS web services and applications related to
 seismic hazards research and the dissemination of hazard data. This documentation explains how
-to use *nshmp-haz-v2* as well as underlying model implementation details.
+to use *nshmp-haz* as well as underlying model implementation details.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
   * [Calculation Configuration](./pages/Calculation-Configuration.md)
   * [Site Specification](./pages/Site-Specification.md)
   * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 * [Hazard Model](./pages/Hazard-Model.md)
   * [Model Structure](./pages/Model-Structure.md)
   * [Model Files](./pages/Model-Files.md)
@@ -35,7 +35,7 @@ to use *nshmp-haz-v2* as well as underlying model implementation details.
 
 * [nshmp-lib](https://code.usgs.gov/ghsc/nshmp/nshmp-lib): USGS hazard modeling library
   * [nshmp-lib JavaDocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/)
-* [*nshmp-haz-v2* License](../LICENSE.md)
+* [*nshmp-haz* License](../LICENSE.md)
 
 ## References
 

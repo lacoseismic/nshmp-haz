@@ -12,15 +12,15 @@ geometry itself is unknown or very poorly defined.
 
 [[_TOC_]]
 
-Source models for use with *nshmp-haz-v2* are defined using [JSON](https://www.json.org) and
-[GeoJSON](https://geojson.org). *nshmp-haz-v2* makes determinations about how to represent a source
+Source models for use with *nshmp-haz* are defined using [JSON](https://www.json.org) and
+[GeoJSON](https://geojson.org). *nshmp-haz* makes determinations about how to represent a source
 based on a GeoJSON geometry type in conjunction with supporting JSON configuration files. Example
 source configuration files, `*-config.json`, are provided with each source type description.
 Configuration files must be fully specified with `null` JSON member values used to specify 'do
 nothing' where appropriate. Any configuration member value in ALL_CAPS indicates the value is one
 of a fixed number of options commonly referred to as an enum.
 
-__Note on Coordinates:__ *nshmp-haz-v2* supports longitude and latitude values in the closed ranges
+__Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed ranges
 `[-360°‥360°]` and `[-90°‥90°]`. Note, however, that mixing site and/or source coordinates across
 the antimeridian (the -180° to 180° transition) will yield unexpected results. For Pacific models
 and calculations, always use positive or negative longitudes exclusively.

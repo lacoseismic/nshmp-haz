@@ -7,7 +7,7 @@ data, or modeling procedures that warrant a model update. Every model the USGS p
 associated with a USGS Open-File report or refereed journal article and supporting datasets.
 However, layered on top of any given model release are bug-fixes and model improvements.
 
-With the update to a new codebase, [nshmp-haz-v2](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2),
+With the update to a new codebase, [nshmp-haz](https://code.usgs.gov/ghsc/nshmp/nshmp-haz),
 the NSHMP has adopted [semantic versioning](http://semver.org) to keep track of different hazard
 models. For any given model region, the first number (or major version) corresponds to a particular
 release or update year. For example, we consider the initial

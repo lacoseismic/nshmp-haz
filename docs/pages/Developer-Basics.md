@@ -53,7 +53,7 @@ git clone https://code.usgs.gov/ghsc/nshmp/nshmp-haz.git
 ## Eclipse Integration (Optional)
 
 Eclipse provides automatic compilation, syntax highlighting, and integration with Git, among
-other useful features. To build or modify *nshmp-haz-v2* using [Eclipse](http://www.eclipse.org/),
+other useful features. To build or modify *nshmp-haz* using [Eclipse](http://www.eclipse.org/),
 install the [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/packages/) or
 [Eclipse IDE for Enterprise Java and Web Developers](https://www.eclipse.org/downloads/packages/),
 if you plan on developing web services. Import the project into Eclipse: `File > Import >
@@ -68,7 +68,7 @@ Gradle > Existing Gradle Project`
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples))
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---
