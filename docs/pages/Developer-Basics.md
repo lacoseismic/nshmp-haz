@@ -7,11 +7,11 @@ The following provides basic guidance on how to set up command-line use of nshmp
 * Java 11 JDK: [Oracle](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) or
   [Amazon Corretto](https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html)
 * [Git](https://git-scm.com/downloads)  
-  * Git is a distributed version control system. The USGS uses a [GitLab](https://docs.gitlab.com)
-    [instance](https://code.usgs.gov/) to host projects and facilitate sharing and collaborative
-    development of code. Git is included in the macOS
-    [developer tools](https://developer.apple.com/xcode/).  
-  * Windows users may want to consider [Git for Windows](https://git-for-windows.github.io) or
+  * Git is a [distributed version control system](https://en.wikipedia.org/wiki/Distributed_version_control).
+    The USGS uses a [GitLab](https://docs.gitlab.com) [instance](https://code.usgs.gov/) to host
+    projects and facilitate sharing and collaborative development of code.
+  * On **macOS**, Git is included in the [developer tools](https://developer.apple.com/xcode/).
+  * On **Windows**, users may want to consider [Git for Windows](https://git-for-windows.github.io) or
     [GitHub Desktop](https://desktop.github.com), both of which include a linux-like terminal
     (Git BASH) in which subsequent commands listed here will work.  
 
@@ -58,3 +58,19 @@ install the [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/
 [Eclipse IDE for Enterprise Java and Web Developers](https://www.eclipse.org/downloads/packages/),
 if you plan on developing web services. Import the project into Eclipse: `File > Import >
 Gradle > Existing Gradle Project`
+
+---
+
+## Related Pages
+
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

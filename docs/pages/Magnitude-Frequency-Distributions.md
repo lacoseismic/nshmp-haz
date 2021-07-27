@@ -48,6 +48,8 @@ tree of rates for a source is also present in a model. Example:
 
 ## Tapered Gutenberg–Richter
 
+TODO: Need a new link for tapered GR MFD
+
 A [tapered Gutenberg-Richter](http://scec.ess.ucla.edu/~ykagan/moms_index.html) MFD is similar to
 Gutenberg-Richter, above, but with an exponential taper applied with a corner magnitude of `mCut`.
 The `a`-value member is optional when a logic tree of rates for a source is also present in a
@@ -97,8 +99,6 @@ example:
   ],
 }
 ```
-
-**mfd-config.json:**
 
 MFD confguration files:
 
@@ -246,7 +246,7 @@ ID's: `[M1, M2, M3, ...]` to support mfd-tree matching across source-tree branch
 
 How MFDs are actually built depends on the settings in a `mfd-config.json` file and rates. For more
 details on MFDs and their configuration see the
-[magnitude frequency distributions](magnitude-frequency-distributions) section.
+[magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) section.
 
 An `mfd-config.json` is currently only required for finite fault sources. It can be located
 anywhere in the file heirarchy and may be overridden in nested directories.
@@ -254,6 +254,8 @@ anywhere in the file heirarchy and may be overridden in nested directories.
 Depending on the types of MFDs being modeled, a rate file may contain Gutenberg-Richter a-values
 or magnitude-specific rates. The branches of a rate-tree commonly have the generic ID's:
 `[R1, R2, R3, ...]` to support matching rate-trees across source-tree branches.
+
+TODO: convert example to JSON format (or see `mfd-config.json` section above)
 
 ```xml
         <!-- (optional) A magnitude uncertainty model that will be
@@ -281,3 +283,20 @@ or magnitude-specific rates. The branches of a rate-tree commonly have the gener
 
     </Settings>
 ```
+
+---
+
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

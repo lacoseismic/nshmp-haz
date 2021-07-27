@@ -344,3 +344,20 @@ using an `interface-config.json` file.
 Subduction intraslab sources are currently specified the same way as
 [grid sources](#grid-sources) in curstal tectonic settings. Source model properties are defined
 using an `slab-config.json` file.
+
+---
+
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

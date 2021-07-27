@@ -1,10 +1,8 @@
 # Site Specification
 
-(TODO update etc and/or javadoc links)
-
 The sites at which to perform hazard and related calculations may be defined in a variety of
 ways. Examples of the file formats described below are available in the resource directory:
-[`etc/nshm`](/usgs/nshmp-haz/tree/master/etc/nshm).
+[`etc/nshm`](../../etc/nshm/README.md).
 
 __Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed
 ranges `[-360° ‥ 360°]` and `[-90° ‥ 90°]`. Note, however, that mixing site and/or source
@@ -21,7 +19,7 @@ entire string in double quotes.
 
 For any site parameter values that are not supplied on the command line or in the file formats
 below, the following defaults are used (see the `site` member of the
-[configuration](calculation-configuration) file):
+[configuration parameter](./Calculation-Configuration.md#calculation-configuration-parameters) table):
 
 ```text
     name: Unnamed
@@ -83,13 +81,13 @@ Additional properties, if present, are ignored by *nshmp-haz* but permitted as t
 relevant for other applications. For example, [styling
 properties](https://help.github.com/articles/mapping-geojson-files-on-github/#styling-features)
 may be used to improve rendering in mapping applications. For a fully fledged example, see the
-[NSHM test sites](/usgs/nshmp-haz/blob/master/etc/nshm/sites-nshmp.geojson) file.
+[NSHM test sites](../../etc/nshm/sites-nshmp.geojson) file.
 
 ### Map Regions
 
 GeoJSON is also used to define *nshmp-haz* map regions. For example, see the file that defines a
 region commonly used when creating hazard and other maps for the
-[Los Angeles basin](/usgs/nshmp-haz/blob/master/etc/nshm/map-la-basin.geojson).
+[Los Angeles basin](../../etc/nshm/map-la-basin.geojson).
 
 A map region is expected as a `Polygon` `FeatureCollection`. Currently, *nshmp-haz* only supports
 a `FeatureCollection` with 1 or 2 polygons. When a single polygon is defined, it must consist of a
@@ -106,5 +104,22 @@ have a feature `id` of `Extents`, and *must* be rectangular (in a mercator proje
 parallel to lines of latitude and longitude. Any points in the 'calculation' polygon outside the
 'extents' polygon are ignored; hazard values at any points within the 'extents' polygon but
 outside the 'calculation' polygon are set to zero. For an example, see the
-[NSHMP Western US](/usgs/nshmp-haz/blob/master/etc/nshm/map-wus.geojson) map site file.
-(TODO This needs updating; link to conus-2018 active crust map-region.geojson).
+[NSHMP Western US](../../etc/nshm/map-wus.geojson) map site file.
+
+TODO This needs updating; link to conus-2018 active crust map-region.geojson.
+
+---
+
+## Related Pages
+
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

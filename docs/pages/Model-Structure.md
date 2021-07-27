@@ -16,7 +16,7 @@ settings supporting the nested source types: `fault-sources`, `grid-sources`, an
 The `volcanic` tectonic setting also supports `decollement-sources`.
 
 The root of a model must include `model-info.json` and _may_ include a `calc-config.json` that
-specifies any custom default [calculation configuration](calculation-configuration) settings
+specifies any custom default [calculation configuration](./Calculation-Configuration.md) settings
 for the model. Top level tectonic setting directories must include `gmm-tree.json` and
 `gmm-config.json` files. Source directories are loaded recursively, permitting configuration files
 deeper in the heirarchy to override those defined higher in the heirarchy, as needed and as
@@ -95,7 +95,7 @@ fault-sources/
           └─ branch-4/
 ```
 
-See also: [Finite Fault Source Type](source-types#finite-fault-sources)
+See also: [Finite Fault Source Type](./Source-Types#fault-sources)
 
 ## Crustal Grid Sources
 
@@ -127,7 +127,7 @@ grid-sources/
       └─ ...
 ```
 
-See also: [Grid Source Type](source-types#grid-sources)
+See also: [Grid Source Type](./Source-Types.md#grid-sources)
 
 ## Crustal Zone (Area) Sources
 
@@ -156,7 +156,7 @@ zone-sources/
           └─ [rate-tree.json]     (optional) tree of rates        (future)
 ```
 
-See also: [Zone Source Type](source-types#zone-sources)
+See also: [Zone Source Type](./Source-Types.md#zone-sources)
 
 ## Subduction Interface Sources
 
@@ -174,7 +174,7 @@ subduction-interface
   └─ ...
 ```
 
-See also: [Subduction Interface Source Type](source-types#subduction-interface-sources)
+See also: [Subduction Interface Source Type](./Source-Types.md#subduction-interface-sources)
 
 ## Subduction Intraslab Sources
 
@@ -192,4 +192,21 @@ subduction-slab
   └─ ...
 ```
 
-See also: [Subduction Intraslab Source Type](source-types#subduction-intraslab-sources)
+See also: [Subduction Intraslab Source Type](./Source-Types.md#subduction-intraslab-sources)
+
+---
+
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

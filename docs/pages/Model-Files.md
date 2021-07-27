@@ -30,7 +30,7 @@ motions from the model.
 
 **calc-config.json:** Optional calculation configuration file specifies the default
 calculation settings used for a NSHM. This file overrides any built in default values. See
-the [calculation configuration](calculation-configuration) page for more details.
+the [calculation configuration](./Calculation-Configuration.md) page for more details.
 
 ## Logic Trees
 
@@ -112,7 +112,7 @@ For example:
 ]
 ```
 
-See the [ground motion models](ground-motion-models) page for details on GMMs supported in
+See the [ground motion models](./Ground-Motion-Models.md) page for details on GMMs supported in
 _nshmp-haz_ and the related `gmm-config.json` files that governs GMM behavior.
 
 ### MFD Logic Trees
@@ -136,7 +136,7 @@ using the same MFDs on multiple branches of a source tree.
 
 How MFDs are intialized (or realized) depends on the presence and contents of `mfd-config.json` and
 `rate-tree.json` files. See the
-[magnitude frequency distributions](magnitude-frequency-distributions) page for details on these
+[magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) page for details on these
 files and the types of MFDs supported in _nshmp-haz_.
 
 ## Rupture Sets
@@ -183,3 +183,20 @@ is composed of an array of rupture-sets.
   ]
 }
 ```
+
+---
+
+## Related Pages
+
+* [Hazard Model](./Hazard-Model.md#hazard-model)
+  * [Model Structure](./Model-Structure.md#model-structure)
+  * [Model Files](./Model-Files.md#model-files)
+  * [Source Types](./Source-Types.md#source-types)
+  * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
+  * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
+  * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

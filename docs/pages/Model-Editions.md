@@ -7,10 +7,10 @@ data, or modeling procedures that warrant a model update. Every model the USGS p
 associated with a USGS Open-File report or refereed journal article and supporting datasets.
 However, layered on top of any given model release are bug-fixes and model improvements.
 
-With the update to a new codebase, [nshmp-haz](https://github.com/usgs/nshmp-haz), the NSHMP has
-adopted [semantic versioning](http://semver.org) to keep track of different hazard models. For
-any given model region, the first number (or major version) corresponds to a particular release
-or update year. For example, we consider the initial
+With the update to a new codebase, [nshmp-haz](https://code.usgs.gov/ghsc/nshmp/nshmp-haz),
+the NSHMP has adopted [semantic versioning](http://semver.org) to keep track of different hazard
+models. For any given model region, the first number (or major version) corresponds to a particular
+release or update year. For example, we consider the initial
 [1996 conterminous U.S. NSHM](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#1996)
 to be v1.0.0. The second number (or minor version) reflects updates to a particular release that
 likely causes small changes to hazard values. The third number reflects non-hazard altering
@@ -19,33 +19,38 @@ hazard.
 
 The USGS NSHMP is committed to supporting current and prior model releases in any given region
 via web services. The table below provides a summary of all NSHM releases and their corresponding
-version numbers.
+version numbers. Links to documentation and data for each of the models below are listed on the USGS
+[Seismic Hazard Maps and Site-Specific Data](https://www.usgs.gov/natural-hazards/earthquake-hazards/seismic-hazard-maps-and-site-specific-data)
+page.
+
+TODO: confirm model versions, tags, links (github vs gitlab...), and availability
 
 Region | Year | Version | Static | Dynamic | Notes |
 -------|:----:|:-------:|:------:|:-------:|-------|
-Conterminous U.S. | [2014](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2014) | [v4.2.0](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.2.0)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | [2014](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2014) | [v4.1.4](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.1.4)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | [2014](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2014) | [v4.0.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2014r1) |:small_blue_diamond:| | ASCE7-16 |
-Conterminous U.S. | [2008](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2008) | v3.3.3 | |:small_blue_diamond:| |
-Conterminous U.S. | [2008](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2008) | [v3.2.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2008r3) |:small_blue_diamond:| | |
-Conterminous U.S. | [2008](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2008) | v3.1.0 |:small_blue_diamond:| | ASCE7-10 |
-Conterminous U.S. | [2008](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2008) | v3.0.0 | | | |
-Conterminous U.S. | [2002](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2002) | v2.0.0 | | | |
-Conterminous U.S. | [1996](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#1996) | v1.0.0 | | | |
-Alaska            | [2007](https://earthquake.usgs.gov/hazards/hazmaps/ak/index.php#2007) | v2.1.0 | |:small_blue_diamond:| |
-Alaska            | [2007](https://earthquake.usgs.gov/hazards/hazmaps/ak/index.php#2007) | v2.0.0 |:small_blue_diamond:| | ASCE7-10 |
-Alaska            | [1999](https://earthquake.usgs.gov/hazards/hazmaps/ak/index.php#1999) | v1.0.0 | | | |
-American Samoa    | [2012](https://earthquake.usgs.gov/hazards/hazmaps/islands.php#samoapacific) | v1.0.0 | | | |
-Guam              | [2012](https://pubs.usgs.gov/of/2012/1015/) | v1.0.0 | | | |
-Hawaii            | [2018](https://earthquake.usgs.gov/hazards/hazmaps/islands.php#hi) | v2.0.0 | | TBD | |
-Hawaii            | [1998](https://earthquake.usgs.gov/hazards/hazmaps/islands.php#hi) | v1.1.0 | | TBD | |
-Hawaii            | [1998](https://earthquake.usgs.gov/hazards/hazmaps/islands.php#hi) | v1.0.0 |:small_blue_diamond:| | ASCE7-10 |
-Puerto Rico & <br/> U.S. Virgin Islands | [2003](https://earthquake.usgs.gov/hazards/hazmaps/islands.php#prvi) | v1.0.0 | | | |
+Conterminous U.S. | 2018 | [v5.0.0](https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [v4.2.0](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.2.0)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [v4.1.4](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.1.4)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [v4.0.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2014r1) |:small_blue_diamond:| | ASCE7-16 |
+Conterminous U.S. | 2008 | v3.3.3 | |:small_blue_diamond:| |
+Conterminous U.S. | 2008 | [v3.2.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2008r3) |:small_blue_diamond:| | |
+Conterminous U.S. | 2008 | v3.1.0 |:small_blue_diamond:| | ASCE7-10 |
+Conterminous U.S. | 2008 | v3.0.0 | | | |
+Conterminous U.S. | 2002 | v2.0.0 | | | |
+Conterminous U.S. | 1996 | v1.0.0 | | | |
+Alaska            | 2007 | v2.1.0 | |:small_blue_diamond:| |
+Alaska            | 2007 | v2.0.0 |:small_blue_diamond:| | ASCE7-10 |
+Alaska            | 1999 | v1.0.0 | | | |
+American Samoa    | 2012 | v1.0.0 | | | |
+Guam              | 2012 | v1.0.0 | | | |
+Hawaii            | 2018 | v2.0.0 | | TBD | |
+Hawaii            | 1998 | v1.1.0 | | TBD | |
+Hawaii            | 1998 | v1.0.0 |:small_blue_diamond:| | ASCE7-10 |
+Puerto Rico & <br/> U.S. Virgin Islands | 2003 | v1.0.0 | | | |
 
 <sup>†</sup> __Note on the 2014 Conterminous U.S. NSHM:__ Initial publication of the
-[2014 model](https://earthquake.usgs.gov/hazards/hazmaps/conterminous/index.php#2014) included
-data to support updates to the U.S. Building Code, specifically hazard curves for peak ground
-acceleration (PGA), and 0.2 and 1.0 second spectral accelerations, all at a BC boundary site
+[2014 model](https://www.usgs.gov/natural-hazards/earthquake-hazards/science/2014-united-states-lower-48-seismic-hazard-long-term)
+included data to support updates to the U.S. Building Code, specifically hazard curves for peak
+ground acceleration (PGA), and 0.2 and 1.0 second spectral accelerations, all at a BC boundary site
 class with Vs30 = 760 m/s. Some time later, the model was deployed to the Unified Hazard Tool
 (UHT) and included support in the Wester U.S. for calculations at sites other than Vs30 = 760 m/s,
 consistent with dynamic calculations using the 2008 model. Subsequently, we updated the 2014
@@ -85,15 +90,32 @@ bound to use those values adopted by the U.S. building code, one of the editions
 is probably most appropriate. However, if one is bound to use the most up to date source model,
 one of the dynamic editions is likely better.
 
-Dynamic editions are supported through web-services provided by the `nshmp-haz-ws` library
-(this repository). Static editions are supported via a separate set of services. Both are
-documented on the [web services](web-services) page.
+TODO: do we want to reference `nshmp-haz-ws` and is this the correct reference here?
+
+Dynamic editions are supported through web-services provided by the `nshmp-haz-ws` library.
+Static editions are supported via a separate set of services. Both are documented on the
+[web services](./NSHMP-Web-Services.md#nshmp-web-services) page.
 
 ## Region specific changes
 
 Changes between editions in model regions are documented in the release notes of the individual
 model repositories.
 
-* [Conterminous US (2014)](/usgs/nshmp-model-cous-2014/wiki)  
-* [Conterminous US (2008)](/usgs/nshmp-model-cous-2008/wiki)  
-* [Alaska (2007)](/usgs/nshmp-model-ak-2007/wiki)  
+TODO: model links currently point to github repos
+
+* [Conterminous US (2014)](https://github.com/usgs/nshm-cous-2014)  
+* [Conterminous US (2008)](https://github.com/usgs/nshm-cous-2008)  
+* [Alaska (2007)](https://github.com/usgs/nshm-ak-2007)  
+
+---
+
+## Related Pages
+
+* [USGS Models](./USGS-Models.md#usgs-models)
+  * [Model Editions](./Model-Editions.md#model-editions)
+  * [Logic Trees & Uncertainty](./Logic-Trees-&-Uncertainty.md#logic-trees-&-uncertainty)
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))

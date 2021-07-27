@@ -8,4 +8,4 @@ command line applications and web service classes and relies on the
 [*nshmp-lib*](https://code.usgs.gov/ghsc/nshmp/nshmp-lib) hazard library, among other
 dependencies.
 
-Please see the [docs](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/docs) for more information.
+Please see the [docs](docs/README.md) for more information.

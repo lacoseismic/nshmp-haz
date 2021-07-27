@@ -52,4 +52,8 @@ __Results directory structure:__
 ```
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 7 – Deaggregation](../7-deaggregation)
+#### Next: [Example 7 – Deaggregation](../7-deaggregation/README.md)
+
+---
+
+* [**Documentation Index**](../../../docs/README.md)

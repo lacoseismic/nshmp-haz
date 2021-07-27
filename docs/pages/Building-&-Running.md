@@ -2,7 +2,12 @@
 
 ## Related Pages
 
-TODO
+* [Building & Running](./Building-&-Running.md#building-&-running)
+  * [Developer Basics](./Developer-Basics.md#developer-basics)
+  * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
+  * [Site Specification](./Site-Specification.md#site-specification)
+  * [Examples](../../etc/examples/README.md) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 
 ## Build & Run Options
 
@@ -12,7 +17,7 @@ TODO
 ## Build and Run Locally
 
 Building and running *nshmp-haz* requires prior installation of Git and Java. Please see the
-[developer basics](developer-basics) page for system configuration guidance.  
+[developer basics](./Developer-Basics.md) page for system configuration guidance.  
 
 ### Building
 
@@ -40,15 +45,16 @@ measures. For example:
 java -cp path/to/nshmp-haz.jar gov.usgs.earthquake.nshmp.HazardCalc model sites [config]
 ```
 
-At a minimum, the hazard source [model](hazard-model) and the [site](site-specification)(s) at
-which to perform calculations must be specified. The source model should specified a path to a
+At a minimum, the hazard source [model](./Hazard-Model.md) and the [site](./Site-Specification.md)(s)
+at which to perform calculations must be specified. The source model should specified a path to a
 directory. A single site may be specified with a string; multiple sites must be specified using
 either a comma-delimited (CSV) or [GeoJSON](http://geojson.org) file. The path to a custom
-[configuration](calculation-configuration) file containing user-specific settings may optionally
+[configuration](./Calculation-Configuration.md) file containing user-specific settings may optionally
 be supplied as a third argument. It can be used to override any calculation settings; if absent
-[default](calculation-configuration) values are used.
+[default](./Calculation-Configuration.md) values are used.
 
-See the [examples](/ghsc/nshmp/nshmp-haz-v2/-/tree/master/etc/examples) directory for more details.
+See the [examples](../../etc/examples/README.md) directory for more details (or
+[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
 
 ### Computing Disaggregations
 
@@ -62,7 +68,7 @@ java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites returnPe
 
 Disaggregations build on and output `HazardCalc` results along with other disaggregation specific
 files. Disaggregations also have some independent
-[configuration](calculation-configuration#config-disagg) options.
+[configuration](./Calculation-Configuration.md#config-disagg) options.
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
@@ -78,7 +84,12 @@ By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *ns
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
-### Running
+### Run in Docker
+
+TODO: Docker scripts currently only get models from github (XML models), so nshmp-haz run fails
+to parse the models (CONUS_2018 or HAWAII_2021), need to at least update `nshmp-haz/scripts/docker-functions.inc.sh`.
+
+TODO: Model identifiers need to be synced between here and the docker scripts (e.g. `HI-2020` vs `HAWAII_2021`).
 
 The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
@@ -98,31 +109,31 @@ docker run \
 # Example
 docker run \
     -e PROGRAM=hazard \
-    -e MODEL=CONUS-2018 \
+    -e MODEL=CONUS_2018 \
     -v $(pwd)/sites.geojson:/app/sites.geojson \
     -v $(pwd)/config.json:/app/config.json \
     -v $(pwd)/hazout:/app/output \
     usgs/nshmp-haz
 ```
 
-Where: (TODO links below need checking)
+Where:
 
 * `PROGRAM` is the nshmp-haz program to run:
   * disagg = `DisaggCalc`
   * hazard = `HazardCalc`
   * rate = `RateCalc`
 
-* `MODEL` is the [USGS model (NSHM)](usgs-models) to run:
-  * CONUS-2018: [Conterminous U.S. 2018](https://github.com/usgs/nshm-conus)
-  * HAWAII-2021: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
+* `MODEL` is the [USGS model (NSHM)](./USGS-Models.md) to run:
+  * `CONUS_2018`: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
+  * `HAWAII_2021`: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
 
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
 
-* Other arguments:
-  * (required) The absolute path to a GeoJSON or CSV [site(s)](site-specification) file
+* Other arguments (local files mapped to files within the Docker container with `:/app/...`):
+  * (required) The absolute path to a GeoJSON or CSV [site(s)](./Site-Specification.md) file
     * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
-  * (optional) The absolute path to a [configuration](calculation-configuration) file
+  * (optional) The absolute path to a [configuration](./Calculation-Configuration.md) file
     * Example: `$(pwd)/my-custom-config.json:/app/config.json`
   * (required) The absolute path to an output directory
     * Example: `$(pwd)/my-hazard-output:/app/output`
@@ -144,3 +155,11 @@ Where:
 
 * `JAVA_XMS` is the intial memory for the JVM (default: system)
 * `JAVA_XMX` is the maximum memory for the JVM (default: 8g)
+
+---
+
+* [**Documentation Index**](../README.md)
+
+---
+![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
+National Seismic Hazard Mapping Project ([NSHMP](https://earthquake.usgs.gov/hazards/))
