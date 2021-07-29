@@ -67,8 +67,8 @@ Gradle > Existing Gradle Project`
   * [Developer Basics](./Developer-Basics.md#developer-basics)
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
-  * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+  * [Examples](../../etc/examples) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---

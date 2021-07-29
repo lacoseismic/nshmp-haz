@@ -18,7 +18,7 @@ support modeling of complex logic trees.
   years), and cautions users using values below 10<sup>-4</sup> (10,000 years). These models were
   developed for building codes concerned with return periods of 10<sup>-4</sup> and above.
 
-* Important considerations when using NSHMs: NSHMs are only applicable to U.S. and it's
+* Important considerations when using NSHMs: NSHMs are only applicable to U.S. and its
   territories. Although hazard close to the borders can be useful for comparison to other models,
   the further one drifts from the U.S. border, the more incomplete the underlying earthquake
   source model will be.

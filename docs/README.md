@@ -7,8 +7,9 @@ USGS's earthquake hazards program ([EHP](http://earthquake.usgs.gov)).
 
 *nshmp-haz* supports high performance seismic hazard calculations required to generate detailed
 maps over large areas and supports a variety of USGS web services and applications related to
-seismic hazards research and the dissemination of hazard data. This documentation explains how
-to use *nshmp-haz* as well as underlying model implementation details.
+seismic hazards research and the dissemination of hazard data (see the
+[NSHM Hazard Tool](https://earthquake.usgs.gov/nshmp/)). This documentation explains how to
+use *nshmp-haz* as well as underlying model implementation details.
 
 ## Table of Contents
 
@@ -17,8 +18,8 @@ to use *nshmp-haz* as well as underlying model implementation details.
   * [Developer Basics](./pages/Developer-Basics.md)
   * [Calculation Configuration](./pages/Calculation-Configuration.md)
   * [Site Specification](./pages/Site-Specification.md)
-  * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+  * [Examples](../../etc/examples) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 * [Hazard Model](./pages/Hazard-Model.md)
   * [Model Structure](./pages/Model-Structure.md)
   * [Model Files](./pages/Model-Files.md)
@@ -29,7 +30,6 @@ to use *nshmp-haz* as well as underlying model implementation details.
 * [USGS Models](./pages/USGS-Models.md)
   * [Model Editions](./pages/Model-Editions.md)
   * [Logic Trees & Uncertainty](./pages/Logic-Trees-&-Uncertainty.md)
-* [NSHMP Web Services](./pages/NSHMP-Web-Services.md#nshmp-web-services)
 
 ## Related Information
 
@@ -41,7 +41,7 @@ to use *nshmp-haz* as well as underlying model implementation details.
 
 * [Functional PSHA](./pages/Functional-PSHA.md)
 * [Probabilistic Seismic Hazard Analysis, a Primer
-  [PDF]](http://www.opensha.org/sites/opensha.org/files/PSHA_Primer_v2_0.pdf)
+  [PDF]](https://opensha.org/resources/PSHA_Primer_v2_0.pdf)
   by Edward Field  
 * [An Introduction to Probabilistic Seismic Hazard Analysis
   [PDF]](http://web.stanford.edu/~bakerjw/Publications/Baker_(2015)_Intro_to_PSHA.pdf)

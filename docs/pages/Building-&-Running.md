@@ -6,8 +6,8 @@
   * [Developer Basics](./Developer-Basics.md#developer-basics)
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
-  * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+  * [Examples](../../etc/examples) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 
 ## Build & Run Options
 
@@ -53,8 +53,8 @@ either a comma-delimited (CSV) or [GeoJSON](http://geojson.org) file. The path t
 be supplied as a third argument. It can be used to override any calculation settings; if absent
 [default](./Calculation-Configuration.md) values are used.
 
-See the [examples](../../etc/examples/README.md) directory for more details (or
-[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+See the [examples](../../etc/examples) directory for more details (or
+[on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 
 ### Computing Disaggregations
 
@@ -86,11 +86,6 @@ to a minimum of 4 GB.
 
 ### Run in Docker
 
-TODO: Docker scripts currently only get models from github (XML models), so nshmp-haz run fails
-to parse the models (CONUS_2018 or HAWAII_2021), need to at least update `nshmp-haz/scripts/docker-functions.inc.sh`.
-
-TODO: Model identifiers need to be synced between here and the docker scripts (e.g. `HI-2020` vs `HAWAII_2021`).
-
 The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
 Docker hub at [https://hub.docker.com/r/usgs/nshmp-haz](https://hub.docker.com/r/usgs/nshmp-haz)
@@ -99,7 +94,7 @@ which can be run with:
 ```bash
 docker run \
     -e PROGRAM=<disagg | hazard | rate> \
-    -e MODEL=<CONUS-2018 | HAWAII-2021> \
+    -e MODEL=<CONUS_2018 | HAWAII_2021> \
     -e RETURN_PERIOD=<RETURN_PERIOD> \
     -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
     -v /absolute/path/to/config/file:/app/config.json \

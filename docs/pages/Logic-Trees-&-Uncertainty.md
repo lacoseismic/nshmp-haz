@@ -19,8 +19,6 @@ alternative models.
 | Sigma Epistemic | _(none)_ | _(no change)_ | __0.2__ : USGS Panel<br>__0.8__ : EPRI |
 | Site Aleatory | _(none)_ | _(no change)_ | __0.185, 0.63, 0.185__ : Site ± σ |
 
----
-
 ## Active Crustal Ground Motion Models
 
 | Description | 2008  | 2014 | 2018 |
@@ -28,16 +26,12 @@ alternative models.
 | WUS | __0.3333__ : BA_08<br>__0.3333__ : CB_08<br>__0.3334__ : CY_08 | __0.22__ : ASK_14<br>__0.22__ : BSSA_14<br>__0.22__ : CB_14<br>__0.22__ : CY_14<br>__0.22__ : IDRISS_14 | __0.25__ : ASK_14<br>__0.25__ : BSSA_14<br>__0.25__ : CB_14<br>__0.25__ : CY_14 |
 | Mean Epistemic | NGA-West1 (M,R)<br>__0.185__ : epi+<br>__0.630__ : off<br>__0.185__ : epi- | NGA-West2 (M,R)<br>__0.185__ : epi+<br>__0.630__ : off<br>__0.185__ : epi- | _(no change)_  |
 
----
-
 ## Subduction Ground Motion Models
 
 | Description | 2008  | 2014 | 2018 |
 |:----------- |:----- |:---- |:---- |
 | Cascadia<br>(interface) | __0.25__ : AB_03 (global)<br>__0.25__ : YOUNGS_97<br>__0.50__ : ZHAO_06 | __0.1__ : AB_03 (global)<br>__0.3__ : AM_09<br>__0.3__ : BCHYDRO_12<br>__0.3__ : ZHAO_06 | __0.3333__ : AM_09<br>__0.3334__ : BCHYDRO_12<br>__0.3333__ : ZHAO_06 |
 | Cascadia<br>(slab) | __0.25__ : AB_03 (global)<br>__0.25__ : AB_03 (cascadia)<br>__0.50__ : YOUNGS_97 | __0.1665__ : AB_03 (global, mod)<br>__0.1665__ : AB_03 (cascadia, mod)<br>__0.3330__ : BCHYDRO_12<br>__0.3340__ : ZHAO_06 | __0.5__ : BCHYDRO_12<br>__0.5__ : ZHAO_06 |
-
----
 
 ## Fault Source Model (CEUS)
 
@@ -50,9 +44,7 @@ alternative models.
 |           | Full : epistemic   | __0.2, 0.6, 0.2__ : M ± 0.2 | _(no change)_  | _(no change)_  |
 |           | Full : aleatory    |  M ± 0.24 (±2σ normal PDF)  | _(no change)_  | _(no change)_  |
 
-¹ There are a very limited number of fault sources in CEUS
-
----
+¹ There are a very limited number of fault sources in CEUS  
 
 ## Fault Source Model (WUS)
 
@@ -68,8 +60,6 @@ alternative models.
 | Dip | Reverse & Strike-Slip | __1.0__ : assigned | _(no change)_ | _(no change)_ |
 |     | Normal | __0.2, 0.6, 0.2__ : 50 ± 10° | __0.2, 0.6, 0.2__ : 50±15° | _(no change)_ |
 
----
-
 ## Grid Source Model
 
 | Model | Description | 2008 | 2014 | 2018 |
@@ -83,8 +73,6 @@ alternative models.
 |              | WUS, M ≥ 6.5 | __1.0__ : 1.0 km | _(no change)_  | _(no change)_  |
 |              | CEUS, All M  | __1.0__ : 5.0 km | _(no change)_  | _(no change)_  |
 
----
-
 ## Fault Source Model (CA, UCERF3)
 
 | Model | 2014 | 2018 |
@@ -97,8 +85,6 @@ alternative models.
 | Inversion Constraint | __1.0__ : UCERF2 (CH) | _(no change)_  |
 | Fault Mo Rate | __1.0__ : off |  _(no change)_  |
 
----
-
 ## Grid Source Model (CA, UCERF3)
 
 | Model | 2014 | 2018 |
@@ -107,8 +93,6 @@ alternative models.
 | Grid: Smoothing | __0.5__ : Adaptive<br>__0.5__ : Fixed | _(no change)_  |
 | Grid: Focal Mechanisms | __1.0__ : assigned | _(no change)_  |
 | Magnitude Scaling | __1.0__ : WC_94 (length) | _(no change)_  |
-
----
 
 ## Subduction seismic source model
 

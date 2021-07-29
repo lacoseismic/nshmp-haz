@@ -18,8 +18,8 @@ page for links to all published models.
 
 Each model region has a dedicated repository with version tags marking different model editions:
 
-* [Conterminous U.S.](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
-* [Hawaii](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)  
+* [Conterminous U.S.](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)
+* [Hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii)  
 * Alaska - _update not yet published_
 * Guam & Marianas - _update not yet published_  
 * Puerto Rico & U.S. Virgin Islands - _update not yet published_  

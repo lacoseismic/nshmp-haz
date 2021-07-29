@@ -9,7 +9,7 @@ listed below. See the [examples](../../etc/examples/README.md) directory, or any
 
 Calculation configuration parameters are optional (i.e. defaults are used for missing values) and
 may be overridden. See [building and running](./Building-&-Running.md) and the
-[examples](../../etc/examples/README.md) for details.
+[examples](../../etc/examples) for details.
 
 Parameter | Type | Default | Notes |
 --------- | ---- | ------- | ----- |
@@ -20,7 +20,7 @@ __`hazard`__
 &nbsp;&nbsp;&nbsp;`.customImls`            |`Map<String, Double[]>`  | `{}` (empty object)     | [2](#notes)
 &nbsp;&nbsp;&nbsp;`.gmmUncertainty`        |`Boolean`  | `false`                   | [3](#notes)
 &nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`             | [`ValueFormat`][url-valueformat]
-__`deagg`__
+__`disagg`__
 &nbsp;&nbsp;&nbsp;`.bins`                  |`Object`   |                           | [4](#notes)
 &nbsp;&nbsp;&nbsp;`.contributorLimit`      |`Double`   | `0.1`                     | [5](#notes)
 __`rate`__
@@ -107,8 +107,8 @@ T ≤ 10 s   | 0.000333, 0.000499, 0.000749, 0.00112, 0.00169, 0.00253, <br>0.00
   * [Developer Basics](./Developer-Basics.md#developer-basics)
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
-  * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+  * [Examples](../../etc/examples) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---
