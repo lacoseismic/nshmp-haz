@@ -88,26 +88,26 @@ Reference | ID | Component | Notes
 Reference | ID | Component | Notes
 :---------|:---|:----------|:------:
 **NGA-East**
-NGA-East<br>[Goulet et al., 2017](https://peer.berkeley.edu/sites/default/files/christine-a-goulet-yousef-bozorgnia-2017_03_0.pdf) | NGA_EAST_USGS¹<br>NGA_EAST_USGS_SEEDS² | RotD50 | 3
-[Shahjouei and Pezeshk, 2016](http://dx.doi.org/10.1785/0120140367) | NGA_EAST_SEED_SP16 | RotD50 | 4
+NGA-East<br>[Goulet et al., 2017](https://peer.berkeley.edu/sites/default/files/christine-a-goulet-yousef-bozorgnia-2017_03_0.pdf) | NGA_EAST_USGS¹<br>NGA_EAST_USGS_SEEDS¹ | RotD50 | 2
+[Shahjouei and Pezeshk, 2016](http://dx.doi.org/10.1785/0120140367) | NGA_EAST_SEED_SP16 | RotD50 | 3
 **Other**
-[Atkinson, 2008](http://dx.doi.org/10.1785/0120070199)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | ATKINSON_08_PRIME | horizontal | 5
-[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245) | *AB_06_\*<br>140BAR\|200BAR<br>none\|_AB\|_J* | horizontal | 5
-[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | AB_06_PRIME | horizontal | 5
-[Campbell, 2003](http://dx.doi.org/10.1785/0120020002) | CAMPBELL_03<br>CAMPBELL_03_AB<br>CAMPBELL_03_J | Geometric mean | 5
-[Frankel et al., 1996](https://pubs.usgs.gov/of/1996/532/) | FRANKEL_96<br>FRANKEL_96_AB<br>FRANKEL_96_J | not specified | 5
+[Atkinson, 2008](http://dx.doi.org/10.1785/0120070199)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | ATKINSON_08_PRIME | horizontal | 4
+[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245) | *AB_06_\*<br>140BAR\|200BAR<br>none\|_AB\|_J* | horizontal | 4
+[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | AB_06_PRIME | horizontal | 4
+[Campbell, 2003](http://dx.doi.org/10.1785/0120020002) | CAMPBELL_03<br>CAMPBELL_03_AB<br>CAMPBELL_03_J | Geometric mean | 4
+[Frankel et al., 1996](https://pubs.usgs.gov/of/1996/532/) | FRANKEL_96<br>FRANKEL_96_AB<br>FRANKEL_96_J | not specified | 4
 [Graizer & Kalkan, 2015](http://dx.doi.org/10.3133/ofr20151009)<br>[Graizer & Kalkan, 2016](http://dx.doi.org/10.1785/0120150194) | GK_15 | Geometric mean<br>(random orientation) |
-[Pezeshk et al., 2011](http://dx.doi.org/10.1785/0120100144) | PEZESHK_11 | GMRotI50 | 5
-[Silva et al., 2002](http://www.pacificengineering.org/CEUS/Development%20of%20Regional%20Hard_ABC.pdf) | SILVA_02<br>SILVA_02_AB<br>SILVA_02_J | Average horizontal | 5
-[Somerville et al., 2001](https://earthquake.usgs.gov/static/lfs/nshm/conterminous/2008/99HQGR0098.pdf) | SOMERVILLE_01 | not specified | 5
-[Tavakoli & Pezeshk, 2005](http://dx.doi.org/10.1785/0120050030) | TP_05<br>TP_05_AB<br>TP_05_J | not specified | 5
-[Toro et al., 1997](http://dx.doi.org/10.1785/gssrl.68.1.41)<br>[Toro, 2002](http://www.ce.memphis.edu/7137/PDFs/attenuations/Toro_2001_(modification_1997).pdf) | TORO_97_MB<br>TORO_97_MW | not specified | 5
+[Pezeshk et al., 2011](http://dx.doi.org/10.1785/0120100144) | PEZESHK_11 | GMRotI50 | 4
+[Silva et al., 2002](http://www.pacificengineering.org/CEUS/Development%20of%20Regional%20Hard_ABC.pdf) | SILVA_02<br>SILVA_02_AB<br>SILVA_02_J | Average horizontal | 4
+[Somerville et al., 2001](https://earthquake.usgs.gov/static/lfs/nshm/conterminous/2008/99HQGR0098.pdf) | SOMERVILLE_01 | not specified | 4
+[Tavakoli & Pezeshk, 2005](http://dx.doi.org/10.1785/0120050030) | TP_05<br>TP_05_AB<br>TP_05_J | not specified | 4
+[Toro et al., 1997](http://dx.doi.org/10.1785/gssrl.68.1.41)<br>[Toro, 2002](http://www.ce.memphis.edu/7137/PDFs/attenuations/Toro_2001_(modification_1997).pdf) | TORO_97_MB<br>TORO_97_MW | not specified | 4
 
-¹ Individual NGA-East Median Model IDs are listed in the [Gmm javadocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html)  
-² Individual NGA-East Seed Model IDs are listed in the [Gmm javadocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html)  
-³ Mean values are not clamped  
-⁴ Shahjouei and Pezeshk (2016) is a NGA-East seed model  
-⁵ Mean values clamped  
+¹ See [Gmm javadocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html)
+for individual NGA-East component model IDs  
+² Mean values are not clamped  
+³ Shahjouei and Pezeshk (2016) is a NGA-East seed model  
+⁴ Mean values clamped  
 
 ### Subduction GMMs
 
