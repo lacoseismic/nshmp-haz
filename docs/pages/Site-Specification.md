@@ -79,7 +79,7 @@ As with the CSV format, the minimum required data is a `geometry` `coordinates` 
 `properties` are optional. When using GeoJSON, the `title` property maps to the name of the site.
 Additional properties, if present, are ignored by *nshmp-haz* but permitted as they may be
 relevant for other applications. For example, [styling
-properties](https://help.github.com/articles/mapping-geojson-files-on-github/#styling-features)
+properties](https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0)
 may be used to improve rendering in mapping applications. For a fully fledged example, see the
 [NSHM test sites](../../etc/nshm/sites-nshmp.geojson) file.
 
@@ -106,8 +106,6 @@ parallel to lines of latitude and longitude. Any points in the 'calculation' pol
 outside the 'calculation' polygon are set to zero. For an example, see the
 [NSHMP Western US](../../etc/nshm/map-wus.geojson) map site file.
 
-TODO This needs updating; link to conus-2018 active crust map-region.geojson.
-
 ---
 
 ## Related Pages
@@ -116,8 +114,8 @@ TODO This needs updating; link to conus-2018 active crust map-region.geojson.
   * [Developer Basics](./Developer-Basics.md#developer-basics)
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
-  * [Examples](../../etc/examples/README.md) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/master/etc/examples))
+  * [Examples](../../etc/examples) (or
+    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
 * [**Documentation Index**](../README.md)
 
 ---

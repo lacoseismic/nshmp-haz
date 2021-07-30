@@ -21,15 +21,14 @@ The USGS NSHMP is committed to supporting current and prior model releases in an
 via web services. The table below provides a summary of all NSHM releases and their corresponding
 version numbers. Links to documentation and data for each of the models below are listed on the USGS
 [Seismic Hazard Maps and Site-Specific Data](https://www.usgs.gov/natural-hazards/earthquake-hazards/seismic-hazard-maps-and-site-specific-data)
-page.
-
-TODO: confirm model versions, tags, links (github vs gitlab...), and availability
+page. Changes between editions in model regions are documented in the release notes of the
+individual model repositories.
 
 Region | Year | Version | Static | Dynamic | Notes |
 -------|:----:|:-------:|:------:|:-------:|-------|
-Conterminous U.S. | 2018 | [v5.0.0](https://code.usgs.gov/ghsc/nshmp/nshm-conus-2018)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | 2014 | [v4.2.0](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.2.0)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | 2014 | [v4.1.4](https://github.com/usgs/nshmp-model-cous-2014/releases/tag/v4.1.4)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2018 | [v5.0.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [v4.2.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [v4.1.4](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
 Conterminous U.S. | 2014 | [v4.0.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2014r1) |:small_blue_diamond:| | ASCE7-16 |
 Conterminous U.S. | 2008 | v3.3.3 | |:small_blue_diamond:| |
 Conterminous U.S. | 2008 | [v3.2.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2008r3) |:small_blue_diamond:| | |
@@ -47,7 +46,7 @@ Hawaii            | 1998 | v1.1.0 | | TBD | |
 Hawaii            | 1998 | v1.0.0 |:small_blue_diamond:| | ASCE7-10 |
 Puerto Rico & <br/> U.S. Virgin Islands | 2003 | v1.0.0 | | | |
 
-<sup>†</sup> __Note on the 2014 Conterminous U.S. NSHM:__ Initial publication of the
+<sup>†</sup> __Note on the 2014 conterminous U.S. NSHM:__ Initial publication of the
 [2014 model](https://www.usgs.gov/natural-hazards/earthquake-hazards/science/2014-united-states-lower-48-seismic-hazard-long-term)
 included data to support updates to the U.S. Building Code, specifically hazard curves for peak
 ground acceleration (PGA), and 0.2 and 1.0 second spectral accelerations, all at a BC boundary site
@@ -67,8 +66,8 @@ Moving forward, we will continue to include the original dynamic version of the 
 Historically, the USGS NSHMP has produced static datasets of hazard curves that accompany the
 'official' release or update to a model. In the context of providing interactive web services,
 such static datasets can be quickly retreived and provide most users with the data they seek.
-More complex analyses, such as deaggregations, require that a complete hazard calculation be
-performed on demand. Historically, USGS deaggregation services were provided for particular model
+More complex analyses, such as disaggregations, require that a complete hazard calculation be
+performed on demand. Historically, USGS disaggregation services were provided for particular model
 years and regions, each located at a unique web address and supported by a unique codebase.
 However, it has proven too difficult to maintain numerous isolated services, and we therefore
 developed a single codebase that supports all current and prior models.
@@ -76,10 +75,12 @@ developed a single codebase that supports all current and prior models.
 Moreover, as time goes by, there may be more customization options we want to expose to users.
 However, with each additional level of customization, it quickly becomes too difficult to produce
 and version corresponding static datasets. We therefore identify model versions that support
-deaggregations and other calculations as 'dynamic'. At present, only the most current versions
-of a particular model region and year are supported via 'dynamic' calculations.
+disaggregations and other calculations as 'dynamic'. At present, only the most current versions
+of a particular model region and year are supported via 'dynamic' calculations. Dynamic editions
+are supported through web-services provided by `nshmp-haz`. Static editions are supported via a
+separate set of services.
 
-In practice, this leads to results produced by 'dynamic' caluculations being somewhat different
+In practice, this leads to results produced by 'dynamic' caluculations being different
 than those stored in static datasets of prior model minor versions, although usually not by much.
 The release notes for each model version detail the changes that give rise to changes in hazard
 between between versions. There are also differences that arise from different modeling
@@ -87,25 +88,8 @@ assumptions between past and current codebases that are detailed below.
 
 It is important for users to know which edition they should be using. For instance if one is
 bound to use those values adopted by the U.S. building code, one of the editions marked `ASCE7-*`
-is probably most appropriate. However, if one is bound to use the most up to date source model,
+is probably most appropriate. However, if one is bound to use the most up-to-date source model,
 one of the dynamic editions is likely better.
-
-TODO: do we want to reference `nshmp-haz-ws` and is this the correct reference here?
-
-Dynamic editions are supported through web-services provided by the `nshmp-haz-ws` library.
-Static editions are supported via a separate set of services. Both are documented on the
-[web services](./NSHMP-Web-Services.md#nshmp-web-services) page.
-
-## Region specific changes
-
-Changes between editions in model regions are documented in the release notes of the individual
-model repositories.
-
-TODO: model links currently point to github repos
-
-* [Conterminous US (2014)](https://github.com/usgs/nshm-cous-2014)  
-* [Conterminous US (2008)](https://github.com/usgs/nshm-cous-2008)  
-* [Alaska (2007)](https://github.com/usgs/nshm-ak-2007)  
 
 ---
 

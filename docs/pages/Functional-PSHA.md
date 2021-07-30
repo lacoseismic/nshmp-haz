@@ -10,14 +10,14 @@ upended the notion of discrete faults as independent sources, and the USGS natio
 model uses temporally clustered sources. Moreover, as the logic trees typically employed in PSHAs
 to capture epistemic uncertainty grow larger, so too does the demand for a more complete
 understanding of uncertainty. At the USGS, there are additional requirements to support source
-model mining, deaggregation, and map-making, often through the use of dynamic web-applications.
+model mining, disaggregation, and map-making, often through the use of dynamic web-applications.
 Implementations of the PSHA methodology commonly iterate over all sources that influence the
 hazard at a site and sequentially build a single hazard curve. Such a linear PSHA computational
 pipeline, however, proves difficult to maintain and modify to support the additional complexity of
 new models, hazard products, and analyses. The functional programming paradigm offers some relief.
 The functional approach breaks calculations down into their component parts or steps, storing
 intermediate results as immutable objects, making it easier to: chain actions together; preserve
-intermediate data or results that may still be relevant (e.g. as in a deaggregation); and leverage
+intermediate data or results that may still be relevant (e.g. as in a disaggregation); and leverage
 the concurrency supported by many modern programming languages.
 
 ## Traditional PSHA formulation (after Baker, 2013)
@@ -62,8 +62,8 @@ a single site, using a single GMM, and a nominal number of sources, modern PSHAs
 
 * Response Spectra, Conditional Mean Spectra – multiple intensity measure types (IMTs; e.g. PGA,
   PGD, PGV, multiple SAs)
-* Deaggregation
-* Banded deaggregation (multiple deaggregations at varying IMLs)
+* Disaggregation
+* Banded disaggregation (multiple disaggregations at varying IMLs)
 * Maps – many thousands of sites
 * Uncertainty analyses
 
@@ -87,7 +87,7 @@ foreach IMT {
 }
 ```
 
-* Support for secondary analyses, such as deaggregation is supplied by a separate code or codes
+* Support for secondary analyses, such as disaggregation is supplied by a separate code or codes
   and can require repeating many of the steps performed to generate an initial hazard curve.
 
 ## What about scaleability, maintenance, and performance?

@@ -79,7 +79,7 @@ or its children will be processed; any standalone sources will be ignored. For e
 ```
 
 **source-group.json:** A specialized form of logic tree that describes model branches that are
-additivd and therefore does not include weights. Examples from the NSHM for the Conterminous U.S.
+additivd and therefore does not include weights. Examples from the NSHM for the conterminous U.S.
 NSHM include the Cascadia segmented partial-rupture models and the New Madrid 1500-yr cluster
 branches. The branch objects in a source group _may_ include an optional `scale` member that can
 be used to impose a probability of occurrence or other scaling requred by a NSHM. If absent, the
@@ -117,7 +117,8 @@ _nshmp-haz_ and the related `gmm-config.json` files that governs GMM behavior.
 
 ### MFD Logic Trees
 
-MFD logic trees are typically defined as JSON members nested in other files. For example:
+MFD logic trees are common to all source types and are defined as JSON members nested in other
+files. For example:
 
 ```json
 "mfd-tree": [
@@ -130,14 +131,16 @@ MFD logic trees are typically defined as JSON members nested in other files. For
 
 An `mfd-tree` may be included as a `properties` member of a GeoJSON feature or as a member of a
 `rupture-set.json` file. In both cases the tree may alternatively be identified with a string, in
-which case the `mfd-tree` will be pulled from the collection of trees defined in a `mfd-map.json`
-file. A `mfd-map.json` file is typicaly located high in the source tree heirarchy and faciltates
-using the same MFDs on multiple branches of a source tree.
+which case the `mfd-tree` will be pulled from the collection of shared trees defined in a
+`mfd-map.json` file. A `mfd-map.json` file is typicaly located high in the source tree heirarchy
+and faciltates using the same MFDs on multiple branches of a source tree. The branches of a
+mfd-tree commonly have the generic ID's: `[M1, M2, M3, ...]` to support mfd-tree matching across
+source-tree branches.
 
 How MFDs are intialized (or realized) depends on the presence and contents of `mfd-config.json` and
 `rate-tree.json` files. See the
-[magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) page for details on these
-files and the types of MFDs supported in _nshmp-haz_.
+[magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) page for details on
+these files and the types of MFDs supported in _nshmp-haz_.
 
 ## Rupture Sets
 
