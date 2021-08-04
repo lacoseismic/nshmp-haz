@@ -132,7 +132,7 @@ Unit Tests:
   rules:
     -
       changes:
-        - 'src/**'
+        - 'src/**/*'
         - '*gradle*'
       when: on_success
     -
