@@ -84,7 +84,7 @@ ext {
    */
   gitCommand = 'git --git-dir=../nshmp-haz/.git describe --tags'
   gitTag = gitCommand.execute().text.replace('\n', '') ?: 'unknown'
-  gitLink = '<a href="https://github.com/usgs/nshmp-haz">' + gitTag +'</a>'
+  gitLink = '<a href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz">' + gitTag +'</a>'
   propsPath = '/resources/main/app.properties'
   docTitle = projectName + ': ' + gitLink
   docFooter = '<div style="float: left; font-size: 16px; text-align: right; ' +
@@ -92,7 +92,7 @@ ext {
       '<b><a href="https://www.usgs.gov" target="_top">U.S. Geological Survey</a></b> ' +
       '– National Seismic Hazard Model Project ' +
       '(<a href="https://earthquake.usgs.gov/hazards/" target="_top">NSHMP</a>) ' +
-      '– <a href="https://github.com/usgs/nshmp-haz/blob/master/LICENSE.md" ' +
+      '– <a href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/LICENSE.m" ' +
       'target="_top">License</a> | <b>' + gitLink + '</b></div>'
   docOut = findProperty('javadoc_loc')
   thinJar = false

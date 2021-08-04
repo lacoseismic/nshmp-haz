@@ -331,8 +331,10 @@ public class Hazard2018 {
   private static final String PROGRAM = Hazard2018.class.getSimpleName();
   private static final String USAGE_COMMAND =
       "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.Hazard2018 model sites [config]";
-  private static final String USAGE_URL1 = "https://github.com/usgs/nshmp-haz/wiki";
-  private static final String USAGE_URL2 = "https://github.com/usgs/nshmp-haz/tree/master/etc";
+  private static final String USAGE_URL1 =
+      "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
+  private static final String USAGE_URL2 =
+      "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
   private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
   private static String version() {
