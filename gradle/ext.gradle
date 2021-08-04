@@ -92,7 +92,7 @@ ext {
       '<b><a href="https://www.usgs.gov" target="_top">U.S. Geological Survey</a></b> ' +
       '– National Seismic Hazard Model Project ' +
       '(<a href="https://earthquake.usgs.gov/hazards/" target="_top">NSHMP</a>) ' +
-      '– <a href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/LICENSE.m" ' +
+      '– <a href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/LICENSE.md" ' +
       'target="_top">License</a> | <b>' + gitLink + '</b></div>'
   docOut = findProperty('javadoc_loc')
   thinJar = false
