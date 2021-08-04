@@ -145,8 +145,8 @@ public class HazardMaps {
     private String slice(String line) {
       List<String> elements = Arrays.asList(line.split(COMMA));
       String siteStr = elements.subList(0, headerCount)
-        .stream()
-        .collect(Collectors.joining(COMMA));
+          .stream()
+          .collect(Collectors.joining(COMMA));
 
       StringBuilder lineOut = new StringBuilder(siteStr);
 
