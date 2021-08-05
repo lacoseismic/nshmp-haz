@@ -36,7 +36,8 @@ __`site`__
 &nbsp;&nbsp;&nbsp;`.z2p5`                  |`Double`   | `null`                    | [7](#notes)
 __`output`__                               |
 &nbsp;&nbsp;&nbsp;`.directory`             |`String`   | `hazout`
-&nbsp;&nbsp;&nbsp;`.dataTypes`             |`String[]` | `[ TOTAL ]`               | [`DataType`][url-datatype]
+&nbsp;&nbsp;&nbsp;`.dataTypes`             |`String[]` | `[ TOTAL, MAP ]`          | [`DataType`][url-datatype]
+&nbsp;&nbsp;&nbsp;`.returnPeriods`         |`Integer[]`| `[ 475, 975, 2475 ]`      | [`ReturnPeriods`][url-returnperiods]
 __`performance`__
 &nbsp;&nbsp;&nbsp;`.optimizeGrids`         |`Boolean`  | `true`                    | [8](#notes)
 &nbsp;&nbsp;&nbsp;`.smoothGrids`           |`Boolean`  | `true`                    | [9](#notes)
@@ -49,6 +50,7 @@ __`performance`__
 [url-distribution]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/DistributionFormat.html
 [url-site]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/Site.html
 [url-datatype]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/DataType.html
+[url-returnperiods]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/CalcConfig.Output.html#returnPeriods
 [url-sheets]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/ThreadCount.html
 
 ### Notes

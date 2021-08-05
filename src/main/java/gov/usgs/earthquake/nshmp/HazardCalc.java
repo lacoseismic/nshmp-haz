@@ -23,6 +23,7 @@ import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
@@ -111,6 +112,11 @@ public class HazardCalc {
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
+
+      if (config.output.dataTypes.contains(DataType.MAP)) {
+        HazardMaps.createDataSets(out, config.output.returnPeriods, log);
+      }
+
       log.info(PROGRAM + ": finished");
 
       /* Transfer log and write config, windows requires fh.close() */
