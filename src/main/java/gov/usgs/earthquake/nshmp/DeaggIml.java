@@ -49,9 +49,11 @@ public class DeaggIml {
    * comprehensive descriptions of source models, configuration files, site
    * files, and hazard calculations.
    *
-   * @see <a href="https://github.com/usgs/nshmp-haz/wiki/Building-&-Running"
-   *      target="_top"> nshmp-haz wiki</a>
-   * @see <a href="https://github.com/usgs/nshmp-haz/tree/master/etc/examples"
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
+   *      target="_top"> nshmp-haz Building & Running</a>
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
    *      target="_top"> example calculations</a>
    */
   public static void main(String[] args) {
@@ -163,8 +165,10 @@ public class DeaggIml {
   private static final String PROGRAM = DeaggIml.class.getSimpleName();
   private static final String USAGE_COMMAND =
       "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggIml model sites iml [config]";
-  private static final String USAGE_URL1 = "https://github.com/usgs/nshmp-haz/wiki";
-  private static final String USAGE_URL2 = "https://github.com/usgs/nshmp-haz/tree/master/etc";
+  private static final String USAGE_URL1 =
+      "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
+  private static final String USAGE_URL2 =
+      "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
   private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
   private static final String USAGE = new StringBuilder()
