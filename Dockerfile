@@ -1,48 +1,48 @@
 ####
-# Run hazard jar file.
+# Run nshmp-haz
 #
-# Running Hazard:
-#   docker pull code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz;
+# Pull Docker Image:
+#   - Production (stable): docker pull usgs/nshmp-haz:production-latest
+#   - Staging (latest, main branch of repo): docker pull usgs/nshmp-haz:staging-latest
+#   - Development (developer forks): docker pull usgs/nshmp-haz:development-latest
+#
+# Run Docker Image:
+#   Parameters:
+#     - CLASS_NAME: The nshmp-haz class name to run (e.g. HazardCalc)
+#     - IML: The intensity measure level, used in certain programs
+#     - JAVA_OPTS: Any JVM options (e.g. -Xmx8g)
+#     - RETURN_PERIOD: The return period, used in certian programs
+#
+#   Volumes:
+#     - Model: /app/model
+#     - Output: /app/output
+#
 #   docker run \
-#       -e PROGRAM=<deagg | deagg-epsilon | deagg-iml | hazard | hazard-2018 | rate> \
-#       -e MODEL=<WUS_20[08|14|18] | CEUS_20[08|14|18] | COUS_20[08|14|18] | AK_2007 | HI_2020> \
-#       -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
-#       -v /absolute/path/to/config/file:/app/config.json \
-#       -v /absolute/path/to/output:/app/output \
-#       code.chs.usgs.gov:5001/ghsc/nshmp/images/nshmp-haz;
+#       --env CLASS_NAME="nshmp-haz class name" \
+#       --volume "/path/to/model:/app/model" \
+#       --volume "/path/to/output:/app/output" \
+#       usgs/nshmp-haz:production-latest
 #
 # Build locally:
-#   docker build
-#       --build-arg gitlab_token=<git-api-token>
+#   docker build \
+#       --build-arg GITLAB_TOKEN=<git-api-token> \
 #       -t nshmp-haz .
 ####
 
 ARG BUILD_IMAGE=usgs/java:11
 ARG FROM_IMAGE=usgs/java:11
 
-ARG project=nshmp-haz
-ARG builder_workdir=/app/${project}
-ARG libs_dir=${builder_workdir}/build/libs
-
 ####
 # Builder image: Build jar file.
 ####
 FROM ${BUILD_IMAGE} as builder
 
-ARG builder_workdir
-ARG libs_dir
-
 # TODO
 # Remove once nshmp-lib is public
-ARG git_username
-ARG git_password
 ARG GITLAB_TOKEN=null
 ARG CI_JOB_TOKEN=null
 
-ENV GIT_NSHMP_USERNAME ${git_username}
-ENV GIT_NSHMP_PASSWORD ${git_password}
-
-WORKDIR ${builder_workdir}
+WORKDIR /app
 
 COPY . .
 
@@ -55,30 +55,24 @@ FROM ${FROM_IMAGE}
 
 LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
-ARG builder_workdir
-ARG libs_dir
-ARG project
-ARG ws_file
-
-ENV CONFIG_FILE ""
-ENV DEBUG false
+# nshmp-haz inputs
+ENV CLASS_NAME "HazardCalc"
 ENV IML ""
-ENV JAVA_XMX "8g"
-ENV MODEL ""
-ENV MOUNT_MODEL false
-ENV NSHM_VERSION main
-ENV PROGRAM hazard
-ENV PROJECT ${project}
 ENV RETURN_PERIOD ""
 
-VOLUME [ "/app/output" ]
+ENV CONFIG_FILE "/app/config.json"
+ENV JAVA_OPTS "-Xmx8g"
+ENV MODEL_PATH "/app/model"
+ENV OUTPUT_PATH "/app/output"
+
+VOLUME [ "${MODEL_PATH}", "${OUTPUT_PATH}" ]
 
 WORKDIR /app
 
-COPY --from=builder ${libs_dir}/* ./
+COPY --from=builder /app/build/libs/nshmp-haz.jar .
 COPY scripts scripts
 
-RUN yum install -y jq
+RUN yum install -y jq \
+    && echo "{}" > "${CONFIG_FILE}"
 
-EXPOSE 8080
 ENTRYPOINT [ "bash", "scripts/docker-entrypoint.sh" ]
