@@ -24,9 +24,7 @@
 #       usgs/nshmp-haz:production-latest
 #
 # Build locally:
-#   docker build \
-#       --build-arg GITLAB_TOKEN=<git-api-token> \
-#       -t nshmp-haz .
+#   docker build -t nshmp-haz .
 ####
 
 ARG BUILD_IMAGE=usgs/java:11
