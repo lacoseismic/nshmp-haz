@@ -9,10 +9,13 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import gov.usgs.earthquake.nshmp.data.Interpolator;
+import gov.usgs.earthquake.nshmp.internal.Parsing;
 
 /**
  * Utility class to create hazard map datasets from a hazard curve results.
@@ -25,12 +28,16 @@ public class HazardMaps {
 
   private static final String COMMA = ",";
   private static final String CURVES_FILE = "curves.csv";
-  private static final String MAP_FILE = "map.csv";
+  private static final List<Integer> DEFAULT_RETURN_PERIODS = List.of(475, 975, 2475);
   private static final Interpolator INTERPOLATOR = Interpolator.builder()
       .logx()
       .logy()
       .decreasingX()
       .build();
+  private static final String MAP_FILE = "map.csv";
+  private static final String PROGRAM = HazardMaps.class.getSimpleName();
+  private static final String VALUE_FMT = "%.8e";
+  private static final Function<Double, String> VALUE_FORMATTER = Parsing.formatDoubleFunction(VALUE_FMT);
 
   private HazardMaps() {}
 
@@ -44,20 +51,27 @@ public class HazardMaps {
    *        tree slicing each {@code curves.csv} file encountered.
    */
   public static void main(String[] args) {
-    if (args.length < 2) {
+    if (args.length < 1) {
       System.out.println("Usage: Supply a path to a file of hazard curve results and");
-      System.out.println("       a space separated list of return periods (in yr)");
+      System.out.println("       optionally a space separated list of return periods (in yr)");
+      System.out.println("       default return periods: 475 975 2475");
+      return;
     }
 
     Path curvesPath = Path.of(args[0]);
-    List<Integer> returnPeriods = Arrays.stream(args)
-        .skip(1)
-        .mapToInt(Integer::valueOf)
-        .boxed()
-        .collect(Collectors.toList());
+    List<Integer> returnPeriods = DEFAULT_RETURN_PERIODS;
+    Logger log = Logger.getLogger(HazardMaps.class.getName());
+
+    if (args.length > 1) {
+      returnPeriods = Arrays.stream(args)
+          .skip(1)
+          .mapToInt(Integer::valueOf)
+          .boxed()
+          .collect(Collectors.toList());
+    }
 
     try {
-      createDataSets(curvesPath, returnPeriods);
+      createDataSets(curvesPath, returnPeriods, log);
     } catch (Exception e) {
       System.out.println("Processing Error");
       System.out.println("Arguments: " + Arrays.toString(args));
@@ -65,7 +79,14 @@ public class HazardMaps {
     }
   }
 
-  static void createDataSets(Path curvesPath, List<Integer> returnPeriods) throws IOException {
+  static void createDataSets(
+      Path curvesPath,
+      List<Integer> returnPeriods,
+      Logger log) throws IOException {
+    log.info(PROGRAM + ": Creating hazard map dataset:");
+    log.info("\tReturn periods: " + returnPeriods.toString());
+    log.info("\tPath: " + curvesPath.toAbsolutePath().toString());
+
     if (Files.isDirectory(curvesPath)) {
       CurvesVisitor curvesFinder = new CurvesVisitor(returnPeriods);
       Files.walkFileTree(curvesPath, curvesFinder);
@@ -158,7 +179,7 @@ public class HazardMaps {
 
       for (double returnPeriod : returnPeriods) {
         lineOut.append(COMMA);
-        lineOut.append(INTERPOLATOR.findX(imls, rates, 1 / returnPeriod));
+        lineOut.append(VALUE_FORMATTER.apply(INTERPOLATOR.findX(imls, rates, 1 / returnPeriod)));
       }
 
       return lineOut.toString();

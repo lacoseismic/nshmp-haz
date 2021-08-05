@@ -112,11 +112,12 @@ public class HazardCalc {
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
-      log.info(PROGRAM + ": finished");
 
       if (config.output.dataTypes.contains(DataType.MAP)) {
-        HazardMaps.createDataSets(out, config.output.returnPeriods);
+        HazardMaps.createDataSets(out, config.output.returnPeriods, log);
       }
+
+      log.info(PROGRAM + ": finished");
 
       /* Transfer log and write config, windows requires fh.close() */
       fh.close();
