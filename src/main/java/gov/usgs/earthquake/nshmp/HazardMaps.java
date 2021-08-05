@@ -37,7 +37,8 @@ public class HazardMaps {
   private static final String MAP_FILE = "map.csv";
   private static final String PROGRAM = HazardMaps.class.getSimpleName();
   private static final String VALUE_FMT = "%.8e";
-  private static final Function<Double, String> VALUE_FORMATTER = Parsing.formatDoubleFunction(VALUE_FMT);
+  private static final Function<Double, String> VALUE_FORMATTER =
+      Parsing.formatDoubleFunction(VALUE_FMT);
 
   private HazardMaps() {}
 
