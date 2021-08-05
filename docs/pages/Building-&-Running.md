@@ -72,10 +72,28 @@ files. Disaggregations also have some independent
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-To ensure you are have the latest *nshmp-haz* update, always first pull the image from Docker:
+nshmp-haz is available as a [public image](https://hub.docker.com/repository/docker/usgs/nshmp-haz)
+with tags:
+
+* `development-latest`: Developer forks
+* `staging-latest`: Latest updates associated with the
+[main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch
+* `production-latest`: Latest stable release associated with the
+[production](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/production) branch
+
+To ensure you have the latest *nshmp-haz* update associated with a specific tag,
+always first pull the image from Docker:
 
 ```bash
-docker pull usgs/nshmp-haz
+docker pull usgs/nshmp-haz:<tag>
+```
+
+> Replace `<tag>` with one of the above tags.
+
+Example:
+
+```bash
+docker pull usgs/nshmp-haz:production-latest
 ```
 
 ### Docker Memory on Mac
@@ -84,7 +102,7 @@ By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run *ns
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 
-### Run in Docker
+### Run nshmp-haz in Docker
 
 The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available on
@@ -93,63 +111,148 @@ which can be run with:
 
 ```bash
 docker run \
-    -e PROGRAM=<disagg | hazard | rate> \
-    -e MODEL=<CONUS_2018 | HAWAII_2021> \
-    -e RETURN_PERIOD=<RETURN_PERIOD> \
-    -v /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
-    -v /absolute/path/to/config/file:/app/config.json \
-    -v /absolute/path/to/output:/app/output \
-    usgs/nshmp-haz
-
-# Example
-docker run \
-    -e PROGRAM=hazard \
-    -e MODEL=CONUS_2018 \
-    -v $(pwd)/sites.geojson:/app/sites.geojson \
-    -v $(pwd)/config.json:/app/config.json \
-    -v $(pwd)/hazout:/app/output \
+    --env CLASS_NAME=<DeaggCalc | DeaggIml | HazardCalc | RateCalc> \
+    --env IML=<NUMBER> \
+    --env RETURN_PERIOD=<NUMBER> \
+    --volume /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
+    --volume /absolute/path/to/config/file:/app/config.json \
+    --volume /absolute/path/to/output:/app/output \
     usgs/nshmp-haz
 ```
 
 Where:
 
-* `PROGRAM` is the nshmp-haz program to run:
-  * disagg = `DisaggCalc`
-  * hazard = `HazardCalc`
-  * rate = `RateCalc`
-
-* `MODEL` is the [USGS model (NSHM)](./USGS-Models.md) to run:
-  * `CONUS_2018`: [Conterminous U.S. 2018](https://code.usgs.gov/ghsc/nshmp/nshm-conus)
-  * `HAWAII_2021`: [Hawaii 2021](https://code.usgs.gov/ghsc/nshmp/nshm-hawaii)
-
+* `CLASS_NAME` is the nshmp-haz class to run:
+  * [DeaggCalc](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggCalc.java)
+  * [DeaggIml](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggIml.java)
+  * [HazardCalc](../../src/main/java/gov/usgs/earthquake/nshmp/HazardCalc.java)
+  * [RateCalc](../../src/main/java/gov/usgs/earthquake/nshmp/RateCalc.java)
 * `RETURN_PERIOD`, in years, is only required when running a disaggregation
-
+* `IML`: intensity measure level, only required when running `DeaggIml`
 * Other arguments (local files mapped to files within the Docker container with `:/app/...`):
+  * (required) The absolute path to a [USGS model (NSHM)](./USGS-Models.md)
+    * Example: `$(pwd)/nshm-hawaii:/app/model`
   * (required) The absolute path to a GeoJSON or CSV [site(s)](./Site-Specification.md) file
     * CSV example: `$(pwd)/my-csv-sites.csv:/app/sites.csv`
     * GeoJSON example: `$(pwd)/my-geojson-sites.geojson:/app/sites.geojson`
-  * (optional) The absolute path to a [configuration](./Calculation-Configuration.md) file
-    * Example: `$(pwd)/my-custom-config.json:/app/config.json`
   * (required) The absolute path to an output directory
     * Example: `$(pwd)/my-hazard-output:/app/output`
+  * (optional) The absolute path to a [configuration](./Calculation-Configuration.md) file
+    * Example: `$(pwd)/my-custom-config.json:/app/config.json`
+
+### Docker Examples
+
+#### [`DeaggCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggCalc.java) Example
+
+The following example runs the `DeaggCalc` program in nshmp-haz with the
+[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
+assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
+
+```bash
+# Download Hawaii NSHM
+git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
+
+# Pull image
+docker pull usgs/nshmp-haz:production-latest
+
+# Run nshmp-haz DeaggCalc
+docker run \
+    --env CLASS_NAME="DeaggCalc" \
+    --env RETURN_PERIOD=475 \
+    --volume "$(pwd)/nshm-hawaii:/app/model" \
+    --volume "$(pwd)/sites.geojson" \
+    --volume "$(pwd)/hawaii-disagg-output:/app/output" \
+    usgs/nshmp-haz:production-latest
+```
+
+#### [`DeaggIml`](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggIml.java) Example
+
+The following example runs the `DeaggIml` program in nshmp-haz with the
+[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
+assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
+
+```bash
+# Download Hawaii NSHM
+git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
+
+# Pull image
+docker pull usgs/nshmp-haz:production-latest
+
+# Run nshmp-haz DeaggIml
+docker run \
+    --env CLASS_NAME="DeaggCalc" \
+    --env IML=1 \
+    --volume "$(pwd)/nshm-hawaii:/app/model" \
+    --volume "$(pwd)/sites.geojson" \
+    --volume "$(pwd)/hawaii-disagg-iml-output:/app/output" \
+    usgs/nshmp-haz:production-latest
+```
+
+#### [`HazardCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/HazardCalc.java) Example
+
+The following example runs the `HazardCalc` program in nshmp-haz with the
+[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
+assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
+
+```bash
+# Download Hawaii NSHM
+git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
+
+# Pull image
+docker pull usgs/nshmp-haz:production-latest
+
+# Run nshmp-haz HazardCalc
+docker run \
+    --env CLASS_NAME="HazardCalc" \
+    --volume "$(pwd)/nshm-hawaii:/app/model" \
+    --volume "$(pwd)/sites.geojson" \
+    --volume "$(pwd)/hawaii-hazard-output:/app/output" \
+    usgs/nshmp-haz:production-latest
+```
+
+#### [`RateCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/RateCalc.java) Example
+
+The following example runs the `RateCalc` program in nshmp-haz with the
+[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
+assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
+
+```bash
+# Download Hawaii NSHM
+git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
+
+# Pull image
+docker pull usgs/nshmp-haz:production-latest
+
+# Run nshmp-haz RateCalc
+docker run \
+    --env CLASS_NAME="RateCalc" \
+    --volume "$(pwd)/nshm-hawaii:/app/model" \
+    --volume "$(pwd)/sites.geojson" \
+    --volume "$(pwd)/hawaii-rate-output:/app/output" \
+    usgs/nshmp-haz:production-latest
+```
 
 ### Run Customization
 
-When running *nshmp-haz* with Docker the initial (Xms) and maximum (Xmx) JVM memory sizes can
+When running *nshmp-haz* with Docker the maximum JVM memory size can
 be set with the environment flag (-e, -env):
 
 ```bash
 docker run \
-    -e JAVA_XMS=<JAVA_XMS> \
-    -e JAVA_XMX=<JAVA_XMX> \
+    --env JAVA_MEMORY=<MEMORY> \
+    ...
+    usgs/nshmp-haz
+
+# Example
+docker run \
+    --env JAVA_MEMORY="12g" \
     ...
     usgs/nshmp-haz
 ```
 
 Where:
 
-* `JAVA_XMS` is the intial memory for the JVM (default: system)
-* `JAVA_XMX` is the maximum memory for the JVM (default: 8g)
+* `JAVA_MEMORY` is the maximum memory for the JVM (default: 8g)
 
 ---
 
