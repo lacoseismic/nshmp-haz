@@ -61,7 +61,7 @@ ENV IML ""
 ENV RETURN_PERIOD ""
 
 ENV CONFIG_FILE "/app/config.json"
-ENV JAVA_OPTS "-Xmx8g"
+ENV JAVA_MEMORY "8g"
 ENV MODEL_PATH "/app/model"
 ENV OUTPUT_PATH "/app/output"
 

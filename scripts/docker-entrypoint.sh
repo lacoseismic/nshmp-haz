@@ -8,7 +8,7 @@ main() {
   sites_file=$(ls /app/sites.*);
 
   # Run nshmp-haz
-  java "${JAVA_OPTS}" \
+  java "-Xmx${JAVA_MEMORY}" \
       -cp "/app/nshmp-haz.jar" \
       "gov.usgs.earthquake.nshmp.${CLASS_NAME}" \
       "${MODEL_PATH}" \
@@ -67,7 +67,7 @@ move_to_output_volume() {
     hazout="hazout";
   fi
 
-  mv "${hazout}/*" "${OUTPUT_PATH}/.";
+  mv "${hazout}"/* "${OUTPUT_PATH}"/.;
   return ${?};
 }
 
