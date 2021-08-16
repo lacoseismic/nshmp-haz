@@ -1,0 +1,14 @@
+[
+  {
+    "id": "BIRD",
+    "weight": 0.1
+  },
+  {
+    "id": "GEO",
+    "weight": 0.8
+  },
+  {
+    "id": "ZENG",
+    "weight": 0.1
+  }
+]
