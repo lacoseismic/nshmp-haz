@@ -15,12 +15,8 @@
     "lower-depth": 12.0,
     "dip": 90.0,
     "rake": 0.0,
-    "rate-type": "SLIP",
+    "rate-type": "RECURRENCE",
     "length": 25.0,
-    "rate-map": {
-      "peer": {
-        "rate": 0.0028528077
-      }
-    }
+    "mfd-tree": "set1-case1"
   }
 }

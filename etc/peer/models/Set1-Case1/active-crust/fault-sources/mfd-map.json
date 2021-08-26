@@ -1,11 +1,12 @@
 {
-  "peer-faults": [
+  "set1-case1-mfd": [
     {
       "id": "set1-case1",
       "weight": 1.0,
       "value": {
         "type": "SINGLE",
-        "m": 6.5
+        "m": 6.5,
+        "rate": 0.0028528077
       }
     }
   ]
