@@ -16,7 +16,6 @@
     "dip": 90.0,
     "rake": 0.0,
     "rate-type": "RECURRENCE",
-    "length": 25.0,
-    "mfd-tree": "set1-case1"
+    "length": 25.0
   }
 }
