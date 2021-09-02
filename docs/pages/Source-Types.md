@@ -39,12 +39,17 @@ sources the relative rate at each grid node is defined using a spatial PDF (see 
 spatial PDFs, [below](#spatial-pdfs)). When realizing each source the spatial PDF value is scaled
 by each regional rate in a rate-tree.
 
-Grid sources are represented in a model using a logic tree with a `rupture-set.json` defining the
-ruptures on each branch. Because gridded seismicity models may be govered by regionally
+Grid sources are represented in a model using a logic tree with a `rupture-sets.json` defining the
+ruptures on each branch.  Because gridded seismicity models may be govered by regionally
 varying MFD properties (e.g. `mMax`), rupture sets for grids are defined in a JSON array.
 
-**rupture-set.json**: The `feature` member points to the ID of a geojson feature (in the
-`grid-sources/features` directory) that defines the bounds of the gridded seismicity source.
+**rupture-sets.json**: Defines an array of one or more rupture sets. Multiple rupture sets are
+used to model regional differences in MFD properties such as maximum magnitude. The `feature`
+member points to the ID of a geojson feature (in the `grid-sources/features` directory) that
+defines the bounds of the gridded seismicity source. A grid rupture set `mfd-tree` is never
+defined inline and always points to a tree in a
+[`mfd-map`](./Magnitude-Frequency-Distributions.md#mfd-construction).
+
 
 ```json
 [
@@ -97,7 +102,11 @@ rupture representations.
 Grid source spatial PDFs are stored in `grid-sources/grid-data/`. The PDFs are stored in
 comma-delimited files that are usually sorted by increasing longitude then latitude (lower-left
 to upper-right). While most gridded rate files contain columns of longitude, latitude, and pdf,
-some may contain depth values (intraslab sources), maximum magnitude caps, or other values.
+some may contain depth values (intraslab sources), maximum magnitude caps, or other values. Scaled
+spatial PDFs are the preferred approach to modeling regional rate variations, however it is also
+possible to define explicit MFDs at each grid node. To do so, the `spatial-pdf` member
+of a **rupture-sets.json** is replaced with `grid-mfds`. See
+`2018 CONUS NSHM > active-crust > grid-sources` for examples of both approaches. 
 
 ## Zone Sources
 
@@ -290,7 +299,7 @@ U.S. Fault system source sets require three files: `rupture_set.json`, `sections
 logic tree. Note that system sources _may_ have complementary gridded seismicity source models
 with matching logic trees.
 
-**rupture_set.json**: Provides identifying information for the ruptures defined in the adjacant
+**rupture-set.json**: Provides identifying information for the ruptures defined in the adjacant
 sections and ruptures files.
 
 **sections.geojson**: defines a feature collection of the fault sections in a fault network.

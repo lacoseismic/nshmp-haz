@@ -140,12 +140,15 @@ source-tree branches.
 How MFDs are intialized (or realized) depends on the presence and contents of `mfd-config.json` and
 `rate-tree.json` files. See the
 [magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) page for details on
-these files and the types of MFDs supported in _nshmp-haz_.
+these files and the types of MFDs supported in _nshmp-haz_. Note also the 
 
 ## Rupture Sets
 
 **rupture-set.json**: A `rupture-set` is the terminal file of a source-tree branch and defines the
 fault sections and MFD's required to intialize a source.
+[Gridded seismicity](./Source-Types.md#grid-sources) sources use a similar **rupture-sets.json**
+that defines an array of rupture sets that may be used to define zones of distinct MFD properties,
+such as maximum magnitude.
 
 ```json
 {
