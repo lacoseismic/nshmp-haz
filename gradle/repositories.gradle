@@ -25,7 +25,7 @@ publishing {
 }
 
 repositories {
-  jcenter()
+  mavenCentral()
 
   maven {
     url "https://code.usgs.gov/api/v4/groups/160/-/packages/maven"
