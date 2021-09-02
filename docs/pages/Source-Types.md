@@ -50,7 +50,6 @@ defines the bounds of the gridded seismicity source. A grid rupture set `mfd-tre
 defined inline and always points to a tree in a
 [`mfd-map`](./Magnitude-Frequency-Distributions.md#mfd-construction).
 
-
 ```json
 [
   {
@@ -106,7 +105,7 @@ some may contain depth values (intraslab sources), maximum magnitude caps, or ot
 spatial PDFs are the preferred approach to modeling regional rate variations, however it is also
 possible to define explicit MFDs at each grid node. To do so, the `spatial-pdf` member
 of a **rupture-sets.json** is replaced with `grid-mfds`. See
-`2018 CONUS NSHM > active-crust > grid-sources` for examples of both approaches. 
+`2018 CONUS NSHM > active-crust > grid-sources` for examples of both approaches.
 
 ## Zone Sources
 

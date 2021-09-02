@@ -140,7 +140,7 @@ source-tree branches.
 How MFDs are intialized (or realized) depends on the presence and contents of `mfd-config.json` and
 `rate-tree.json` files. See the
 [magnitude frequency distributions](./Magnitude-Frequency-Distributions.md) page for details on
-these files and the types of MFDs supported in _nshmp-haz_. Note also the 
+these files and the types of MFDs supported in _nshmp-haz_.
 
 ## Rupture Sets
 
