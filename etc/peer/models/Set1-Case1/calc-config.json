@@ -1,0 +1,15 @@
+{
+  "model": {
+    "name": "PEER Test: Set1-Case1",
+    "surfaceSpacing": 1.0,
+    "ruptureFloating": "OFF",
+    "ruptureVariability": false,
+    "pointSourceType": "FINITE",
+    "areaGridScaling": "UNIFORM_0P01"
+  },
+  "hazard": {
+    "exceedanceModel": "NONE",
+    "valueFormat": "ANNUAL_RATE",
+    "imts": ["PGA"]
+  }
+}

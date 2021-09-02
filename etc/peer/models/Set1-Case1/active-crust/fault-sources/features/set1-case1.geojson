@@ -1,0 +1,21 @@
+{
+  "type": "Feature",
+  "id": 1,
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [-122.00000, 38.22480],
+      [-122.00000, 38.00000]
+    ]
+  },
+  "properties": {
+    "name": "Set1-Case1 fault",
+    "state": "CA",
+    "upper-depth": 0.0,
+    "lower-depth": 12.0,
+    "dip": 90.0,
+    "rake": 0.0,
+    "rate-type": "RECURRENCE",
+    "length": 25.0
+  }
+}
