@@ -32,6 +32,7 @@ import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.model.SiteData;
 
 /**
  * Compute probabilisitic seismic hazard from a {@link HazardModel}.
@@ -108,7 +109,7 @@ public class HazardCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = readSites(args[1], config, log);
+      Sites sites = readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
@@ -131,19 +132,23 @@ public class HazardCalc {
     }
   }
 
-  static Sites readSites(String arg, CalcConfig defaults, Logger log) {
+  static Sites readSites(
+      String arg,
+      CalcConfig defaults,
+      SiteData siteData,
+      Logger log) {
     try {
       if (arg.toLowerCase().endsWith(".csv")) {
         Path path = Paths.get(arg);
         log.info("Site file: " + path.toAbsolutePath().normalize());
-        return Sites.fromCsv(path, defaults);
+        return Sites.fromCsv(path, defaults, siteData);
       }
       if (arg.toLowerCase().endsWith(".geojson")) {
         Path path = Paths.get(arg);
         log.info("Site file: " + path.toAbsolutePath().normalize());
-        return Sites.fromJson(path, defaults);
+        return Sites.fromJson(path, defaults, siteData);
       }
-      return Sites.fromString(arg, defaults);
+      return Sites.fromString(arg, defaults, siteData);
     } catch (Exception e) {
       throw new IllegalArgumentException(NEWLINE +
           "    sites = \"" + arg + "\" must either be a 3 to 7 argument," + NEWLINE +

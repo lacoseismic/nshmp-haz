@@ -109,7 +109,7 @@ public class DeaggEpsilon {
       }
       log.info(config.toString());
 
-      List<Site> sites = ImmutableList.copyOf(Sites.fromCsv(siteFile, config, true));
+      List<Site> sites = ImmutableList.copyOf(Sites.fromCsv(siteFile, config, model.siteData()));
       log.info("Sites: " + sites.size());
 
       log.info("Site data columns: " + colsToSkip);
@@ -134,11 +134,21 @@ public class DeaggEpsilon {
     }
   }
 
+  // TODO removed this set from Site; temp repair
+  static final Set<String> SITE_KEYS = ImmutableSet.of(
+      "name",
+      "lat",
+      "lon",
+      "vs30",
+      "vsInf",
+      "z1p0",
+      "z2p5");
+
   /* returns the number of site data columns are present. */
   private static int headerCount(Path path) throws IOException {
     String header = Files.lines(path).findFirst().get();
     Set<String> columns = ImmutableSet.copyOf(Splitter.on(',').trimResults().split(header));
-    return Sets.intersection(columns, Site.KEYS).size();
+    return Sets.intersection(columns, SITE_KEYS).size();
   }
 
   private static List<Imt> readImtList(Path path, int colsToSkip) throws IOException {

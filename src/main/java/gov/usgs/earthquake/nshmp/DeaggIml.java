@@ -98,7 +98,7 @@ public class DeaggIml {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, log);
+      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       double iml = Double.valueOf(args[2]);
