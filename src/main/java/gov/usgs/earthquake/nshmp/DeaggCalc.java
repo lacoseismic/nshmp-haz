@@ -97,7 +97,7 @@ public class DeaggCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, log);
+      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       double returnPeriod = Double.valueOf(args[2]);
