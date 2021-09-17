@@ -79,7 +79,7 @@ or its children will be processed; any standalone sources will be ignored. For e
 ```
 
 **source-group.json:** A specialized form of logic tree that describes model branches that are
-additivd and therefore does not include weights. Examples from the NSHM for the conterminous U.S.
+additive and therefore does not include weights. Examples from the NSHM for the conterminous U.S.
 NSHM include the Cascadia segmented partial-rupture models and the New Madrid 1500-yr cluster
 branches. The branch objects in a source group _may_ include an optional `scale` member that can
 be used to impose a probability of occurrence or other scaling requred by a NSHM. If absent, the
@@ -96,6 +96,17 @@ be used to impose a probability of occurrence or other scaling requred by a NSHM
     "scale": 1.5
   }
 ]
+```
+
+**tree-info.json:** Top level source trees and groups must be accompanied by a file that contains
+a unique integer ID for the logic tree. This file _may_ also include a `name` field that, if
+present, will be used instead of the enclosing directory name, but it is not required.
+
+ ```json
+{
+  "id": 3199,
+  "name": "Cascadia Subduction Zone"
+}
 ```
 
 ### GMM Logic Trees
