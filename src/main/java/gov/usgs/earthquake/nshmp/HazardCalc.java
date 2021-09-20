@@ -1,5 +1,7 @@
 package gov.usgs.earthquake.nshmp;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
 import java.io.BufferedReader;
@@ -12,13 +14,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -29,7 +34,6 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
-import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SiteData;
@@ -42,23 +46,21 @@ import gov.usgs.earthquake.nshmp.model.SiteData;
 public class HazardCalc {
 
   /**
-   * Entry point for a probabilisitic seismic hazard calculation.
+   * Entry point for a probabilisitic seismic hazard curve calculation.
    *
    * <p>Computing hazard curves requires at least 2, and at most 3, arguments.
-   * At a minimum, the path to a model directory and the site(s) at which to
-   * perform calculations must be specified. Under the 2-argument scenario,
+   * At a minimum, the path to a model directory and a file of site(s) at which
+   * to perform calculations must be specified. Under the 2-argument scenario,
    * model initialization and calculation configuration settings are drawn from
-   * the deafult configuration accompanying and located at the root of the model
-   * directory. Sites may be defined as a string, a CSV file, or a GeoJSON file.
+   * the default configuration. Sites may be defined in a CSV or GeoJSON file.
    *
-   * <p>To override any default or calculation configuration settings included
-   * with the model, supply the path to another configuration file as a third
-   * argument.
+   * <p>To override any default calculation configuration settings, also supply
+   * the path to a configuration file as a third argument.
    *
    * <p>Refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/wikis"
-   * target="_top">wiki</a> for comprehensive descriptions of source models,
-   * configuration files, site files, and hazard calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/README.md"
+   * target="_top">documentation</a> for comprehensive descriptions of source
+   * models, configuration files, site files, and hazard calculations.
    *
    * @see <a
    *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
@@ -91,7 +93,7 @@ public class HazardCalc {
     Path tmpLog = createTempLog();
 
     try {
-      FileHandler fh = new FileHandler(Preconditions.checkNotNull(tmpLog.getFileName()).toString());
+      FileHandler fh = new FileHandler(checkNotNull(tmpLog.getFileName()).toString());
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
@@ -137,23 +139,20 @@ public class HazardCalc {
       CalcConfig defaults,
       SiteData siteData,
       Logger log) {
+
+    Path path = Paths.get(arg);
+    log.info("Sites file: " + path.toAbsolutePath().normalize());
+    String fname = arg.toLowerCase();
+    checkArgument(fname.endsWith(".csv") || fname.endsWith(".json"),
+        "Sites file [%s] must be a path to a *.csv or *.geojson file", arg);
+
     try {
-      if (arg.toLowerCase().endsWith(".csv")) {
-        Path path = Paths.get(arg);
-        log.info("Site file: " + path.toAbsolutePath().normalize());
-        return Sites.fromCsv(path, defaults, siteData);
-      }
-      if (arg.toLowerCase().endsWith(".geojson")) {
-        Path path = Paths.get(arg);
-        log.info("Site file: " + path.toAbsolutePath().normalize());
-        return Sites.fromJson(path, defaults, siteData);
-      }
-      return Sites.fromString(arg, defaults, siteData);
-    } catch (Exception e) {
-      throw new IllegalArgumentException(NEWLINE +
-          "    sites = \"" + arg + "\" must either be a 3 to 7 argument," + NEWLINE +
-          "    comma-delimited string, or specify a path to a *.csv or *.geojson file",
-          e);
+      return fname.endsWith(".csv")
+          ? Sites.fromCsv(path, defaults, siteData)
+          : Sites.fromJson(path, defaults, siteData);
+    } catch (IOException ioe) {
+      throw new IllegalArgumentException(
+          "Error parsing sites file [%s]; see sites file documentation");
     }
   }
 
@@ -165,34 +164,117 @@ public class HazardCalc {
       HazardModel model,
       CalcConfig config,
       Sites sites,
-      Logger log) throws IOException {
+      Logger log) throws IOException, InterruptedException, ExecutionException {
 
-    ExecutorService exec = null;
-    ThreadCount threadCount = config.performance.threadCount;
-    if (threadCount == ThreadCount.ONE) {
-      exec = MoreExecutors.newDirectExecutorService();
-      log.info("Threads: Running on calling thread");
-    } else {
-      exec = Executors.newFixedThreadPool(threadCount.value());
-      log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
-    }
-
+    int threadCount = config.performance.threadCount.value();
+    final ExecutorService exec = initExecutor(threadCount);
+    log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     log.info(PROGRAM + ": calculating ...");
 
     HazardExport handler = HazardExport.create(model, config, sites, log);
-    for (Site site : sites) {
-      Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
-      handler.write(hazard);
-      log.fine(hazard.toString());
-    }
-    handler.expire();
+    CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
+    WriteTask.Builder writeTask = new WriteTask.Builder(handler);
 
+    Future<Path> out = null;
+    for (Site site : sites) {
+      Hazard hazard = calcTask.withSite(site).call();
+      out = exec.submit(writeTask.withResult(hazard));
+    }
+    /* Block shutdown until last task is returned. */
+    Path outputDir = out.get();
+
+    handler.expire();
+    exec.shutdown();
     log.info(String.format(
         PROGRAM + ": %s sites completed in %s",
         handler.resultCount(), handler.elapsedTime()));
 
-    exec.shutdown();
-    return handler.outputDir();
+    return outputDir;
+  }
+
+  private static ExecutorService initExecutor(int threadCount) {
+    if (threadCount == 1) {
+      return MoreExecutors.newDirectExecutorService();
+    } else {
+      return Executors.newFixedThreadPool(threadCount);
+    }
+  }
+
+  private static final class CalcTask implements
+      Callable<Hazard> {
+
+    final HazardModel model;
+    final CalcConfig config;
+    final Site site;
+    final Executor exec;
+
+    CalcTask(
+        HazardModel model,
+        CalcConfig config,
+        Site site,
+        Executor exec) {
+
+      this.model = model;
+      this.config = config;
+      this.site = site;
+      this.exec = exec;
+    }
+
+    @Override
+    public Hazard call() {
+      return HazardCalcs.hazard(model, config, site, exec);
+    }
+
+    static class Builder {
+
+      final HazardModel model;
+      final CalcConfig config;
+      final Executor exec;
+
+      Builder(HazardModel model, CalcConfig config, Executor exec) {
+        this.model = model;
+        this.config = config;
+        this.exec = exec;
+      }
+
+      /* Builds and returns the task. */
+      CalcTask withSite(Site site) {
+        return new CalcTask(model, config, site, exec);
+      }
+    }
+  }
+
+  private static final class WriteTask implements Callable<Path> {
+
+    final HazardExport handler;
+    final Hazard hazard;
+
+    WriteTask(
+        HazardExport handler,
+        Hazard hazard) {
+      this.handler = handler;
+      this.hazard = hazard;
+    }
+
+    @Override
+    public Path call() throws IOException {
+      handler.write(hazard);
+      return handler.outputDir();
+    }
+
+    static class Builder {
+
+      final HazardExport handler;
+
+      Builder(HazardExport handler) {
+        this.handler = handler;
+      }
+
+      /* Builds and returns the task. */
+      WriteTask withResult(Hazard hazard) {
+        return new WriteTask(handler, hazard);
+      }
+    }
   }
 
   static final String TMP_LOG = "nshmp-haz-log";
@@ -239,13 +321,14 @@ public class HazardCalc {
 
   private static final String PROGRAM = HazardCalc.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.HazardCalc model sites [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.Hazard model sites [config]";
   private static final String USAGE_URL1 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
   private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
+  @Deprecated
   private static String version() {
     String version = "unknown";
     /* Assume we're running from a jar. */
@@ -281,15 +364,9 @@ public class HazardCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is either:")
+      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
       .append(NEWLINE)
-      .append("     - a string, e.g. ").append(SITE_STRING)
-      .append(NEWLINE)
-      .append("       (site class and basin terms are optional)")
-      .append(NEWLINE)
-      .append("       (escape any spaces or enclose string in double-quotes)")
-      .append(NEWLINE)
-      .append("     - or a *.csv file or *.geojson file of site data")
+      .append("     - site class and basin terms are optional")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)
