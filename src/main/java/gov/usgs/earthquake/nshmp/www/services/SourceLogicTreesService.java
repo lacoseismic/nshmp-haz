@@ -2,6 +2,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import javax.inject.Singleton;
 
+import gov.usgs.earthquake.nshmp.model.Models;
 import gov.usgs.earthquake.nshmp.www.Response;
 import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
@@ -24,9 +25,8 @@ public class SourceLogicTreesService {
     var url = request.getUri().getPath();
 
     try {
-      var trees = ServletUtil.model().trees();
-      trees.values().stream().forEach(tree -> System.out.println(tree.id()));
-      var response = new Response<>(Status.SUCCESS, NAME, url, ServletUtil.model().trees(), url);
+      var trees = Models.trees(ServletUtil.model());
+      var response = new Response<>(Status.SUCCESS, NAME, url, trees, url);
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
       return ServicesUtil.handleError(e, NAME, url);
