@@ -67,7 +67,6 @@ public class ServletUtil {
   // private static List<HazardModel> HAZARD_MODELS = new ArrayList<>();
 
   private static HazardModel HAZARD_MODEL;
-  private static final String MODEL_INFO = "model-info.json";
 
   static {
     /* TODO modified for deagg-epsilon branch; should be context var */
@@ -86,10 +85,6 @@ public class ServletUtil {
         .create();
   }
 
-  // static List<HazardModel> hazardModels() {
-  // return List.copyOf(HAZARD_MODELS);
-  // }
-
   static HazardModel model() {
     return HAZARD_MODEL;
   }
@@ -103,14 +98,6 @@ public class ServletUtil {
   @EventListener
   void startup(StartupEvent event) {
     HAZARD_MODEL = loadModel(modelPath);
-    // TODO should model path just be libs/model
-    // try {
-    // var modelFinder = new ModelFinder();
-    // Files.walkFileTree(modelPath, modelFinder);
-    // modelFinder.paths().forEach(path -> HAZARD_MODELS.add(loadModel(path)));
-    // } catch (IOException e) {
-    // throw new RuntimeException(e);
-    // }
   }
 
   private HazardModel loadModel(Path path) {
@@ -183,31 +170,7 @@ public class ServletUtil {
     }
   }
 
-  // private static class ModelFinder extends SimpleFileVisitor<Path> {
-  // private List<Path> paths;
-  //
-  // ModelFinder() {
-  // paths = new ArrayList<>();
-  // }
-  //
-  // List<Path> paths() {
-  // return List.copyOf(paths);
-  // }
-  //
-  // @Override
-  // public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-  // var fileName = path.getFileName();
-  //
-  // if (fileName != null && fileName.toString().equals(MODEL_INFO)) {
-  // paths.add(path.getParent());
-  // }
-  //
-  // return FileVisitResult.CONTINUE;
-  // }
-  // }
-
   private static class PathConverter implements JsonSerializer<Path> {
-
     @Override
     public JsonElement serialize(
         Path path,
