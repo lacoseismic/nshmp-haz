@@ -13,6 +13,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+/**
+ * Micronaut controller for NSHM source logic trees.
+ *
+ * @see SourceLogicTreesService
+ * @author U.S. Geological Survey
+ */
 @Tag(
     name = "Source Logic Trees",
     description = "NSHM source logic trees service")
