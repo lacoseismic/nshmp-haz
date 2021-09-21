@@ -38,14 +38,9 @@ public class SourceLogicTreesService {
     var url = request.getUri().getPath();
 
     try {
-      var tree = ServletUtil.model().tree(id);
+      var tree = Models.tree(ServletUtil.model(), id);
       var requestData = new RequestData(id);
-
-      if (tree.isEmpty()) {
-        throw new RuntimeException(String.format("Id [%s] not found", id));
-      }
-
-      var response = new Response<>(Status.SUCCESS, NAME, requestData, tree.get(), url);
+      var response = new Response<>(Status.SUCCESS, NAME, requestData, tree, url);
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
       return ServicesUtil.handleError(e, NAME, url);
