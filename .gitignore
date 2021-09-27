@@ -13,7 +13,6 @@ eq-prob*/
 eq-rate*/
 Scratch*.java
 nshmp-haz-log*
-models
 webapp/models
 webapp/jsdocs
 scratch*.html

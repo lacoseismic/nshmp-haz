@@ -1,7 +1,7 @@
 {
-  "surface-spacing": 1.0,
+  "surface-spacing": 0.02,
   "rupture-scaling": "PEER",
-  "rupture-floating": "OFF",
+  "rupture-floating": "ON",
   "dip-slip-model": "FIXED",
   "dip-tree": null
 }
