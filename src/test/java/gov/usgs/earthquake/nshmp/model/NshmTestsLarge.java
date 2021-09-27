@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp;
+package gov.usgs.earthquake.nshmp.model;
 
 // import static gov.usgs.earthquake.nshmp.site.NshmpSite.BOSTON_MA;
 // import static gov.usgs.earthquake.nshmp.site.NshmpSite.CHICAGO_IL;
