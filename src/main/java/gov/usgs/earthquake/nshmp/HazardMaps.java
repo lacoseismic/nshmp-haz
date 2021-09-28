@@ -32,7 +32,7 @@ public class HazardMaps {
   private static final Interpolator INTERPOLATOR = Interpolator.builder()
       .logx()
       .logy()
-      .decreasingX()
+      .decreasingY()
       .build();
   private static final String MAP_FILE = "map.csv";
   private static final String PROGRAM = HazardMaps.class.getSimpleName();

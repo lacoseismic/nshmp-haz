@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp;
+package gov.usgs.earthquake.nshmp.model;
 
 // import static org.junit.Assert.assertEquals;
 //
