@@ -1,0 +1,13 @@
+{
+  "set1-case8b-mfd": [
+    {
+      "id": "set1-case8b",
+      "weight": 1.0,
+      "value": {
+        "type": "SINGLE",
+        "m": 6.0,
+        "rate": 0.016042517
+      }
+    }
+  ]
+}
