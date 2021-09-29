@@ -94,8 +94,6 @@ class PeerTest {
   static final String S3_C4 = "Set3-Case4";
 
   private static final Path PEER_DIR = Paths.get("etc", "peer");
-  // private static final Path PEER_DIR = Paths.get("..", "nshmp-model-dev",
-  // "models", "PEER");
   private static final Path MODEL_DIR = PEER_DIR.resolve("models");
   private static final Path RESULT_DIR = PEER_DIR.resolve("results");
 

@@ -137,6 +137,20 @@ class PeerTestArgumentProviders {
     }
   }
 
+  static class Set1Case11 implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+      return PeerTest.load(PeerTest.S1_C11);
+    }
+  }
+
+  static class Set1Case11_Fast implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+      return PeerTest.load(PeerTest.S1_C11_F);
+    }
+  }
+
   static class Set2Case2a implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
