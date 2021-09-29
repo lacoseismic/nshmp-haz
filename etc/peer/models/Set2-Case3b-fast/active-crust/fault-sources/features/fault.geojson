@@ -1,0 +1,21 @@
+{
+  "type": "Feature",
+  "id": 1,
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [-65.00000,  0.38221],
+      [-65.00000, -0.38221]
+    ]
+  },
+  "properties": {
+    "name": "Set2 Fault 4",
+    "state": "CA",
+    "upper-depth": 1.0,
+    "lower-depth": 12.0,
+    "dip": 45.0,
+    "rake": 90.0,
+    "rate-type": "RECURRENCE",
+    "length": 85.0
+  }
+}

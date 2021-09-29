@@ -1,0 +1,13 @@
+{
+  "set2-case3-mfd": [
+    {
+      "id": "set2-case3",
+      "weight": 1.0,
+      "value": {
+        "type": "SINGLE",
+        "m": 7.0,
+        "rate": 0.0022360312
+      }
+    }
+  ]
+}
