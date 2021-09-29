@@ -29,6 +29,14 @@ import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set1Case7_
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set1Case8a;
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set1Case8b;
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set1Case8c;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2a;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2a_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2b;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2b_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2c;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2c_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2d;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case2d_Fast;
 
 class PeerTests {
 
@@ -212,75 +220,67 @@ class PeerTests {
   // site, double[] expected) {
   // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
   // }
-  //
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2a.class)
-  // @DisplayName("Set2 Case2a")
-  // final void set2Case2a(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2a_Fast.class)
-  // @DisplayName("Set2 Case2a Fast")
-  // final void set2Case2aF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2b.class)
-  // @DisplayName("Set2 Case2b")
-  // final void set2Case2b(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2b_Fast.class)
-  // @DisplayName("Set2 Caseb2 Fast")
-  // final void set2Case2bF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2c.class)
-  // @DisplayName("Set2 Case2c")
-  // final void set2Case2c(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2c_Fast.class)
-  // @DisplayName("Set2 Case2c Fast")
-  // final void set2Case2cF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2d.class)
-  // @DisplayName("Se2 Case2d")
-  // final void set2Case2d(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case2d_Fast.class)
-  // @DisplayName("Set2 Case2d Fast")
-  // final void set2Case2dF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
+
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2a.class)
+  @DisplayName("Set2 Case2a")
+  final void set2Case2a(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2a_Fast.class)
+  @DisplayName("Set2 Case2a Fast")
+  final void set2Case2aF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2b.class)
+  @DisplayName("Set2 Case2b")
+  final void set2Case2b(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2b_Fast.class)
+  @DisplayName("Set2 Caseb2 Fast")
+  final void set2Case2bF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2c.class)
+  @DisplayName("Set2 Case2c")
+  final void set2Case2c(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2c_Fast.class)
+  @DisplayName("Set2 Case2c Fast")
+  final void set2Case2cF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2d.class)
+  @DisplayName("Se2 Case2d")
+  final void set2Case2d(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case2d_Fast.class)
+  @DisplayName("Set2 Case2d Fast")
+  final void set2Case2dF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
   // @Disabled
   // @ParameterizedTest(name = "{0}, Site={index}")
   // @ArgumentsSource(Set2Case3a.class)
