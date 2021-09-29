@@ -1,0 +1,21 @@
+{
+  "grid-spacing": 0.01,
+  "smoothing-density": null,
+  "smoothing-limit": null,
+  "opt-distance-bin": null,
+  "point-source-type": "POINT",
+  "rupture-scaling": "PEER",
+  "max-depth": 30.0,
+  "focal-mech-tree": [
+    { "id": "STRIKE_SLIP", "weight": 1.0 }
+  ],
+  "grid-depth-map": {
+    "all": {
+      "mMin": 4.5,
+      "mMax": 10.0,
+      "depth-tree": [
+        { "id": "5 km", "weight": 1.0, "value": 5.0 }
+      ]
+    }
+  }
+}

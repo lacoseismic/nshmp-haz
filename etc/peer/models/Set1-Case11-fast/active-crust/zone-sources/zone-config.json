@@ -1,0 +1,26 @@
+{
+  "grid-spacing": 0.1,
+  "smoothing-density": null,
+  "smoothing-limit": null,
+  "opt-distance-bin": null,
+  "point-source-type": "POINT",
+  "rupture-scaling": "PEER",
+  "max-depth": 30.0,
+  "focal-mech-tree": [
+    { "id": "STRIKE_SLIP", "weight": 1.0 }
+  ],
+  "grid-depth-map": {
+    "all": {
+      "mMin": 4.5,
+      "mMax": 10.0,
+      "depth-tree": [
+        { "id": "5 km", "weight": 0.1667, "value": 5.0 },
+        { "id": "6 km", "weight": 0.1666, "value": 6.0 },
+        { "id": "7 km", "weight": 0.1667, "value": 7.0 },
+        { "id": "8 km", "weight": 0.1667, "value": 8.0 },
+        { "id": "9 km", "weight": 0.1666, "value": 9.0 },
+        { "id": "10 km", "weight": 0.1667, "value": 10.0 }
+      ]
+    }
+  }
+}

@@ -2,5 +2,5 @@
   "epistemic-tree": null,
   "aleatory-properties": null,
   "minimum-magnitude": 5.0,
-  "nshm-bin-model": true
+  "nshm-bin-model": false
 }
