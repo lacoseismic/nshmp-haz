@@ -8,25 +8,21 @@ file of distance, magnitude, and epsilon bins, and a text file of summary statis
 contributing sources. For this, it can be helpful to create a second system alias:
 
 ```Shell
-alias deagg='java -Xms1g -Xmx4g -cp /path/to/nshmp-haz/build/libs/nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggCalc'
+alias deagg='java -Xms4g -Xmx8g -cp /path/to/nshmp-haz/build/libs/nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggCalc'
 ```
 
 `DeaggCalc` is similar to `HazardCalc` in every way except that the return-period of interest
 must be specified. For example, execute:
 
 ```Shell
-deagg ../../../../nshm-cous-2008/Western\ US sites.geojson 2475 config.json
+deagg ../../../../nshm-conus sites.geojson 2475 config.json
 ```
 
 The results of the deaggregation are saved along with hazard curves in `deagg` directories.
- As with `HazardCalc`, if the `GMM` ddata type has been specified (as it has in the
- [config](https://github.com/usgs/nshmp-haz/blob/master/etc/examples/7-deaggregation/config.json)
- file for this example) additional deaggregation results for each GMM are generated as well.
- Deaggregations by individual `SOURCE` type are also possible.
-
-See the following pages for more information on
-[deaggregation](https://github.com/usgs/nshmp-haz/wiki/about-deaggregation)
-and the meaning of [epsilon](https://github.com/usgs/nshmp-haz/wiki/what-is-epsilon%3F).
+As with `HazardCalc`, if the `GMM` ddata type has been specified (as it has in the
+[config](../../../docs/pages/Calculation-Configuration.md#calculation-configuration)
+file for this example) additional deaggregation results for each GMM are generated as well.
+Deaggregations by individual `SOURCE` type are also possible.
 
 __Results directory structure:__
 
@@ -36,8 +32,9 @@ __Results directory structure:__
       ├─ config.json
       ├─ DeaggCalc.log
       ├─ PGA/
+      │   ├─ curves-truncated.csv
       │   ├─ curves.csv
-      │   ├─ deagg/
+      │   ├─ disagg/
       │   │   ├─ Los Angeles CA/
       │   │   │   ├─ data.csv
       │   │   │   └─ summary.txt
@@ -51,9 +48,9 @@ __Results directory structure:__
       │   │       ├─ data.csv
       │   │       └─ summary.txt
       │   └─ gmm/
-      │       ├─ AB_03_CASCADIA_SLAB/
+      │       ├─ AM_09_INTERFACE_BASIN/
       │       │   ├─ curves.csv
-      │       │   └─ deagg/
+      │       │   └─ disagg/
       │       │       ├─ San Francisco CA/
       │       │       │   ├─ data.csv
       │       │       │   └─ summary.txt
@@ -61,7 +58,7 @@ __Results directory structure:__
       │       │           ├─ data.csv
       │       │           └─ summary.txt
       │       ├─ ...
-      │       ├─ CB_08/
+      │       ├─ CB_14_BASIN/
       │       │   ├─ curves.csv
       │       │   └─ deagg/
       │       │       ├─ Los Angeles CA/
@@ -77,14 +74,13 @@ __Results directory structure:__
       │       │           ├─ data.csv
       │       │           └─ summary.txt
       │       └─ ...
-      ├─ SA0P2/
+      ├─ SA0P1/
       │   └─ ...
-      └─ SA1P0/
-          └─ ...
+      └─ ...
 ```
 
 Note that in the output above, there are only deaggregation results for
-subduction GMMs (e.g. `AB_03_CASCADIA_SLAB`) for sites closer to the Cascadia subduction zone;
+subduction GMMs (e.g. `AM_09_INTERFACE_BASIN`) for sites closer to the Cascadia subduction zone;
 empty results will not be saved.
 
 <!-- markdownlint-disable MD001 -->

@@ -143,7 +143,7 @@ public class HazardCalc {
     Path path = Paths.get(arg);
     log.info("Sites file: " + path.toAbsolutePath().normalize());
     String fname = arg.toLowerCase();
-    checkArgument(fname.endsWith(".csv") || fname.endsWith(".json"),
+    checkArgument(fname.endsWith(".csv") || fname.endsWith(".geojson"),
         "Sites file [%s] must be a path to a *.csv or *.geojson file", arg);
 
     try {

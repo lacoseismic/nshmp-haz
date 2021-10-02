@@ -19,9 +19,6 @@ The [site specification](https://github.com/usgs/nshmp-haz/wiki/sites)
 wiki page provides details on the two file formats. Note that with either format,
 if the name of a site is supplied, it will be included in the first column of any output curve files.
 
-Note that both formats ([CSV](sites.csv) and [GeoJSON](sites.geojson)) are elegantly
-rendered by GitHub.
-
 __Results directory structure:__
 
 ```text
