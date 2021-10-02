@@ -4,7 +4,7 @@ __Working directory:__ `/path/to/nshmp-haz/etc/examples/6-enhanced-output`
 
 While mean hazard is of broad interest, it can be useful to preserve individual components of a
 total curve, particularly with more complex models. Execute the following to write curves for
-each source type and ground motion model (GMM) used in the 2018 NSHM (cloned in the previous
+each source type and ground motion model (GMM) used in the CONUS NSHM (cloned in the previous
 example):
 
 ```Shell
