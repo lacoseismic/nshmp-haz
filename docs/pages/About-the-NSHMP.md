@@ -11,7 +11,7 @@ Earthquake Hazards Reduction Act of 1977, as amended:
 >lifelines, including additional maps needed for performance-based design approaches."
 
 The NSHMP primarily produces long-term NSHMs that are used in U.S. building codes and numerous
-other seismic design requirements. The models are used is site-specific analyses and also for
+other seismic design requirements. The models are used in site-specific analyses and also for
 defining likely earthquake scenarios for emergency planning. NSHMs are considered reference
 (or baseline) models used by the risk, insurance and reinsurance industries, and they are also
 considered in other industries such as real estate lending. A 9-member steering committee of
