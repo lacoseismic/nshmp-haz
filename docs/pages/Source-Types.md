@@ -40,7 +40,7 @@ spatial PDFs, [below](#spatial-pdfs)). When realizing each source the spatial PD
 by each regional rate in a rate-tree.
 
 Grid sources are represented in a model using a logic tree with a `rupture-sets.json` defining the
-ruptures on each branch.  Because gridded seismicity models may be govered by regionally
+ruptures on each branch.  Because gridded seismicity models may be governed by regionally
 varying MFD properties (e.g. `mMax`), rupture sets for grids are defined in a JSON array.
 
 **rupture-sets.json**: Defines an array of one or more rupture sets. Multiple rupture sets are
@@ -175,12 +175,12 @@ Finite fault source representation. The geometry, properties and rupture MFDs of
 are defined by one or more GeoJSONs and associated configuration. Depending on the complexity of
 the source, it may be represented using a single GeoJSON or result from stitching together
 multiple GeoJSONs (see note on fault section stitching, [below](#fault-section-stitching)). If a
-fault source is represented with a logic treek then `rupture-set.json` defines the ruptures for
+fault source is represented with a logic tree then `rupture-set.json` defines the ruptures for
 each branch. Depending on the MFDs and scaling relations used to determine a rupture size, some
 ruptures may fill the entire source model while smaller events are modeled as 'floating' ruptures;
 they occur in multiple locations on the fault surface with appropriately scaled rates. MFDs
-associated with finite fault models may be explicitely defined or or derived from slip rates.
-Fault rupture rates may be modeled using explicitely defined MFDs or logic trees of slip rate.
+associated with finite fault models may be explicitly defined or derived from slip rates.
+Fault rupture rates may be modeled using explicitly defined MFDs or logic trees of slip rate.
 
 **fault-source.geojson**: Defines the geometry and properties of a single source. In the example
 below the presence of a `rate-map` property indicates MFDs should be constructed from the supplied

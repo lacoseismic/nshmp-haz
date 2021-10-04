@@ -51,7 +51,7 @@ Puerto Rico & <br/> U.S. Virgin Islands | 2003 | v1.0.0 | | | |
 included data to support updates to the U.S. Building Code, specifically hazard curves for peak
 ground acceleration (PGA), and 0.2 and 1.0 second spectral accelerations, all at a BC boundary site
 class with Vs30 = 760 m/s. Some time later, the model was deployed to the Unified Hazard Tool
-(UHT) and included support in the Wester U.S. for calculations at sites other than Vs30 = 760 m/s,
+(UHT) and included support in the Western U.S. for calculations at sites other than Vs30 = 760 m/s,
 consistent with dynamic calculations using the 2008 model. Subsequently, we updated the 2014
 model with [addional periods and site classes](https://pubs.er.usgs.gov/publication/ofr20181111).
 Doing so required dropping several ground motion models (GMMs) and a redistribution of logic-tree
