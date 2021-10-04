@@ -49,6 +49,12 @@ import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case3c
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case3c_Fast;
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case3d;
 import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case3d_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case4a;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case4a_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case4b;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case4b_Fast;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case5a;
+import gov.usgs.earthquake.nshmp.model.peer.PeerTestArgumentProviders.Set2Case5b;
 
 class PeerTests {
 
@@ -353,54 +359,48 @@ class PeerTests {
     PeerTest.test(modelName, model, site, expected, TOL, EXEC);
   }
 
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case4a.class)
-  // @DisplayName("Set2 Case4a")
-  // final void set2Case4a(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case4a_Fast.class)
-  // @DisplayName("Set2 Case4a Fast")
-  // final void set2Case4aF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @Disabled
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case4b.class)
-  // @DisplayName("Set2 Case4b")
-  // final void set2Case4b(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case4b_Fast.class)
-  // @DisplayName("Set2 Case4b Fast")
-  // final void set2Case4bF(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case5a.class)
-  // @DisplayName("Set2 Case5a")
-  // final void set2Case5a(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
-  //
-  // @ParameterizedTest(name = "{0}, Site={index}")
-  // @ArgumentsSource(Set2Case5b.class)
-  // @DisplayName("Set2 Case5b")
-  // final void set2Case5b(String modelName, HazardModel model, Site
-  // site, double[] expected) {
-  // PeerTest.test(modelName, model, site, expected, TOL, EXEC);
-  // }
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case4a.class)
+  @DisplayName("Set2 Case4a")
+  final void set2Case4a(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case4a_Fast.class)
+  @DisplayName("Set2 Case4a Fast")
+  final void set2Case4aF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @Disabled
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case4b.class)
+  @DisplayName("Set2 Case4b")
+  final void set2Case4b(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case4b_Fast.class)
+  @DisplayName("Set2 Case4b Fast")
+  final void set2Case4bF(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case5a.class)
+  @DisplayName("Set2 Case5a")
+  final void set2Case5a(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
+
+  @ParameterizedTest(name = "{0}, Site={index}")
+  @ArgumentsSource(Set2Case5b.class)
+  @DisplayName("Set2 Case5b")
+  final void set2Case5b(String modelName, HazardModel model, Site site, double[] expected) {
+    PeerTest.test(modelName, model, site, expected, TOL, EXEC);
+  }
 
 }
