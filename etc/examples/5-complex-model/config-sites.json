@@ -3,7 +3,6 @@
     "imts": ["SA1P0", "SA2P0"]
   },
   "output": {
-    "directory": "hazout-sites",
-    "flushLimit": 1
+    "directory": "hazout-sites"
   }
 }

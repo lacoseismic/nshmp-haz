@@ -14,11 +14,9 @@ testing. See the [PEER directory](../../peer/) for more information.
 
 The result of this calculation should be available as a single comma-delimited file containing
 several total mean hazard curves for PGA in a newly created `hazout` directory. In this example,
- the calculation configuration was derived from the model directory and the site was specified
-  as a comma-delimited string. The string must have the form:
-   `name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]`, where `vs30`, `vsInf`, `z1p0`, and `z2p5`
-   are optional. See the [site specification](https://github.com/usgs/nshmp-haz/wiki/sites)
-   page for more details.
+the calculation configuration was derived from the model directory and the site is defined in
+file `site.csv`. See the [site specification](https://github.com/usgs/nshmp-haz/wiki/sites)
+page for more details.
 
 Note that not all [calculation configuration](https://github.com/usgs/nshmp-haz/wiki/Configuration)
 parameters need be supplied; see the [configuration file](../../peer/models/Set1-Case1/config.json)
