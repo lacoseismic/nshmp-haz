@@ -42,6 +42,12 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
+ * Disaggregate probabilisitic seismic hazard at a return period of interest or
+ * at specific ground motion levels.
+ *
+ * @author U.S. Geological Survey
+ */
+/**
  * Custom application to support 2018 integration into building codes.
  * Application will process a list of sites for which the risk-targetd response
  * spectra is supplied, deaggregating the hazard at each spectral period at the
@@ -58,7 +64,30 @@ public class DeaggEpsilon {
       .create();
 
   /**
-   * Entry point for the application.
+   * Entry point for the disaggregation of probabilisitic seismic hazard.
+   *
+   * <p>Two approaches to disaggregation of seimic hazard are possible with this
+   * application. In the first approach, the 'sites' file is the same as it
+   * would be for a hazard calculation, and disaggregation is performed for all
+   * calculated intensity measures at the 'returnPeriod' (in years)of interest
+   * specified in the config file (default = 2475 years)
+   *
+   * <p>In the second approach, the sites file includes columns for each
+   * spectral period and the target ground motion level to disaggregate for
+   * each. For example, the target values could be a risk-targeted response
+   * spectrum.
+   *
+   * <p>Please refer to the nshmp-haz <a
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs"
+   * target="_top">docs</a> for comprehensive descriptions of source models,
+   * configuration files, site files, and hazard calculations.
+   *
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
+   *      target="_top"> nshmp-haz Building & Running</a>
+   * @see <a
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
+   *      target="_top"> example calculations</a>
    */
   public static void main(String[] args) {
 
@@ -308,7 +337,7 @@ public class DeaggEpsilon {
 
   private static final String PROGRAM = DeaggEpsilon.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggEpsilon model sites-spectra [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggEpsilon model sites [config]";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
@@ -320,7 +349,8 @@ public class DeaggEpsilon {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites-spectra' is a *.csv file of locations and risk-targeted response spectra")
+      .append(
+          "  'sites' is a *.csv file of locations, site parameters and (optional) target ground motion levels")
       .append(NEWLINE)
       .append("     - Header: lon,lat,PGA,SA0P01,SA0P02,...")
       .append(NEWLINE)
