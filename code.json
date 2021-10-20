@@ -2,30 +2,27 @@
   {
     "name": "nshmp-haz",
     "organization": "U.S. Geological Survey",
-    "description": "National Seismic Hazard Mapping Project (NSHMP) software stack",
-    "version": "#.#.#",
-    "status": "Production",
-    "doi": "doi:###TBD###",
+    "description": "NSHMP command line applications and web services",
+    "version": "2.0.0",
+    "status": "Development",
 
     "permissions": {
       "usageType": "openSource",
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/LICENSE.md"
+          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/main/LICENSE.md"
         }
       ]
     },
 
-    "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/",
-    "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs",
-    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/releases/tag/v#.#.#",
-    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/DISCLAIMER.md",
+    "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/",
+    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/archive/main/nshmp-haz-main.zip",
+    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/main/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz.git",
     "vcs": "git",
 
     "laborHours": 1200,
-
-    "languages": [ "Java" ],
 
     "tags": [
       "Earthquake Hazards",
@@ -38,8 +35,11 @@
       "earthquake-source",
       "hazard-curve",
       "disaggregation",
-      "deaggregation",
-      "doi|###TBD###"
+      "doi|https://doi.org/10.5066/P9STF5GK"
+    ],
+
+    "languages": [
+      "Java"
     ],
 
     "contact": {
@@ -48,7 +48,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2021-06-##"
+      "metadataLastUpdated": "2021-10-20"
     }
   }
 ]
