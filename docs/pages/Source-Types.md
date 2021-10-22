@@ -175,7 +175,7 @@ Finite fault source representation. The geometry, properties and rupture MFDs of
 are defined by one or more GeoJSONs and associated configuration. Depending on the complexity of
 the source, it may be represented using a single GeoJSON or result from stitching together
 multiple GeoJSONs (see note on fault section stitching, [below](#fault-section-stitching)). If a
-fault source is represented with a logic tree then `rupture-set.json` defines the ruptures for
+fault source is represented with a logic tree then a `rupture-set.json` defines the ruptures for
 each branch. Depending on the MFDs and scaling relations used to determine a rupture size, some
 ruptures may fill the entire source model while smaller events are modeled as 'floating' ruptures;
 they occur in multiple locations on the fault surface with appropriately scaled rates. MFDs
@@ -243,6 +243,24 @@ variations and an associated slip-rate scaling model are also supported for norm
 }
 ```
 
+**rupture-set.json**: When a fault source is represented with a logic tree a
+`rupture-set.json` defines the ruptures for each branch. A rupture set _may_ also define custom
+properties and _may_ also contain a `sections` member that defines the fault sections for the
+rupture set (see note on fault section stitching, [below](#fault-section-stitching)).
+
+```json
+{
+  "name": "New Madrid - USGS (center)",
+  "id": 3023,
+  "sections": [3020, 3021, 3022],
+  "mfd-tree": "usgs-hi-mag",
+  "properties": {
+    "state": "MO",
+    "width": 15.0
+  }
+}
+```
+
 ### Fault Section Stitching
 
 When multiple sections are defined for a rupture, the ruptures must be defined in an order that
@@ -264,7 +282,8 @@ a cluster may only have an mfd-tree composed of `Mfd.Type.SINGLE` MFDs and the m
 match across all sources in a cluster (i.e. each mfd-tree has the same IDs and weights).
 
 **cluster-set.json** A specialized type of rupture set, this file defines the array of fault
-rupture sets that make up a 'cluster'.
+rupture sets that make up a 'cluster'. As with fault sources, the nested rupture sets in a cluster
+set _may_ define `properties` and `sections` members.
 
 ```json
 {
