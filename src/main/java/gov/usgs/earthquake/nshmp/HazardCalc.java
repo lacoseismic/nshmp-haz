@@ -58,16 +58,16 @@ public class HazardCalc {
    * the path to a configuration file as a third argument.
    *
    * <p>Refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/README.md"
-   * target="_top">documentation</a> for comprehensive descriptions of source
-   * models, configuration files, site files, and hazard calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/README.md">
+   * documentation</a> for comprehensive descriptions of source models,
+   * configuration files, site files, and hazard calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
-   *      target="_top"> nshmp-haz Building & Running</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">
+   *      nshmp-haz Building & Running</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
-   *      target="_top"> example calculations</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples">
+   *      example calculations</a>
    */
   public static void main(String[] args) {
 
