@@ -70,6 +70,8 @@ A general purpose MFD that represents defined by explicit arrays of magnitudes a
   }
 ```
 
+An incremental MFD will ignore any uncertainty settings defined in a `mfd-config.json`.
+
 ## MFD Construction
 
 Construction of MFDs from their declaration in a tree also depends on the following files:
