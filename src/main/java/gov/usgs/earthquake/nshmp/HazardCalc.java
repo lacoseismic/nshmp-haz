@@ -326,7 +326,6 @@ public class HazardCalc {
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
   @Deprecated
   private static String version() {

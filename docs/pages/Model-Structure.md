@@ -11,14 +11,15 @@ for representing model data and relationships and is supported in most programmi
 ## Directory Structure
 
 Earthquake source files are organized by tectonic setting: `active-crust`, `stable-crust`,
-`subduction-interface`, `subduction-slab`, and `volcanic` with the two crustal and the volcanic
-settings supporting the nested source types: `fault-sources`, `grid-sources`, and `zone-sources`.
-The `volcanic` tectonic setting also supports `decollement-sources`.
+`subduction`, and `volcanic`. The crustal and volcanic tectonic settings support `fault`, `grid`,
+and `zone` source types. The volcanic tectonic setting additionally supports a `decollement`
+source type. The subduction tectonic setting supports `interface` and `slab` source types. 
 
 The root of a model must include `model-info.json` and _may_ include a `calc-config.json` that
 specifies any custom default [calculation configuration](./Calculation-Configuration.md) settings
-for the model. Top level tectonic setting directories must include `gmm-tree.json` and
-`gmm-config.json` files. Source directories are loaded recursively, permitting configuration files
+for the model. Top level tectonic setting directories may include a `gmm-tree.json` and
+`gmm-config.json` files. If absent, the two ground motion model files must be present in the nested
+source type directories. Source directories are loaded recursively, permitting configuration files
 deeper in the heirarchy to override those defined higher in the heirarchy, as needed and as
 specified for each source type. Nested directories support associations between groups of sources,
 their configuration and initialization, and ground motion models. If there are a large number of
@@ -31,26 +32,33 @@ model-directory/
   ├─ calc-config.json             (optional, overrides defaults)
   │
   ├─ active-crust/
-  │   ├─ gmm-config.json          (required, can override)
-  │   ├─ gmm-tree.json            (required, can override)
+  │   ├─ gmm-config.json          (required here or in child source type directory, can override)
+  │   ├─ gmm-tree.json
   │   │
-  │   ├─ fault-sources/
+  │   ├─ fault/
   │   │   └─ ...
   │   │
-  │   ├─ grid-sources/
+  │   ├─ grid/
   │   │   └─ ...
   │   │
-  │   └─ zone-sources/
+  │   └─ zone/
   │       └─ ...
   │
   ├─ stable-crust/...             Same structure as 'active-crust'
   │   └─ ...
   │
-  ├─ subduction-interface/        Similar structure to 'fault-sources'
-  │   └─ ...
+  ├─ volcanic/...                 Same structure as 'active-crust'; may include
+  │   └─ ...                      'decollement' source type
   │
-  └─ subduction-slab/             Similar structure to 'grid-sources'
-      └─ ...
+  └─ subduction/
+      ├─ gmm-config.json          (required here or in nested source type directory, can override)
+      ├─ gmm-tree.json
+      │
+      ├─ interface/               Similar structure to 'fault' sources
+      │   └─ ...
+      │
+      └─ slab/                    Similar structure to 'grid' sources
+          └─ ...
 ```
 
 The following sections describe each source type, associated configuration and source definition
@@ -65,7 +73,7 @@ surface trace of the section. The coordinate order of the trace must adhere to t
 geology right-hand rule.
 
 ```text
-fault-sources/
+fault/
   ├─ fault-config.json            (required, can override)
   ├─ mfd-config.json              (required, can override)
   ├─ mfd-map.json                 (optional) Map of shared mfd-trees
@@ -105,7 +113,7 @@ trees of source model variants. Grid sources are modeled as point sources of var
 Multiple GeoJSON `Polygon`s may be used to accomodate spatial variations in source properties.
 
 ```text
-grid-sources/
+grid/
   ├─ grid-config.json             (required, can override)
   ├─ mfd-map.json                 (optional) Map of shared mfd-trees
   ├─ features/                    (required) Directory of grid feature bounds
@@ -136,7 +144,7 @@ of dynamically computing rates over a zone from a single value or `rate-tree.jso
 a model.*
 
 ```text
-zone-sources/
+zone/
   ├─ zone-config.json             (required, can override)
   ├─ mfd-config.json              (required)
   ├─ mfd-map.json                 (optional) Map of shared mfd-trees
@@ -164,7 +172,7 @@ define interface sections using a `MultiLineString` of multple traces at increas
 coordinate order of each trace must adhere to the U.S. structural geology right-hand rule.
 
 ```text
-subduction-interface
+interface/
   ├─ gmm-config.json              (required)
   ├─ gmm-tree.json                (required)
   ├─ interface-config.json        (required)
@@ -182,7 +190,7 @@ rate files (`*.csv`) are stored adjacent to their corresponding feature file (`*
 _this may change in a future release_.
 
 ```text
-subduction-slab
+slab/
   ├─ gmm-config.json              (required)
   ├─ gmm-tree.json                (required)
   ├─ slab-config.json             (required)
