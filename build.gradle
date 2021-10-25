@@ -47,7 +47,6 @@ configurations {
 apply from: "${projectDir}/gradle/dependencies.gradle"
 apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"
-apply from: "${projectDir}/gradle/javadoc.gradle"
 apply from: "${projectDir}/gradle/repositories.gradle"
 
 sourceCompatibility = JavaVersion.VERSION_11
