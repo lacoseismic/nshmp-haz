@@ -70,6 +70,7 @@ Reference | ID | Component | Notes
 [Boore & Anderson, 2008](http://dx.doi.org/10.1193/1.2830434) | BA_08 | GMRotI50 |
 [Campbell & Bozorgnia, 2008](http://dx.doi.org/10.1193/1.2857546) | CB_08 | GMRotI50 |
 [Chiou & Youngs, 2008](http://dx.doi.org/10.1193/1.2894832) | CY_08 | GMRotI50 |
+[Gulerce & Abrahamson, 2011](http://dx.doi.org/10.1193/1.3651317) | GA_11 | V/H |
 **Other**
 [Abrahamson & Silva, 1997](http://dx.doi.org/10.1785/gssrl.68.1.94) | AS_97 | Average horizontal |
 [Boore et al., 1997](http://dx.doi.org/10.1785/gssrl.68.1.128)<br>[Boore, 2005](http://dx.doi.org/10.1785/gssrl.76.3.368) | BJF_97 | Random horizontal | 1
