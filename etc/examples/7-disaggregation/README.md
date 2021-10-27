@@ -1,36 +1,36 @@
-# Example 7: Deaggregation
+# Example 7: Disaggregation
 
-__Working directory:__ `/path/to/nshmp-haz/etc/examples/7-deaggregation`
+__Working directory:__ `/path/to/nshmp-haz/etc/examples/7-disaggregation`
 
-To perform a deaggregation of hazard, one must use the program `DeaggCalc`. Internally,
-`DeaggCalc` calls `HazardCalc` and then reprocesses the data to generate a comma-delimited
+To perform a disaggregation of hazard, one must use the program `DisaggCalc`. Internally,
+`DisaggCalc` calls `HazardCalc` and then reprocesses the data to generate a comma-delimited
 file of distance, magnitude, and epsilon bins, and a text file of summary statistics and primary
 contributing sources. For this, it can be helpful to create a second system alias:
 
 ```Shell
-alias deagg='java -Xms4g -Xmx8g -cp /path/to/nshmp-haz/build/libs/nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggCalc'
+alias disagg='java -Xms4g -Xmx8g -cp /path/to/nshmp-haz/build/libs/nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc'
 ```
 
-`DeaggCalc` is similar to `HazardCalc` in every way except that the return-period of interest
+`DisaggCalc` is similar to `HazardCalc` in every way except that the return-period of interest
 must be specified. For example, execute:
 
 ```Shell
-deagg ../../../../nshm-conus sites.geojson 2475 config.json
+disagg ../../../../nshm-conus sites.geojson 2475 config.json
 ```
 
-The results of the deaggregation are saved along with hazard curves in `deagg` directories.
-As with `HazardCalc`, if the `GMM` ddata type has been specified (as it has in the
+The results of the disaggregation are saved along with hazard curves in `disagg` directories.
+As with `HazardCalc`, if the `GMM` data type has been specified (as it has in the
 [config](../../../docs/pages/Calculation-Configuration.md#calculation-configuration)
-file for this example) additional deaggregation results for each GMM are generated as well.
-Deaggregations by individual `SOURCE` type are also possible.
+file for this example) additional disaggregation results for each GMM are generated as well.
+Disaggregations by individual `SOURCE` type are also possible.
 
 __Results directory structure:__
 
 ```text
-7-deaggregation/
+7-disaggregation/
   └─ hazout/
       ├─ config.json
-      ├─ DeaggCalc.log
+      ├─ DisaggCalc.log
       ├─ PGA/
       │   ├─ curves-truncated.csv
       │   ├─ curves.csv
@@ -60,7 +60,7 @@ __Results directory structure:__
       │       ├─ ...
       │       ├─ CB_14_BASIN/
       │       │   ├─ curves.csv
-      │       │   └─ deagg/
+      │       │   └─ disagg/
       │       │       ├─ Los Angeles CA/
       │       │       │   ├─ data.csv
       │       │       │   └─ dsummary.txt
@@ -79,9 +79,9 @@ __Results directory structure:__
       └─ ...
 ```
 
-Note that in the output above, there are only deaggregation results for
-subduction GMMs (e.g. `AM_09_INTERFACE_BASIN`) for sites closer to the Cascadia subduction zone;
-empty results will not be saved.
+Note that in the output above, there are only disaggregation results for subduction GMMs
+(e.g. `AM_09_INTERFACE_BASIN`) for sites closer to the Cascadia subduction zone; empty results
+will not be saved.
 
 <!-- markdownlint-disable MD001 -->
 #### Next: [Example 8 – Earthquake probabilities and rates](../8-probabilities/README.md)

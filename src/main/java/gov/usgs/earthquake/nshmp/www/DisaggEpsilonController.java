@@ -5,10 +5,9 @@ import java.util.EnumMap;
 import javax.inject.Inject;
 
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService;
-import gov.usgs.earthquake.nshmp.www.services.DeaggEpsilonService.Query;
+import gov.usgs.earthquake.nshmp.www.services.DisaggEpsilonService;
+import gov.usgs.earthquake.nshmp.www.services.DisaggEpsilonService.Query;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -22,9 +21,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "Epsilon Deaggregation Service (experimental)")
-@Controller("/deagg-epsilon")
-public class DeaggEpsilonController {
+@Tag(name = "Epsilon Disaggregation Service (experimental)")
+@Controller("/disagg-epsilon")
+public class DisaggEpsilonController {
 
   @Inject
   private NshmpMicronautServlet servlet;
@@ -44,30 +43,45 @@ public class DeaggEpsilonController {
    * @param basin Whether to use basin service
    */
   @Operation(
-      summary = "Compute epsilon deaggregation",
-      description = "Compute epsilon deaggregation given longitude, latitude, Vs30 and IMT-IML map",
-      operationId = "deaggEpsilon_doGetDeaggEpsilon")
+      summary = "Compute epsilon disaggregation",
+      description = "Compute epsilon disaggregation given longitude, latitude, Vs30 and IMT-IML map",
+      operationId = "disaggEpsilon_doGetDisaggEpsilon")
   @ApiResponse(
-      description = "Epsilon deaggregations",
+      description = "Epsilon disaggregations",
       responseCode = "200")
   @Get(uri = "{?longitude,latitude,vs30,basin}")
-  public HttpResponse<String> doGetDeaggEpsilon(
+  public HttpResponse<String> doGetDisaggEpsilon(
       HttpRequest<?> request,
       @Schema(
           required = true,
           minimum = "-360",
-          maximum = "360") @QueryValue @Nullable Double longitude,
+          maximum = "360")
+      @QueryValue
+      @Nullable
+      Double longitude,
       @Schema(
           required = true,
           minimum = "-90",
-          maximum = "90") @QueryValue @Nullable Double latitude,
-      @Schema(required = true) @QueryValue @Nullable Integer vs30,
-      @Schema(defaultValue = "false") @QueryValue @Nullable Boolean basin,
+          maximum = "90")
+      @QueryValue
+      @Nullable
+      Double latitude,
+      @Schema(required = true)
+      @QueryValue
+      @Nullable
+      Integer vs30,
+      @Schema(defaultValue = "false")
+      @QueryValue
+      @Nullable
+      Boolean basin,
       @Schema(
           defaultValue = "{\"SA0P01\": 0.01}",
-          required = true) @QueryValue @Nullable EnumMap<Imt, Double> imtImls) {
+          required = true)
+      @QueryValue
+      @Nullable
+      EnumMap<Imt, Double> imtImls) {
     var query = new Query(request, longitude, latitude, vs30, basin);
-    return DeaggEpsilonService.handleDoGetDeaggEpsilon(request, query);
+    return DisaggEpsilonService.handleDoGetDisaggEpsilon(request, query);
   }
 
   /**
@@ -80,29 +94,44 @@ public class DeaggEpsilonController {
    * @param basin Whether to use basin service
    */
   @Operation(
-      summary = "Compute epsilon deaggregation",
-      description = "Compute epsilon deaggregation given longitude, latitude, Vs30 and IMT-IML map",
-      operationId = "deaggEpsilon_doGetDeaggEpsilonSlash")
+      summary = "Compute epsilon disaggregation",
+      description = "Compute epsilon disaggregation given longitude, latitude, Vs30 and IMT-IML map",
+      operationId = "disaggEpsilon_doGetDisaggEpsilonSlash")
   @ApiResponse(
-      description = "Epsilon deaggregations",
+      description = "Epsilon disaggregations",
       responseCode = "200")
   @Get(uri = "{/longitude}{/latitude}{/vs30}{/basin}")
-  public HttpResponse<String> doGetDeaggEpsilonSlash(
+  public HttpResponse<String> doGetDisaggEpsilonSlash(
       HttpRequest<?> request,
       @Schema(
           required = true,
           minimum = "-360",
-          maximum = "360") @PathVariable @Nullable Double longitude,
+          maximum = "360")
+      @PathVariable
+      @Nullable
+      Double longitude,
       @Schema(
           required = true,
           minimum = "-90",
-          maximum = "90") @PathVariable @Nullable Double latitude,
-      @Schema(required = true) @PathVariable @Nullable Integer vs30,
-      @Schema(defaultValue = "false") @PathVariable @Nullable Boolean basin,
+          maximum = "90")
+      @PathVariable
+      @Nullable
+      Double latitude,
+      @Schema(required = true)
+      @PathVariable
+      @Nullable
+      Integer vs30,
+      @Schema(defaultValue = "false")
+      @PathVariable
+      @Nullable
+      Boolean basin,
       @Schema(
           defaultValue = "{\"SA0P01\": 0.01}",
-          required = true) @QueryValue @Nullable EnumMap<Imt, Double> imtImls) {
-    return doGetDeaggEpsilon(request, longitude, latitude, vs30, basin, null);
+          required = true)
+      @QueryValue
+      @Nullable
+      EnumMap<Imt, Double> imtImls) {
+    return doGetDisaggEpsilon(request, longitude, latitude, vs30, basin, null);
   }
 
 }

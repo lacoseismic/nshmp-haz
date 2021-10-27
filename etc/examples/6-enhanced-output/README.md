@@ -59,7 +59,7 @@ __Results directory structure:__
 ```
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 7 – Deaggregation](../7-deaggregation/README.md)
+#### Next: [Example 7 – Disaggregation](../7-disaggregation/README.md)
 
 ---
 

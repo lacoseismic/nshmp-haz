@@ -132,7 +132,7 @@ The functional pipeline can be processed stepwise:
 
 ![image](images/psha-functional.png "PSHA functional pipeline")
 
-**Need a deagreggation?** Revisit and parse the results of steps 1 and 2
+**Need a disaggregation?** Revisit and parse the results of steps 1 and 2
 
 **Need a response spectra?** Spawn more calculations, one for each IMT, at step 2.
 

@@ -18,41 +18,40 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.DeaggEpsilonController;
+import gov.usgs.earthquake.nshmp.www.DisaggEpsilonController;
 import gov.usgs.earthquake.nshmp.www.Response;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
 /**
- * Hazard deaggregation handler for {@link DeaggEpsilonController}.
+ * Hazard disaggregation handler for {@link DisaggEpsilonController}.
  *
  * @author U.S. Geological Survey
  */
 @Singleton
-public final class DeaggEpsilonService {
+public final class DisaggEpsilonService {
 
   /* Developer notes: See HazardService. */
 
-  private static final String NAME = "Epsilon Deaggregation";
+  private static final String NAME = "Epsilon Disaggregation";
 
   @Value("${nshmp-haz.basin-service-url}")
   private static URL basinUrl;
 
   /**
-   * Handler for {@link DeaggEpsilonController#doGetDeaggEpsilon}. Returns the
-   * usage or the deagg result.
+   * Handler for {@link DisaggEpsilonController#doGetDisaggEpsilon}. Returns the
+   * usage or the disagg result.
    *
    * @param query The query
    * @param urlHelper The URL helper
    */
-  public static HttpResponse<String> handleDoGetDeaggEpsilon(HttpRequest<?> request, Query query) {
+  public static HttpResponse<String> handleDoGetDisaggEpsilon(HttpRequest<?> request, Query query) {
     try {
       var timer = ServletUtil.timer();
 
@@ -70,7 +69,7 @@ public final class DeaggEpsilonService {
     }
   }
 
-  /* Create map of IMT to deagg IML. */
+  /* Create map of IMT to disagg IML. */
   private static EnumMap<Imt, Double> readImtsFromQuery(HttpRequest<?> request) {
     var imtImls = new EnumMap<Imt, Double>(Imt.class);
     for (var param : request.getParameters().asMap().entrySet()) {
@@ -95,9 +94,9 @@ public final class DeaggEpsilonService {
     var siteFunction = new SiteFunction(data);
     var timer = Stopwatch.createStarted();
     var hazard = ServicesUtil.calcHazard(configFunction, siteFunction);
-    var deagg = Disaggregation.atImls(hazard, data.imtImls, ServletUtil.CALC_EXECUTOR);
+    var disagg = Disaggregation.atImls(hazard, data.imtImls, ServletUtil.CALC_EXECUTOR);
     return new ResultBuilder()
-        .deagg(deagg)
+        .disagg(disagg)
         .requestData(data)
         .timer(timer)
         .url(request)
@@ -190,32 +189,32 @@ public final class DeaggEpsilonService {
     final String εlabel = "% Contribution to Hazard";
     final Object εbins;
 
-    ResponseMetadata(Disaggregation deagg, RequestData request, Imt imt) {
+    ResponseMetadata(Disaggregation disagg, RequestData request, Imt imt) {
       this.models = new SourceModel(ServletUtil.model());
       this.longitude = request.longitude;
       this.latitude = request.latitude;
       this.imt = imt.toString();
       this.iml = imt.period();
       this.vs30 = request.vs30;
-      this.εbins = deagg.εBins();
+      this.εbins = disagg.εBins();
     }
   }
 
   private static final class ResponseData {
     final Object server;
-    final List<DeaggResponse> deaggs;
+    final List<DisaggResponse> disaggs;
 
-    ResponseData(Object server, List<DeaggResponse> deaggs) {
+    ResponseData(Object server, List<DisaggResponse> deaggs) {
       this.server = server;
-      this.deaggs = deaggs;
+      this.disaggs = deaggs;
     }
   }
 
-  private static final class DeaggResponse {
+  private static final class DisaggResponse {
     final ResponseMetadata metadata;
     final Object data;
 
-    DeaggResponse(ResponseMetadata metadata, Object data) {
+    DisaggResponse(ResponseMetadata metadata, Object data) {
       this.metadata = metadata;
       this.data = data;
     }
@@ -225,10 +224,10 @@ public final class DeaggEpsilonService {
     String url;
     Stopwatch timer;
     RequestData request;
-    Disaggregation deagg;
+    Disaggregation disagg;
 
-    ResultBuilder deagg(Disaggregation deagg) {
-      this.deagg = deagg;
+    ResultBuilder disagg(Disaggregation disagg) {
+      this.disagg = disagg;
       return this;
     }
 
@@ -248,16 +247,16 @@ public final class DeaggEpsilonService {
     }
 
     Response<RequestData, ResponseData> build() {
-      ImmutableList.Builder<DeaggResponse> responseListBuilder = ImmutableList.builder();
+      ImmutableList.Builder<DisaggResponse> responseListBuilder = ImmutableList.builder();
 
       for (Imt imt : request.imtImls.keySet()) {
-        ResponseMetadata responseData = new ResponseMetadata(deagg, request, imt);
-        Object deaggs = deagg.toJsonCompact(imt);
-        DeaggResponse response = new DeaggResponse(responseData, deaggs);
+        ResponseMetadata responseData = new ResponseMetadata(disagg, request, imt);
+        Object disaggs = disagg.toJsonCompact(imt);
+        DisaggResponse response = new DisaggResponse(responseData, disaggs);
         responseListBuilder.add(response);
       }
 
-      List<DeaggResponse> responseList = responseListBuilder.build();
+      List<DisaggResponse> responseList = responseListBuilder.build();
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       var response = new ResponseData(server, responseList);
 

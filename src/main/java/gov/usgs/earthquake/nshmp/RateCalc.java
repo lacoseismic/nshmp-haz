@@ -218,7 +218,6 @@ public class RateCalc {
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
@@ -230,13 +229,7 @@ public class RateCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is either:")
-      .append(NEWLINE)
-      .append("     - a string, e.g. ").append(SITE_STRING)
-      .append(NEWLINE)
-      .append("       (escape any spaces or enclose string in double-quotes)")
-      .append(NEWLINE)
-      .append("     - or a *.csv file or *.geojson file of site data")
+      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)

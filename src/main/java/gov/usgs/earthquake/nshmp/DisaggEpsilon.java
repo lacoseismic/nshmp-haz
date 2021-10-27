@@ -219,7 +219,7 @@ public class DisaggEpsilon {
    * returns the path to the directory where results were written.
    *
    * TODO consider refactoring to supply an Optional<Double> return period to
-   * HazardCalc.calc() that will trigger deaggregations if the value is present.
+   * HazardCalc.calc() that will trigger disaggregations if the value is present.
    */
   private static Path calc(
       HazardModel model,
@@ -266,7 +266,7 @@ public class DisaggEpsilon {
       Result result = new Result(responses);
 
       String filename = String.format(
-          "edeagg_%.2f_%.2f.json",
+          "edisagg_%.2f_%.2f.json",
           site.location.longitude,
           site.location.latitude);
 
@@ -335,7 +335,7 @@ public class DisaggEpsilon {
 
   private static final String PROGRAM = DisaggEpsilon.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggEpsilon model sites [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggEpsilon model sites [config]";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)

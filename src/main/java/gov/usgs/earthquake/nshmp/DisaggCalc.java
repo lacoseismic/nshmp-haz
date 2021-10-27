@@ -28,16 +28,16 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
- * Deaggregate probabilisitic seismic hazard at a return period of interest.
+ * Disaggregate probabilisitic seismic hazard at a return period of interest.
  *
  * @author U.S. Geological Survey
  */
 public class DisaggCalc {
 
   /**
-   * Entry point for the deaggregation of probabilisitic seismic hazard.
+   * Entry point for the disaggregation of probabilisitic seismic hazard.
    *
-   * <p>Deaggregating siesmic hazard is largeley identical to a hazard
+   * <p>Disaggregating siesmic hazard is largeley identical to a hazard
    * calculation except that a return period (in years) must be supplied as an
    * additional argument after the 'site(s)' argument. See the
    * {@link HazardCalc#main(String[]) HazardCalc program} for more information
@@ -122,7 +122,8 @@ public class DisaggCalc {
    * returns the path to the directory where results were written.
    *
    * TODO consider refactoring to supply an Optional<Double> return period to
-   * HazardCalc.calc() that will trigger deaggregations if the value is present.
+   * HazardCalc.calc() that will trigger disaggregations if the value is
+   * present.
    */
   private static Path calc(
       HazardModel model,
