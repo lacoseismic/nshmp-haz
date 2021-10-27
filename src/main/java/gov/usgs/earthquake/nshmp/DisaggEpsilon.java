@@ -47,7 +47,7 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
  *
  * @author U.S. Geological Survey
  */
-public class DeaggEpsilon {
+public class DisaggEpsilon {
 
   private static final Gson GSON = new GsonBuilder()
       .serializeSpecialFloatingPointValues()
@@ -107,7 +107,7 @@ public class DeaggEpsilon {
     }
 
     Logging.init();
-    Logger log = Logger.getLogger(DeaggCalc.class.getName());
+    Logger log = Logger.getLogger(DisaggCalc.class.getName());
     Path tmpLog = HazardCalc.createTempLog();
 
     try {
@@ -333,7 +333,7 @@ public class DeaggEpsilon {
     return incrementedDir;
   }
 
-  private static final String PROGRAM = DeaggEpsilon.class.getSimpleName();
+  private static final String PROGRAM = DisaggEpsilon.class.getSimpleName();
   private static final String USAGE_COMMAND =
       "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggEpsilon model sites [config]";
 

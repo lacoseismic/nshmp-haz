@@ -32,8 +32,7 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
  *
  * @author U.S. Geological Survey
  */
-@Deprecated
-public class DeaggCalc {
+public class DisaggCalc {
 
   /**
    * Entry point for the deaggregation of probabilisitic seismic hazard.
@@ -71,12 +70,12 @@ public class DeaggCalc {
   static Optional<String> run(String[] args) {
     int argCount = args.length;
 
-    if (argCount < 3 || argCount > 4) {
+    if (argCount < 2 || argCount > 3) {
       return Optional.of(USAGE);
     }
 
     Logging.init();
-    Logger log = Logger.getLogger(DeaggCalc.class.getName());
+    Logger log = Logger.getLogger(DisaggCalc.class.getName());
     Path tmpLog = HazardCalc.createTempLog();
 
     try {
@@ -89,8 +88,8 @@ public class DeaggCalc {
       HazardModel model = HazardModel.load(modelPath);
 
       CalcConfig config = model.config();
-      if (argCount == 4) {
-        Path userConfigPath = Paths.get(args[3]);
+      if (argCount == 3) {
+        Path userConfigPath = Paths.get(args[2]);
         config = CalcConfig.copyOf(model.config())
             .extend(CalcConfig.from(userConfigPath))
             .build();
@@ -101,7 +100,7 @@ public class DeaggCalc {
       Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
-      double returnPeriod = Double.valueOf(args[2]);
+      double returnPeriod = config.disagg.returnPeriod;
 
       Path out = calc(model, config, sites, returnPeriod, log);
       log.info(PROGRAM + ": finished");
@@ -162,14 +161,13 @@ public class DeaggCalc {
     return handler.outputDir();
   }
 
-  private static final String PROGRAM = DeaggCalc.class.getSimpleName();
+  private static final String PROGRAM = DisaggCalc.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggCalc model sites returnPeriod [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites [config]";
   private static final String USAGE_URL1 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
@@ -181,19 +179,9 @@ public class DeaggCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is either:")
+      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
       .append(NEWLINE)
-      .append("     - a string, e.g. ").append(SITE_STRING)
-      .append(NEWLINE)
-      .append("       (site class and basin terms are optional)")
-      .append(NEWLINE)
-      .append("       (escape any spaces or enclose string in double-quotes)")
-      .append(NEWLINE)
-      .append("     - or a *.csv file or *.geojson file of site data")
-      .append(NEWLINE)
-      .append("  'returnPeriod', in years, is a time horizon of interest")
-      .append(NEWLINE)
-      .append("     - e.g. one might enter 2475 to represent a 2% in 50 year probability")
+      .append("     - site class and basin terms are optional")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)
