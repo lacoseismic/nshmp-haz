@@ -115,11 +115,9 @@ class PeerTest {
             .toList());
     checkArgument(actual.length == expected.length);
 
-    // tests difference relative to tolerance
-    // TODO maybe just decrease this tolerance and
-    // do away with ratio test below
+    // test difference relative to tolerance
     assertArrayEquals(expected, actual, tolerance);
-    // tests ratio relative to tolerance
+    // test ratio relative to tolerance
     for (int i = 0; i < expected.length; i++) {
       String message = String.format("arrays differ at [%s] expected:<[%s]> but was:<[%s]>",
           i, expected[i], actual[i]);
