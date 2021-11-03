@@ -35,7 +35,6 @@ import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 
@@ -116,10 +115,9 @@ public final class HazardService {
       this.data = data;
     }
 
-    @Override
+    @Override // TODO this needs to pick up SiteData
     public Site apply(CalcConfig config) {
       return Site.builder()
-          .dataService(config.siteData.service)
           .location(Location.create(data.longitude, data.latitude))
           .vs30(data.vs30)
           .build();

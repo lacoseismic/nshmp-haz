@@ -27,7 +27,6 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.EqRateExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -107,7 +106,7 @@ public class RateCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
@@ -137,7 +136,7 @@ public class RateCalc {
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log) throws IOException, ExecutionException, InterruptedException {
 
     ThreadCount threadCount = config.performance.threadCount;
@@ -170,7 +169,7 @@ public class RateCalc {
   private static EqRateExport concurrentCalc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log,
       ListeningExecutorService executor)
       throws InterruptedException, ExecutionException, IOException {

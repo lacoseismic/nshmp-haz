@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -107,7 +108,7 @@ public class HazardCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
@@ -130,7 +131,7 @@ public class HazardCalc {
     }
   }
 
-  static Sites readSites(
+  static List<Site> readSites(
       String arg,
       CalcConfig defaults,
       SiteData siteData,
@@ -145,7 +146,7 @@ public class HazardCalc {
     try {
       return fname.endsWith(".csv")
           ? Sites.fromCsv(path, defaults, siteData)
-          : Sites.fromJson(path, defaults, siteData);
+          : Sites.fromGeoJson(path, defaults, siteData);
     } catch (IOException ioe) {
       throw new IllegalArgumentException(
           "Error parsing sites file [%s]; see sites file documentation");
@@ -159,7 +160,7 @@ public class HazardCalc {
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log) throws IOException, InterruptedException, ExecutionException {
 
     int threadCount = config.performance.threadCount.value();

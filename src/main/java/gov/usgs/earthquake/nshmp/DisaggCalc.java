@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +23,6 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -97,7 +97,7 @@ public class DisaggCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       double returnPeriod = config.disagg.returnPeriod;
@@ -128,7 +128,7 @@ public class DisaggCalc {
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       double returnPeriod,
       Logger log) throws IOException {
 

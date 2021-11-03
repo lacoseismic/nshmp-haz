@@ -219,7 +219,8 @@ public class DisaggEpsilon {
    * returns the path to the directory where results were written.
    *
    * TODO consider refactoring to supply an Optional<Double> return period to
-   * HazardCalc.calc() that will trigger disaggregations if the value is present.
+   * HazardCalc.calc() that will trigger disaggregations if the value is
+   * present.
    */
   private static Path calc(
       HazardModel model,
@@ -240,7 +241,7 @@ public class DisaggEpsilon {
 
     log.info(PROGRAM + ": calculating ...");
     Path outDir = createOutputDir(config.output.directory);
-    Path siteDir = outDir.resolve("vs30-" + (int) sites.get(0).vs30);
+    Path siteDir = outDir.resolve("vs30-" + (int) sites.get(0).vs30());
     Files.createDirectory(siteDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
@@ -267,8 +268,8 @@ public class DisaggEpsilon {
 
       String filename = String.format(
           "edisagg_%.2f_%.2f.json",
-          site.location.longitude,
-          site.location.latitude);
+          site.location().longitude,
+          site.location().latitude);
 
       Path resultPath = siteDir.resolve(filename);
       Writer writer = Files.newBufferedWriter(resultPath);
@@ -303,11 +304,11 @@ public class DisaggEpsilon {
 
     ResponseData(List<String> models, Site site, Imt imt, double iml) {
       this.models = models;
-      this.longitude = site.location.longitude;
-      this.latitude = site.location.latitude;
+      this.longitude = site.location().longitude;
+      this.latitude = site.location().latitude;
       this.imt = imt.toString();
       this.iml = iml;
-      this.vs30 = site.vs30;
+      this.vs30 = site.vs30();
     }
   }
 
