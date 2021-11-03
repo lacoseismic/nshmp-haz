@@ -13,7 +13,7 @@ for representing model data and relationships and is supported in most programmi
 Earthquake source files are organized by tectonic setting: `active-crust`, `stable-crust`,
 `subduction`, and `volcanic`. The crustal and volcanic tectonic settings support `fault`, `grid`,
 and `zone` source types. The volcanic tectonic setting additionally supports a `decollement`
-source type. The subduction tectonic setting supports `interface` and `slab` source types. 
+source type. The subduction tectonic setting supports `interface` and `slab` source types.
 
 The root of a model must include `model-info.json` and _may_ include a `calc-config.json` that
 specifies any custom default [calculation configuration](./Calculation-Configuration.md) settings
