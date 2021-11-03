@@ -11,14 +11,14 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/main/LICENSE.md"
+          "URL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/1.9.1/LICENSE.md"
         }
       ]
     },
 
     "homepageURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/",
-    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/archive/main/nshmp-haz-main.zip",
-    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/main/DISCLAIMER.md",
+    "downloadURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/archive/1.9.1/nshmp-haz-1.9.1.zip",
+    "disclaimerURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/raw/1.9.1/DISCLAIMER.md",
     "repositoryURL": "https://code.usgs.gov/ghsc/nshmp/nshmp-haz.git",
     "vcs": "git",
 
