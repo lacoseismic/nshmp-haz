@@ -4,16 +4,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -58,16 +55,16 @@ public class HazardCalc {
    * the path to a configuration file as a third argument.
    *
    * <p>Refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/README.md"
-   * target="_top">documentation</a> for comprehensive descriptions of source
-   * models, configuration files, site files, and hazard calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/README.md">
+   * documentation</a> for comprehensive descriptions of source models,
+   * configuration files, site files, and hazard calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
-   *      target="_top"> nshmp-haz Building & Running</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">
+   *      nshmp-haz Building & Running</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
-   *      target="_top"> example calculations</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples">
+   *      example calculations</a>
    */
   public static void main(String[] args) {
 
@@ -111,7 +108,7 @@ public class HazardCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
@@ -134,7 +131,7 @@ public class HazardCalc {
     }
   }
 
-  static Sites readSites(
+  static List<Site> readSites(
       String arg,
       CalcConfig defaults,
       SiteData siteData,
@@ -149,7 +146,7 @@ public class HazardCalc {
     try {
       return fname.endsWith(".csv")
           ? Sites.fromCsv(path, defaults, siteData)
-          : Sites.fromJson(path, defaults, siteData);
+          : Sites.fromGeoJson(path, defaults, siteData);
     } catch (IOException ioe) {
       throw new IllegalArgumentException(
           "Error parsing sites file [%s]; see sites file documentation");
@@ -163,7 +160,7 @@ public class HazardCalc {
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log) throws IOException, InterruptedException, ExecutionException {
 
     int threadCount = config.performance.threadCount.value();
@@ -313,11 +310,8 @@ public class HazardCalc {
     return Optional.of(sb.toString());
   }
 
-  /**
-   * The Git application version. This version string applies to all other
-   * nshnmp-haz applications.
-   */
-  public static final String VERSION = version();
+  /** The Git application version. */
+  public static final String VERSION = "TODO get version from resource";
 
   private static final String PROGRAM = HazardCalc.class.getSimpleName();
   private static final String USAGE_COMMAND =
@@ -326,33 +320,6 @@ public class HazardCalc {
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
-
-  @Deprecated
-  private static String version() {
-    String version = "unknown";
-    /* Assume we're running from a jar. */
-    try {
-      InputStream is = HazardCalc.class.getResourceAsStream("/app.properties");
-      Properties props = new Properties();
-      props.load(is);
-      is.close();
-      version = props.getProperty("app.version");
-    } catch (Exception e1) {
-      /* Otherwise check for a repository. */
-      Path gitDir = Paths.get(".git");
-      if (Files.exists(gitDir)) {
-        try {
-          Process pr = Runtime.getRuntime().exec("git describe --tags");
-          BufferedReader br = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-          version = br.readLine();
-          br.close();
-          /* Detached from repository. */
-        } catch (Exception e2) {}
-      }
-    }
-    return version;
-  }
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)

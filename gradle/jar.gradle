@@ -1,44 +1,16 @@
 apply plugin: "com.github.johnrengelman.shadow"
 
 /*
- * Possibly record app version. The creation of this file
- * on each build causes the classpath to appear changed so
- * Gradle reruns tests, even though no code has changed.
- *
- * Note that 'git describe' only works when running gradle from the command
- * line so version values in eclipse builds will empty. Use thinJar
- * task to skip dependencies.
- */
-tasks.register("propertyFile") {
-  description = "Create a property file with application version"
-  doFirst {
-    def props = new Properties()
-    def propsFile = new File(project.buildDir.toString() + propsPath)
-    if (propsFile.exists()) {
-      props.load(propsFile.newReader())
-    } else {
-      propsFile.createNewFile()
-    }
-    if (!gitTag.equals(props.getProperty('app.version'))) {
-      props.setProperty('app.version', gitTag)
-      props.store(propsFile.newWriter(), null)
-    }
-  }
-}
-
-/*
- * Build a thin jar and add a properties file with the application version.
+ * Build a thin jar.
  */
 jar {
   archiveBaseName = "${projectName}-thin"
-  dependsOn propertyFile
 }
 
 /*
  * Build a fat jar to be used for running programs and Micronaut services.
  */
 shadowJar {
-  dependsOn propertyFile
   baseName = projectName
   classifier = ''
   archiveVersion = ''

@@ -3,7 +3,7 @@
 __Working directory:__ `/path/to/nshmp-haz/etc/examples/8-probabilities`
 
 `nshmp-haz` can also calculate earthquake probabilities and rates at a location.
-As with the `HazardCalc` and `DeaggCalc` programs, `RateCalc` takes a model, a site data file
+As with the `HazardCalc` and `DisaggCalc` programs, `RateCalc` takes a model, a site data file
 or string, and an optional config file, which will control whether the distributions generated
 are incremental or cumulative, and whether the distribution values are expressed as annual rates
 or Poisson probabilities. The default (no config supplied) settings are for incremental

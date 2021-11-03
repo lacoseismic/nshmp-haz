@@ -116,10 +116,9 @@ public final class HazardService {
       this.data = data;
     }
 
-    @Override
+    @Override // TODO this needs to pick up SiteData
     public Site apply(CalcConfig config) {
       return Site.builder()
-          .dataService(config.siteData.service)
           .location(Location.create(data.longitude, data.latitude))
           .vs30(data.vs30)
           .build();

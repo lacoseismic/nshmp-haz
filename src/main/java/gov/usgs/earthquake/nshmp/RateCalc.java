@@ -27,7 +27,6 @@ import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.EqRateExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -54,16 +53,16 @@ public class RateCalc {
    * argument.
    *
    * <p>Please refer to the nshmp-haz <a
-   * href="https://github.com/usgs/nshmp-haz/wiki" target="_top">wiki</a> for
-   * comprehensive descriptions of source models, configuration files, site
-   * files, and earthquake rate calculations.
+   * href="https://github.com/usgs/nshmp-haz/wiki">wiki</a> for comprehensive
+   * descriptions of source models, configuration files, site files, and
+   * earthquake rate calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
-   *      target="_top"> nshmp-haz Building & Running</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">
+   *      nshmp-haz Building & Running</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
-   *      target="_top"> example calculations</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples">
+   *      example calculations</a>
    */
   public static void main(String[] args) {
 
@@ -107,7 +106,7 @@ public class RateCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
       Path out = calc(model, config, sites, log);
@@ -137,7 +136,7 @@ public class RateCalc {
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log) throws IOException, ExecutionException, InterruptedException {
 
     ThreadCount threadCount = config.performance.threadCount;
@@ -170,7 +169,7 @@ public class RateCalc {
   private static EqRateExport concurrentCalc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       Logger log,
       ListeningExecutorService executor)
       throws InterruptedException, ExecutionException, IOException {
@@ -218,7 +217,6 @@ public class RateCalc {
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
@@ -230,13 +228,7 @@ public class RateCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is either:")
-      .append(NEWLINE)
-      .append("     - a string, e.g. ").append(SITE_STRING)
-      .append(NEWLINE)
-      .append("       (escape any spaces or enclose string in double-quotes)")
-      .append(NEWLINE)
-      .append("     - or a *.csv file or *.geojson file of site data")
+      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)

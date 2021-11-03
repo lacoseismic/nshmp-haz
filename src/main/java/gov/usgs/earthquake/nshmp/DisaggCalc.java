@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,38 +23,37 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
-import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
- * Deaggregate probabilisitic seismic hazard at a return period of interest.
+ * Disaggregate probabilisitic seismic hazard at a return period of interest.
  *
  * @author U.S. Geological Survey
  */
-public class DeaggCalc {
+public class DisaggCalc {
 
   /**
-   * Entry point for the deaggregation of probabilisitic seismic hazard.
+   * Entry point for the disaggregation of probabilisitic seismic hazard.
    *
-   * <p>Deaggregating siesmic hazard is largeley identical to a hazard
+   * <p>Disaggregating siesmic hazard is largeley identical to a hazard
    * calculation except that a return period (in years) must be supplied as an
    * additional argument after the 'site(s)' argument. See the
    * {@link HazardCalc#main(String[]) HazardCalc program} for more information
    * on required parameters.
    *
    * <p>Please refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs"
-   * target="_top">docs</a> for comprehensive descriptions of source models,
-   * configuration files, site files, and hazard calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs">
+   * docs</a> for comprehensive descriptions of source models, configuration
+   * files, site files, and hazard calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
-   *      target="_top"> nshmp-haz Building & Running</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">
+   *      nshmp-haz Building & Running</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
-   *      target="_top"> example calculations</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples">
+   *      example calculations</a>
    */
   public static void main(String[] args) {
 
@@ -70,12 +70,12 @@ public class DeaggCalc {
   static Optional<String> run(String[] args) {
     int argCount = args.length;
 
-    if (argCount < 3 || argCount > 4) {
+    if (argCount < 2 || argCount > 3) {
       return Optional.of(USAGE);
     }
 
     Logging.init();
-    Logger log = Logger.getLogger(DeaggCalc.class.getName());
+    Logger log = Logger.getLogger(DisaggCalc.class.getName());
     Path tmpLog = HazardCalc.createTempLog();
 
     try {
@@ -88,8 +88,8 @@ public class DeaggCalc {
       HazardModel model = HazardModel.load(modelPath);
 
       CalcConfig config = model.config();
-      if (argCount == 4) {
-        Path userConfigPath = Paths.get(args[3]);
+      if (argCount == 3) {
+        Path userConfigPath = Paths.get(args[2]);
         config = CalcConfig.copyOf(model.config())
             .extend(CalcConfig.from(userConfigPath))
             .build();
@@ -97,10 +97,10 @@ public class DeaggCalc {
       log.info(config.toString());
 
       log.info("");
-      Sites sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
       log.info("Sites: " + sites);
 
-      double returnPeriod = Double.valueOf(args[2]);
+      double returnPeriod = config.disagg.returnPeriod;
 
       Path out = calc(model, config, sites, returnPeriod, log);
       log.info(PROGRAM + ": finished");
@@ -122,12 +122,13 @@ public class DeaggCalc {
    * returns the path to the directory where results were written.
    *
    * TODO consider refactoring to supply an Optional<Double> return period to
-   * HazardCalc.calc() that will trigger deaggregations if the value is present.
+   * HazardCalc.calc() that will trigger disaggregations if the value is
+   * present.
    */
   private static Path calc(
       HazardModel model,
       CalcConfig config,
-      Sites sites,
+      List<Site> sites,
       double returnPeriod,
       Logger log) throws IOException {
 
@@ -161,14 +162,13 @@ public class DeaggCalc {
     return handler.outputDir();
   }
 
-  private static final String PROGRAM = DeaggCalc.class.getSimpleName();
+  private static final String PROGRAM = DisaggCalc.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggCalc model sites returnPeriod [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites [config]";
   private static final String USAGE_URL1 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs";
   private static final String USAGE_URL2 =
       "https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples";
-  private static final String SITE_STRING = "name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
@@ -180,19 +180,9 @@ public class DeaggCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is either:")
+      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
       .append(NEWLINE)
-      .append("     - a string, e.g. ").append(SITE_STRING)
-      .append(NEWLINE)
-      .append("       (site class and basin terms are optional)")
-      .append(NEWLINE)
-      .append("       (escape any spaces or enclose string in double-quotes)")
-      .append(NEWLINE)
-      .append("     - or a *.csv file or *.geojson file of site data")
-      .append(NEWLINE)
-      .append("  'returnPeriod', in years, is a time horizon of interest")
-      .append(NEWLINE)
-      .append("     - e.g. one might enter 2475 to represent a 2% in 50 year probability")
+      .append("     - site class and basin terms are optional")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)

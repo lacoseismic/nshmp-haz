@@ -111,7 +111,7 @@ which can be run with:
 
 ```bash
 docker run \
-    --env CLASS_NAME=<DeaggCalc | DeaggIml | HazardCalc | RateCalc> \
+    --env CLASS_NAME=<DisaggCalc | HazardCalc | RateCalc> \
     --env IML=<NUMBER> \
     --env RETURN_PERIOD=<NUMBER> \
     --volume /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
@@ -123,12 +123,9 @@ docker run \
 Where:
 
 * `CLASS_NAME` is the nshmp-haz class to run:
-  * [DeaggCalc](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggCalc.java)
-  * [DeaggIml](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggIml.java)
+  * [DisaggCalc](../../src/main/java/gov/usgs/earthquake/nshmp/DisaggCalc.java)
   * [HazardCalc](../../src/main/java/gov/usgs/earthquake/nshmp/HazardCalc.java)
   * [RateCalc](../../src/main/java/gov/usgs/earthquake/nshmp/RateCalc.java)
-* `RETURN_PERIOD`, in years, is only required when running a disaggregation
-* `IML`: intensity measure level, only required when running `DeaggIml`
 * Other arguments (local files mapped to files within the Docker container with `:/app/...`):
   * (required) The absolute path to a [USGS model (NSHM)](./USGS-Models.md)
     * Example: `$(pwd)/nshm-hawaii:/app/model`
@@ -141,52 +138,6 @@ Where:
     * Example: `$(pwd)/my-custom-config.json:/app/config.json`
 
 ### Docker Examples
-
-#### [`DeaggCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggCalc.java) Example
-
-The following example runs the `DeaggCalc` program in nshmp-haz with the
-[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
-assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
-
-```bash
-# Download Hawaii NSHM
-git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
-
-# Pull image
-docker pull usgs/nshmp-haz:production-latest
-
-# Run nshmp-haz DeaggCalc
-docker run \
-    --env CLASS_NAME="DeaggCalc" \
-    --env RETURN_PERIOD=475 \
-    --volume "$(pwd)/nshm-hawaii:/app/model" \
-    --volume "$(pwd)/sites.geojson" \
-    --volume "$(pwd)/hawaii-disagg-output:/app/output" \
-    usgs/nshmp-haz:production-latest
-```
-
-#### [`DeaggIml`](../../src/main/java/gov/usgs/earthquake/nshmp/DeaggIml.java) Example
-
-The following example runs the `DeaggIml` program in nshmp-haz with the
-[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
-assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
-
-```bash
-# Download Hawaii NSHM
-git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
-
-# Pull image
-docker pull usgs/nshmp-haz:production-latest
-
-# Run nshmp-haz DeaggIml
-docker run \
-    --env CLASS_NAME="DeaggCalc" \
-    --env IML=1 \
-    --volume "$(pwd)/nshm-hawaii:/app/model" \
-    --volume "$(pwd)/sites.geojson" \
-    --volume "$(pwd)/hawaii-disagg-iml-output:/app/output" \
-    usgs/nshmp-haz:production-latest
-```
 
 #### [`HazardCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/HazardCalc.java) Example
 
@@ -207,6 +158,29 @@ docker run \
     --volume "$(pwd)/nshm-hawaii:/app/model" \
     --volume "$(pwd)/sites.geojson" \
     --volume "$(pwd)/hawaii-hazard-output:/app/output" \
+    usgs/nshmp-haz:production-latest
+```
+
+#### [`DisaggCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/DisaggCalc.java) Example
+
+The following example runs the `DisaggCalc` program in nshmp-haz with the
+[nshm-hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git) model and the
+assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.geojson`.
+
+```bash
+# Download Hawaii NSHM
+git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
+
+# Pull image
+docker pull usgs/nshmp-haz:production-latest
+
+# Run nshmp-haz DisaggCalc
+docker run \
+    --env CLASS_NAME="DisaggCalc" \
+    --env RETURN_PERIOD=475 \
+    --volume "$(pwd)/nshm-hawaii:/app/model" \
+    --volume "$(pwd)/sites.geojson" \
+    --volume "$(pwd)/hawaii-disagg-output:/app/output" \
     usgs/nshmp-haz:production-latest
 ```
 

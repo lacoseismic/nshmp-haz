@@ -42,21 +42,12 @@ import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
- * Disaggregate probabilisitic seismic hazard at a return period of interest or
+ * Disaggregate probabilistic seismic hazard at a return period of interest or
  * at specific ground motion levels.
  *
  * @author U.S. Geological Survey
  */
-/**
- * Custom application to support 2018 integration into building codes.
- * Application will process a list of sites for which the risk-targetd response
- * spectra is supplied, deaggregating the hazard at each spectral period at the
- * supplied ground motion. The set of IMTs processed is dictated by the set
- * defined in the sites file.
- *
- * @author U.S. Geological Survey
- */
-public class DeaggEpsilon {
+public class DisaggEpsilon {
 
   private static final Gson GSON = new GsonBuilder()
       .serializeSpecialFloatingPointValues()
@@ -69,25 +60,32 @@ public class DeaggEpsilon {
    * <p>Two approaches to disaggregation of seimic hazard are possible with this
    * application. In the first approach, the 'sites' file is the same as it
    * would be for a hazard calculation, and disaggregation is performed for all
-   * calculated intensity measures at the 'returnPeriod' (in years)of interest
-   * specified in the config file (default = 2475 years)
+   * configured intensity measures at the 'returnPeriod' (in years) of interest
+   * specified in the config file (default = 2475 years).
    *
    * <p>In the second approach, the sites file includes columns for each
    * spectral period and the target ground motion level to disaggregate for
    * each. For example, the target values could be a risk-targeted response
-   * spectrum.
+   * spectrum, or they could be ground motion levels precomputed for a specific
+   * return period.
+   *
+   * <p>It is important to note that the first approach will do the full hazard
+   * calculation and compute hazard curves from which the target disaggregation
+   * ground motion level will be determined. In the second approach, the ground
+   * motion targets are known and the time consuming hazard curve calculation
+   * can be avoided.
    *
    * <p>Please refer to the nshmp-haz <a
-   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs"
-   * target="_top">docs</a> for comprehensive descriptions of source models,
-   * configuration files, site files, and hazard calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs">
+   * docs</a> for comprehensive descriptions of source models, configuration
+   * files, site files, and hazard calculations.
    *
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md"
-   *      target="_top"> nshmp-haz Building & Running</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">
+   *      nshmp-haz Building & Running</a>
    * @see <a
-   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples"
-   *      target="_top"> example calculations</a>
+   *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples">
+   *      example calculations</a>
    */
   public static void main(String[] args) {
 
@@ -109,7 +107,7 @@ public class DeaggEpsilon {
     }
 
     Logging.init();
-    Logger log = Logger.getLogger(DeaggCalc.class.getName());
+    Logger log = Logger.getLogger(DisaggCalc.class.getName());
     Path tmpLog = HazardCalc.createTempLog();
 
     try {
@@ -221,7 +219,8 @@ public class DeaggEpsilon {
    * returns the path to the directory where results were written.
    *
    * TODO consider refactoring to supply an Optional<Double> return period to
-   * HazardCalc.calc() that will trigger deaggregations if the value is present.
+   * HazardCalc.calc() that will trigger disaggregations if the value is
+   * present.
    */
   private static Path calc(
       HazardModel model,
@@ -242,7 +241,7 @@ public class DeaggEpsilon {
 
     log.info(PROGRAM + ": calculating ...");
     Path outDir = createOutputDir(config.output.directory);
-    Path siteDir = outDir.resolve("vs30-" + (int) sites.get(0).vs30);
+    Path siteDir = outDir.resolve("vs30-" + (int) sites.get(0).vs30());
     Files.createDirectory(siteDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
@@ -268,9 +267,9 @@ public class DeaggEpsilon {
       Result result = new Result(responses);
 
       String filename = String.format(
-          "edeagg_%.2f_%.2f.json",
-          site.location.longitude,
-          site.location.latitude);
+          "edisagg_%.2f_%.2f.json",
+          site.location().longitude,
+          site.location().latitude);
 
       Path resultPath = siteDir.resolve(filename);
       Writer writer = Files.newBufferedWriter(resultPath);
@@ -305,11 +304,11 @@ public class DeaggEpsilon {
 
     ResponseData(List<String> models, Site site, Imt imt, double iml) {
       this.models = models;
-      this.longitude = site.location.longitude;
-      this.latitude = site.location.latitude;
+      this.longitude = site.location().longitude;
+      this.latitude = site.location().latitude;
       this.imt = imt.toString();
       this.iml = iml;
-      this.vs30 = site.vs30;
+      this.vs30 = site.vs30();
     }
   }
 
@@ -335,9 +334,9 @@ public class DeaggEpsilon {
     return incrementedDir;
   }
 
-  private static final String PROGRAM = DeaggEpsilon.class.getSimpleName();
+  private static final String PROGRAM = DisaggEpsilon.class.getSimpleName();
   private static final String USAGE_COMMAND =
-      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DeaggEpsilon model sites [config]";
+      "java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggEpsilon model sites [config]";
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)

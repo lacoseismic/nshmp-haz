@@ -33,15 +33,15 @@ public final class MetaUtil {
     public JsonElement serialize(Site site, Type typeOfSrc, JsonSerializationContext context) {
       JsonObject loc = new JsonObject();
 
-      loc.addProperty("latitude", Maths.round(site.location.latitude, 3));
-      loc.addProperty("longitude", Maths.round(site.location.longitude, 3));
+      loc.addProperty("latitude", Maths.round(site.location().latitude, 3));
+      loc.addProperty("longitude", Maths.round(site.location().longitude, 3));
 
       JsonObject json = new JsonObject();
       json.add("location", loc);
-      json.addProperty("vs30", site.vs30);
-      json.addProperty("vsInfered", site.vsInferred);
-      json.addProperty("z1p0", Double.isNaN(site.z1p0) ? null : site.z1p0);
-      json.addProperty("z2p5", Double.isNaN(site.z2p5) ? null : site.z2p5);
+      json.addProperty("vs30", site.vs30());
+      json.addProperty("vsInfered", site.vsInferred());
+      json.addProperty("z1p0", Double.isNaN(site.z1p0()) ? null : site.z1p0());
+      json.addProperty("z2p5", Double.isNaN(site.z2p5()) ? null : site.z2p5());
 
       return json;
     }
