@@ -42,7 +42,7 @@ FROM ${FROM_IMAGE}
 LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@usgs.gov>"
 
 ENV CONTEXT_PATH="/"
-ENV BASIN_SERVICE_URL="https://earthquake.usgs.gov/nshmp/ws/data/basin"
+ENV BASIN_SERVICE_URL="https://earthquake.usgs.gov/ws/nshmp/data/basin"
 ENV JAVA_OPTS="-Xms2g -Xmx8g"
 ENV MODELS_DIRECTORY="/models"
 
