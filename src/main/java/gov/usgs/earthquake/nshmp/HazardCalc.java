@@ -109,7 +109,7 @@ public class HazardCalc {
 
       log.info("");
       List<Site> sites = readSites(args[1], config, model.siteData(), log);
-      log.info("Sites: " + sites);
+      log.info("Sites: " + Sites.toString(sites));
 
       Path out = calc(model, config, sites, log);
 

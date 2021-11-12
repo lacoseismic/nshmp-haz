@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
 import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
 
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -61,11 +60,16 @@ public class HazardController {
   @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir}")
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> request,
+
       @Schema(minimum = "-360", maximum = "360") @PathVariable double longitude,
+
       @Schema(minimum = "-90", maximum = "90") @PathVariable double latitude,
+
       @Schema(minimum = "150", maximum = "3000") @PathVariable int vs30,
-      @QueryValue(defaultValue = "false") @Nullable boolean truncate,
-      @QueryValue(defaultValue = "false") @Nullable boolean maxdir) {
+
+      @QueryValue(defaultValue = "false") boolean truncate,
+
+      @QueryValue(defaultValue = "false") boolean maxdir) {
 
     /*
      * @Schema annotation parameter constraints only affect Swagger service

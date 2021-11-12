@@ -23,6 +23,7 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
+import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -98,7 +99,7 @@ public class DisaggCalc {
 
       log.info("");
       List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
-      log.info("Sites: " + sites);
+      log.info("Sites: " + Sites.toString(sites));
 
       double returnPeriod = config.disagg.returnPeriod;
 
