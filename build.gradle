@@ -60,6 +60,10 @@ jacoco {
 
 test {
   useJUnitPlatform()
+  
+  filter {
+    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsLarge"
+  }
 }
 
 jacocoTestReport {
