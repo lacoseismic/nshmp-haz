@@ -77,8 +77,6 @@ class NshmTestsLarge {
 
   private static ExecutorService EXEC;
 
-  private static Object object;
-
   @BeforeAll
   static void setUpBeforeClass() {
     int cores = Runtime.getRuntime().availableProcessors();
