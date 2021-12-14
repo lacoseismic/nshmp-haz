@@ -37,7 +37,7 @@ for rupture geometry. Truncated Gutenberg-Richter MFDs are used to model grid so
 magnitudes and rates with logic trees of varying a-value, b-value and maximum magnitude. For grid
 sources the relative rate at each grid node is defined using a spatial PDF (see notes on
 spatial PDFs, [below](#spatial-pdfs)). When realizing each source the spatial PDF value is scaled
-by each regional rate in a rate-tree.
+by each regional rate in a required `rate-tree`.
 
 Grid sources are represented in a model using a logic tree with a `rupture-sets.json` defining the
 ruptures on each branch.  Because gridded seismicity models may be governed by regionally
