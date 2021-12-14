@@ -29,7 +29,7 @@
 
 plugins {
   id "application"
-  id "com.diffplug.gradle.spotless" version "${spotlessVersion}"
+  id "com.diffplug.spotless" version "${spotlessVersion}"
   id "com.github.johnrengelman.shadow" version "${shadowVersion}"
   id "com.github.node-gradle.node" version "${nodeVersion}"
   id "com.github.spotbugs" version "${spotbugsVersion}"
