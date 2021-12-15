@@ -22,7 +22,7 @@ stages:
 ####
 
 .gradle:
-  image: ${DEVOPS_REGISTRY}usgs/java:11-jdk
+  image: ${DEVOPS_REGISTRY}usgs/amazoncorretto:11
   stage: build
   tags:
     - development
@@ -45,8 +45,8 @@ Build Image Haz:
   variables:
     CI_PROJECT_NAME: nshmp-haz
     DOCKER_BUILD_ARGS: |
-      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
@@ -56,8 +56,8 @@ Build Image WS:
   variables:
     CI_PROJECT_NAME: nshmp-haz-ws
     DOCKER_BUILD_ARGS: |
-      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
-      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/java:11
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
     DOCKERFILE: ws.Dockerfile
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
