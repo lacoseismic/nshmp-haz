@@ -92,14 +92,14 @@ class NshmTestsLarge {
   private static final Path DATA_PATH = Paths.get("src/test/resources/e2e");
 
   @Test
-  public void testConus2018() throws IOException {
+  public void testConus2018() {
     testModel("nshm-conus", 2018, CONUS_SITES);
   }
 
   private static void testModel(
       String modelName,
       int year,
-      List<NamedLocation> locations) throws IOException {
+      List<NamedLocation> locations) {
 
     Path modelPath = MODEL_PATH.resolve(modelName);
     HazardModel model = ModelLoader.load(modelPath);
@@ -112,7 +112,7 @@ class NshmTestsLarge {
       String modelName,
       int year,
       HazardModel model,
-      NamedLocation location) throws IOException {
+      NamedLocation location) {
 
     // String actual = generateActual(model, location);
     Map<String, XySequence> actual = generateActual(model, location);
@@ -209,6 +209,11 @@ class NshmTestsLarge {
   private static class Curve {
     double[] xs;
     double[] ys;
+
+    Curve(double[] xs, double[] ys) {
+      this.xs = xs;
+      this.ys = ys;
+    }
   }
 
   private static void writeExpecteds(
