@@ -13,8 +13,8 @@
 #       nshmp-haz-ws
 ####
 
-ARG BUILD_IMAGE=usgs/java:11
-ARG FROM_IMAGE=usgs/java:11
+ARG BUILD_IMAGE=usgs/amazoncorretto:11
+ARG FROM_IMAGE=usgs/amazoncorretto:11
 
 ####
 # Builder image: Build jar file.
