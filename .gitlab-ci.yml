@@ -25,7 +25,7 @@ stages:
   image: ${DEVOPS_REGISTRY}usgs/amazoncorretto:11
   stage: build
   tags:
-    - development
+    - build
 
 ####
 # Stage: init
