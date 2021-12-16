@@ -1,0 +1,50 @@
+apply plugin: "com.github.node-gradle.node"
+
+node {
+  download = true
+  version = "${nodeVersion}"
+}
+
+/* Install markdownlint-cli with NPM */
+task nodeInstall(type: NpmTask) {
+  description "Install markdownlint-clia and yamllint with NPM"
+  args = [
+    "install",
+    "markdownlint-cli",
+    "yaml-lint",
+    "--save-dev",
+    "--loglevel",
+    "error"
+  ]
+}
+
+/* Run markdownlint */
+task markdownlint(type: NpxTask) {
+  description "Run markdownlint"
+  dependsOn nodeInstall
+  command = "markdownlint"
+  args = ["**/*.md"]
+}
+
+/* Apply markdownlint fixes */
+task markdownlintApply(type: NpxTask) {
+  description "Apply markdownlint fixes"
+  dependsOn nodeInstall
+  command = "markdownlint"
+  args = [
+    "**/*.md",
+    "--fix",
+  ]
+}
+
+/* Run yamllint */
+task yamllint(type: NpxTask) {
+  description "Run yamllint"
+  dependsOn nodeInstall
+  command = "yamllint"
+  args = [
+    "**/*.yml",
+    "--ignore=.gradle/**",
+    "--ignore=node_modules/**",
+  ]
+}

@@ -1,0 +1,16 @@
+apply plugin: "com.star-zero.gradle.githook"
+
+/**
+ * Add Git hooks on pre commit and pre push.
+ *
+ * See https://github.com/STAR-ZERO/gradle-githook
+ */
+githook {
+  createHooksDirIfNotExist = true
+
+  hooks {
+    "pre-push" {
+      task = "markdownlint yamllint spotlessCheck spotbugsMain spotbugsTest"
+    }
+  }
+}
