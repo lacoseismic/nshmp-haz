@@ -14,6 +14,7 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.Response;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Status;
+
 import io.micronaut.http.HttpResponse;
 
 public class ServicesUtil {
