@@ -81,12 +81,12 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(JavaExec) {
   jvmArgs(
-    '-noverify',
-    '-Xms2g',
-    '-Xmx8g',
-    '-XX:TieredStopAtLevel=1',
-    '-Dcom.sun.management.jmxremote',
-  )
+      '-noverify',
+      '-Xms2g',
+      '-Xmx8g',
+      '-XX:TieredStopAtLevel=1',
+      '-Dcom.sun.management.jmxremote',
+      )
 }
 
 /* Add HTML reports to SpotBugs */
