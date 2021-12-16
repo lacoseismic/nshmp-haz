@@ -1,8 +1,8 @@
 
 dependencies {
+  // NSHMP
   implementation "ghsc:nshmp-lib:${nshmpLibVersion}"
   implementation "ghsc:nshmp-ws-utils:${nshmpWsUtilsVersion}"
-  nshmp "ghsc:nshmp-lib:${nshmpLibVersion}@zip"
 
   // AWS
   implementation "com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}"

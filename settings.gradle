@@ -1,5 +1,5 @@
 plugins {
-  id "com.alexvasilkov.git-dependencies" version "2.0.1"
+  id "com.alexvasilkov.git-dependencies" version "2.0.3"
 }
 
 rootProject.name = "nshmp-haz"
@@ -19,7 +19,7 @@ git {
   if (user && pass) {
     fetch("https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git", {
       name "nshmp-haz-dep--nshm-hi-2021"
-      tag "main"
+      tag "2.0.0"
     })
   }
 }

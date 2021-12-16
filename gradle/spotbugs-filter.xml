@@ -1,0 +1,27 @@
+<FindBugsFilter>
+
+  <!-- Caused by Java 11 generating a null check on try with resources. This
+    passed on Java 8 -->
+  <Match>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
+  </Match>
+
+  <!-- StringConverter.INSTANCE.convert(this) will never be null -->
+  <Match>
+    <Class name="gov.usgs.earthquake.nshmp.geo.Location" />
+    <Method name="toString" />
+    <Bug code="NP" />
+  </Match>
+
+  <!-- https://spotbugs.readthedocs.io/en/stable/filter.html#rank -->
+  <!-- TODO can we change this to higher rank or remove all together? -->
+  <Match>
+    <Rank value="16" />
+  </Match>
+
+  <!-- Example exclude class -->
+  <!-- <Match> -->
+  <!-- <Class name="gov.usgs.earthquake.nshmp.eq.fault.Faults" /> -->
+  <!-- </Match> -->
+
+</FindBugsFilter>

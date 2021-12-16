@@ -1,0 +1,69 @@
+apply plugin: "com.diffplug.spotless"
+
+/*
+ * Configure Spotless for code formatting checks based on the
+ * nshmp eclispe formatter (src/resources/nshmp.eclipse-format.xml).
+ *
+ * Spotless formatting check (spotlessCheck) is automatically
+ * ran on the pre-commit and pre-push git hooks.
+ *
+ * To fix any formatting issues run ./gradlew spotlessApply.
+ *
+ * See https://github.com/diffplug/spotless/tree/master/plugin-gradle
+ */
+spotless {
+
+  /* Java formatting */
+  java {
+    targetExclude "**/build", "bin", "**/Scratch*.java", "tmp", "libs"
+
+    removeUnusedImports()
+
+    custom "Refuse wildcard imports", {
+      if (it =~ /\nimport .*\*;/) {
+        throw new Error("Do not use wildcard imports. 'spotlessApply' cannot resolve this issue.");
+      }
+    }
+
+    importOrderFile "${projectDir}/src/main/resources/eclipse.importorder"
+    eclipse().configFile "${projectDir}/src/main/resources/nshmp.eclipse-format.xml"
+
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+
+  /* Gradle file formatting */
+  groovyGradle {
+    target "**/*.gradle"
+    targetExclude "**/build", ".gradle", "bin", "tmp"
+    greclipse()
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+
+  /* .gitignore, Bash, and Dockerfile formatting */
+  format "misc", {
+    target "**/.gitgnore", "**/*.sh", "**/*Dockerfile"
+    targetExclude "**/build", ".gradle/**", ".settings", "tmp/**",
+        "libs/**", "node_modules"
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+    replaceRegex "Too many blank lines", "^\\n\\n+", "\n"
+  }
+
+  /* XML formatting */
+  format "xml", {
+    target fileTree(".") {
+      include "**/*.xml"
+      exclude "**/build", ".settings", ".classpath", ".project",
+          "tmp/**", ".gradle/**", "libs/**", "node_modules"
+    }
+    eclipseWtp("xml")
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+}
