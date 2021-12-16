@@ -31,7 +31,7 @@ plugins {
   id "application"
   id "com.diffplug.spotless" version "${spotlessVersion}"
   id "com.github.johnrengelman.shadow" version "${shadowVersion}"
-  id "com.github.node-gradle.node" version "${nodeVersion}"
+  id "com.github.node-gradle.node" version "${nodePluginVersion}"
   id "com.github.spotbugs" version "${spotbugsVersion}"
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
@@ -40,30 +40,23 @@ plugins {
   id "maven-publish"
 }
 
-configurations {
-  nshmp
-}
-
 apply from: "${projectDir}/gradle/dependencies.gradle"
 apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"
+apply from: "${projectDir}/gradle/git-hooks.gradle"
+apply from: "${projectDir}/gradle/node.gradle"
 apply from: "${projectDir}/gradle/repositories.gradle"
+apply from: "${projectDir}/gradle/spotbugs.gradle"
+apply from: "${projectDir}/gradle/spotless.gradle"
 
-sourceCompatibility = JavaVersion.VERSION_11
+
 compileJava.options.encoding = "UTF-8"
-
+compileTestJava.options.encoding = "UTF-8"
 mainClassName = "gov.usgs.earthquake.nshmp.www.Application"
+sourceCompatibility = JavaVersion.VERSION_11
 
 jacoco {
   toolVersion = "0.8.4"
-}
-
-test {
-  useJUnitPlatform()
-
-  filter {
-    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsLarge"
-  }
 }
 
 jacocoTestReport {
@@ -87,7 +80,13 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(JavaExec) {
-  jvmArgs('-noverify', '-Xms2g', '-Xmx8g', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+  jvmArgs(
+    '-noverify',
+    '-Xms2g',
+    '-Xmx8g',
+    '-XX:TieredStopAtLevel=1',
+    '-Dcom.sun.management.jmxremote',
+  )
 }
 
 /* Add HTML reports to SpotBugs */
@@ -105,15 +104,10 @@ task libsClean(type: Delete) {
 }
 clean.dependsOn libsClean
 
-gradle.afterProject {
-  copy {
-    from {
-      configurations.nshmp.collect { zipTree(it) }
-    }
-    into nshmpLib
+test {
+  useJUnitPlatform()
+
+  filter {
+    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsLarge"
   }
-  apply from: "${nshmpLibGradleDir}/git-hooks.gradle"
-  apply from: "${nshmpLibGradleDir}/node.gradle"
-  apply from: "${nshmpLibGradleDir}/spotbugs.gradle"
-  apply from: "${nshmpLibGradleDir}/spotless.gradle"
 }
