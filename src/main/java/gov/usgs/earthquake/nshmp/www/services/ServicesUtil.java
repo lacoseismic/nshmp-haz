@@ -3,8 +3,6 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.gson.GsonBuilder;
 
@@ -36,25 +34,12 @@ public class ServicesUtil {
   static Hazard calcHazard(
       Function<HazardModel, CalcConfig> configFunction,
       Function<CalcConfig, Site> siteFunction) throws InterruptedException, ExecutionException {
-    // TODO reduce for singleton model
-    var futuresList = Stream.of(ServletUtil.model())
-        .map(model -> {
-          var config = configFunction.apply(model);
-          var site = siteFunction.apply(config);
-          return calcHazard(model, config, site);
-        })
-        .collect(Collectors.toList());
 
-    var hazardsFuture = CompletableFuture
-        .allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]))
-        .thenApply(v -> {
-          return futuresList.stream()
-              .map(future -> future.join())
-              .collect(Collectors.toList());
-        });
-
-    var hazards = hazardsFuture.get().toArray(new Hazard[] {});
-    return Hazard.merge(hazards);
+    HazardModel model = ServletUtil.model();
+    CalcConfig config = configFunction.apply(model);
+    Site site = siteFunction.apply(config);
+    CompletableFuture<Hazard> future = calcHazard(model, config, site);
+    return future.get();
   }
 
   @Deprecated
@@ -129,11 +114,10 @@ public class ServicesUtil {
       HazardModel model,
       CalcConfig config,
       Site site) {
-    return CompletableFuture
-        .supplyAsync(
-            () -> HazardCalcs.hazard(
-                model, config, site, ServletUtil.CALC_EXECUTOR),
-            ServletUtil.TASK_EXECUTOR);
+
+    return CompletableFuture.supplyAsync(
+        () -> HazardCalcs.hazard(model, config, site, ServletUtil.CALC_EXECUTOR),
+        ServletUtil.TASK_EXECUTOR);
   }
 
 }

@@ -82,7 +82,6 @@ public final class RateService {
     var service = query.service;
 
     try {
-      var timer = ServletUtil.timer();
 
       if (query.isNull()) {
         return handleDoGetUsage(request, service);

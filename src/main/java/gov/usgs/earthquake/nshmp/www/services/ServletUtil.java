@@ -10,14 +10,12 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
@@ -48,23 +46,14 @@ import io.micronaut.runtime.event.annotation.EventListener;
 public class ServletUtil {
 
   public static final Gson GSON;
-  public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
-      "yyyy-MM-dd'T'HH:mm:ssXXX");
 
   static final ListeningExecutorService CALC_EXECUTOR;
   static final ExecutorService TASK_EXECUTOR;
 
   static final int THREAD_COUNT;
 
-  /* Stateful flag to reject requests while a result is pending. */
-  static boolean uhtBusy = false;
-  static long hitCount = 0;
-  static long missCount = 0;
-
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
-
-  // private static List<HazardModel> HAZARD_MODELS = new ArrayList<>();
 
   private static HazardModel HAZARD_MODEL;
 
@@ -140,33 +129,6 @@ public class ServletUtil {
       return HazardModel.load(path);
     } catch (Exception e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  public static Timer timer() {
-    return new Timer();
-  }
-
-  /*
-   * Simple timer object. The servlet timer just runs. The calculation timer can
-   * be started later.
-   */
-  @Deprecated
-  public static final class Timer {
-    Stopwatch servlet = Stopwatch.createStarted();
-    Stopwatch calc = Stopwatch.createUnstarted();
-
-    public Timer start() {
-      calc.start();
-      return this;
-    }
-
-    public String servletTime() {
-      return servlet.toString();
-    }
-
-    public String calcTime() {
-      return calc.toString();
     }
   }
 
