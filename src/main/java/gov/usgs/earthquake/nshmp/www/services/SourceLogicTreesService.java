@@ -1,7 +1,5 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import jakarta.inject.Singleton;
-
 import gov.usgs.earthquake.nshmp.model.Models;
 import gov.usgs.earthquake.nshmp.www.Response;
 import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
@@ -9,6 +7,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import jakarta.inject.Singleton;
 
 /**
  * Source model tree handler for {@link SourceLogicTreesController}

@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
-import jakarta.inject.Singleton;
-
 import com.google.common.base.Stopwatch;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
@@ -38,6 +36,7 @@ import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import jakarta.inject.Singleton;
 
 /**
  * Probabilistic seismic hazard calculation handler for

@@ -1,7 +1,5 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import jakarta.inject.Inject;
-
 import gov.usgs.earthquake.nshmp.www.services.HazardService;
 import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
 
@@ -15,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 /**
  * Micronaut controller for probabilistic seismic hazard calculations.

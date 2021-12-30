@@ -3,8 +3,6 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.inject.Singleton;
-
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +18,7 @@ import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import jakarta.inject.Singleton;
 
 /**
  * Entry point for services related to source models. Current services:
