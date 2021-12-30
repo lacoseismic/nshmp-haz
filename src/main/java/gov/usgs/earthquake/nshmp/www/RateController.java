@@ -2,8 +2,6 @@ package gov.usgs.earthquake.nshmp.www;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import gov.usgs.earthquake.nshmp.www.services.RateService;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Query;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Service;
@@ -19,6 +17,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.inject.Inject;
 
 /**
  * Micronaut controller for rate and probability services.

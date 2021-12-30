@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
-
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -30,6 +28,7 @@ import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import jakarta.inject.Singleton;
 
 /**
  * Earthquake probability and rate calculation handler service for

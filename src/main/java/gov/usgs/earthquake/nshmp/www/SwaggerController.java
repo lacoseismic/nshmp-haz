@@ -3,8 +3,6 @@ package gov.usgs.earthquake.nshmp.www;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import com.google.common.io.Resources;
 
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil;
@@ -16,6 +14,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 /**
  * Expose OpenAPI YAML file.

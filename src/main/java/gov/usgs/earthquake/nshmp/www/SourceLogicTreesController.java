@@ -1,7 +1,5 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import javax.inject.Inject;
-
 import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService;
 
 import io.micronaut.http.HttpRequest;
@@ -12,6 +10,7 @@ import io.micronaut.http.annotation.PathVariable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 /**
  * Micronaut controller for NSHM source logic trees.
