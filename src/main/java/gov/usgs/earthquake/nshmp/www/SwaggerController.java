@@ -3,7 +3,7 @@ package gov.usgs.earthquake.nshmp.www;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.google.common.io.Resources;
 

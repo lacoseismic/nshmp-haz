@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp.www;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService;
 

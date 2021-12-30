@@ -3,7 +3,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;

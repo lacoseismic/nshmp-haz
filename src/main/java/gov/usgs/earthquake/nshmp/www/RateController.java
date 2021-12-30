@@ -2,7 +2,7 @@ package gov.usgs.earthquake.nshmp.www;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import gov.usgs.earthquake.nshmp.www.services.RateService;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Query;

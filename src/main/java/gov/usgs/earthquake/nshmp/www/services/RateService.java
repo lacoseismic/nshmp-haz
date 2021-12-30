@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;

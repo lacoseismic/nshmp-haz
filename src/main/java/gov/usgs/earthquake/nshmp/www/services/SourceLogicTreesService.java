@@ -1,6 +1,6 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import gov.usgs.earthquake.nshmp.model.Models;
 import gov.usgs.earthquake.nshmp.www.Response;
