@@ -11,11 +11,9 @@ import gov.usgs.earthquake.nshmp.gmm.Gmm;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -48,10 +46,14 @@ public class SourceServices {
   public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
     var url = request.getUri().getPath();
     try {
-      var response = new Response<>(
-          Status.USAGE, NAME, url, new ResponseData(), url);
-      var jsonString = GSON.toJson(response);
-      return HttpResponse.ok(jsonString);
+      var response = ResponseBody.usage()
+          .name(NAME)
+          .url(url)
+          .request(url)
+          .response(new ResponseData())
+          .build();
+      var json = GSON.toJson(response);
+      return HttpResponse.ok(json);
     } catch (Exception e) {
       return ServicesUtil.handleError(e, NAME, url);
     }
