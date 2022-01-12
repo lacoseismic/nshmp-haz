@@ -104,14 +104,6 @@ stages:
     - latest_image_name="${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
     - docker tag "${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}" "${latest_image_name}";
     - docker push "${latest_image_name}";
-    - if [[
-          ${CI_COMMIT_REF_SLUG} == "${CI_DEFAULT_BRANCH}" ||
-          ${CI_COMMIT_REF_SLUG} == "production" ||
-          -n "${CI_COMMIT_TAG}"
-      ]]; then
-        docker tag "${latest_image_name}" "usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
-        docker push "usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
-      fi
     - |
       printf "
         --------
@@ -145,28 +137,28 @@ stages:
 # Stage: build
 ####
 
-# Build Image Haz:
-#   extends:
-#     - .docker-build
-#   variables:
-#     CI_PROJECT_NAME: nshmp-haz
-#     DOCKER_BUILD_ARGS: |
-#       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
-#       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
-#       CI_JOB_TOKEN=${CI_JOB_TOKEN}
-#     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
+Build Image Haz:
+  extends:
+    - .docker-build
+  variables:
+    CI_PROJECT_NAME: nshmp-haz
+    DOCKER_BUILD_ARGS: |
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      CI_JOB_TOKEN=${CI_JOB_TOKEN}
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
-# Build Image WS:
-#   extends:
-#     - .docker-build
-#   variables:
-#     CI_PROJECT_NAME: nshmp-haz-ws
-#     DOCKER_BUILD_ARGS: |
-#       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
-#       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
-#       CI_JOB_TOKEN=${CI_JOB_TOKEN}
-#     DOCKERFILE: ws.Dockerfile
-#     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
+Build Image WS:
+  extends:
+    - .docker-build
+  variables:
+    CI_PROJECT_NAME: nshmp-haz-ws
+    DOCKER_BUILD_ARGS: |
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      CI_JOB_TOKEN=${CI_JOB_TOKEN}
+    DOCKERFILE: ws.Dockerfile
+    UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Build Project:
   extends:
