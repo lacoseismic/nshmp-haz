@@ -5,12 +5,12 @@ apply plugin: "com.star-zero.gradle.githook"
  *
  * See https://github.com/STAR-ZERO/gradle-githook
  */
-// githook {
-//   createHooksDirIfNotExist = true
+githook {
+  createHooksDirIfNotExist = true
 
-//   hooks {
-//     "pre-push" {
-//       task = "markdownlint yamllint spotlessCheck spotbugsMain spotbugsTest"
-//     }
-//   }
-// }
+  hooks {
+    "pre-push" {
+      task = "markdownlint yamllint spotlessCheck spotbugsMain spotbugsTest"
+    }
+  }
+}
