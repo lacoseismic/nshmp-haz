@@ -1,5 +1,7 @@
 # Using nshmp-haz with Matlab
 
+This is out of date.
+
 >**NOTE:** *nshmp-haz* was recently upgraded to Java 8, which supercedes and is
 incompatable with the Java 7 JVM that ships with Matlab. Users will need to set the
 `MATLAB_JAVA` environment variable to point to a Java 8 runtime.
