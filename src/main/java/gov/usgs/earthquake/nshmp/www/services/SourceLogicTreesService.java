@@ -1,9 +1,8 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
 import gov.usgs.earthquake.nshmp.model.Models;
-import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -25,7 +24,12 @@ public class SourceLogicTreesService {
 
     try {
       var trees = Models.trees(ServletUtil.model());
-      var response = new Response<>(Status.SUCCESS, NAME, url, trees, url);
+      var response = ResponseBody.success()
+          .name(NAME)
+          .url(url)
+          .request(url)
+          .response(trees)
+          .build();
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
       return ServicesUtil.handleError(e, NAME, url);
@@ -39,7 +43,12 @@ public class SourceLogicTreesService {
     try {
       var tree = Models.tree(ServletUtil.model(), id);
       var requestData = new RequestData(id);
-      var response = new Response<>(Status.SUCCESS, NAME, requestData, tree, url);
+      var response = ResponseBody.success()
+          .name(NAME)
+          .url(url)
+          .request(requestData)
+          .response(tree)
+          .build();
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
       return ServicesUtil.handleError(e, NAME, url);

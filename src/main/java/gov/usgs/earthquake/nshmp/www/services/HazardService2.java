@@ -24,12 +24,11 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.HazardController;
-import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 
@@ -53,7 +52,12 @@ public final class HazardService2 {
     var url = request.getUri().getPath();
     try {
       var usage = new RequestMetadata(ServletUtil.model());// SourceServices.ResponseData();
-      var response = new Response(Status.USAGE, NAME, url, usage, url);
+      var response = ResponseBody.usage()
+          .name(NAME)
+          .url(url)
+          .request(url)
+          .response(usage)
+          .build();
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
@@ -75,7 +79,7 @@ public final class HazardService2 {
 
       // var data = new RequestData(query);
 
-      Response<RequestData, ResponseData> response = process(request, args);
+      ResponseBody<RequestData, ResponseData> response = process(request, args);
       String svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
 
@@ -84,7 +88,7 @@ public final class HazardService2 {
     }
   }
 
-  static Response<RequestData, ResponseData> process(
+  static ResponseBody<RequestData, ResponseData> process(
       HttpRequest<?> request,
       RequestData data) throws InterruptedException, ExecutionException {
 
@@ -323,7 +327,7 @@ public final class HazardService2 {
       return this;
     }
 
-    Response<RequestData, ResponseData> build() {
+    ResponseBody<RequestData, ResponseData> build() {
       var hazards = new ArrayList<HazardResponse>();
 
       for (Imt imt : totalMap.keySet()) {
@@ -348,7 +352,12 @@ public final class HazardService2 {
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       var response = new ResponseData(new ResponseMetadata(server), List.copyOf(hazards));
 
-      return new Response<>(Status.SUCCESS, NAME, request, response, url);
+      return ResponseBody.<RequestData, ResponseData> success()
+          .name(NAME)
+          .url(url)
+          .request(request)
+          .response(response)
+          .build();
     }
   }
 

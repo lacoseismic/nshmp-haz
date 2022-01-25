@@ -16,12 +16,11 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
-import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
@@ -60,8 +59,8 @@ public final class RateService {
   public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request, Service service) {
     try {
       var response = metadata(request, service);
-      var svcResponse = ServletUtil.GSON.toJson(response);
-      return HttpResponse.ok(svcResponse);
+      var json = ServletUtil.GSON.toJson(response);
+      return HttpResponse.ok(json);
     } catch (Exception e) {
       return ServicesUtil.handleError(e, service.name, request.getUri().getPath());
     }
@@ -96,22 +95,26 @@ public final class RateService {
     }
   }
 
-  static Response<String, Usage> metadata(HttpRequest<?> request, Service service) {
+  static ResponseBody<String, Usage> metadata(HttpRequest<?> request, Service service) {
     var parameters = service == Service.RATE ? new RateParameters() : new ProbabilityParameters();
     var usage = new Usage(service, parameters);
     var url = request.getUri().getPath();
-    return new Response<>(Status.USAGE, service.name, url, usage, url);
+    return ResponseBody.<String, Usage> usage()
+        .name(service.name)
+        .url(url)
+        .request(url)
+        .response(usage)
+        .build();
   }
 
-  static Response<RequestData, ResponseData> processRequest(
+  static ResponseBody<RequestData, ResponseData> processRequest(
       HttpRequest<?> request,
       Service service,
       RequestData data) throws InterruptedException, ExecutionException {
     var timer = Stopwatch.createStarted();
     var rates = calc(service, data);
     var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
-    return Response.<RequestData, ResponseData> builder()
-        .success()
+    return ResponseBody.<RequestData, ResponseData> success()
         .name(service.name)
         .request(data)
         .response(responseData)

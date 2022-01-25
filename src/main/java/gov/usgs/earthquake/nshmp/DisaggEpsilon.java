@@ -251,6 +251,7 @@ public class DisaggEpsilon {
       Site site = sites.get(i);
       Map<Imt, Double> spectrum = rtrSpectra.get(i);
 
+      // use IMLs from site spectra
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
       Disaggregation disagg = Disaggregation.atImls(hazard, spectrum, exec);
 
@@ -261,7 +262,9 @@ public class DisaggEpsilon {
             site,
             imt,
             spectrum.get(imt));
-        Response response = new Response(imtMetadata, disagg.toJsonCompact(imt));
+        Response response = new Response(
+            imtMetadata,
+            disagg.toJson(imt, false, true, true, false));
         responses.add(response);
       }
       Result result = new Result(responses);

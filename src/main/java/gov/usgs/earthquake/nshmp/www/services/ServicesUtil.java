@@ -11,9 +11,8 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.Response;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
-import gov.usgs.earthquake.nshmp.www.meta.Status;
 
 import io.micronaut.http.HttpResponse;
 
@@ -24,7 +23,12 @@ public class ServicesUtil {
       String name,
       String url) {
     var msg = e.getMessage() + " (see logs)";
-    var svcResponse = new Response<>(Status.ERROR, name, url, msg, url);
+    var svcResponse = ResponseBody.error()
+        .name(name)
+        .url(url)
+        .request(url)
+        .response(msg)
+        .build();
     var gson = new GsonBuilder().setPrettyPrinting().create();
     var response = gson.toJson(svcResponse);
     e.printStackTrace();
