@@ -2,6 +2,8 @@ package gov.usgs.earthquake.nshmp;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
+import static gov.usgs.earthquake.nshmp.calc.DataType.GMM;
+import static gov.usgs.earthquake.nshmp.calc.DataType.SOURCE;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -251,9 +253,12 @@ public class DisaggEpsilon {
       Site site = sites.get(i);
       Map<Imt, Double> spectrum = rtrSpectra.get(i);
 
-      // use IMLs from site spectra
+      // task: use IMLs from site spectra
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
       Disaggregation disagg = Disaggregation.atImls(hazard, spectrum, exec);
+
+      boolean gmmsOut = config.output.dataTypes.contains(GMM);
+      boolean typesOut = config.output.dataTypes.contains(SOURCE);
 
       List<Response> responses = new ArrayList<>(spectrum.size());
       for (Imt imt : spectrum.keySet()) {
@@ -264,7 +269,7 @@ public class DisaggEpsilon {
             spectrum.get(imt));
         Response response = new Response(
             imtMetadata,
-            disagg.toJson(imt, false, true, true, false));
+            disagg.toJson(imt, false, gmmsOut, typesOut, false));
         responses.add(response);
       }
       Result result = new Result(responses);
