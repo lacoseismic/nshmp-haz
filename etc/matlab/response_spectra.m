@@ -100,7 +100,7 @@ for i = 1:length(means)
     end
 end
  
-xlabel('Distance (km)','FontSize',12)
+xlabel('Periods (sec)','FontSize',12)
 ylabel('Median Ground Motion (g)','FontSize',12)
 title('Ground Motion vs Response Spectra (Means)', 'FontSize', 14)
 axis([0.001 10 0.005 0.8]);
