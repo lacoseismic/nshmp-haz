@@ -32,7 +32,6 @@ import com.google.gson.GsonBuilder;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Disaggregation;
-import gov.usgs.earthquake.nshmp.calc.Disaggs;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -265,7 +264,7 @@ public class DisaggEpsilon {
             spectrum.get(imt));
         Response response = new Response(
             imtMetadata,
-            Disaggs.resultWithGmmAndType(disagg, imt));
+            disagg.toJson(imt, false, true, true, false));
         responses.add(response);
       }
       Result result = new Result(responses);
