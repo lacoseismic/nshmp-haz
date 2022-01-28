@@ -6,7 +6,7 @@ National Seismic Hazard Model Project ([NSHMP](https://earthquake.usgs.gov/hazar
 USGS's earthquake hazards program ([EHP](http://earthquake.usgs.gov)).
 
 *nshmp-haz* supports high performance seismic hazard calculations required to generate detailed
-maps over large areas and supports a variety of USGS web services and applications related to
+maps over large areas and supports a variety of web services and applications related to
 seismic hazards research and the dissemination of hazard data (see the
 [NSHM Hazard Tool](https://earthquake.usgs.gov/nshmp/)). This documentation explains how to
 use *nshmp-haz* as well as underlying model implementation details.
@@ -27,6 +27,7 @@ use *nshmp-haz* as well as underlying model implementation details.
   * [Magnitude Frequency Distributions (MFDs)](./pages/Magnitude-Frequency-Distributions.md)
   * [Rupture Scaling Relations](./pages/Rupture-Scaling-Relations.md)
   * [Ground Motion Models (GMMs)](./pages/Ground-Motion-Models.md)
+* [Implementation Details](./pages/Implementation-Details.md)
 * [USGS Models](./pages/USGS-Models.md)
   * [Model Editions](./pages/Model-Editions.md)
   * [Logic Trees & Uncertainty](./pages/Logic-Trees-&-Uncertainty.md)
