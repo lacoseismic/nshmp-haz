@@ -146,6 +146,7 @@ public class DisaggEpsilon {
       log.info("Spectra: " + imtImlMaps.size());
 
       checkArgument(sites.size() == imtImlMaps.size(), "Sites and spectra lists different sizes");
+      // Spectra should be checked against IMTs supported by model GMMs
 
       Path out = calc(model, config, sites, imtImlMaps, log);
 
