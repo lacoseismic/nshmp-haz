@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www;
 
 import static java.lang.Runtime.getRuntime;
 
@@ -27,9 +27,7 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
-
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
@@ -46,10 +44,10 @@ public class ServletUtil {
 
   public static final Gson GSON;
 
-  static final ListeningExecutorService CALC_EXECUTOR;
-  static final ExecutorService TASK_EXECUTOR;
+  public static final ListeningExecutorService CALC_EXECUTOR;
+  public static final ExecutorService TASK_EXECUTOR;
 
-  static final int THREAD_COUNT;
+  public static final int THREAD_COUNT;
 
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
@@ -73,7 +71,7 @@ public class ServletUtil {
         .create();
   }
 
-  static HazardModel model() {
+  public static HazardModel model() {
     return HAZARD_MODEL;
   }
 

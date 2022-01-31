@@ -4,7 +4,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 
 import gov.usgs.earthquake.nshmp.geo.Coordinates;
-import gov.usgs.earthquake.nshmp.www.services.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
 
 /**
  * Service metadata, parameterization, and constraint strings, in JSON format.

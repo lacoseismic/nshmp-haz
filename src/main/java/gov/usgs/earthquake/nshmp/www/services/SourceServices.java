@@ -12,9 +12,10 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ServicesUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -105,7 +106,7 @@ public class SourceServices {
     Set<Gmm> gmms;
     Map<NehrpSiteClass, Double> siteClasses;
 
-    SourceModel(HazardModel model) {
+    public SourceModel(HazardModel model) {
       name = model.name();
       gmms = model.gmms();
       siteClasses = model.siteClasses();

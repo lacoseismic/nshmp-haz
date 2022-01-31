@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -11,9 +11,6 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.WsUtils;
-
 import io.micronaut.http.HttpResponse;
 
 public class ServicesUtil {
@@ -35,7 +32,8 @@ public class ServicesUtil {
     return HttpResponse.serverError(response);
   }
 
-  static Hazard calcHazard(
+  @Deprecated
+  public static Hazard calcHazard(
       Function<HazardModel, CalcConfig> configFunction,
       Function<CalcConfig, Site> siteFunction) throws InterruptedException, ExecutionException {
 
@@ -47,12 +45,12 @@ public class ServicesUtil {
   }
 
   @Deprecated
-  static class ServiceQueryData implements ServiceQuery {
+  public static class ServiceQueryData implements ServiceQuery {
 
     public final Double longitude;
     public final Double latitude;
 
-    ServiceQueryData(Double longitude, Double latitude) {
+    public ServiceQueryData(Double longitude, Double latitude) {
       this.longitude = longitude;
       this.latitude = latitude;
     }
@@ -70,7 +68,7 @@ public class ServicesUtil {
   }
 
   @Deprecated
-  static class ServiceRequestData {
+  public static class ServiceRequestData {
 
     public final double longitude;
     public final double latitude;
@@ -81,7 +79,7 @@ public class ServicesUtil {
     }
   }
 
-  enum Key {
+  public enum Key {
     EDITION,
     REGION,
     MODEL,
@@ -114,6 +112,7 @@ public class ServicesUtil {
     void checkValues();
   }
 
+  @Deprecated
   private static CompletableFuture<Hazard> calcHazard(
       HazardModel model,
       CalcConfig config,

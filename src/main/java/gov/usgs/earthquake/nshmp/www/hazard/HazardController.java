@@ -1,8 +1,7 @@
-package gov.usgs.earthquake.nshmp.www;
+package gov.usgs.earthquake.nshmp.www.hazard;
 
-import gov.usgs.earthquake.nshmp.www.services.HazardService;
-import gov.usgs.earthquake.nshmp.www.services.HazardService.QueryParameters;
-
+import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
+import gov.usgs.earthquake.nshmp.www.ServicesUtil;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -16,9 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut controller for probabilistic seismic hazard calculations.
+ * Micronaut controller for probabilistic seismic hazard calculations and
+ * services.
  *
- * @see HazardService
  * @author U.S. Geological Survey
  */
 @Tag(
@@ -32,8 +31,7 @@ public class HazardController {
 
   @Operation(
       summary = "Hazard model and service metadata",
-      description = "Returns details of the installed model and service request parameters",
-      operationId = "hazard_doGetMetadata")
+      description = "Returns details of the installed model and service request parameters")
   @ApiResponse(
       description = "Hazard service metadata",
       responseCode = "200")
@@ -51,31 +49,32 @@ public class HazardController {
    */
   @Operation(
       summary = "Compute probabilisitic hazard at a site",
-      description = "Returns hazard curves computed from the installed model",
-      operationId = "hazard_doGetHazard")
+      description = "Returns hazard curves computed from the installed model")
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200")
   @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir}")
   public HttpResponse<String> doGetHazard(
-      HttpRequest<?> request,
-
-      @Schema(minimum = "-360", maximum = "360") @PathVariable double longitude,
-
-      @Schema(minimum = "-90", maximum = "90") @PathVariable double latitude,
-
-      @Schema(minimum = "150", maximum = "3000") @PathVariable int vs30,
-
-      @QueryValue(defaultValue = "false") boolean truncate,
-
-      @QueryValue(defaultValue = "false") boolean maxdir) {
-
-    /*
-     * @Schema annotation parameter constraints only affect Swagger service
-     * index page behavior; still need to validate against model. TODO
-     */
-
-    var query = new QueryParameters(longitude, latitude, vs30, truncate, maxdir);
-    return HazardService.handleDoGetHazard(request, query);
+      HttpRequest<?> http,
+      @Schema(
+          minimum = "-360",
+          maximum = "360") @PathVariable double longitude,
+      @Schema(
+          minimum = "-90",
+          maximum = "90") @PathVariable double latitude,
+      @Schema(
+          minimum = "150",
+          maximum = "3000") @PathVariable int vs30,
+      @QueryValue(
+          defaultValue = "false") boolean truncate,
+      @QueryValue(
+          defaultValue = "false") boolean maxdir) {
+    try {
+      HazardService.Request request = new HazardService.Request(
+          http, longitude, latitude, vs30, truncate, maxdir);
+      return HazardService.processRequest(request);
+    } catch (Exception e) {
+      return ServicesUtil.handleError(e, HazardService.NAME, http.getUri().getPath());
+    }
   }
 }

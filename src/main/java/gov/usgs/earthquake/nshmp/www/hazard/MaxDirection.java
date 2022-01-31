@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www.hazard;
 
 import static gov.usgs.earthquake.nshmp.gmm.Imt.PGA;
 import static gov.usgs.earthquake.nshmp.gmm.Imt.SA0P01;

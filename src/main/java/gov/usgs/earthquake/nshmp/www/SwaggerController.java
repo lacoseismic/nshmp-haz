@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.io.Resources;
 
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
