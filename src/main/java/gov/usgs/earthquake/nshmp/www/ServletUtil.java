@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
@@ -181,6 +182,23 @@ public class ServletUtil {
       return imt.period() + " s";
     }
     return imt.toString();
+  }
+
+  public static Object serverData(int threads, Stopwatch timer) {
+    return new Server(threads, timer);
+  }
+
+  private static class Server {
+
+    final int threads;
+    final String timer;
+    final String version;
+
+    Server(int threads, Stopwatch timer) {
+      this.threads = threads;
+      this.timer = timer.toString();
+      this.version = "TODO where to get version?";
+    }
   }
 
 }

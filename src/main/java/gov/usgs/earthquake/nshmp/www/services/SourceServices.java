@@ -20,7 +20,6 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
-import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -80,7 +79,9 @@ public class SourceServices {
 
     public ResponseData() {
       this.description = "Installed source model listing";
-      this.server = Metadata.serverData(ServletUtil.THREAD_COUNT, Stopwatch.createStarted());
+      this.server = ServletUtil.serverData(
+          ServletUtil.THREAD_COUNT,
+          Stopwatch.createStarted());
       // this.parameters = new Parameters();
     }
   }
@@ -122,6 +123,7 @@ public class SourceServices {
       imts = model.gmms().stream()
           .map(Gmm::supportedImts)
           .flatMap(Set::stream)
+          .distinct()
           .sorted()
           .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
           .collect(toList());

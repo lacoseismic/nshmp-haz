@@ -28,41 +28,9 @@ public final class Metadata {
       this.status = Status.USAGE.toString();
       this.description = description;
       this.syntax = syntax;
-      this.server = serverData(1, Stopwatch.createStarted());
+      this.server = ServletUtil.serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
-  }
-
-  public static Object serverData(int threads, Stopwatch timer) {
-    return new Server(threads, timer);
-  }
-
-  private static class Server {
-
-    final int threads;
-    final String timer;
-    final String version;
-
-    Server(int threads, Stopwatch timer) {
-      this.threads = threads;
-      this.timer = timer.toString();
-      this.version = "TODO where to get version?";
-    }
-
-    // static Component NSHMP_HAZ_COMPONENT = new Component(
-    // NSHMP_HAZ_URL,
-    // Versions.NSHMP_HAZ_VERSION);
-    //
-    // static final class Component {
-    //
-    // final String url;
-    // final String version;
-    //
-    // Component(String url, String version) {
-    // this.url = url;
-    // this.version = version;
-    // }
-    // }
   }
 
   public static class DefaultParameters {

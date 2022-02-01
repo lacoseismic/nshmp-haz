@@ -36,7 +36,6 @@ import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
-import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
 import io.micronaut.http.HttpRequest;
@@ -55,10 +54,12 @@ public final class HazardService {
   static final String NAME = "Hazard Service";
   static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
+  private static final String TOTAL_KEY = "Total";
+
   /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
-    var usage = new UsageMetadata(ServletUtil.model());
+    var usage = new Metadata(ServletUtil.model());
     var body = ResponseBody.usage()
         .name(NAME)
         .url(url)
@@ -74,7 +75,7 @@ public final class HazardService {
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
     var hazard = calcHazard(request);
-    var response = new ResponseBuilder()
+    var response = new Response.Builder()
         .timer(stopwatch)
         .request(request)
         .hazard(hazard)
@@ -123,14 +124,14 @@ public final class HazardService {
     return future.get();
   }
 
-  static class UsageMetadata {
+  static class Metadata {
 
     final SourceModel model;
     final DoubleParameter longitude;
     final DoubleParameter latitude;
     final DoubleParameter vs30;
 
-    UsageMetadata(HazardModel model) {
+    Metadata(HazardModel model) {
       this.model = new SourceModel(model);
       // TODO need min max from model
       longitude = new DoubleParameter(
@@ -184,24 +185,105 @@ public final class HazardService {
     }
   }
 
-  private static final class ResponseMetadata {
-    final Object server;
-    final String xlabel = "Ground Motion (g)";
-    final String ylabel = "Annual Frequency of Exceedence";
-
-    ResponseMetadata(Object server) {
-      this.server = server;
-    }
-  }
-
   private static final class Response {
-    final ResponseMetadata metadata;
+
+    final Metadata metadata;
     final List<ImtCurves> hazardCurves;
 
-    Response(ResponseMetadata metadata, List<ImtCurves> hazardCurves) {
+    Response(Metadata metadata, List<ImtCurves> hazardCurves) {
       this.metadata = metadata;
       this.hazardCurves = hazardCurves;
     }
+
+    private static final class Metadata {
+      final Object server;
+      final String xlabel = "Ground Motion (g)";
+      final String ylabel = "Annual Frequency of Exceedence";
+
+      Metadata(Object server) {
+        this.server = server;
+      }
+    }
+
+    private static final class Builder {
+
+      Stopwatch timer;
+      Request request;
+      Map<Imt, Map<SourceType, MutableXySequence>> componentMaps;
+      Map<Imt, MutableXySequence> totalMap;
+
+      Builder timer(Stopwatch timer) {
+        this.timer = timer;
+        return this;
+      }
+
+      Builder request(Request request) {
+        this.request = request;
+        return this;
+      }
+
+      Builder hazard(Hazard hazard) {
+        // TODO necessary??
+        checkState(totalMap == null, "Hazard has already been added to this builder");
+
+        componentMaps = new EnumMap<>(Imt.class);
+        totalMap = new EnumMap<>(Imt.class);
+
+        var typeTotalMaps = curvesBySource(hazard);
+
+        for (var imt : hazard.curves().keySet()) {
+
+          /* Total curve for IMT. */
+          XySequence.addToMap(imt, totalMap, hazard.curves().get(imt));
+
+          /* Source component curves for IMT. */
+          var typeTotalMap = typeTotalMaps.get(imt);
+          var componentMap = componentMaps.get(imt);
+
+          if (componentMap == null) {
+            componentMap = new EnumMap<>(SourceType.class);
+            componentMaps.put(imt, componentMap);
+          }
+
+          for (var type : typeTotalMap.keySet()) {
+            XySequence.addToMap(type, componentMap, typeTotalMap.get(type));
+          }
+        }
+
+        return this;
+      }
+
+      Response build() {
+        var hazards = new ArrayList<ImtCurves>();
+
+        for (Imt imt : totalMap.keySet()) {
+          var curves = new ArrayList<Curve>();
+
+          // total curve
+          curves.add(new Curve(
+              TOTAL_KEY,
+              updateCurve(request, totalMap.get(imt), imt)));
+
+          // component curves
+          var typeMap = componentMaps.get(imt);
+          for (SourceType type : typeMap.keySet()) {
+            curves.add(new Curve(
+                type.toString(),
+                updateCurve(request, typeMap.get(type), imt)));
+          }
+
+          hazards.add(new ImtCurves(imt, curves));
+        }
+
+        Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
+        var response = new Response(
+            new Response.Metadata(server),
+            hazards);
+
+        return response;
+      }
+    }
+
   }
 
   private static final class ImtCurves {
@@ -221,87 +303,6 @@ public final class HazardService {
     Curve(String component, XySequence values) {
       this.component = component;
       this.values = values;
-    }
-  }
-
-  private static final String TOTAL_KEY = "Total";
-
-  private static final class ResponseBuilder {
-
-    Stopwatch timer;
-    Request request;
-    Map<Imt, Map<SourceType, MutableXySequence>> componentMaps;
-    Map<Imt, MutableXySequence> totalMap;
-
-    ResponseBuilder timer(Stopwatch timer) {
-      this.timer = timer;
-      return this;
-    }
-
-    ResponseBuilder request(Request request) {
-      this.request = request;
-      return this;
-    }
-
-    ResponseBuilder hazard(Hazard hazard) {
-      // TODO necessary??
-      checkState(totalMap == null, "Hazard has already been added to this builder");
-
-      componentMaps = new EnumMap<>(Imt.class);
-      totalMap = new EnumMap<>(Imt.class);
-
-      var typeTotalMaps = curvesBySource(hazard);
-
-      for (var imt : hazard.curves().keySet()) {
-
-        /* Total curve for IMT. */
-        XySequence.addToMap(imt, totalMap, hazard.curves().get(imt));
-
-        /* Source component curves for IMT. */
-        var typeTotalMap = typeTotalMaps.get(imt);
-        var componentMap = componentMaps.get(imt);
-
-        if (componentMap == null) {
-          componentMap = new EnumMap<>(SourceType.class);
-          componentMaps.put(imt, componentMap);
-        }
-
-        for (var type : typeTotalMap.keySet()) {
-          XySequence.addToMap(type, componentMap, typeTotalMap.get(type));
-        }
-      }
-
-      return this;
-    }
-
-    Response build() {
-      var hazards = new ArrayList<ImtCurves>();
-
-      for (Imt imt : totalMap.keySet()) {
-        var curves = new ArrayList<Curve>();
-
-        // total curve
-        curves.add(new Curve(
-            TOTAL_KEY,
-            updateCurve(request, totalMap.get(imt), imt)));
-
-        // component curves
-        var typeMap = componentMaps.get(imt);
-        for (SourceType type : typeMap.keySet()) {
-          curves.add(new Curve(
-              type.toString(),
-              updateCurve(request, typeMap.get(type), imt)));
-        }
-
-        hazards.add(new ImtCurves(imt, curves));
-      }
-
-      Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
-      var response = new Response(
-          new ResponseMetadata(server),
-          hazards);
-
-      return response;
     }
   }
 
@@ -353,5 +354,4 @@ public final class HazardService {
         .map(Imt::valueOf)
         .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
   }
-
 }

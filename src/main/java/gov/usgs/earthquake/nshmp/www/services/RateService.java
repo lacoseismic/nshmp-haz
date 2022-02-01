@@ -26,7 +26,6 @@ import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
-import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -276,7 +275,7 @@ public final class RateService {
     final List<Sequence> data;
 
     ResponseData(ResponseMetadata metadata, EqRate rates, Stopwatch timer) {
-      server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
+      server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
     }
@@ -335,7 +334,7 @@ public final class RateService {
     private Usage(Service service, DefaultParameters parameters) {
       description = service.description;
       this.syntax = service.syntax;
-      server = Metadata.serverData(1, Stopwatch.createStarted());
+      server = ServletUtil.serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
   }

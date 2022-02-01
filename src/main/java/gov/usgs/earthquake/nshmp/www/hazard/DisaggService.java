@@ -25,8 +25,7 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.hazard.HazardService.UsageMetadata;
-import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -57,7 +56,7 @@ public final class DisaggService {
   /** HazardController.doGetMetadata() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
-    var usage = new UsageMetadata(ServletUtil.model());
+    var usage = new Metadata(ServletUtil.model());
     var response = ResponseBody.usage()
         .name(NAME)
         .url(url)
@@ -73,7 +72,7 @@ public final class DisaggService {
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
     var disagg = calcDisaggIml(request);
-    var response = new ResponseBuilder()
+    var response = new Response.Builder()
         .timer(stopwatch)
         .request(request)
         .disagg(disagg)
@@ -93,7 +92,7 @@ public final class DisaggService {
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
     var disagg = calcDisaggRp(request);
-    var response = new ResponseBuilder()
+    var response = new Response.Builder()
         .timer(stopwatch)
         .request(request)
         .disagg(disagg)
@@ -238,26 +237,70 @@ public final class DisaggService {
     }
   }
 
-  private static final class ResponseMetadata {
-    final Object server;
-    final String rlabel = "Closest Distance, rRup (km)";
-    final String mlabel = "Magnitude (Mw)";
-    final String εlabel = "% Contribution to Hazard";
-    final Object εbins;
-
-    ResponseMetadata(Object server, Object εbins) {
-      this.server = server;
-      this.εbins = εbins;
-    }
-  }
-
   private static final class Response {
-    final ResponseMetadata metadata;
+    final Response.Metadata metadata;
     final List<ImtDisagg> disaggs;
 
-    Response(ResponseMetadata metadata, List<ImtDisagg> disaggs) {
+    Response(Response.Metadata metadata, List<ImtDisagg> disaggs) {
       this.metadata = metadata;
       this.disaggs = disaggs;
+    }
+
+    private static final class Metadata {
+      final Object server;
+      final String rlabel = "Closest Distance, rRup (km)";
+      final String mlabel = "Magnitude (Mw)";
+      final String εlabel = "% Contribution to Hazard";
+      final Object εbins;
+
+      Metadata(Object server, Object εbins) {
+        this.server = server;
+        this.εbins = εbins;
+      }
+    }
+
+    private static final class Builder {
+
+      Stopwatch timer;
+      Optional<RequestRp> requestRp = Optional.empty();
+      Optional<RequestIml> requestIml = Optional.empty();
+      Disaggregation disagg;
+
+      Builder timer(Stopwatch timer) {
+        this.timer = timer;
+        return this;
+      }
+
+      Builder request(Object request) {
+        if (request instanceof RequestRp) {
+          requestRp = Optional.of((RequestRp) request);
+          return this;
+        }
+        requestIml = Optional.of((RequestIml) request);
+        return this;
+      }
+
+      Builder disagg(Disaggregation disagg) {
+        this.disagg = disagg;
+        return this;
+      }
+
+      Response build() {
+
+        Set<Imt> imts = requestRp.isPresent()
+            ? requestRp.orElseThrow().imts
+            : requestIml.orElseThrow().imls.keySet();
+
+        List<ImtDisagg> disaggs = imts.stream()
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .collect(toList());
+
+        Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
+
+        return new Response(
+            new Response.Metadata(server, disagg.εBins()),
+            disaggs);
+      }
     }
   }
 
@@ -272,49 +315,4 @@ public final class DisaggService {
       this.data = data;
     }
   }
-
-  private static final class ResponseBuilder {
-
-    Stopwatch timer;
-    Optional<RequestRp> requestRp = Optional.empty();
-    Optional<RequestIml> requestIml = Optional.empty();
-    Disaggregation disagg;
-
-    ResponseBuilder timer(Stopwatch timer) {
-      this.timer = timer;
-      return this;
-    }
-
-    ResponseBuilder request(Object request) {
-      if (request instanceof RequestRp) {
-        requestRp = Optional.of((RequestRp) request);
-        return this;
-      }
-      requestIml = Optional.of((RequestIml) request);
-      return this;
-    }
-
-    ResponseBuilder disagg(Disaggregation disagg) {
-      this.disagg = disagg;
-      return this;
-    }
-
-    Response build() {
-
-      Set<Imt> imts = requestRp.isPresent()
-          ? requestRp.orElseThrow().imts
-          : requestIml.orElseThrow().imls.keySet();
-
-      List<ImtDisagg> disaggs = imts.stream()
-          .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
-          .collect(toList());
-
-      Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
-
-      return new Response(
-          new ResponseMetadata(server, disagg.εBins()),
-          disaggs);
-    }
-  }
-
 }
