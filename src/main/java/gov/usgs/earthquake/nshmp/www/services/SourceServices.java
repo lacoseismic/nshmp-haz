@@ -1,7 +1,13 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -12,10 +18,10 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.ServicesUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
+import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -33,6 +39,8 @@ public class SourceServices {
   private static final String DESCRIPTION = "Installed source model listing";
   private static final String SERVICE_DESCRIPTION =
       "Utilities for querying earthquake source models";
+
+  static final Logger LOG = LoggerFactory.getLogger(RateService.class);
 
   public static final Gson GSON;
 
@@ -57,7 +65,7 @@ public class SourceServices {
       var json = GSON.toJson(response);
       return HttpResponse.ok(json);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, url);
+      return ServletUtil.error(LOG, e, NAME, url);
     }
   }
 
@@ -105,11 +113,18 @@ public class SourceServices {
     String name;
     Set<Gmm> gmms;
     Map<NehrpSiteClass, Double> siteClasses;
+    List<Parameter> imts;
 
     public SourceModel(HazardModel model) {
       name = model.name();
       gmms = model.gmms();
       siteClasses = model.siteClasses();
+      imts = model.gmms().stream()
+          .map(Gmm::supportedImts)
+          .flatMap(Set::stream)
+          .sorted()
+          .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
+          .collect(toList());
     }
 
     // public static List<SourceModel> getList() {

@@ -1,7 +1,11 @@
 package gov.usgs.earthquake.nshmp.www.hazard;
 
+import java.util.Set;
+
+import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
-import gov.usgs.earthquake.nshmp.www.ServicesUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -15,8 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut controller for probabilistic seismic hazard calculations and
- * services.
+ * Micronaut web service controller for probabilistic seismic hazard
+ * calculations.
  *
  * @author U.S. Geological Survey
  */
@@ -36,8 +40,15 @@ public class HazardController {
       description = "Hazard service metadata",
       responseCode = "200")
   @Get
-  public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
-    return HazardService.handleDoGetMetadata(request);
+  public HttpResponse<String> doGetMetadata(HttpRequest<?> http) {
+    try {
+      return HazardService.getMetadata(http);
+    } catch (Exception e) {
+      return ServletUtil.error(
+          HazardService.LOG, e,
+          HazardService.NAME,
+          http.getUri().toString());
+    }
   }
 
   /**
@@ -46,6 +57,13 @@ public class HazardController {
    * @param vs30 Site Vs30 value in m/s [150..3000]
    * @param truncate Truncate curves at return periods below ~10,000 years
    * @param maxdir Apply max-direction scaling
+   * @param imt Optional IMTs at which to compute hazard. If none are supplied
+   *        then the default set of supported IMTs for the installed model is
+   *        used. Note that a model may not support all the values listed below
+   *        (see disagreggation metadata). Responses for numerous IMT's are
+   *        quite large, on the order of MB. Multiple IMTs may be comma
+   *        delimited, e.g. @code{?imt=PGA,SA0p2,SA1P0}.
+   *
    */
   @Operation(
       summary = "Compute probabilisitic hazard at a site",
@@ -53,7 +71,7 @@ public class HazardController {
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200")
-  @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir}")
+  @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir,imt}")
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> http,
       @Schema(
@@ -66,15 +84,23 @@ public class HazardController {
           minimum = "150",
           maximum = "3000") @PathVariable int vs30,
       @QueryValue(
-          defaultValue = "false") boolean truncate,
+          defaultValue = "false") @Nullable Boolean truncate,
       @QueryValue(
-          defaultValue = "false") boolean maxdir) {
+          defaultValue = "false") @Nullable Boolean maxdir,
+      @QueryValue @Nullable Set<Imt> imt) {
     try {
+      Set<Imt> imts = HazardService.readImts(http);
       HazardService.Request request = new HazardService.Request(
-          http, longitude, latitude, vs30, truncate, maxdir);
-      return HazardService.processRequest(request);
+          http,
+          longitude, latitude, vs30,
+          truncate, maxdir,
+          imts);
+      return HazardService.getHazard(request);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, HazardService.NAME, http.getUri().getPath());
+      return ServletUtil.error(
+          HazardService.LOG, e,
+          HazardService.NAME,
+          http.getUri().toString());
     }
   }
 }

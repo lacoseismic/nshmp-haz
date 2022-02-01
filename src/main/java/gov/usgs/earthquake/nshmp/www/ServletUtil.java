@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
@@ -31,6 +34,7 @@ import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.runtime.event.annotation.EventListener;
 import jakarta.inject.Singleton;
 
@@ -43,11 +47,14 @@ import jakarta.inject.Singleton;
 public class ServletUtil {
 
   public static final Gson GSON;
+  public static final Gson GSON2;
 
   public static final ListeningExecutorService CALC_EXECUTOR;
   public static final ExecutorService TASK_EXECUTOR;
 
   public static final int THREAD_COUNT;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServletUtil.class);
 
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
@@ -69,6 +76,17 @@ public class ServletUtil {
         .serializeNulls()
         .setPrettyPrinting()
         .create();
+
+    // removed old IMT and ValueFormat enum serialization
+    GSON2 = new GsonBuilder()
+        .registerTypeAdapter(Double.class, new WsUtils.DoubleSerializer())
+        .registerTypeAdapter(Site.class, new MetaUtil.SiteSerializer())
+        .registerTypeHierarchyAdapter(Path.class, new PathConverter())
+        .disableHtmlEscaping()
+        .serializeNulls()
+        .setPrettyPrinting()
+        .create();
+
   }
 
   public static HazardModel model() {
@@ -137,6 +155,32 @@ public class ServletUtil {
         JsonSerializationContext context) {
       return new JsonPrimitive(path.toAbsolutePath().normalize().toString());
     }
+  }
+
+  public static HttpResponse<String> error(
+      Logger logger,
+      Throwable e,
+      String name,
+      String url) {
+    var msg = e.getMessage() + " (see logs)";
+    var svcResponse = ResponseBody.error()
+        .name(name)
+        .url(url)
+        .request(url)
+        .response(msg)
+        .build();
+    var response = GSON2.toJson(svcResponse);
+    logger.error("Servlet error", e);
+    return HttpResponse.serverError(response);
+  }
+
+  public static String imtShortLabel(Imt imt) {
+    if (imt.equals(Imt.PGA) || imt.equals(Imt.PGV)) {
+      return imt.name();
+    } else if (imt.isSA()) {
+      return imt.period() + " s";
+    }
+    return imt.toString();
   }
 
 }

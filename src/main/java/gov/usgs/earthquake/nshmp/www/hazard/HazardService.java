@@ -5,14 +5,20 @@ import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.data.DoubleData.checkInRange;
 import static gov.usgs.earthquake.nshmp.geo.Coordinates.checkLatitude;
 import static gov.usgs.earthquake.nshmp.geo.Coordinates.checkLongitude;
+import static java.util.stream.Collectors.toCollection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
 
@@ -28,7 +34,6 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SourceType;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.ServicesUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata;
@@ -39,49 +44,49 @@ import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
 
 /**
- * Probabilistic seismic hazard calculation handler for
- * {@link HazardController}.
+ * Hazard service.
  *
+ * @see HazardController
  * @author U.S. Geological Survey
  */
 @Singleton
 public final class HazardService {
 
   static final String NAME = "Hazard Service";
+  static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
   /** HazardController.doGetUsage() handler. */
-  public static HttpResponse<String> handleDoGetMetadata(HttpRequest<?> request) {
-    var url = request.getUri().getPath();
-    try {
-      var usage = new UsageMetadata(ServletUtil.model());
-      var response = ResponseBody.usage()
-          .name(NAME)
-          .url(url)
-          .request(url)
-          .response(usage)
-          .build();
-      var svcResponse = ServletUtil.GSON.toJson(response);
-      return HttpResponse.ok(svcResponse);
-    } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, url);
-    }
+  public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
+    var url = request.getUri().toString();
+    var usage = new UsageMetadata(ServletUtil.model());
+    var body = ResponseBody.usage()
+        .name(NAME)
+        .url(url)
+        .request(url)
+        .response(usage)
+        .build();
+    var json = ServletUtil.GSON.toJson(body);
+    return HttpResponse.ok(json);
   }
 
   /** HazardController.doGetHazard() handler. */
-  public static HttpResponse<String> processRequest(Request request) {
-    try {
-      Response response = process(request);
-      var body = ResponseBody.success()
-          .name(NAME)
-          .url(request.http.getUri().getPath())
-          .request(request)
-          .response(response)
-          .build();
-      String svcResponse = ServletUtil.GSON.toJson(body);
-      return HttpResponse.ok(svcResponse);
-    } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, request.http.getUri().getPath());
-    }
+  public static HttpResponse<String> getHazard(Request request)
+      throws InterruptedException, ExecutionException {
+    var stopwatch = Stopwatch.createStarted();
+    var hazard = calcHazard(request);
+    var response = new ResponseBuilder()
+        .timer(stopwatch)
+        .request(request)
+        .hazard(hazard)
+        .build();
+    var body = ResponseBody.success()
+        .name(NAME)
+        .url(request.http.getUri().toString())
+        .request(request)
+        .response(response)
+        .build();
+    String json = ServletUtil.GSON.toJson(body);
+    return HttpResponse.ok(json);
   }
 
   /*
@@ -93,47 +98,32 @@ public final class HazardService {
    * apply truncation and scaling on the client.
    */
 
-  static Response process(Request request)
-      throws InterruptedException, ExecutionException {
-
-    var stopwatch = Stopwatch.createStarted();
-    var hazard = calcHazard(request);
-
-    return new ResultBuilder()
-        .request(request)
-        .hazard(hazard)
-        .timer(stopwatch)
-        .build();
-  }
-
   public static Hazard calcHazard(Request request)
       throws InterruptedException, ExecutionException {
 
     HazardModel model = ServletUtil.model();
 
-    // will we be passing in options for config??
-    CalcConfig config = CalcConfig.copyOf(model.config()).build();
+    // modify config to include service endpoint arguments
+    CalcConfig config = CalcConfig.copyOf(model.config())
+        .imts(request.imts)
+        .build();
 
-    // TODO this needs to pick up SiteData
+    // TODO this needs to pick up SiteData, centralize
     Site site = Site.builder()
         .location(Location.create(request.longitude, request.latitude))
         .vs30(request.vs30)
         .build();
-    CompletableFuture<Hazard> future = futureHazard(model, config, site);
+
+    CompletableFuture<Hazard> future = CompletableFuture.supplyAsync(
+        () -> HazardCalcs.hazard(
+            model, config, site,
+            ServletUtil.CALC_EXECUTOR),
+        ServletUtil.TASK_EXECUTOR);
+
     return future.get();
   }
 
-  private static CompletableFuture<Hazard> futureHazard(
-      HazardModel model,
-      CalcConfig config,
-      Site site) {
-
-    return CompletableFuture.supplyAsync(
-        () -> HazardCalcs.hazard(model, config, site, ServletUtil.CALC_EXECUTOR),
-        ServletUtil.TASK_EXECUTOR);
-  }
-
-  private static class UsageMetadata {
+  static class UsageMetadata {
 
     final SourceModel model;
     final DoubleParameter longitude;
@@ -142,8 +132,6 @@ public final class HazardService {
 
     UsageMetadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // perhaps move out to shared factory with parameter instances
-      //
       // TODO need min max from model
       longitude = new DoubleParameter(
           "Longitude",
@@ -167,12 +155,13 @@ public final class HazardService {
 
   public static final class Request {
 
-    transient HttpRequest<?> http;
+    final transient HttpRequest<?> http;
     final double longitude;
     final double latitude;
     final double vs30;
     final boolean truncate;
     final boolean maxdir;
+    final Set<Imt> imts;
 
     public Request(
         HttpRequest<?> http,
@@ -180,7 +169,8 @@ public final class HazardService {
         double latitude,
         int vs30,
         boolean truncate,
-        boolean maxdir) {
+        boolean maxdir,
+        Set<Imt> imts) {
 
       this.http = http;
       this.longitude = checkLongitude(longitude);
@@ -188,13 +178,16 @@ public final class HazardService {
       this.vs30 = checkInRange(Site.VS30_RANGE, Site.Key.VS30, vs30);
       this.truncate = truncate;
       this.maxdir = maxdir;
+      this.imts = imts.isEmpty()
+          ? ServletUtil.model().config().hazard.imts
+          : imts;
     }
   }
 
   private static final class ResponseMetadata {
+    final Object server;
     final String xlabel = "Ground Motion (g)";
     final String ylabel = "Annual Frequency of Exceedence";
-    final Object server;
 
     ResponseMetadata(Object server) {
       this.server = server;
@@ -216,7 +209,7 @@ public final class HazardService {
     final List<Curve> data;
 
     ImtCurves(Imt imt, List<Curve> data) {
-      this.imt = new Parameter(imtShortLabel(imt), imt.name());
+      this.imt = new Parameter(ServletUtil.imtShortLabel(imt), imt.name());
       this.data = data;
     }
   }
@@ -233,27 +226,36 @@ public final class HazardService {
 
   private static final String TOTAL_KEY = "Total";
 
-  private static final class ResultBuilder {
+  private static final class ResponseBuilder {
 
     Stopwatch timer;
     Request request;
-
     Map<Imt, Map<SourceType, MutableXySequence>> componentMaps;
     Map<Imt, MutableXySequence> totalMap;
 
-    ResultBuilder hazard(Hazard hazardResult) {
+    ResponseBuilder timer(Stopwatch timer) {
+      this.timer = timer;
+      return this;
+    }
+
+    ResponseBuilder request(Request request) {
+      this.request = request;
+      return this;
+    }
+
+    ResponseBuilder hazard(Hazard hazard) {
       // TODO necessary??
       checkState(totalMap == null, "Hazard has already been added to this builder");
 
       componentMaps = new EnumMap<>(Imt.class);
       totalMap = new EnumMap<>(Imt.class);
 
-      var typeTotalMaps = curvesBySource(hazardResult);
+      var typeTotalMaps = curvesBySource(hazard);
 
-      for (var imt : hazardResult.curves().keySet()) {
+      for (var imt : hazard.curves().keySet()) {
 
         /* Total curve for IMT. */
-        XySequence.addToMap(imt, totalMap, hazardResult.curves().get(imt));
+        XySequence.addToMap(imt, totalMap, hazard.curves().get(imt));
 
         /* Source component curves for IMT. */
         var typeTotalMap = typeTotalMaps.get(imt);
@@ -269,16 +271,6 @@ public final class HazardService {
         }
       }
 
-      return this;
-    }
-
-    ResultBuilder timer(Stopwatch timer) {
-      this.timer = timer;
-      return this;
-    }
-
-    ResultBuilder request(Request request) {
-      this.request = request;
       return this;
     }
 
@@ -301,13 +293,13 @@ public final class HazardService {
               updateCurve(request, typeMap.get(type), imt)));
         }
 
-        hazards.add(new ImtCurves(imt, List.copyOf(curves)));
+        hazards.add(new ImtCurves(imt, curves));
       }
 
       Object server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
       var response = new Response(
           new ResponseMetadata(server),
-          List.copyOf(hazards));
+          hazards);
 
       return response;
     }
@@ -351,13 +343,15 @@ public final class HazardService {
     return limit;
   }
 
-  private static String imtShortLabel(Imt imt) {
-    if (imt.equals(Imt.PGA) || imt.equals(Imt.PGV)) {
-      return imt.name();
-    } else if (imt.isSA()) {
-      return imt.period() + " s";
-    }
-    return imt.toString();
+  /* Read the 'imt' query values; can be comma-delimited. */
+  static Set<Imt> readImts(HttpRequest<?> http) {
+    return http.getParameters()
+        .getAll("imt")// TODO where are key strings?
+        .stream()
+        .map(s -> s.split(","))
+        .flatMap(Arrays::stream)
+        .map(Imt::valueOf)
+        .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
   }
 
 }

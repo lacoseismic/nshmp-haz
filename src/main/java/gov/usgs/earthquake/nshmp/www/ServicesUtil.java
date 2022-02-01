@@ -4,33 +4,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
-import com.google.gson.GsonBuilder;
-
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import io.micronaut.http.HttpResponse;
 
 public class ServicesUtil {
-
-  public static HttpResponse<String> handleError(
-      Throwable e,
-      String name,
-      String url) {
-    var msg = e.getMessage() + " (see logs)";
-    var svcResponse = ResponseBody.error()
-        .name(name)
-        .url(url)
-        .request(url)
-        .response(msg)
-        .build();
-    var gson = new GsonBuilder().setPrettyPrinting().create();
-    var response = gson.toJson(svcResponse);
-    e.printStackTrace();
-    return HttpResponse.serverError(response);
-  }
 
   @Deprecated
   public static Hazard calcHazard(
