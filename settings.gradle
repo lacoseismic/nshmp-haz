@@ -20,9 +20,9 @@ git {
     fetch("https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git", {
       name "nshmp-haz-dep--nshm-hi-2021"
       tag "2.0.0"
-    // fetch("https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus.git", {
-    //   name "nshmp-haz-dep--nshm-conus-2018"
-    //   tag "main"
+      // fetch("https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus.git", {
+      //   name "nshmp-haz-dep--nshm-conus-2018"
+      //   tag "main"
     })
   }
 }
