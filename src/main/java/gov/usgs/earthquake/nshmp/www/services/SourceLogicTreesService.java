@@ -1,7 +1,11 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.usgs.earthquake.nshmp.model.Models;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
 
 import io.micronaut.http.HttpRequest;
@@ -15,6 +19,8 @@ import jakarta.inject.Singleton;
  */
 @Singleton
 public class SourceLogicTreesService {
+
+  static final Logger LOG = LoggerFactory.getLogger(SourceLogicTreesService.class);
 
   private static final String NAME = "Source Logic Trees";
 
@@ -32,7 +38,7 @@ public class SourceLogicTreesService {
           .build();
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, url);
+      return ServletUtil.error(LOG, e, NAME, url);
     }
   }
 
@@ -51,7 +57,7 @@ public class SourceLogicTreesService {
           .build();
       return HttpResponse.ok(ServletUtil.GSON.toJson(response));
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, NAME, url);
+      return ServletUtil.error(LOG, e, NAME, url);
     }
   }
 

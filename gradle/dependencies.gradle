@@ -1,6 +1,8 @@
 
 dependencies {
+
   // NSHMP
+  // implementation files('../nshmp-lib/build/libs/nshmp-lib.jar')
   implementation "ghsc:nshmp-lib:${nshmpLibVersion}"
   implementation "ghsc:nshmp-ws-utils:${nshmpWsUtilsVersion}"
 

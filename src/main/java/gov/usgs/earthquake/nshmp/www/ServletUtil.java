@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www;
 
 import static java.lang.Runtime.getRuntime;
 
@@ -14,6 +14,10 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
@@ -27,12 +31,12 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.runtime.event.annotation.EventListener;
 import jakarta.inject.Singleton;
 
@@ -45,11 +49,14 @@ import jakarta.inject.Singleton;
 public class ServletUtil {
 
   public static final Gson GSON;
+  public static final Gson GSON2;
 
-  static final ListeningExecutorService CALC_EXECUTOR;
-  static final ExecutorService TASK_EXECUTOR;
+  public static final ListeningExecutorService CALC_EXECUTOR;
+  public static final ExecutorService TASK_EXECUTOR;
 
-  static final int THREAD_COUNT;
+  public static final int THREAD_COUNT;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServletUtil.class);
 
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
@@ -71,9 +78,20 @@ public class ServletUtil {
         .serializeNulls()
         .setPrettyPrinting()
         .create();
+
+    // removed old IMT and ValueFormat enum serialization
+    GSON2 = new GsonBuilder()
+        .registerTypeAdapter(Double.class, new WsUtils.DoubleSerializer())
+        .registerTypeAdapter(Site.class, new MetaUtil.SiteSerializer())
+        .registerTypeHierarchyAdapter(Path.class, new PathConverter())
+        .disableHtmlEscaping()
+        .serializeNulls()
+        .setPrettyPrinting()
+        .create();
+
   }
 
-  static HazardModel model() {
+  public static HazardModel model() {
     return HAZARD_MODEL;
   }
 
@@ -138,6 +156,49 @@ public class ServletUtil {
         Type type,
         JsonSerializationContext context) {
       return new JsonPrimitive(path.toAbsolutePath().normalize().toString());
+    }
+  }
+
+  public static HttpResponse<String> error(
+      Logger logger,
+      Throwable e,
+      String name,
+      String url) {
+    var msg = e.getMessage() + " (see logs)";
+    var svcResponse = ResponseBody.error()
+        .name(name)
+        .url(url)
+        .request(url)
+        .response(msg)
+        .build();
+    var response = GSON2.toJson(svcResponse);
+    logger.error("Servlet error", e);
+    return HttpResponse.serverError(response);
+  }
+
+  public static String imtShortLabel(Imt imt) {
+    if (imt.equals(Imt.PGA) || imt.equals(Imt.PGV)) {
+      return imt.name();
+    } else if (imt.isSA()) {
+      return imt.period() + " s";
+    }
+    return imt.toString();
+  }
+
+  public static Object serverData(int threads, Stopwatch timer) {
+    return new Server(threads, timer);
+  }
+
+  private static class Server {
+
+    final int threads;
+    final String timer;
+    final String version;
+
+    Server(int threads, Stopwatch timer) {
+      this.threads = threads;
+      this.timer = timer.toString();
+      this.version = "TODO where to get version?";
     }
   }
 

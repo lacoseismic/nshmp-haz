@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -17,13 +20,13 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.RateController;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ServicesUtil.Key;
+import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceQueryData;
+import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceRequestData;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
-import gov.usgs.earthquake.nshmp.www.meta.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.Key;
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceQueryData;
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil.ServiceRequestData;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -37,6 +40,8 @@ import jakarta.inject.Singleton;
  */
 @Singleton
 public final class RateService {
+
+  static final Logger LOG = LoggerFactory.getLogger(RateService.class);
 
   /*
    * Developer notes:
@@ -62,7 +67,7 @@ public final class RateService {
       var json = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(json);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, request.getUri().getPath());
+      return ServletUtil.error(LOG, e, service.name, request.getUri().getPath());
     }
   }
 
@@ -91,7 +96,7 @@ public final class RateService {
       var svcResponse = ServletUtil.GSON.toJson(response);
       return HttpResponse.ok(svcResponse);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, service.name, request.getUri().getPath());
+      return ServletUtil.error(LOG, e, service.name, request.getUri().getPath());
     }
   }
 
@@ -271,7 +276,7 @@ public final class RateService {
     final List<Sequence> data;
 
     ResponseData(ResponseMetadata metadata, EqRate rates, Stopwatch timer) {
-      server = Metadata.serverData(ServletUtil.THREAD_COUNT, timer);
+      server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
     }
@@ -330,7 +335,7 @@ public final class RateService {
     private Usage(Service service, DefaultParameters parameters) {
       description = service.description;
       this.syntax = service.syntax;
-      server = Metadata.serverData(1, Stopwatch.createStarted());
+      server = ServletUtil.serverData(1, Stopwatch.createStarted());
       this.parameters = parameters;
     }
   }

@@ -3,9 +3,9 @@ package gov.usgs.earthquake.nshmp.www;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import com.google.common.io.Resources;
+import org.slf4j.LoggerFactory;
 
-import gov.usgs.earthquake.nshmp.www.services.ServicesUtil;
+import com.google.common.io.Resources;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -40,7 +40,9 @@ public class SwaggerController {
           .collect(Collectors.joining("\n"));
       return HttpResponse.ok(yml);
     } catch (Exception e) {
-      return ServicesUtil.handleError(e, "Swagger", request.getUri().getPath());
+      return ServletUtil.error(
+          LoggerFactory.getLogger("Swagger"),
+          e, "Swagger", request.getUri().toString());
     }
   }
 }
