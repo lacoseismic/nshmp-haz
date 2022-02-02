@@ -57,12 +57,12 @@ public class HazardController {
    * @param vs30 Site Vs30 value in m/s [150..3000]
    * @param truncate Truncate curves at return periods below ~10,000 years
    * @param maxdir Apply max-direction scaling
-   * @param imt Optional IMTs at which to compute hazard. If none are supplied
-   *        then the default set of supported IMTs for the installed model is
-   *        used. Note that a model may not support all the values listed below
-   *        (see disagreggation metadata). Responses for numerous IMT's are
-   *        quite large, on the order of MB. Multiple IMTs may be comma
-   *        delimited, e.g. @code{?imt=PGA,SA0p2,SA1P0}.
+   * @param imt Optional IMTs at which to compute hazard. If none are supplied,
+   *        then the supported set for the installed model is used. Note that a
+   *        model may not support all the values listed below (see
+   *        disagreggation metadata). Responses for numerous IMT's are quite
+   *        large, on the order of MB. Multiple IMTs may be comma delimited,
+   *        e.g. ?imt=PGA,SA0p2,SA1P0.
    *
    */
   @Operation(

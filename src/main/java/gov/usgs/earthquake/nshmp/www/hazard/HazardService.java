@@ -66,7 +66,7 @@ public final class HazardService {
         .request(url)
         .response(usage)
         .build();
-    var json = ServletUtil.GSON.toJson(body);
+    var json = ServletUtil.GSON2.toJson(body);
     return HttpResponse.ok(json);
   }
 
@@ -86,7 +86,7 @@ public final class HazardService {
         .request(request)
         .response(response)
         .build();
-    String json = ServletUtil.GSON.toJson(body);
+    String json = ServletUtil.GSON2.toJson(body);
     return HttpResponse.ok(json);
   }
 
