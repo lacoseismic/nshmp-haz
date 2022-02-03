@@ -27,7 +27,6 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -168,6 +167,7 @@ public final class DisaggService {
         .vs30(request.vs30)
         .build();
 
+    // could just get from HazardService
     CompletableFuture<Hazard> hazFuture = CompletableFuture.supplyAsync(
         () -> HazardCalcs.hazard(
             model, config, site,

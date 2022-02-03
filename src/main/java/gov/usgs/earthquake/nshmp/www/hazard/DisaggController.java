@@ -8,10 +8,10 @@ import java.util.Set;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -43,7 +43,7 @@ public class DisaggController {
   @ApiResponse(
       description = "Disaggregation service metadata",
       responseCode = "200")
-  @Get
+  @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetMetadata(HttpRequest<?> http) {
     try {
       return DisaggService.getMetadata(http);
@@ -74,7 +74,9 @@ public class DisaggController {
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200")
-  @Get(uri = "rp/{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}")
+  @Get(
+      uri = "rp/{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
+      produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggReturnPeriod(
       HttpRequest<?> http,
       @Schema(
@@ -117,7 +119,9 @@ public class DisaggController {
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200")
-  @Get(uri = "iml/{longitude}/{latitude}/{vs30}")
+  @Get(
+      uri = "iml/{longitude}/{latitude}/{vs30}",
+      produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggIml(
       HttpRequest<?> http,
       @Schema(

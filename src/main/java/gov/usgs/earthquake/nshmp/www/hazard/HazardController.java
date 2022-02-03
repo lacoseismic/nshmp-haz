@@ -5,10 +5,10 @@ import java.util.Set;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -40,7 +40,7 @@ public class HazardController {
   @ApiResponse(
       description = "Hazard service metadata",
       responseCode = "200")
-  @Get
+  @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetMetadata(HttpRequest<?> http) {
     try {
       return HazardService.getMetadata(http);
@@ -72,7 +72,9 @@ public class HazardController {
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200")
-  @Get(uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir,imt}")
+  @Get(
+      uri = "/{longitude}/{latitude}/{vs30}{?truncate,maxdir,imt}",
+      produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> http,
       @Schema(

@@ -49,7 +49,8 @@ public class HazardCalc {
    * At a minimum, the path to a model directory and a file of site(s) at which
    * to perform calculations must be specified. Under the 2-argument scenario,
    * model initialization and calculation configuration settings are drawn from
-   * the default configuration. Sites may be defined in a CSV or GeoJSON file.
+   * the default configuration for the model. Sites may be defined in a CSV or
+   * GeoJSON file.
    *
    * <p>To override any default calculation configuration settings, also supply
    * the path to a configuration file as a third argument.
@@ -88,9 +89,10 @@ public class HazardCalc {
     Logging.init();
     Logger log = Logger.getLogger(HazardCalc.class.getName());
     Path tmpLog = createTempLog();
+    String tmpLogName = checkNotNull(tmpLog.getFileName()).toString();
 
     try {
-      FileHandler fh = new FileHandler(checkNotNull(tmpLog.getFileName()).toString());
+      FileHandler fh = new FileHandler(tmpLogName);
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
@@ -98,6 +100,7 @@ public class HazardCalc {
       Path modelPath = Paths.get(args[0]);
       HazardModel model = HazardModel.load(modelPath);
 
+      /* Calculation configuration, possibly user supplied. */
       CalcConfig config = model.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
