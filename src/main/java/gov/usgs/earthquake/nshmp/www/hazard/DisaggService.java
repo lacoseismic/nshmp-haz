@@ -168,6 +168,7 @@ public final class DisaggService {
         .vs30(request.vs30)
         .build();
 
+    // could just get from HazardService
     CompletableFuture<Hazard> hazFuture = CompletableFuture.supplyAsync(
         () -> HazardCalcs.hazard(
             model, config, site,

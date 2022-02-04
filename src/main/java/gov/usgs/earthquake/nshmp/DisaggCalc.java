@@ -1,21 +1,39 @@
 package gov.usgs.earthquake.nshmp;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Disaggregation;
@@ -25,24 +43,45 @@ import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
+import gov.usgs.earthquake.nshmp.data.Interpolator;
+import gov.usgs.earthquake.nshmp.data.XySequence;
+import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 /**
- * Disaggregate probabilisitic seismic hazard at a return period of interest.
+ * Disaggregate probabilistic seismic hazard at a return period of interest or
+ * at specific ground motion levels.
  *
  * @author U.S. Geological Survey
  */
 public class DisaggCalc {
 
+  private static final Gson GSON = new GsonBuilder()
+      .serializeSpecialFloatingPointValues()
+      .serializeNulls()
+      .create();
+
   /**
    * Entry point for the disaggregation of probabilisitic seismic hazard.
    *
-   * <p>Disaggregating siesmic hazard is largeley identical to a hazard
-   * calculation except that a return period (in years) must be supplied as an
-   * additional argument after the 'site(s)' argument. See the
-   * {@link HazardCalc#main(String[]) HazardCalc program} for more information
-   * on required parameters.
+   * <p>Two approaches to disaggregation of seimic hazard are possible with this
+   * application. In the first approach, the 'sites' file is the same as it
+   * would be for a hazard calculation, and disaggregation is performed for all
+   * configured intensity measures at the 'returnPeriod' (in years) of interest
+   * specified in the config file (default = 2475 years, equivalent to 2% in 50
+   * years).
+   *
+   * <p>In the second approach, the sites file includes columns for each
+   * spectral period or other intensity measure and the target ground motion
+   * level to disaggregate for each. For example, the target values could be a
+   * risk-targeted spectral accelerations, or they could be ground motion levels
+   * precomputed for a specific return period.
+   *
+   * <p>Note that the first approach will do the full hazard calculation and
+   * compute hazard curves from which the target disaggregation ground motion
+   * level will be determined. In the second approach, the ground motion targets
+   * are known and the time consuming hazard curve calculation can be avoided.
    *
    * <p>Please refer to the nshmp-haz <a
    * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs">
@@ -78,9 +117,10 @@ public class DisaggCalc {
     Logging.init();
     Logger log = Logger.getLogger(DisaggCalc.class.getName());
     Path tmpLog = HazardCalc.createTempLog();
+    String tmpLogName = checkNotNull(tmpLog.getFileName()).toString();
 
     try {
-      FileHandler fh = new FileHandler(Preconditions.checkNotNull(tmpLog.getFileName()).toString());
+      FileHandler fh = new FileHandler(tmpLogName);
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
@@ -88,6 +128,14 @@ public class DisaggCalc {
       Path modelPath = Paths.get(args[0]);
       HazardModel model = HazardModel.load(modelPath);
 
+      log.info("");
+      Path siteFile = Paths.get(args[1]);
+      log.info("Site file: " + siteFile.toAbsolutePath().normalize());
+      checkArgument(
+          siteFile.toString().endsWith(".csv"),
+          "Only *.csv site files supported");
+
+      /* Calculation configuration, possibly user supplied. */
       CalcConfig config = model.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
@@ -97,13 +145,64 @@ public class DisaggCalc {
       }
       log.info(config.toString());
 
-      log.info("");
-      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
-      log.info("Sites: " + Sites.toString(sites));
+      /* Column header data. */
+      Set<String> allColumns = columns(siteFile);
+      Set<String> siteColumns = new HashSet<>(allColumns);
+      siteColumns.retainAll(SITE_KEYS);
+      int colsToSkip = siteColumns.size(); // needed?
+      log.info("Site data columns: " + colsToSkip);
 
-      double returnPeriod = config.disagg.returnPeriod;
+      /* Sites */
+      List<Site> sites = Sites.fromCsv(siteFile, config, model.siteData());
+      log.info("Sites: " + sites.size());
 
-      Path out = calc(model, config, sites, returnPeriod, log);
+      Set<Imt> modelImts = model.config().hazard.imts;
+
+      /*
+       * If no IML columns present, disaggregate at IMTs and return period from
+       * config, otherwise disaggregate at target IMLs are present.
+       *
+       * We've removed support for gejson site files at present.
+       */
+      Path out;
+      if (siteColumns.size() == allColumns.size()) {
+        checkArgument(
+            modelImts.containsAll(config.hazard.imts),
+            "Config specifies IMTs not supported by model");
+
+        // List<Imt> imts = config.imts;
+
+        // Path out = calc(model, config, sites, imtImlMaps, log);
+
+        double returnPeriod = config.disagg.returnPeriod;
+
+        out = calcRp(model, config, sites, returnPeriod, log);
+
+      } else {
+
+        List<Imt> imts = readImtList(siteFile, colsToSkip);
+        checkArgument(
+            modelImts.containsAll(imts),
+            "Sites file contains IMTs not supported by model");
+        List<Map<Imt, Double>> imls = readSpectra(siteFile, imts, colsToSkip);
+        checkArgument(
+            sites.size() == imls.size(),
+            "Sites and spectra lists different sizes");
+        log.info("Spectra: " + imls.size()); // 1:1 with sites
+
+        out = calcIml(model, config, sites, imls, log);
+      }
+
+      // List<Map<Imt, Double>> imtImlMaps = readSpectra(siteFile, imts,
+      // colsToSkip);
+      // log.info("Spectra: " + imtImlMaps.size());
+
+      // checkArgument(sites.size() == imtImlMaps.size(), "Sites and spectra
+      // lists different sizes");
+      // Spectra should be checked against IMTs supported by model GMMs
+
+      // Path out = calc(model, config, sites, imls, log);
+
       log.info(PROGRAM + ": finished");
 
       /* Transfer log and write config, windows requires fh.close() */
@@ -118,6 +217,58 @@ public class DisaggCalc {
     }
   }
 
+  private static final Set<String> SITE_KEYS = ImmutableSet.of(
+      Site.Key.NAME,
+      Site.Key.LAT,
+      Site.Key.LON,
+      Site.Key.VS30,
+      Site.Key.VS_INF,
+      Site.Key.Z1P0,
+      Site.Key.Z2P5);
+
+  private static Set<String> columns(Path path) throws IOException {
+    String header = Files.lines(path).findFirst().get();
+    return Arrays.stream(header.split(","))
+        .map(String::trim)
+        .collect(toSet());
+  }
+
+  private static List<Imt> readImtList(Path path, int colsToSkip) throws IOException {
+    String header = Files.lines(path).findFirst().get();
+    return Splitter.on(',')
+        .trimResults()
+        .splitToList(header)
+        .stream()
+        .skip(colsToSkip)
+        .map(Imt::valueOf)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  private static List<Map<Imt, Double>> readSpectra(Path path, List<Imt> imts, int colsToSkip)
+      throws IOException {
+    return Files.lines(path)
+        .skip(1)
+        .map(s -> readSpectra(imts, s, colsToSkip))
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  private static Map<Imt, Double> readSpectra(List<Imt> imts, String line, int colsToSkip) {
+
+    double[] imls = Splitter.on(',')
+        .trimResults()
+        .splitToList(line)
+        .stream()
+        .skip(colsToSkip)
+        .mapToDouble(Double::valueOf)
+        .toArray();
+
+    EnumMap<Imt, Double> imtImlMap = new EnumMap<>(Imt.class);
+    for (int i = 0; i < imts.size(); i++) {
+      imtImlMap.put(imts.get(i), imls[i]);
+    }
+    return imtImlMap;
+  }
+
   /*
    * Compute hazard curves using the supplied model, config, and sites. Method
    * returns the path to the directory where results were written.
@@ -126,7 +277,7 @@ public class DisaggCalc {
    * HazardCalc.calc() that will trigger disaggregations if the value is
    * present.
    */
-  private static Path calc(
+  private static Path calcRp(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
@@ -143,24 +294,250 @@ public class DisaggCalc {
       log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     }
 
-    log.info(PROGRAM + ": calculating ...");
+    log.info(PROGRAM + " (return period): calculating ...");
 
     HazardExport handler = HazardExport.create(model, config, sites, log);
+    Path disaggDir = handler.outputDir().resolve("disagg");
+    Files.createDirectory(disaggDir);
 
-    for (Site site : sites) {
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
+
+    for (int i = 0; i < sites.size(); i++) {
+      Site site = sites.get(i);
+
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
-      Disaggregation disagg = HazardCalcs.disaggReturnPeriod(hazard, returnPeriod, exec);
-      handler.write(hazard, Optional.of(disagg));
-      log.fine(hazard.toString());
+
+      Map<Imt, Double> imls = imlsForReturnPeriod(hazard, returnPeriod);
+
+      Disaggregation disagg = Disaggregation.atImls(hazard, imls, exec);
+
+      // needs to handle disagg same way as iml
+      // handler.write(hazard, Optional.of(disagg));
+      handler.write(hazard, Optional.empty());
+
+      Response response = new Response.Builder()
+          .site(site)
+          .returnPeriod(returnPeriod)
+          .imls(imls)
+          .disagg(disagg)
+          .build();
+
+      String filename = disaggFilename(site);
+      Path resultPath = disaggDir.resolve(filename);
+      Writer writer = Files.newBufferedWriter(resultPath);
+      GSON.toJson(response, writer);
+      writer.close();
+
+      if (i % logInterval == 0) {
+        log.info(String.format(
+            "     %s of %s sites completed in %s",
+            i + 1, sites.size(), stopwatch));
+      }
     }
     handler.expire();
 
     log.info(String.format(
-        PROGRAM + ": %s sites completed in %s",
+        PROGRAM + " (return period): %s sites completed in %s",
         handler.resultCount(), handler.elapsedTime()));
 
     exec.shutdown();
     return handler.outputDir();
+  }
+
+  /* Hazard curves are already in log-x space. */
+  static final Interpolator IML_INTERPOLATER = Interpolator.builder()
+      .logy()
+      .decreasingY()
+      .build();
+
+  // this should be in a factory
+  private static Map<Imt, Double> imlsForReturnPeriod(
+      Hazard hazard,
+      double returnPeriod) {
+
+    double rate = 1.0 / returnPeriod;
+    Map<Imt, Double> imls = new EnumMap<>(Imt.class);
+    for (Entry<Imt, XySequence> entry : hazard.curves().entrySet()) {
+      double iml = IML_INTERPOLATER.findX(entry.getValue(), rate);
+      // remove exp below by transforming disagg-epsilon to log earlier
+      imls.put(entry.getKey(), Math.exp(iml));
+    }
+    return imls;
+  }
+
+  /*
+   * Compute hazard curves using the supplied model, config, and sites. Method
+   * returns the path to the directory where results were written.
+   *
+   * TODO consider refactoring to supply an Optional<Double> return period to
+   * HazardCalc.calc() that will trigger disaggregations if the value is
+   * present.
+   */
+  private static Path calcIml(
+      HazardModel model,
+      CalcConfig config,
+      List<Site> sites,
+      List<Map<Imt, Double>> imls,
+      Logger log) throws IOException {
+
+    ExecutorService exec = null;
+    ThreadCount threadCount = config.performance.threadCount;
+    if (threadCount == ThreadCount.ONE) {
+      exec = MoreExecutors.newDirectExecutorService();
+      log.info("Threads: Running on calling thread");
+    } else {
+      exec = Executors.newFixedThreadPool(threadCount.value());
+      log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
+    }
+
+    log.info(PROGRAM + " (IML): calculating ...");
+    Path outDir = createOutputDir(config.output.directory);
+    Path disaggDir = outDir.resolve("disagg");
+    Files.createDirectory(disaggDir);
+
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
+
+    for (int i = 0; i < sites.size(); i++) {
+
+      Site site = sites.get(i);
+      Map<Imt, Double> siteImls = imls.get(i);
+
+      Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
+      Disaggregation disagg = Disaggregation.atImls(hazard, siteImls, exec);
+
+      Response response = new Response.Builder()
+          .site(site)
+          .imls(siteImls)
+          .disagg(disagg)
+          .build();
+
+      String filename = disaggFilename(site);
+      Path resultPath = disaggDir.resolve(filename);
+      Writer writer = Files.newBufferedWriter(resultPath);
+      GSON.toJson(response, writer);
+      writer.close();
+
+      if (i % logInterval == 0) {
+        log.info(String.format(
+            "     %s of %s sites completed in %s",
+            i + 1, sites.size(), stopwatch));
+      }
+    }
+
+    log.info(String.format(
+        PROGRAM + " (IML): %s sites completed in %s",
+        sites.size(), stopwatch));
+
+    exec.shutdown();
+    return outDir;
+  }
+
+  private static final class Response {
+
+    final Response.Metadata metadata;
+    final Object data;
+
+    Response(Response.Metadata metadata, Object data) {
+      this.metadata = metadata;
+      this.data = data;
+    }
+
+    static final class Metadata {
+
+      final String name;
+      final double longitude;
+      final double latitude;
+      final double vs30;
+      final Double returnPeriod;
+      final Map<String, Double> imls;
+
+      Metadata(Site site, Double returnPeriod, Map<Imt, Double> imls) {
+        this.name = site.name();
+        this.longitude = site.location().longitude;
+        this.latitude = site.location().latitude;
+        this.vs30 = site.vs30();
+        this.returnPeriod = returnPeriod;
+        this.imls = imls.entrySet().stream()
+            .collect(Collectors.toMap(
+                e -> e.getKey().name(),
+                Entry::getValue,
+                (x, y) -> y,
+                () -> new LinkedHashMap<String, Double>()));
+      }
+    }
+
+    static final class Builder {
+
+      Disaggregation disagg;
+      Site site;
+      Double returnPeriod; // optional
+      Map<Imt, Double> imls;
+
+      Builder imls(Map<Imt, Double> imls) {
+        this.imls = imls;
+        return this;
+      }
+
+      Builder returnPeriod(double returnPeriod) {
+        this.returnPeriod = returnPeriod;
+        return this;
+      }
+
+      Builder site(Site site) {
+        this.site = site;
+        return this;
+      }
+
+      Builder disagg(Disaggregation disagg) {
+        this.disagg = disagg;
+        return this;
+      }
+
+      Response build() {
+
+        List<ImtDisagg> disaggs = imls.keySet().stream()
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .collect(toList());
+
+        return new Response(
+            new Response.Metadata(site, returnPeriod, imls),
+            disaggs);
+      }
+    }
+  }
+
+  // this could be consolidated with DisaggService
+  private static final class ImtDisagg {
+    final String imt;
+    final Object data;
+
+    ImtDisagg(Imt imt, Object data) {
+      this.imt = imt.name();
+      this.data = data;
+    }
+  }
+
+  // duplicate of that in HazardExport
+  private static Path createOutputDir(Path dir) throws IOException {
+    int i = 1;
+    Path incrementedDir = dir;
+    while (Files.exists(incrementedDir)) {
+      incrementedDir = incrementedDir.resolveSibling(dir.getFileName() + "-" + i);
+      i++;
+    }
+    Files.createDirectories(incrementedDir);
+    return incrementedDir;
+  }
+
+  private static String disaggFilename(Site site) {
+    return site.name().equals(Site.NO_NAME)
+        ? String.format(
+            "%.2f,%.2f.json",
+            site.location().longitude,
+            site.location().latitude)
+        : site.name() + ".json";
   }
 
   private static final String PROGRAM = DisaggCalc.class.getSimpleName();
@@ -181,9 +558,10 @@ public class DisaggCalc {
       .append("Where:").append(NEWLINE)
       .append("  'model' is a model directory")
       .append(NEWLINE)
-      .append("  'sites' is a *.csv file or *.geojson file of sites and data")
+      .append(
+          "  'sites' is a *.csv file of locations, site parameters and (optional) target ground motion levels")
       .append(NEWLINE)
-      .append("     - site class and basin terms are optional")
+      .append("     - Header: lon,lat,PGA,SA0P01,SA0P02,...")
       .append(NEWLINE)
       .append("  'config' (optional) supplies a calculation configuration")
       .append(NEWLINE)
@@ -191,7 +569,6 @@ public class DisaggCalc {
       .append("For more information, see:").append(NEWLINE)
       .append("  ").append(USAGE_URL1).append(NEWLINE)
       .append("  ").append(USAGE_URL2).append(NEWLINE)
-      .append(NEWLINE)
       .toString();
 
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -49,7 +50,8 @@ public class HazardCalc {
    * At a minimum, the path to a model directory and a file of site(s) at which
    * to perform calculations must be specified. Under the 2-argument scenario,
    * model initialization and calculation configuration settings are drawn from
-   * the default configuration. Sites may be defined in a CSV or GeoJSON file.
+   * the default configuration for the model. Sites may be defined in a CSV or
+   * GeoJSON file.
    *
    * <p>To override any default calculation configuration settings, also supply
    * the path to a configuration file as a third argument.
@@ -88,9 +90,10 @@ public class HazardCalc {
     Logging.init();
     Logger log = Logger.getLogger(HazardCalc.class.getName());
     Path tmpLog = createTempLog();
+    String tmpLogName = checkNotNull(tmpLog.getFileName()).toString();
 
     try {
-      FileHandler fh = new FileHandler(checkNotNull(tmpLog.getFileName()).toString());
+      FileHandler fh = new FileHandler(tmpLogName);
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
@@ -98,6 +101,7 @@ public class HazardCalc {
       Path modelPath = Paths.get(args[0]);
       HazardModel model = HazardModel.load(modelPath);
 
+      /* Calculation configuration, possibly user supplied. */
       CalcConfig config = model.config();
       if (argCount == 3) {
         Path userConfigPath = Paths.get(args[2]);
@@ -172,10 +176,19 @@ public class HazardCalc {
     CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
     WriteTask.Builder writeTask = new WriteTask.Builder(handler);
 
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
+
     Future<Path> out = null;
-    for (Site site : sites) {
+    for (int i = 0; i < sites.size(); i++) {
+      Site site = sites.get(i);
       Hazard hazard = calcTask.withSite(site).call();
       out = exec.submit(writeTask.withResult(hazard));
+      if (i % logInterval == 0) {
+        log.info(String.format(
+            "     %s of %s sites completed in %s",
+            i + 1, sites.size(), stopwatch));
+      }
     }
     /* Block shutdown until last task is returned. */
     Path outputDir = out.get();
