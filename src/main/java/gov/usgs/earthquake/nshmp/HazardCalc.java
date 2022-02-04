@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -175,10 +176,19 @@ public class HazardCalc {
     CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
     WriteTask.Builder writeTask = new WriteTask.Builder(handler);
 
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
+
     Future<Path> out = null;
-    for (Site site : sites) {
+    for (int i = 0; i < sites.size(); i++) {
+      Site site = sites.get(i);
       Hazard hazard = calcTask.withSite(site).call();
       out = exec.submit(writeTask.withResult(hazard));
+      if (i % logInterval == 0) {
+        log.info(String.format(
+            "     %s of %s sites completed in %s",
+            i + 1, sites.size(), stopwatch));
+      }
     }
     /* Block shutdown until last task is returned. */
     Path outputDir = out.get();

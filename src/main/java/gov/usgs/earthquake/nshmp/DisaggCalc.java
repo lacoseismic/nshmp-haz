@@ -301,7 +301,7 @@ public class DisaggCalc {
     Files.createDirectory(disaggDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
-    int logInterval = sites.size() > 1000 ? 100 : sites.size() > 100 ? 10 : 1;
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
 
     for (int i = 0; i < sites.size(); i++) {
       Site site = sites.get(i);
@@ -397,7 +397,7 @@ public class DisaggCalc {
     Files.createDirectory(disaggDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
-    int logInterval = sites.size() > 1000 ? 100 : sites.size() > 100 ? 10 : 1;
+    int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
 
     for (int i = 0; i < sites.size(); i++) {
 
