@@ -166,16 +166,11 @@ public class DisaggCalc {
        */
       Path out;
       if (siteColumns.size() == allColumns.size()) {
+
         checkArgument(
             modelImts.containsAll(config.hazard.imts),
             "Config specifies IMTs not supported by model");
-
-        // List<Imt> imts = config.imts;
-
-        // Path out = calc(model, config, sites, imtImlMaps, log);
-
         double returnPeriod = config.disagg.returnPeriod;
-
         out = calcRp(model, config, sites, returnPeriod, log);
 
       } else {
@@ -189,19 +184,9 @@ public class DisaggCalc {
             sites.size() == imls.size(),
             "Sites and spectra lists different sizes");
         log.info("Spectra: " + imls.size()); // 1:1 with sites
-
         out = calcIml(model, config, sites, imls, log);
+
       }
-
-      // List<Map<Imt, Double>> imtImlMaps = readSpectra(siteFile, imts,
-      // colsToSkip);
-      // log.info("Spectra: " + imtImlMaps.size());
-
-      // checkArgument(sites.size() == imtImlMaps.size(), "Sites and spectra
-      // lists different sizes");
-      // Spectra should be checked against IMTs supported by model GMMs
-
-      // Path out = calc(model, config, sites, imls, log);
 
       log.info(PROGRAM + ": finished");
 
@@ -346,13 +331,13 @@ public class DisaggCalc {
   }
 
   /* Hazard curves are already in log-x space. */
-  static final Interpolator IML_INTERPOLATER = Interpolator.builder()
+  private static final Interpolator IML_INTERPOLATER = Interpolator.builder()
       .logy()
       .decreasingY()
       .build();
 
-  // this should be in a factory
-  private static Map<Imt, Double> imlsForReturnPeriod(
+  /** Compute the return period intercepts from a hazard result. */
+  public static Map<Imt, Double> imlsForReturnPeriod(
       Hazard hazard,
       double returnPeriod) {
 
@@ -360,7 +345,6 @@ public class DisaggCalc {
     Map<Imt, Double> imls = new EnumMap<>(Imt.class);
     for (Entry<Imt, XySequence> entry : hazard.curves().entrySet()) {
       double iml = IML_INTERPOLATER.findX(entry.getValue(), rate);
-      // remove exp below by transforming disagg-epsilon to log earlier
       imls.put(entry.getKey(), Math.exp(iml));
     }
     return imls;

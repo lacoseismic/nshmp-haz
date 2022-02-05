@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -38,7 +39,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -155,7 +155,7 @@ public final class HazardService {
     }
   }
 
-  public static final class Request {
+  static final class Request {
 
     final transient HttpRequest<?> http;
     final double longitude;
@@ -347,12 +347,19 @@ public final class HazardService {
 
   /* Read the 'imt' query values; can be comma-delimited. */
   static Set<Imt> readImts(HttpRequest<?> http) {
-    return http.getParameters()
-        .getAll("imt")// TODO where are key strings?
-        .stream()
+    return http.getParameters().getAll("imt").stream()
         .map(s -> s.split(","))
         .flatMap(Arrays::stream)
         .map(Imt::valueOf)
         .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
+  }
+
+  /* Read the 'imt' query values; can be comma-delimited. */
+  static Set<DataType> readDataTypes(HttpRequest<?> http) {
+    return http.getParameters().getAll("out").stream()
+        .map(s -> s.split(","))
+        .flatMap(Arrays::stream)
+        .map(DataType::valueOf)
+        .collect(toCollection(() -> EnumSet.noneOf(DataType.class)));
   }
 }

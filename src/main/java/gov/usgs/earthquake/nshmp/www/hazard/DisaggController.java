@@ -5,10 +5,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Map;
 import java.util.Set;
 
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -92,14 +92,20 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double returnPeriod,
-      @Schema() @QueryValue @Nullable Set<Imt> imt) {
+      @QueryValue @Nullable Set<Imt> imt,
+      @Schema(allowableValues = {
+          "DISAGG_DATA",
+          "GMM",
+          "SOURCE" }) @QueryValue @Nullable Set<DataType> out) {
     try {
       Set<Imt> imts = HazardService.readImts(http);
+      Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
           http,
           longitude, latitude, vs30,
           returnPeriod,
-          imts);
+          imts,
+          dataTypes);
       return DisaggService.getDisaggRp(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -113,6 +119,7 @@ public class DisaggController {
    * @param longitude Longitude in the range [-360..360]°.
    * @param latitude Latitude in decimal degrees [-90..90]°.
    * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param out The data types to output
    */
   @Operation(
       summary = "Disaggregate hazard at specified IMLs",
@@ -133,7 +140,11 @@ public class DisaggController {
           maximum = "90") @PathVariable double latitude,
       @Schema(
           minimum = "150",
-          maximum = "3000") @PathVariable double vs30) {
+          maximum = "3000") @PathVariable double vs30,
+      @Schema(allowableValues = {
+          "DISAGG_DATA",
+          "GMM",
+          "SOURCE" }) @QueryValue @Nullable Set<DataType> out) {
 
     /*
      * Developer notes:
@@ -146,10 +157,12 @@ public class DisaggController {
     try {
       Map<Imt, Double> imtImlMap = http.getParameters().asMap(Imt.class, Double.class);
       checkArgument(!imtImlMap.isEmpty(), "No IMLs supplied");
+      Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestIml request = new DisaggService.RequestIml(
           http,
           longitude, latitude, vs30,
-          imtImlMap);
+          imtImlMap,
+          dataTypes);
       return DisaggService.getDisaggIml(request);
     } catch (Exception e) {
       return ServletUtil.error(
