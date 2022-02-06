@@ -1,5 +1,8 @@
 package gov.usgs.earthquake.nshmp.www.hazard;
 
+import static gov.usgs.earthquake.nshmp.calc.DataType.DISAGG_DATA;
+import static gov.usgs.earthquake.nshmp.calc.DataType.GMM;
+import static gov.usgs.earthquake.nshmp.calc.DataType.SOURCE;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
@@ -15,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Range;
 
+import gov.usgs.earthquake.nshmp.DisaggCalc;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.calc.Disaggregation;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
@@ -54,8 +59,15 @@ public final class DisaggService {
   private static Range<Double> rpRange = Range.closed(1.0, 20000.0);
   private static Range<Double> imlRange = Range.closed(0.0001, 8.0);
 
+  /* For Swagger selctions */
+  enum DisaggDataType {
+    GMM,
+    SOURCE,
+    DISAGG_DATA;
+  }
+
   /** HazardController.doGetMetadata() handler. */
-  public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
+  static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
     var usage = new Metadata(ServletUtil.model());
     var response = ResponseBody.usage()
@@ -69,7 +81,7 @@ public final class DisaggService {
   }
 
   /** HazardController.doGetDisaggIml() handler. */
-  public static HttpResponse<String> getDisaggIml(RequestIml request)
+  static HttpResponse<String> getDisaggIml(RequestIml request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
     var disagg = calcDisaggIml(request);
@@ -89,7 +101,7 @@ public final class DisaggService {
   }
 
   /** HazardController.doGetDisaggRp() handler. */
-  public static HttpResponse<String> getDisaggRp(RequestRp request)
+  static HttpResponse<String> getDisaggRp(RequestRp request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
     var disagg = calcDisaggRp(request);
@@ -116,7 +128,7 @@ public final class DisaggService {
    *
    */
 
-  static Disaggregation calcDisaggIml(RequestIml request)
+  private static Disaggregation calcDisaggIml(RequestIml request)
       throws InterruptedException, ExecutionException {
 
     HazardModel model = ServletUtil.model();
@@ -124,6 +136,7 @@ public final class DisaggService {
     // modify config to include service endpoint arguments
     CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(request.imls.keySet())
+        // .dataTypes(request.dataTypes)
         .build();
 
     // TODO this needs to pick up SiteData, centralize
@@ -152,7 +165,7 @@ public final class DisaggService {
     return disagg;
   }
 
-  static Disaggregation calcDisaggRp(RequestRp request)
+  private static Disaggregation calcDisaggRp(RequestRp request)
       throws InterruptedException, ExecutionException {
 
     HazardModel model = ServletUtil.model();
@@ -160,6 +173,7 @@ public final class DisaggService {
     // modify config to include service endpoint arguments
     CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(request.imts)
+        // .dataTypes(request.dataTypes)
         .build();
 
     // TODO this needs to pick up SiteData, centralize
@@ -176,10 +190,13 @@ public final class DisaggService {
         ServletUtil.TASK_EXECUTOR);
 
     Hazard hazard = hazFuture.get();
+    Map<Imt, Double> imls = DisaggCalc.imlsForReturnPeriod(
+        hazard,
+        request.returnPeriod);
 
     CompletableFuture<Disaggregation> disaggfuture = CompletableFuture.supplyAsync(
-        () -> Disaggregation.atReturnPeriod(
-            hazard, request.returnPeriod,
+        () -> Disaggregation.atImls(
+            hazard, imls,
             ServletUtil.CALC_EXECUTOR),
         ServletUtil.TASK_EXECUTOR);
 
@@ -195,19 +212,22 @@ public final class DisaggService {
     final double latitude;
     final double vs30;
     final Map<Imt, Double> imls;
+    final Set<DataType> dataTypes;
 
     RequestIml(
         HttpRequest<?> http,
         double longitude,
         double latitude,
         double vs30,
-        Map<Imt, Double> imls) {
+        Map<Imt, Double> imls,
+        Set<DataType> dataTypes) {
 
       this.http = http;
       this.longitude = longitude;
       this.latitude = latitude;
       this.vs30 = vs30;
       this.imls = imls;
+      this.dataTypes = dataTypes;
     }
   }
 
@@ -219,6 +239,7 @@ public final class DisaggService {
     final double vs30;
     final double returnPeriod;
     final Set<Imt> imts;
+    final Set<DataType> dataTypes;
 
     RequestRp(
         HttpRequest<?> http,
@@ -226,7 +247,8 @@ public final class DisaggService {
         double latitude,
         double vs30,
         double returnPeriod,
-        Set<Imt> imts) {
+        Set<Imt> imts,
+        Set<DataType> dataTypes) {
 
       this.http = http;
       this.longitude = longitude;
@@ -236,6 +258,7 @@ public final class DisaggService {
       this.imts = imts.isEmpty()
           ? ServletUtil.model().config().hazard.imts
           : imts;
+      this.dataTypes = dataTypes;
     }
   }
 
@@ -267,6 +290,7 @@ public final class DisaggService {
       Optional<RequestRp> requestRp = Optional.empty();
       Optional<RequestIml> requestIml = Optional.empty();
       Disaggregation disagg;
+      CalcConfig config;
 
       Builder timer(Stopwatch timer) {
         this.timer = timer;
@@ -293,8 +317,16 @@ public final class DisaggService {
             ? requestRp.orElseThrow().imts
             : requestIml.orElseThrow().imls.keySet();
 
+        Set<DataType> dataTypes = requestRp.isPresent()
+            ? requestRp.orElseThrow().dataTypes
+            : requestIml.orElseThrow().dataTypes;
+
         List<ImtDisagg> disaggs = imts.stream()
-            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(
+                imt,
+                dataTypes.contains(GMM),
+                dataTypes.contains(SOURCE),
+                dataTypes.contains(DISAGG_DATA))))
             .collect(toList());
 
         Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);

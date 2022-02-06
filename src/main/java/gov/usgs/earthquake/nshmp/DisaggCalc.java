@@ -3,6 +3,9 @@ package gov.usgs.earthquake.nshmp;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
+import static gov.usgs.earthquake.nshmp.calc.DataType.DISAGG_DATA;
+import static gov.usgs.earthquake.nshmp.calc.DataType.GMM;
+import static gov.usgs.earthquake.nshmp.calc.DataType.SOURCE;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -166,16 +169,11 @@ public class DisaggCalc {
        */
       Path out;
       if (siteColumns.size() == allColumns.size()) {
+
         checkArgument(
             modelImts.containsAll(config.hazard.imts),
             "Config specifies IMTs not supported by model");
-
-        // List<Imt> imts = config.imts;
-
-        // Path out = calc(model, config, sites, imtImlMaps, log);
-
         double returnPeriod = config.disagg.returnPeriod;
-
         out = calcRp(model, config, sites, returnPeriod, log);
 
       } else {
@@ -189,19 +187,9 @@ public class DisaggCalc {
             sites.size() == imls.size(),
             "Sites and spectra lists different sizes");
         log.info("Spectra: " + imls.size()); // 1:1 with sites
-
         out = calcIml(model, config, sites, imls, log);
+
       }
-
-      // List<Map<Imt, Double>> imtImlMaps = readSpectra(siteFile, imts,
-      // colsToSkip);
-      // log.info("Spectra: " + imtImlMaps.size());
-
-      // checkArgument(sites.size() == imtImlMaps.size(), "Sites and spectra
-      // lists different sizes");
-      // Spectra should be checked against IMTs supported by model GMMs
-
-      // Path out = calc(model, config, sites, imls, log);
 
       log.info(PROGRAM + ": finished");
 
@@ -307,16 +295,13 @@ public class DisaggCalc {
       Site site = sites.get(i);
 
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
+      handler.write(hazard);
 
       Map<Imt, Double> imls = imlsForReturnPeriod(hazard, returnPeriod);
-
       Disaggregation disagg = Disaggregation.atImls(hazard, imls, exec);
 
-      // needs to handle disagg same way as iml
-      // handler.write(hazard, Optional.of(disagg));
-      handler.write(hazard, Optional.empty());
-
       Response response = new Response.Builder()
+          .config(config)
           .site(site)
           .returnPeriod(returnPeriod)
           .imls(imls)
@@ -346,13 +331,13 @@ public class DisaggCalc {
   }
 
   /* Hazard curves are already in log-x space. */
-  static final Interpolator IML_INTERPOLATER = Interpolator.builder()
+  private static final Interpolator IML_INTERPOLATER = Interpolator.builder()
       .logy()
       .decreasingY()
       .build();
 
-  // this should be in a factory
-  private static Map<Imt, Double> imlsForReturnPeriod(
+  /** Compute the return period intercepts from a hazard result. */
+  public static Map<Imt, Double> imlsForReturnPeriod(
       Hazard hazard,
       double returnPeriod) {
 
@@ -360,7 +345,6 @@ public class DisaggCalc {
     Map<Imt, Double> imls = new EnumMap<>(Imt.class);
     for (Entry<Imt, XySequence> entry : hazard.curves().entrySet()) {
       double iml = IML_INTERPOLATER.findX(entry.getValue(), rate);
-      // remove exp below by transforming disagg-epsilon to log earlier
       imls.put(entry.getKey(), Math.exp(iml));
     }
     return imls;
@@ -408,6 +392,7 @@ public class DisaggCalc {
       Disaggregation disagg = Disaggregation.atImls(hazard, siteImls, exec);
 
       Response response = new Response.Builder()
+          .config(config)
           .site(site)
           .imls(siteImls)
           .disagg(disagg)
@@ -470,10 +455,11 @@ public class DisaggCalc {
 
     static final class Builder {
 
-      Disaggregation disagg;
       Site site;
+      Disaggregation disagg;
       Double returnPeriod; // optional
       Map<Imt, Double> imls;
+      CalcConfig config;
 
       Builder imls(Map<Imt, Double> imls) {
         this.imls = imls;
@@ -495,10 +481,20 @@ public class DisaggCalc {
         return this;
       }
 
+      Builder config(CalcConfig config) {
+        this.config = config;
+        return this;
+      }
+
       Response build() {
 
+        // default toJson(imt, false, false, false)
         List<ImtDisagg> disaggs = imls.keySet().stream()
-            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(
+                imt,
+                config.output.dataTypes.contains(GMM),
+                config.output.dataTypes.contains(SOURCE),
+                config.output.dataTypes.contains(DISAGG_DATA))))
             .collect(toList());
 
         return new Response(

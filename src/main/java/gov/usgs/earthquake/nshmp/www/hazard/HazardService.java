@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
@@ -56,6 +57,33 @@ public final class HazardService {
   static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
   private static final String TOTAL_KEY = "Total";
+
+  /* For Swagger selections; mprs + pgv */
+  enum HazardImt {
+    PGA,
+    PGV,
+    SA0P01,
+    SA0P02,
+    SA0P03,
+    SA0P05,
+    SA0P075,
+    SA0P1,
+    SA0P15,
+    SA0P2,
+    SA0P25,
+    SA0P3,
+    SA0P4,
+    SA0P5,
+    SA0P75,
+    SA1P0,
+    SA1P5,
+    SA2P0,
+    SA3P0,
+    SA4P0,
+    SA5P0,
+    SA7P5,
+    SA10P0;
+  }
 
   /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
@@ -155,7 +183,7 @@ public final class HazardService {
     }
   }
 
-  public static final class Request {
+  static final class Request {
 
     final transient HttpRequest<?> http;
     final double longitude;
@@ -347,12 +375,19 @@ public final class HazardService {
 
   /* Read the 'imt' query values; can be comma-delimited. */
   static Set<Imt> readImts(HttpRequest<?> http) {
-    return http.getParameters()
-        .getAll("imt")// TODO where are key strings?
-        .stream()
+    return http.getParameters().getAll("imt").stream()
         .map(s -> s.split(","))
         .flatMap(Arrays::stream)
         .map(Imt::valueOf)
         .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
+  }
+
+  /* Read the 'imt' query values; can be comma-delimited. */
+  static Set<DataType> readDataTypes(HttpRequest<?> http) {
+    return http.getParameters().getAll("out").stream()
+        .map(s -> s.split(","))
+        .flatMap(Arrays::stream)
+        .map(DataType::valueOf)
+        .collect(toCollection(() -> EnumSet.noneOf(DataType.class)));
   }
 }

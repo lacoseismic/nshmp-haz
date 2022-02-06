@@ -5,9 +5,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Map;
 import java.util.Set;
 
+import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.DisaggDataType;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardImt;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
@@ -63,11 +66,9 @@ public class DisaggController {
    * @param returnPeriod The return period of the target ground motion, or
    *        intensity measure level (IML), in the range [1..20000] years.
    * @param imt Optional IMTs at which to compute hazard. If none are supplied,
-   *        then the supported set for the installed model is used. Note that a
-   *        model may not support all the values listed below (see
-   *        disagreggation metadata). Responses for numerous IMT's are quite
-   *        large, on the order of MB. Multiple IMTs may be comma delimited,
-   *        e.g. ?imt=PGA,SA0p2,SA1P0.
+   *        then the supported set for the installed model is used. Responses
+   *        for numerous IMT's are quite large, on the order of MB.
+   * @param out The data types to output
    */
   @Operation(
       summary = "Disaggregate hazard at a specified return period",
@@ -92,14 +93,17 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double returnPeriod,
-      @Schema() @QueryValue @Nullable Set<Imt> imt) {
+      @QueryValue @Nullable Set<HazardImt> imt,
+      @QueryValue @Nullable Set<DisaggDataType> out) {
     try {
       Set<Imt> imts = HazardService.readImts(http);
+      Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
           http,
           longitude, latitude, vs30,
           returnPeriod,
-          imts);
+          imts,
+          dataTypes);
       return DisaggService.getDisaggRp(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -113,6 +117,7 @@ public class DisaggController {
    * @param longitude Longitude in the range [-360..360]°.
    * @param latitude Latitude in decimal degrees [-90..90]°.
    * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param out The data types to output
    */
   @Operation(
       summary = "Disaggregate hazard at specified IMLs",
@@ -133,23 +138,26 @@ public class DisaggController {
           maximum = "90") @PathVariable double latitude,
       @Schema(
           minimum = "150",
-          maximum = "3000") @PathVariable double vs30) {
+          maximum = "3000") @PathVariable double vs30,
+      @QueryValue @Nullable Set<DisaggDataType> out) {
 
     /*
      * Developer notes:
      *
      * It is awkward to support IMT=#; numerous unique keys that may or may not
      * be present yields a clunky swagger interface. The disagg-iml endpoint
-     * requires one or more IMT=# query arguments. Documented in example.
+     * requires one or more IMT=# query arguments. Document in example.
      */
 
     try {
       Map<Imt, Double> imtImlMap = http.getParameters().asMap(Imt.class, Double.class);
       checkArgument(!imtImlMap.isEmpty(), "No IMLs supplied");
+      Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestIml request = new DisaggService.RequestIml(
           http,
           longitude, latitude, vs30,
-          imtImlMap);
+          imtImlMap,
+          dataTypes);
       return DisaggService.getDisaggIml(request);
     } catch (Exception e) {
       return ServletUtil.error(
