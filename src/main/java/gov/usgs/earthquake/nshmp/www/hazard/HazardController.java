@@ -5,7 +5,7 @@ import java.util.Set;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardImt;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -60,11 +60,8 @@ public class HazardController {
    * @param truncate Truncate curves at return periods below ~10,000 years
    * @param maxdir Apply max-direction scaling
    * @param imt Optional IMTs at which to compute hazard. If none are supplied,
-   *        then the supported set for the installed model is used. Note that a
-   *        model may not support all the values listed below (see
-   *        disagreggation metadata). Responses for numerous IMT's are quite
-   *        large, on the order of MB. Multiple IMTs may be comma delimited,
-   *        e.g. ?imt=PGA,SA0p2,SA1P0.
+   *        then the supported set for the installed model is used. Responses
+   *        for numerous IMT's are quite large, on the order of MB.
    *
    */
   @Operation(
@@ -91,7 +88,7 @@ public class HazardController {
           defaultValue = "false") @Nullable Boolean truncate,
       @QueryValue(
           defaultValue = "false") @Nullable Boolean maxdir,
-      @QueryValue @Nullable Set<Imt> imt) {
+      @QueryValue @Nullable Set<HazardImt> imt) {
     try {
       Set<Imt> imts = HazardService.readImts(http);
       HazardService.Request request = new HazardService.Request(

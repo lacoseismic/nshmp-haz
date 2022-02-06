@@ -1,5 +1,8 @@
 package gov.usgs.earthquake.nshmp.www.hazard;
 
+import static gov.usgs.earthquake.nshmp.calc.DataType.DISAGG_DATA;
+import static gov.usgs.earthquake.nshmp.calc.DataType.GMM;
+import static gov.usgs.earthquake.nshmp.calc.DataType.SOURCE;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Range;
 
+import gov.usgs.earthquake.nshmp.DisaggCalc;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.calc.Disaggregation;
@@ -53,6 +57,13 @@ public final class DisaggService {
 
   private static Range<Double> rpRange = Range.closed(1.0, 20000.0);
   private static Range<Double> imlRange = Range.closed(0.0001, 8.0);
+
+  /* For Swagger selctions */
+  enum DisaggDataType {
+    GMM,
+    SOURCE,
+    DISAGG_DATA;
+  }
 
   /** HazardController.doGetMetadata() handler. */
   static HttpResponse<String> getMetadata(HttpRequest<?> request) {
@@ -178,13 +189,13 @@ public final class DisaggService {
         ServletUtil.TASK_EXECUTOR);
 
     Hazard hazard = hazFuture.get();
-    // Map<Imt, Double> imls = DisaggCalc.imlsForReturnPeriod(
-    // hazard,
-    // request.returnPeriod);
+    Map<Imt, Double> imls = DisaggCalc.imlsForReturnPeriod(
+        hazard,
+        request.returnPeriod);
 
     CompletableFuture<Disaggregation> disaggfuture = CompletableFuture.supplyAsync(
-        () -> Disaggregation.atReturnPeriod(
-            hazard, request.returnPeriod,
+        () -> Disaggregation.atImls(
+            hazard, imls,
             ServletUtil.CALC_EXECUTOR),
         ServletUtil.TASK_EXECUTOR);
 
@@ -278,6 +289,7 @@ public final class DisaggService {
       Optional<RequestRp> requestRp = Optional.empty();
       Optional<RequestIml> requestIml = Optional.empty();
       Disaggregation disagg;
+      CalcConfig config;
 
       Builder timer(Stopwatch timer) {
         this.timer = timer;
@@ -304,8 +316,16 @@ public final class DisaggService {
             ? requestRp.orElseThrow().imts
             : requestIml.orElseThrow().imls.keySet();
 
+        Set<DataType> dataTypes = requestRp.isPresent()
+            ? requestRp.orElseThrow().dataTypes
+            : requestIml.orElseThrow().dataTypes;
+
         List<ImtDisagg> disaggs = imts.stream()
-            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(
+                imt,
+                dataTypes.contains(GMM),
+                dataTypes.contains(SOURCE),
+                dataTypes.contains(DISAGG_DATA))))
             .collect(toList());
 
         Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);

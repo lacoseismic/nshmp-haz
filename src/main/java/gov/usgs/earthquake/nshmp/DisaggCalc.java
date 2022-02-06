@@ -3,6 +3,9 @@ package gov.usgs.earthquake.nshmp;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static gov.usgs.earthquake.nshmp.Text.NEWLINE;
+import static gov.usgs.earthquake.nshmp.calc.DataType.DISAGG_DATA;
+import static gov.usgs.earthquake.nshmp.calc.DataType.GMM;
+import static gov.usgs.earthquake.nshmp.calc.DataType.SOURCE;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -292,16 +295,13 @@ public class DisaggCalc {
       Site site = sites.get(i);
 
       Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
+      handler.write(hazard);
 
       Map<Imt, Double> imls = imlsForReturnPeriod(hazard, returnPeriod);
-
       Disaggregation disagg = Disaggregation.atImls(hazard, imls, exec);
 
-      // needs to handle disagg same way as iml
-      // handler.write(hazard, Optional.of(disagg));
-      handler.write(hazard, Optional.empty());
-
       Response response = new Response.Builder()
+          .config(config)
           .site(site)
           .returnPeriod(returnPeriod)
           .imls(imls)
@@ -392,6 +392,7 @@ public class DisaggCalc {
       Disaggregation disagg = Disaggregation.atImls(hazard, siteImls, exec);
 
       Response response = new Response.Builder()
+          .config(config)
           .site(site)
           .imls(siteImls)
           .disagg(disagg)
@@ -454,10 +455,11 @@ public class DisaggCalc {
 
     static final class Builder {
 
-      Disaggregation disagg;
       Site site;
+      Disaggregation disagg;
       Double returnPeriod; // optional
       Map<Imt, Double> imls;
+      CalcConfig config;
 
       Builder imls(Map<Imt, Double> imls) {
         this.imls = imls;
@@ -479,10 +481,20 @@ public class DisaggCalc {
         return this;
       }
 
+      Builder config(CalcConfig config) {
+        this.config = config;
+        return this;
+      }
+
       Response build() {
 
+        // default toJson(imt, false, false, false)
         List<ImtDisagg> disaggs = imls.keySet().stream()
-            .map(imt -> new ImtDisagg(imt, disagg.toJson(imt)))
+            .map(imt -> new ImtDisagg(imt, disagg.toJson(
+                imt,
+                config.output.dataTypes.contains(GMM),
+                config.output.dataTypes.contains(SOURCE),
+                config.output.dataTypes.contains(DISAGG_DATA))))
             .collect(toList());
 
         return new Response(

@@ -57,6 +57,33 @@ public final class HazardService {
 
   private static final String TOTAL_KEY = "Total";
 
+  /* For Swagger selections; mprs + pgv */
+  enum HazardImt {
+    PGA,
+    PGV,
+    SA0P01,
+    SA0P02,
+    SA0P03,
+    SA0P05,
+    SA0P075,
+    SA0P1,
+    SA0P15,
+    SA0P2,
+    SA0P25,
+    SA0P3,
+    SA0P4,
+    SA0P5,
+    SA0P75,
+    SA1P0,
+    SA1P5,
+    SA2P0,
+    SA3P0,
+    SA4P0,
+    SA5P0,
+    SA7P5,
+    SA10P0;
+  }
+
   /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
