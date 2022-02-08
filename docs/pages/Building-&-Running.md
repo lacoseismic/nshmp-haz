@@ -60,7 +60,7 @@ See the [examples](../../etc/examples) directory for more details (or
 
 Like `HazardCalc`, the `DisaggCalc` program performs disaggregations at one or more sites for a
 variety of intensity measures. The return period for the disaggregation is defined in the config,
-see [`disagg.returnPeriod`]()./Calculation-Configuration.md#calculation-configuration-parameters).
+see [`disagg.returnPeriod`](./Calculation-Configuration.md#calculation-configuration-parameters).
 Example:
 
 ```bash
