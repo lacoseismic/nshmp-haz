@@ -18,8 +18,7 @@ use *nshmp-haz* as well as underlying model implementation details.
   * [Developer Basics](./pages/Developer-Basics.md)
   * [Calculation Configuration](./pages/Calculation-Configuration.md)
   * [Site Specification](./pages/Site-Specification.md)
-  * [Examples](../../etc/examples) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
+  * [Examples](../../etc/examples)
 * [Hazard Model](./pages/Hazard-Model.md)
   * [Model Structure](./pages/Model-Structure.md)
   * [Model Files](./pages/Model-Files.md)
