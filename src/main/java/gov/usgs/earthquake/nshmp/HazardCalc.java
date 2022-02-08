@@ -172,7 +172,7 @@ public class HazardCalc {
     log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     log.info(PROGRAM + ": calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, log);
+    HazardExport handler = HazardExport.create(model, config, sites);
     CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
     WriteTask.Builder writeTask = new WriteTask.Builder(handler);
 
@@ -184,10 +184,11 @@ public class HazardCalc {
       Site site = sites.get(i);
       Hazard hazard = calcTask.withSite(site).call();
       out = exec.submit(writeTask.withResult(hazard));
-      if (i % logInterval == 0) {
+      int count = i + 1;
+      if (count % logInterval == 0) {
         log.info(String.format(
             "     %s of %s sites completed in %s",
-            i + 1, sites.size(), stopwatch));
+            count, sites.size(), stopwatch));
       }
     }
     /* Block shutdown until last task is returned. */
@@ -197,7 +198,7 @@ public class HazardCalc {
     exec.shutdown();
     log.info(String.format(
         PROGRAM + ": %s sites completed in %s",
-        handler.resultCount(), handler.elapsedTime()));
+        handler.resultCount(), stopwatch.stop()));
 
     return outputDir;
   }

@@ -280,7 +280,7 @@ public class DisaggCalc {
 
     log.info(PROGRAM + " (return period): calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, log);
+    HazardExport handler = HazardExport.create(model, config, sites);
     Path disaggDir = handler.outputDir().resolve("disagg");
     Files.createDirectory(disaggDir);
 
@@ -310,17 +310,18 @@ public class DisaggCalc {
       GSON.toJson(response, writer);
       writer.close();
 
-      if (i % logInterval == 0) {
+      int count = i + 1;
+      if (count % logInterval == 0) {
         log.info(String.format(
             "     %s of %s sites completed in %s",
-            i + 1, sites.size(), stopwatch));
+            count, sites.size(), stopwatch));
       }
     }
     handler.expire();
 
     log.info(String.format(
         PROGRAM + " (return period): %s sites completed in %s",
-        handler.resultCount(), handler.elapsedTime()));
+        sites.size(), stopwatch.stop()));
 
     exec.shutdown();
     return handler.outputDir();
@@ -396,16 +397,17 @@ public class DisaggCalc {
       GSON.toJson(response, writer);
       writer.close();
 
-      if (i % logInterval == 0) {
+      int count = i + 1;
+      if (count % logInterval == 0) {
         log.info(String.format(
             "     %s of %s sites completed in %s",
-            i + 1, sites.size(), stopwatch));
+            count, sites.size(), stopwatch));
       }
     }
 
     log.info(String.format(
         PROGRAM + " (IML): %s sites completed in %s",
-        sites.size(), stopwatch));
+        sites.size(), stopwatch.stop()));
 
     exec.shutdown();
     return outDir;
