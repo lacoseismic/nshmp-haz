@@ -82,7 +82,7 @@ final class NshmpSiteFiles {
 
   /*
    * Currently, we're exporting map regions as polygons. Although the GeoJSON
-   * spec supports polygons with holes (and hence 3-dimensional arrays, we only
+   * spec supports polygons with holes (and hence 3-dimensional arrays), we only
    * support singular polygons. Polygons render better than PointStrings in any
    * event.
    */

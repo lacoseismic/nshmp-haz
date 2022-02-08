@@ -139,11 +139,9 @@ public final class RateService {
      * probability service has been called.
      */
 
-    // for (var model : ServletUtil.hazardModels()) {
     var model = ServletUtil.model();
     var rate = process(service, model, site, data.distance, data.timespan);
     futureRates.add(rate);
-    // }
 
     var rates = futureRates.stream()
         .map((future) -> {
