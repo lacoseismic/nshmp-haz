@@ -18,7 +18,7 @@ In this example we've overridden the configuration supplied by the model. Specif
 * The `imls` (intensity measure levels or x-values) of the resultant curves
 have been explicitely defined for each `imt`.
 
-See the [configuration specification]../../../docs/pages/Calculation-Configuration.md)
+See the [configuration specification](../../../docs/pages/Calculation-Configuration.md)
 for details on default values and supported options and formats.
 
 __Results directory structure:__
@@ -26,14 +26,20 @@ __Results directory structure:__
 ```text
 2-custom-config/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       ├─ SA0P2/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       └─ SA1P0/
-          └─ curves.csv
+          ├─ curves.csv
+          ├─ curves-truncated.csv
+          └─ map.csv
 ```
 
 <!-- markdownlint-disable MD001 -->

@@ -86,9 +86,9 @@ public class HazardMaps {
       Path curvesPath,
       List<Integer> returnPeriods,
       Logger log) throws IOException {
-    log.info(PROGRAM + ": Creating hazard map dataset:");
-    log.info("\tReturn periods: " + returnPeriods.toString());
-    log.info("\tPath: " + curvesPath.toAbsolutePath().toString());
+    log.info(PROGRAM + ": Creating hazard map datasets...");
+    log.info("    Return periods: " + returnPeriods.toString());
+    log.info("    Path: " + curvesPath.toAbsolutePath().toString());
 
     if (Files.isDirectory(curvesPath)) {
       CurvesVisitor curvesFinder = new CurvesVisitor(returnPeriods);
