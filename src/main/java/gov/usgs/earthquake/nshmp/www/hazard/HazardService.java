@@ -39,7 +39,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -162,7 +161,7 @@ public final class HazardService {
 
     Metadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // TODO need min max from model
+      // should get min max from model
       longitude = new DoubleParameter(
           "Longitude",
           "°",
@@ -252,7 +251,7 @@ public final class HazardService {
       }
 
       Builder hazard(Hazard hazard) {
-        // TODO necessary??
+        // necessary??
         checkState(totalMap == null, "Hazard has already been added to this builder");
 
         componentMaps = new EnumMap<>(Imt.class);
@@ -347,7 +346,7 @@ public final class HazardService {
      * If entire curve is <1e-4, this method will return a curve consisting of
      * just the first point in the supplied curve.
      *
-     * TODO We probably want to move the TRUNCATION_LIMIT out to a config.
+     * Consider moving to config.
      */
 
     double[] yValues = curve.yValues().toArray();

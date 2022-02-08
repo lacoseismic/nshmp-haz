@@ -32,7 +32,6 @@ import gov.usgs.earthquake.nshmp.calc.ValueFormat;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
-
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
@@ -64,7 +63,6 @@ public class ServletUtil {
   private static HazardModel HAZARD_MODEL;
 
   static {
-    /* TODO modified for disagg-epsilon branch; should be context var */
     THREAD_COUNT = getRuntime().availableProcessors();
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();

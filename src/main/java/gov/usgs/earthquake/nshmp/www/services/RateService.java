@@ -27,7 +27,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -311,8 +310,8 @@ public final class RateService {
   }
 
   /*
-   * TODO would rather use this a general container for mfds and hazard curves.
-   * See HazardService.Curve
+   * Would rather use this a general container for mfds and hazard curves. See
+   * HazardService.Curve
    */
   private static class Sequence {
     final String component;

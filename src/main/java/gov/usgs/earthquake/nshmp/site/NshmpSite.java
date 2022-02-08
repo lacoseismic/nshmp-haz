@@ -20,10 +20,6 @@ import gov.usgs.earthquake.nshmp.internal.UsRegion;
  */
 public enum NshmpSite implements NamedLocation {
 
-  // TODO move this and other nshmp specific classes to nshmp-haz
-  // TODO update output files which should also be part of nshmp-haz
-  // TODO do we need ATC sites?
-
   /* Northern CA (16) */
   BIG_SUR_CA(-121.75, 36.25),
   COALINGA_CA(-120.40, 36.15),
