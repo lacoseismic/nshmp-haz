@@ -61,7 +61,7 @@ Note that in the output above, there are only disaggregation results for subduct
 will not be saved.
 
 <!-- markdownlint-disable MD001 -->
-#### Next: [Example 8 – Earthquake probabilities and rates](../8-probabilities/README.md)
+<!--  #### Next: [Example 8 – Earthquake probabilities and rates](../8-probabilities/README.md) -->
 
 ---
 
