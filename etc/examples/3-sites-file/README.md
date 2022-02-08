@@ -24,7 +24,7 @@ __Results directory structure:__
 ```text
 3-sites-file/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
       │   ├─ curves.csv

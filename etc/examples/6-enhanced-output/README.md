@@ -31,7 +31,7 @@ __Results directory structure:__
 ```text
 6-enhanced-output/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
       │   ├─ curves-truncated.csv

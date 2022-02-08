@@ -47,20 +47,28 @@ __Results directory structure:__
 ```text
 5-complex-model/
   ├─ hazout-sites/
-  │   ├─ config.json
+  │   ├─ calc-config.json
   │   ├─ HazardCalc.log
   │   ├─ SA1P0/
-  │   │   └─ curves.csv
+  │   │   ├─ curves.csv
+  │   │   ├─ curves-truncated.csv
+  │   │   └─ map.csv
   │   └─ SA2P0/
-  │       └─ curves.csv
+  │       ├─ curves.csv
+  │       ├─ curves-truncated.csv
+  │       └─ map.csv
   │
   └─ hazout-map/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ SA1P0/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       └─ SA2P0/
-          └─ curves.csv
+          ├─ curves.csv
+          ├─ curves-truncated.csv
+          └─ map.csv
 ```
 
 <!-- markdownlint-disable MD001 -->

@@ -16,14 +16,20 @@ __Results directory structure:__
 ```text
 4-hazard-map/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       ├─ SA0P2/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       └─ SA1P0/
-          └─ curves.csv
+          ├─ curves.csv
+          ├─ curves-truncated.csv
+          └─ map.csv
 ```
 
 <!-- markdownlint-disable MD001 -->
