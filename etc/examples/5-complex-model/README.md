@@ -39,7 +39,7 @@ hazard ../../../../nshm-conus map.geojson config-map.json
 ```
 
 This computes 121 curves over a 2° by 2° area and will give you a sense of how long a larger map
-might take. This small coarse map may take 10 minutes to complete. Note that in the above two
+might take. This small, coarse map may take 10 minutes to complete. Note that in the above two
 examples we specified different output directories in the config files for each calculation.
 
 __Results directory structure:__
