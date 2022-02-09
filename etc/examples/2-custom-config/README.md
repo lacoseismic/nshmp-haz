@@ -13,12 +13,12 @@ In this example we've overridden the configuration supplied by the model. Specif
 * The upper end of each hazard curve has been truncated at 3 standard deviations.
 * Hazard curves have been saved as poisson probability instead of annual rate.
 * Hazard curves have been calculated for 3 `imts`
- ([intensity measures](http://usgs.github.io/nshmp-haz/javadoc/index.html?gov/usgs/earthquake/nshmp/gmm/Imt.html),
+ ([intensity measures](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Imt.html),
   or spectral periods).
 * The `imls` (intensity measure levels or x-values) of the resultant curves
 have been explicitely defined for each `imt`.
 
-See the [configuration specification](https://github.com/usgs/nshmp-haz/wiki/configuration)
+See the [configuration specification](../../../docs/pages/Calculation-Configuration.md)
 for details on default values and supported options and formats.
 
 __Results directory structure:__
@@ -26,14 +26,20 @@ __Results directory structure:__
 ```text
 2-custom-config/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       ├─ SA0P2/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       └─ SA1P0/
-          └─ curves.csv
+          ├─ curves.csv
+          ├─ curves-truncated.csv
+          └─ map.csv
 ```
 
 <!-- markdownlint-disable MD001 -->

@@ -59,16 +59,17 @@ See the [examples](../../etc/examples) directory for more details (or
 ### Computing Disaggregations
 
 Like `HazardCalc`, the `DisaggCalc` program performs disaggregations at one or more sites for a
-variety of intensity measures, but requires an additional `returnPeriod` argument, in years. For
-example:
+variety of intensity measures. The return period for the disaggregation is defined in the config,
+see [`disagg.returnPeriod`](./Calculation-Configuration.md#calculation-configuration-parameters).
+Example:
 
 ```bash
-java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites returnPeriod [config]
+java -cp nshmp-haz.jar gov.usgs.earthquake.nshmp.DisaggCalc model sites [config]
 ```
 
 Disaggregations build on and output `HazardCalc` results along with other disaggregation specific
 files. Disaggregations also have some independent
-[configuration](./Calculation-Configuration.md#config-disagg) options.
+[configuration](./Calculation-Configuration.md#calculation-configuration-parameters) options.
 
 ## Run with [Docker](https://docs.docker.com/install/)
 

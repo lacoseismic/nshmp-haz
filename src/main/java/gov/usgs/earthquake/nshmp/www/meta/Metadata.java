@@ -35,22 +35,10 @@ public final class Metadata {
 
   public static class DefaultParameters {
 
-    // final EnumParameter<Edition> edition;
-    // final EnumParameter<Region> region;
     final DoubleParameter longitude;
     final DoubleParameter latitude;
 
     public DefaultParameters() {
-
-      // edition = new EnumParameter<>(
-      // "Model edition",
-      // ParamType.STRING,
-      // EnumSet.allOf(Edition.class));
-      //
-      // region = new EnumParameter<>(
-      // "Model region",
-      // ParamType.STRING,
-      // EnumSet.allOf(Region.class));
 
       longitude = new DoubleParameter(
           "Longitude",

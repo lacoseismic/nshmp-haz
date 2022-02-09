@@ -70,46 +70,20 @@ public class SourceServices {
   }
 
   /*
-   * TODO service metadata should be in same package as services (why
+   * task... service metadata should be in same package as services (why
    * ResponseData is currently public); rename meta package to
    */
   public static class ResponseData {
     final String description;
     final Object server;
-    // final Parameters parameters;
 
     public ResponseData() {
       this.description = "Installed source model listing";
       this.server = ServletUtil.serverData(
           ServletUtil.THREAD_COUNT,
           Stopwatch.createStarted());
-      // this.parameters = new Parameters();
     }
   }
-
-  // static class Parameters {
-  // List<SourceModel> models;
-  // DoubleParameter returnPeriod;
-  // DoubleParameter vs30;
-  //
-  // Parameters() {
-  // models = ServletUtil.hazardModels().stream()
-  // .map(SourceModel::new)
-  // .collect(Collectors.toList());
-  //
-  // returnPeriod = new DoubleParameter(
-  // "Return period",
-  // "years",
-  // 100.0,
-  // 1e6);
-  //
-  // vs30 = new DoubleParameter(
-  // "Vs30",
-  // "m/s",
-  // 150,
-  // 1500);
-  // }
-  // }
 
   public static class SourceModel {
     String name;
@@ -129,12 +103,6 @@ public class SourceServices {
           .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
           .collect(toList());
     }
-
-    // public static List<SourceModel> getList() {
-    // return ServletUtil.hazardModels().stream()
-    // .map(SourceModel::new)
-    // .collect(Collectors.toList());
-    // }
   }
 
   enum Attributes {

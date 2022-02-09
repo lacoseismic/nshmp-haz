@@ -15,14 +15,15 @@ The config file for this example, `config.json`, specified `GMM` and `SOURCE` as
 [output data types][output_types]. Note that the output curves directory now contains additional
 directories of curves by source type and GMM.
 
-[output_types]: ../../../docs/pages/Calculation-Configuration.md#calculation-configuration
+[output_types]: ../../../docs/pages/Calculation-Configuration.md#calculation-configuration-parameters
 
-See the `nshmp-haz` wiki and javadocs for more information on source types ([Wiki][source_wiki],
-[JavaDoc][source_javadoc]) and GMMs ([Wiki][gmm_wiki], [JavaDoc][gmm_javadoc]).
+See the `nshmp-haz` documentation and javadocs for more information on source types
+([docs][source_docs], [JavaDoc][source_javadoc]) and GMMs
+([docs][gmm_docs], [JavaDoc][gmm_javadoc]).
 
-[source_wiki]: ../../../docs/pages/Source-Types.md
+[source_docs]: ../../../docs/pages/Source-Types.md
 [source_javadoc]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/model/SourceType.html
-[gmm_wiki]: ./../../docs/pages/Ground-Motion-Models.md
+[gmm_docs]: ./../../docs/pages/Ground-Motion-Models.md
 [gmm_javadoc]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/package-summary.html
 
 __Results directory structure:__
@@ -30,7 +31,7 @@ __Results directory structure:__
 ```text
 6-enhanced-output/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
       │   ├─ curves-truncated.csv

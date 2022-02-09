@@ -1,6 +1,6 @@
 # Examples
 
-These examples are designed to be executed locally while following the READMEs on GitHub.
+These examples are designed to be executed locally while following the READMEs on GitLub.
 All examples avoid a lengthy call to Java and the `HazardCalc` program by using the following
 system alias:
 

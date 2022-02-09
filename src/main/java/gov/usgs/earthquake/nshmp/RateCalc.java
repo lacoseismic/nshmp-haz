@@ -186,9 +186,6 @@ public class RateCalc {
      * there are one or more longer-running calcs in the batch, processing
      * batches of locations to a List preserves submission order; as opposed to
      * using FutureCallbacks, which will reorder sites on export.
-     *
-     * TODO this is a terrible implementation with batch size 10. resulted from
-     * refactor to exports not queueing results
      */
     for (Site site : sites) {
       Callable<EqRate> task = EqRate.callable(model, config, site);

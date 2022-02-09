@@ -56,7 +56,7 @@ import gov.usgs.earthquake.nshmp.geo.json.Properties.Style;
  */
 final class NshmpSiteFiles {
 
-  // TODO consider removing this to nshm-model-dev
+  // Consider removing this to nshm-model-dev
   // keeping the outputs in nshmp-haz
 
   /*
@@ -82,7 +82,7 @@ final class NshmpSiteFiles {
 
   /*
    * Currently, we're exporting map regions as polygons. Although the GeoJSON
-   * spec supports polygons with holes (and hence 3-dimensional arrays, we only
+   * spec supports polygons with holes (and hence 3-dimensional arrays), we only
    * support singular polygons. Polygons render better than PointStrings in any
    * event.
    */
@@ -185,19 +185,24 @@ final class NshmpSiteFiles {
 
   static void writeNshmpSummaryPoly() throws IOException {
     Set<NshmpPolygon> polys = EnumSet.range(LA_BASIN, UCERF3_NSHM14);
+
+    List<String> nameList = polys.stream()
+        .map(Functions.toStringFunction())
+        .collect(Collectors.toList());
+
+    List<LocationList> coordList = polys.stream()
+        .map(new Function<NshmpPolygon, LocationList>() {
+          @Override
+          public LocationList apply(NshmpPolygon poly) {
+            return poly.coordinates();
+          }
+        }::apply)
+        .collect(Collectors.toList());
+
     writePolysJson(
         EXPORT_DIR.resolve("map-nshmp-all.geojson"),
-        polys.stream()
-            .map(Functions.toStringFunction())
-            .collect(Collectors.toList()),
-        polys.stream()
-            .map(new Function<NshmpPolygon, LocationList>() {
-              @Override
-              public LocationList apply(NshmpPolygon poly) {
-                return poly.coordinates();
-              }
-            }::apply)
-            .collect(Collectors.toList()));
+        nameList,
+        coordList);
   }
 
   static void writePolysJson(
@@ -210,7 +215,6 @@ final class NshmpSiteFiles {
         .put("spacing", 0.1);
 
     int i = 0;
-    // TODO this incrementer is messed up
     // can't name and coords come as a map?
     for (LocationList border : coordList) {
       props.put(Style.TITLE, nameList.get(i++));
@@ -395,7 +399,6 @@ final class NshmpSiteFiles {
         .put(Style.MARKER_SIZE, "small");
 
     for (NamedLocation loc : sites) {
-      // TODO test loc vs loc.toString()
       b.add(Feature.point(loc.location())
           .properties(props
               .put(Style.TITLE, loc.toString())

@@ -6,7 +6,7 @@ To compute hazard at more than one site, one may supply a comma-delimited (\*.cs
  or [GeoJSON](http://geojson.org) (\*.geojson) formatted site data file instead:
 
 ```Shell
-hazard ../../peer/models/Set1-Case1  sites.csv config.json
+hazard ../../peer/models/Set1-Case1 sites.csv config.json
 ```
 
 or
@@ -15,8 +15,8 @@ or
 hazard ../../peer/models/Set1-Case1 sites.geojson config.json
 ```
 
-The [site specification](https://github.com/usgs/nshmp-haz/wiki/sites)
-wiki page provides details on the two file formats. Note that with either format,
+The [site specification](../../../docs/pages/Site-Specification.md)
+page provides details on the two file formats. Note that with either format,
 if the name of a site is supplied, it will be included in the first column of any output curve files.
 
 __Results directory structure:__
@@ -24,14 +24,20 @@ __Results directory structure:__
 ```text
 3-sites-file/
   └─ hazout/
-      ├─ config.json
+      ├─ calc-config.json
       ├─ HazardCalc.log
       ├─ PGA/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       ├─ SA0P2/
-      │   └─ curves.csv
+      │   ├─ curves.csv
+      │   ├─ curves-truncated.csv
+      │   └─ map.csv
       └─ SA1P0/
-          └─ curves.csv
+          ├─ curves.csv
+          ├─ curves-truncated.csv
+          └─ map.csv
 ```
 
 <!-- markdownlint-disable MD001 -->

@@ -139,11 +139,9 @@ public final class RateService {
      * probability service has been called.
      */
 
-    // for (var model : ServletUtil.hazardModels()) {
     var model = ServletUtil.model();
     var rate = process(service, model, site, data.distance, data.timespan);
     futureRates.add(rate);
-    // }
 
     var rates = futureRates.stream()
         .map((future) -> {
@@ -311,8 +309,8 @@ public final class RateService {
   }
 
   /*
-   * TODO would rather use this a general container for mfds and hazard curves.
-   * See HazardService.Curve
+   * Would rather use this a general container for mfds and hazard curves. See
+   * HazardService.Curve
    */
   private static class Sequence {
     final String component;

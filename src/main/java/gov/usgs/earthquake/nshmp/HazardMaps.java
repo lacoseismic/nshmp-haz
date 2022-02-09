@@ -53,9 +53,11 @@ public class HazardMaps {
    */
   public static void main(String[] args) {
     if (args.length < 1) {
-      System.out.println("Usage: Supply a path to a file of hazard curve results and");
-      System.out.println("       optionally a space separated list of return periods (in yr)");
-      System.out.println("       default return periods: 475 975 2475");
+      System.out.println("Usage: Supply a path to a file of or directory containing hazard");
+      System.out.println("       curve results and optionally a space separated list of return");
+      System.out.println("       periods (in yr). If a directory is specified, nested curve");
+      System.out.println("       files are expected to be named 'curves.csv'.");
+      System.out.println("       Default return periods: 475 975 2475");
       return;
     }
 
@@ -84,9 +86,9 @@ public class HazardMaps {
       Path curvesPath,
       List<Integer> returnPeriods,
       Logger log) throws IOException {
-    log.info(PROGRAM + ": Creating hazard map dataset:");
-    log.info("\tReturn periods: " + returnPeriods.toString());
-    log.info("\tPath: " + curvesPath.toAbsolutePath().toString());
+    log.info(PROGRAM + ": Creating hazard map datasets...");
+    log.info("    Return periods: " + returnPeriods.toString());
+    log.info("    Path: " + curvesPath.toAbsolutePath().toString());
 
     if (Files.isDirectory(curvesPath)) {
       CurvesVisitor curvesFinder = new CurvesVisitor(returnPeriods);

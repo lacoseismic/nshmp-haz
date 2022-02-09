@@ -64,7 +64,6 @@ public class ServletUtil {
   private static HazardModel HAZARD_MODEL;
 
   static {
-    /* TODO modified for disagg-epsilon branch; should be context var */
     THREAD_COUNT = getRuntime().availableProcessors();
     CALC_EXECUTOR = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(THREAD_COUNT));
     TASK_EXECUTOR = Executors.newSingleThreadExecutor();
