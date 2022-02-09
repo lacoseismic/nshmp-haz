@@ -14,41 +14,37 @@ may be overridden. See [building and running](./Building-&-Running.md) and the
 Parameter | Type | Default | Notes |
 --------- | ---- | ------- | ----- |
 __`hazard`__
-&nbsp;&nbsp;&nbsp;`.exceedanceModel`       |`String`   | `TRUNCATION_3SIGMA_UPPER` | [`ExceedanceModel`][url-exceedance]
-&nbsp;&nbsp;&nbsp;`.truncationLevel`       |`Double`   | `3.0`                     | [1](#notes)
+&nbsp;&nbsp;&nbsp;`.exceedanceModel`       |`String`   | `TRUNCATION_3SIGMA_UPPER`  | [`ExceedanceModel`][url-exceedance]
+&nbsp;&nbsp;&nbsp;`.truncationLevel`       |`Double`   | `3.0`                      | [1](#notes)
 &nbsp;&nbsp;&nbsp;`.imts`                  |`String[]` | `[ PGV, PGA, SA0P01, SA0P02, SA0P03, SA0P05, SA0P075, SA0P1, SA0P15, SA0P2, SA0P25, SA0P3, SA0P4, SA0P5, SA0P75, SA1P0, SA1P5, SA2P0, SA3P0, SA4P0, SA5P0, SA7P5, SA10P0 ]` | [`Imt`][url-imt]
 &nbsp;&nbsp;&nbsp;`.customImls`            |`Map<String, Double[]>`  | `{}` (empty object)     | [2](#notes)
-&nbsp;&nbsp;&nbsp;`.gmmUncertainty`        |`Boolean`  | `false`                   | [3](#notes)
-&nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`             | [`ValueFormat`][url-valueformat]
+&nbsp;&nbsp;&nbsp;`.gmmDampingRatio`       |`Double`   | `0.05` (5%)                | [3](#notes)
+&nbsp;&nbsp;&nbsp;`.gmmSigmaScale`         |`Double`   | `1.0` (100%)               |
+&nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`              | [`ValueFormat`][url-valueformat]
 __`disagg`__
-&nbsp;&nbsp;&nbsp;`.bins`                  |`Object`   |                           | [4](#notes)
-&nbsp;&nbsp;&nbsp;`.contributorLimit`      |`Double`   | `0.1`                     | [5](#notes)
+&nbsp;&nbsp;&nbsp;`.retrunPeriod`          |`Double`   | `2475`                     |
+&nbsp;&nbsp;&nbsp;`.bins`                  |`Object`   |                            | [4](#notes)
+&nbsp;&nbsp;&nbsp;`.contributorLimit`      |`Double`   | `0.1`                      | [5](#notes)
 __`rate`__
-&nbsp;&nbsp;&nbsp;`.bins`                  |`Object`   |                           | [6](#notes)
+&nbsp;&nbsp;&nbsp;`.bins`                  |`Object`   |                            | [6](#notes)
 &nbsp;&nbsp;&nbsp;`.distance`              |`Double`   | `20` km
-&nbsp;&nbsp;&nbsp;`.distributionFormat`    |`String`   | `INCREMENTAL`             | [`DistributionFormat`][url-distribution]
+&nbsp;&nbsp;&nbsp;`.distributionFormat`    |`String`   | `INCREMENTAL`              | [`DistributionFormat`][url-distribution]
 &nbsp;&nbsp;&nbsp;`.timespan`              |`Double`   | `30` years
-&nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`             | [`ValueFormat`][url-valueformat]
-__`site`__
-&nbsp;&nbsp;&nbsp;`.vs30`                  |`Double`   | `760.0`                   | [`Site`][url-site]
-&nbsp;&nbsp;&nbsp;`.vsInferred`            |`Boolean`  | `true`
-&nbsp;&nbsp;&nbsp;`.z1p0`                  |`Double`   | `null`                    | [7](#notes)
-&nbsp;&nbsp;&nbsp;`.z2p5`                  |`Double`   | `null`                    | [7](#notes)
+&nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`              | [`ValueFormat`][url-valueformat]
 __`output`__                               |
 &nbsp;&nbsp;&nbsp;`.directory`             |`String`   | `hazout`
-&nbsp;&nbsp;&nbsp;`.dataTypes`             |`String[]` | `[ TOTAL, MAP ]`          | [`DataType`][url-datatype]
-&nbsp;&nbsp;&nbsp;`.returnPeriods`         |`Integer[]`| `[ 475, 975, 2475 ]`      | [`ReturnPeriods`][url-returnperiods]
+&nbsp;&nbsp;&nbsp;`.dataTypes`             |`String[]` | `[ TOTAL, MAP ]`           | [`DataType`][url-datatype]
+&nbsp;&nbsp;&nbsp;`.returnPeriods`         |`Double[]` | `[ 475, 975, 2475, 10000]` | [`ReturnPeriods`][url-returnperiods]
 __`performance`__
-&nbsp;&nbsp;&nbsp;`.optimizeGrids`         |`Boolean`  | `true`                    | [8](#notes)
-&nbsp;&nbsp;&nbsp;`.smoothGrids`           |`Boolean`  | `true`                    | [9](#notes)
-&nbsp;&nbsp;&nbsp;`.systemPartition`       |`Integer`  | `1000`                    | [10](#notes)
-&nbsp;&nbsp;&nbsp;`.threadCount`           |`String`   | `ALL`                     | [`ThreadCount`][url-sheets]
+&nbsp;&nbsp;&nbsp;`.optimizeGrids`         |`Boolean`  | `true`                     | [7](#notes)
+&nbsp;&nbsp;&nbsp;`.smoothGrids`           |`Boolean`  | `true`                     | [8](#notes)
+&nbsp;&nbsp;&nbsp;`.systemPartition`       |`Integer`  | `1000`                     | [9](#notes)
+&nbsp;&nbsp;&nbsp;`.threadCount`           |`String`   | `ALL`                      | [`ThreadCount`][url-sheets]
 
 [url-exceedance]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/ExceedanceModel.html
 [url-imt]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Imt.html
 [url-valueformat]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/ValueFormat.html
 [url-distribution]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/DistributionFormat.html
-[url-site]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/Site.html
 [url-datatype]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/DataType.html
 [url-returnperiods]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/CalcConfig.Output.html#returnPeriods
 [url-sheets]: https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/calc/ThreadCount.html
@@ -57,12 +53,11 @@ __`performance`__
 
 1. `hazard.truncationLevel`: This value is only used if the `hazard.exceedanceModel` requires a
    limit (e.g. `TRUNCATION_UPPER_ONLY`)
-2. `hazard.gmmUncertainty`: If values for additional epistemic uncertainty on ground motion have
-   been defined, this value en/disables this feature.
-3. `hazard.customImls`: Hazard is computed at default intensity measure levels (IMLs) for every
+2. `hazard.customImls`: Hazard is computed at default intensity measure levels (IMLs) for every
    supported intenisty measure type (IMT), but a user can specify different IMLs as needed (see
    [example 2](../../etc/examples/2-custom-config/README.md) and the
    table of default IMLs, below).
+3. `hazard.gmmDampingRatio` currently has no effect.
 4. `disagg.bins`: This field maps to a data container that specifies the following default ranges
    and intervals for distance, magnitude, and epsilon binning: `"bins": { "rMin": 0.0, "rMax":
    1000.0, "Δr": 20.0, "mMin": 4.4, "mMax": 9.4, "Δm": 0.2, "εMin": -3.0, "εMax": 3.0, "Δε": 0.5 }`.
@@ -72,14 +67,11 @@ __`performance`__
 6. `rate.bins`: This field maps to a data container that specifies the following default magnitude
    binning range and interval: `"bins": { "mMin": 4.2, "mMax": 9.4, "Δm": 0.1 }`. The `bins` object
    must be fully specified; partial overrides do not apply to nested JSON objects.
-7. `site.z1p0` and `site.z2p5`: Basin terms may be specified as `null` or `NaN` (both unquoted).
-   `null` is preferred as `NaN` does not conform to the JSON spec. When trying to override default
-   values, however, a `null` term will be ignored whereas `NaN` will override any existing value.
-8. `performance.optimizeGrids`: Gridded seismicity source optimizations are currently implemented
+7. `performance.optimizeGrids`: Gridded seismicity source optimizations are currently implemented
    for any non-fixed strike grid source. For any site, rates across all azimuths are aggregated
    in tables of distance and magnitude.
-9. `performance.smoothGrids`: Resample gridded seismicity sources close to a site.
-10. `performance.systemPartition`: The number of ruptures in a fault-system source to process
+8. `performance.smoothGrids`: Resample gridded seismicity sources close to a site.
+9. `performance.systemPartition`: The number of ruptures in a fault-system source to process
     concurrently.
 
 ## Default Intensity Measure Levels (IMLs)
