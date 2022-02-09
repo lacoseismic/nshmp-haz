@@ -17,9 +17,12 @@ __`hazard`__
 &nbsp;&nbsp;&nbsp;`.exceedanceModel`       |`String`   | `TRUNCATION_3SIGMA_UPPER`  | [`ExceedanceModel`][url-exceedance]
 &nbsp;&nbsp;&nbsp;`.truncationLevel`       |`Double`   | `3.0`                      | [1](#notes)
 &nbsp;&nbsp;&nbsp;`.imts`                  |`String[]` | `[ PGV, PGA, SA0P01, SA0P02, SA0P03, SA0P05, SA0P075, SA0P1, SA0P15, SA0P2, SA0P25, SA0P3, SA0P4, SA0P5, SA0P75, SA1P0, SA1P5, SA2P0, SA3P0, SA4P0, SA5P0, SA7P5, SA10P0 ]` | [`Imt`][url-imt]
+&nbsp;&nbsp;&nbsp;`.tectonicSettings`      |`String[]` | `[]`                       | Tectonic setting filter
+&nbsp;&nbsp;&nbsp;`.sourceTypes`           |`String[]` | `[]`                       | Source type filter
+&nbsp;&nbsp;&nbsp;`.vs30s`                 |`Double[]` | `[]`                       | Vs30s to use for batch jobs
 &nbsp;&nbsp;&nbsp;`.customImls`            |`Map<String, Double[]>`  | `{}` (empty object)     | [2](#notes)
 &nbsp;&nbsp;&nbsp;`.gmmDampingRatio`       |`Double`   | `0.05` (5%)                | [3](#notes)
-&nbsp;&nbsp;&nbsp;`.gmmSigmaScale`         |`Double`   | `1.0` (100%)               |
+&nbsp;&nbsp;&nbsp;`.gmmSigmaScale`         |`Double`   | `1.0` (100%, no scaling)   |
 &nbsp;&nbsp;&nbsp;`.valueFormat`           |`String`   | `ANNUAL_RATE`              | [`ValueFormat`][url-valueformat]
 __`disagg`__
 &nbsp;&nbsp;&nbsp;`.retrunPeriod`          |`Double`   | `2475`                     |
