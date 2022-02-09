@@ -39,7 +39,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -138,11 +137,8 @@ public final class HazardService {
         .imts(request.imts)
         .build();
 
-    // TODO this needs to pick up SiteData, centralize
-    Site site = Site.builder()
-        .location(Location.create(request.longitude, request.latitude))
-        .vs30(request.vs30)
-        .build();
+    Location loc = Location.create(request.longitude, request.latitude);
+    Site site = ServletUtil.createSite(loc, request.vs30, model.siteData());
 
     CompletableFuture<Hazard> future = CompletableFuture.supplyAsync(
         () -> HazardCalcs.hazard(

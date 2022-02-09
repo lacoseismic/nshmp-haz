@@ -32,7 +32,6 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -136,14 +135,10 @@ public final class DisaggService {
     // modify config to include service endpoint arguments
     CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(request.imls.keySet())
-        // .dataTypes(request.dataTypes)
         .build();
 
-    // TODO this needs to pick up SiteData, centralize
-    Site site = Site.builder()
-        .location(Location.create(request.longitude, request.latitude))
-        .vs30(request.vs30)
-        .build();
+    Location loc = Location.create(request.longitude, request.latitude);
+    Site site = ServletUtil.createSite(loc, request.vs30, model.siteData());
 
     // use HazardService.calcHazard() instead?
     CompletableFuture<Hazard> hazFuture = CompletableFuture.supplyAsync(
@@ -173,14 +168,10 @@ public final class DisaggService {
     // modify config to include service endpoint arguments
     CalcConfig config = CalcConfig.copyOf(model.config())
         .imts(request.imts)
-        // .dataTypes(request.dataTypes)
         .build();
 
-    // TODO this needs to pick up SiteData, centralize
-    Site site = Site.builder()
-        .location(Location.create(request.longitude, request.latitude))
-        .vs30(request.vs30)
-        .build();
+    Location loc = Location.create(request.longitude, request.latitude);
+    Site site = ServletUtil.createSite(loc, request.vs30, model.siteData());
 
     // could just get from HazardService
     CompletableFuture<Hazard> hazFuture = CompletableFuture.supplyAsync(

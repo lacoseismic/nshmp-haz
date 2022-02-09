@@ -29,10 +29,11 @@ import com.google.gson.JsonSerializer;
 
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.ValueFormat;
+import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.model.SiteData;
 import gov.usgs.earthquake.nshmp.www.meta.MetaUtil;
-
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.context.event.StartupEvent;
@@ -186,6 +187,16 @@ public class ServletUtil {
 
   public static Object serverData(int threads, Stopwatch timer) {
     return new Server(threads, timer);
+  }
+
+  public static Site createSite(Location location, double vs30, SiteData siteData) {
+    Site.Builder builder = Site.builder()
+        .location(location)
+        .vs30(vs30);
+    SiteData.Values sdValues = siteData.get(location);
+    sdValues.z1p0.ifPresent(builder::z1p0);
+    sdValues.z2p5.ifPresent(builder::z2p5);
+    return builder.build();
   }
 
   private static class Server {
