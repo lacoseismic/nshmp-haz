@@ -5,21 +5,12 @@ ways. Examples of the file formats described below are available in the resource
 [`etc/nshm`](../../etc/nshm/README.md).
 
 __Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed
-ranges `[-360° ‥ 360°]` and `[-90° ‥ 90°]`. Note, however, that mixing site and/or source
+ranges `[-360° ‥ 360°]` and `[-90° ‥ 90°]`. However, mixing site and/or source
 coordinates across the antimeridian (the -180° to 180° transition) will yield unexpected results.
 For Pacific models and calculations, always use positive or negative longitudes exclusively.
 
-## Site String
-
-For the case of running a single site of interest, most *nshmp-haz* programs accept a
-comma-delimited string of the form: `name,lon,lat[,vs30,vsInf[,z1p0,z2p5]]`, where `vs30`, `vsInf`,
-`z1p0`, and `z2p5` are optional. Note that if `vs30` is supplied, so too must `vsInf`. Likewise if
-`z1p0` is supplied, so too must `z2p5`. If the string contains any spaces, escape them or wrap the
-entire string in double quotes.
-
-For any site parameter values that are not supplied on the command line or in the file formats
-below, the following defaults are used (see the `site` member of the
-[configuration parameter](./Calculation-Configuration.md#calculation-configuration-parameters) table):
+For any site parameter values that are not supplied in the file formats below, the following
+defaults are used:
 
 ```text
     name: Unnamed
@@ -30,7 +21,7 @@ below, the following defaults are used (see the `site` member of the
 ```
 
 For basin depth parameters `z1p0` and `z2p5`, a `null` value indicates that a GMM should use
-it's 'default' basin depth scale factor.
+it's 'default' basin depth scale factor, which is usually included in it's Vs30 site term.
 
 ## Comma-Delimited Format (\*.csv)
 

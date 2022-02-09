@@ -54,9 +54,9 @@ public class RateCalc {
    * argument.
    *
    * <p>Please refer to the nshmp-haz <a
-   * href="https://github.com/usgs/nshmp-haz/wiki">wiki</a> for comprehensive
-   * descriptions of source models, configuration files, site files, and
-   * earthquake rate calculations.
+   * href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/docs">documentation</a>
+   * for comprehensive descriptions of source models, configuration files, site
+   * files, and earthquake rate calculations.
    *
    * @see <a
    *      href="https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/blob/main/docs/pages/Building-&-Running.md">

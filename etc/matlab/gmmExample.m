@@ -54,11 +54,11 @@ input.z2p5  =   NaN; % in km; NaN triggers default basin depth model
 input.z1p0  =   NaN; % in km; NaN triggers default basin depth model
 
 % Specify a ground motion model. GMM identifiers:
-% http://usgs.github.io/nshmp-haz/javadoc/gov/usgs/earthquake/nshmp/gmm/Gmm.html
+% https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html
 gmm = 'ASK_14';
 
 % Specify an intensity measure type (IMT). IMT identifiers:
-% http://usgs.github.io/nshmp-haz/javadoc/gov/usgs/earthquake/nshmp/gmm/Imt.html
+% https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Imt.html
 imt = 'PGA';
 
 % Do a calculation. The MatUtil.calc(gmm, imt, gmmInput) method returns an
