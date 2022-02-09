@@ -14,11 +14,11 @@ clear;
 % 90.0,
 %
 % For a full list of GMM input paramters see:
-% http://usgs.github.io/nshmp-haz/javadoc/gov/usgs/earthquake/nshmp/gmm/GmmInput.html
+% https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/GmmInput.html
 %
 % If 'null' is supplied as a value or a GMM input field and values are
 % not given, the default values are used:
-% http://usgs.github.io/nshmp-haz/javadoc/gov/usgs/earthquake/nshmp/gmm/GmmInput.Builder.html#withDefaults--
+% https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/GmmInput.Builder.html#withDefaults()
 inputs = fileread('gmm-inputs.csv');
 
 
