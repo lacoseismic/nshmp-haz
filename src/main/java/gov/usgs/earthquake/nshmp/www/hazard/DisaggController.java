@@ -139,6 +139,10 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double vs30,
+      @QueryValue @Nullable Double PGA,
+      @QueryValue @Nullable Double SA0P2,
+      @QueryValue @Nullable Double SA1P0,
+      @QueryValue @Nullable Double SA5P0,
       @QueryValue @Nullable Set<DisaggDataType> out) {
 
     /*
