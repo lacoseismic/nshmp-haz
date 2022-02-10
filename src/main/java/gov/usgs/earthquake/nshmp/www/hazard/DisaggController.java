@@ -77,7 +77,7 @@ public class DisaggController {
       description = "Disaggregation",
       responseCode = "200")
   @Get(
-      uri = "rp/{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
+      uri = "{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggReturnPeriod(
       HttpRequest<?> http,
@@ -126,7 +126,7 @@ public class DisaggController {
       description = "Disaggregation",
       responseCode = "200")
   @Get(
-      uri = "iml/{longitude}/{latitude}/{vs30}",
+      uri = "{longitude}/{latitude}/{vs30}",
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggIml(
       HttpRequest<?> http,
@@ -139,6 +139,10 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double vs30,
+      @QueryValue @Nullable Double PGA,
+      @QueryValue @Nullable Double SA0P2,
+      @QueryValue @Nullable Double SA1P0,
+      @QueryValue @Nullable Double SA5P0,
       @QueryValue @Nullable Set<DisaggDataType> out) {
 
     /*
