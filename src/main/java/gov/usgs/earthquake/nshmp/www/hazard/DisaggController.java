@@ -77,7 +77,7 @@ public class DisaggController {
       description = "Disaggregation",
       responseCode = "200")
   @Get(
-      uri = "rp/{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
+      uri = "{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggReturnPeriod(
       HttpRequest<?> http,
@@ -96,6 +96,7 @@ public class DisaggController {
       @QueryValue @Nullable Set<HazardImt> imt,
       @QueryValue @Nullable Set<DisaggDataType> out) {
     try {
+      HttpResponse.accepted();
       Set<Imt> imts = HazardService.readImts(http);
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
@@ -126,7 +127,7 @@ public class DisaggController {
       description = "Disaggregation",
       responseCode = "200")
   @Get(
-      uri = "iml/{longitude}/{latitude}/{vs30}",
+      uri = "{longitude}/{latitude}/{vs30}",
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggIml(
       HttpRequest<?> http,
