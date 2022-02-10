@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -57,8 +56,6 @@ public class ServletUtil {
   public static final ExecutorService TASK_EXECUTOR;
 
   public static final int THREAD_COUNT;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ServletUtil.class);
 
   @Value("${nshmp-haz.model-path}")
   private Path modelPath;
