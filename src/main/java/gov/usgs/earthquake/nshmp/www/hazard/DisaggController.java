@@ -96,7 +96,6 @@ public class DisaggController {
       @QueryValue @Nullable Set<HazardImt> imt,
       @QueryValue @Nullable Set<DisaggDataType> out) {
     try {
-      HttpResponse.accepted();
       Set<Imt> imts = HazardService.readImts(http);
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
