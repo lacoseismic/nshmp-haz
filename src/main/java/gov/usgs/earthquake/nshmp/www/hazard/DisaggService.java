@@ -117,8 +117,7 @@ public final class DisaggService {
         .response(response)
         .build();
     String svcResponse = ServletUtil.GSON2.toJson(body);
-    return HttpResponse.ok(svcResponse)
-        .header("Connection", "keep-alive");
+    return HttpResponse.created(svcResponse);
   }
 
   /*
