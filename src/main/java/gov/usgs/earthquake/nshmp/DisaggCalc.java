@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -155,8 +156,16 @@ public class DisaggCalc {
       int colsToSkip = siteColumns.size(); // needed?
       log.info("Site data columns: " + colsToSkip);
 
+      /* Possible batch vs30 from config.vs30s. */
+      checkArgument(
+          config.hazard.vs30s.size() <= 1,
+          "config.hazard.vs30s may only have one value for disagg");
+      OptionalDouble vs30 = (config.hazard.vs30s.size() == 1)
+          ? OptionalDouble.of(config.hazard.vs30s.iterator().next())
+          : OptionalDouble.empty();
+
       /* Sites */
-      List<Site> sites = Sites.fromCsv(siteFile, config, model.siteData());
+      List<Site> sites = Sites.fromCsv(siteFile, model.siteData(), vs30);
       log.info("Sites: " + sites.size());
 
       Set<Imt> modelImts = model.config().hazard.imts;
@@ -280,7 +289,7 @@ public class DisaggCalc {
 
     log.info(PROGRAM + " (return period): calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites);
+    HazardExport handler = HazardExport.create(model, config, sites, OptionalDouble.empty());
     Path disaggDir = handler.outputDir().resolve("disagg");
     Files.createDirectory(disaggDir);
 
@@ -369,6 +378,7 @@ public class DisaggCalc {
     }
 
     log.info(PROGRAM + " (IML): calculating ...");
+
     Path outDir = createOutputDir(config.output.directory);
     Path disaggDir = outDir.resolve("disagg");
     Files.createDirectory(disaggDir);

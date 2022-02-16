@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
@@ -138,10 +139,10 @@ class PeerTest {
     Map<String, double[]> expectedsMap = loadExpecteds(modelId);
     HazardModel model = HazardModel.load(MODEL_DIR.resolve(modelId));
     CalcConfig config = model.config();
-    Iterable<Site> sites = Sites.fromCsv(MODEL_DIR.resolve(
-        modelId).resolve("sites.csv"),
-        config,
-        model.siteData());
+    Iterable<Site> sites = Sites.fromCsv(
+        MODEL_DIR.resolve(modelId).resolve("sites.csv"),
+        model.siteData(),
+        OptionalDouble.empty());
 
     // ensure that only PGA is being used
     checkState(config.hazard.imts.size() == 1);
