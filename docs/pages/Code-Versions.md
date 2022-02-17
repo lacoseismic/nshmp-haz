@@ -32,9 +32,11 @@ We continue to investigate the cause of other differences but they are small eno
 comfortable moving forward deploying nshmp-haz v2 codes and models to our public web services and
 applications.
 
-## Example map
+[Download v1 to v2 difference and ratio maps](https://code.usgs.gov/ghsc/users/pmpowers/nshmp-haz/-/raw/code-version-doc-506/docs/pages/images/comp_JSON_vs_XML_0p2-grid-20220216-BC.pdf?inline=false)
 
-![v1 to v2 differences and ratios](./images/comp_JSON_vs_XML_0p2-grid-20220216-BC.pdf)
+## Example map: 0.2 s, 2475-yr
+
+![0.2 s SA, 2475-yr](./images/JSON_vs_XML-SA0P2-2475.jpg)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)
