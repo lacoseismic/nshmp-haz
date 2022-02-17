@@ -30,6 +30,7 @@ use *nshmp-haz* as well as underlying model implementation details.
 * [USGS Models](./pages/USGS-Models.md)
   * [Model Editions](./pages/Model-Editions.md)
   * [Logic Trees & Uncertainty](./pages/Logic-Trees-&-Uncertainty.md)
+  * [Code Versions](./pages/Code-Versions.md)
 
 ## Related Information
 

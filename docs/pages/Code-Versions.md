@@ -1,4 +1,4 @@
-# Hazard Calculation Code Versions
+# Code Versions
 
 The static datasets of USGS NSHMs prior to 2014 were computed using Fortran (see
 [nshmp-haz-fortran](https://github.com/usgs/nshmp-haz-fortran]). The static datasets for the

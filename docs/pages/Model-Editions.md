@@ -98,6 +98,7 @@ one of the dynamic editions is likely better.
 * [USGS Models](./USGS-Models.md#usgs-models)
   * [Model Editions](./Model-Editions.md#model-editions)
   * [Logic Trees & Uncertainty](./Logic-Trees-&-Uncertainty.md#logic-trees-&-uncertainty)
+  * [Code Versions](./Code-Versions.md#code-versions)
 * [**Documentation Index**](../README.md)
 
 ---
