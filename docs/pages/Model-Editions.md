@@ -24,26 +24,26 @@ version numbers. Links to documentation and data for each of the models below ar
 page. Changes between editions in model regions are documented in the release notes of the
 individual model repositories.
 
-Region | Year | Version | Static | Dynamic | Notes |
--------|:----:|:-------:|:------:|:-------:|-------|
-Conterminous U.S. | 2018 | [v5.0.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | 2014 | [v4.2.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | 2014 | [v4.1.4](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
-Conterminous U.S. | 2014 | [v4.0.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2014r1) |:small_blue_diamond:| | ASCE7-16 |
-Conterminous U.S. | 2008 | v3.3.3 | |:small_blue_diamond:| |
-Conterminous U.S. | 2008 | [v3.2.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2008r3) |:small_blue_diamond:| | |
-Conterminous U.S. | 2008 | v3.1.0 |:small_blue_diamond:| | ASCE7-10 |
-Conterminous U.S. | 2008 | v3.0.0 | | | |
-Conterminous U.S. | 2002 | v2.0.0 | | | |
-Conterminous U.S. | 1996 | v1.0.0 | | | |
-Alaska            | 2007 | v2.1.0 | |:small_blue_diamond:| |
-Alaska            | 2007 | v2.0.0 |:small_blue_diamond:| | ASCE7-10 |
-Alaska            | 1999 | v1.0.0 | | | |
-American Samoa    | 2012 | v1.0.0 | | | |
-Guam              | 2012 | v1.0.0 | | | |
-Hawaii            | 2018 | v2.0.0 | | TBD | |
-Hawaii            | 1998 | v1.1.0 | | TBD | |
-Hawaii            | 1998 | v1.0.0 |:small_blue_diamond:| | ASCE7-10 |
+Region            | Year | Version | Static | Dynamic | Notes |
+------------------|:----:|:-------:|:------:|:-------:|-------|
+Conterminous U.S. | 2018 | [5.0.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [4.2.0](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [4.1.4](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)<sup>†</sup> | |:small_blue_diamond:| |
+Conterminous U.S. | 2014 | [4.0.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2014r1) |:small_blue_diamond:| | ASCE7-16 |
+Conterminous U.S. | 2008 | 3.3.3 | |:small_blue_diamond:| |
+Conterminous U.S. | 2008 | [3.2.0](https://github.com/usgs/nshmp-haz-fortran/releases/tag/nshm2008r3) |:small_blue_diamond:| | |
+Conterminous U.S. | 2008 | 3.1.0 |:small_blue_diamond:| | ASCE7-10 |
+Conterminous U.S. | 2008 | 3.0.0 | | | |
+Conterminous U.S. | 2002 | 2.0.0 | | | |
+Conterminous U.S. | 1996 | 1.0.0 | | | |
+Alaska            | 2007 | 2.1.0 | |:small_blue_diamond:| |
+Alaska            | 2007 | 2.0.0 |:small_blue_diamond:| | ASCE7-10 |
+Alaska            | 1999 | 1.0.0 | | | |
+American Samoa    | 2012 | 1.0.0 | | | |
+Guam              | 2012 | 1.0.0 | | | |
+Hawaii            | 2018 | 2.0.0 | | TBD | |
+Hawaii            | 1998 | 1.1.0 | | TBD | |
+Hawaii            | 1998 | 1.0.0 |:small_blue_diamond:| | ASCE7-10 |
 Puerto Rico & <br/> U.S. Virgin Islands | 2003 | v1.0.0 | | | |
 
 <sup>†</sup> __Note on the 2014 conterminous U.S. NSHM:__ Initial publication of the
@@ -98,6 +98,7 @@ one of the dynamic editions is likely better.
 * [USGS Models](./USGS-Models.md#usgs-models)
   * [Model Editions](./Model-Editions.md#model-editions)
   * [Logic Trees & Uncertainty](./Logic-Trees-&-Uncertainty.md#logic-trees-&-uncertainty)
+  * [Code Versions](./Code-Versions.md#code-versions)
 * [**Documentation Index**](../README.md)
 
 ---
