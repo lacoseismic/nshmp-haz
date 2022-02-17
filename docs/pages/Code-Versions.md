@@ -1,13 +1,13 @@
 # Hazard Calculation Code Versions
 
 The static datasets of USGS NSHMs prior to 2014 were computed using Fortran (see
-(nshmp-haz-fortran)[https://github.com/usgs/nshmp-haz-fortran]). The static datasets for the
+[nshmp-haz-fortran](https://github.com/usgs/nshmp-haz-fortran]). The static datasets for the
 2014 Conterminous U.S. NSHM were computed using the Fortran codes and
-(OpenSHA)[https://opensha.org/] for the California portion of the model. The dynamic versions
+[OpenSHA](https://opensha.org/) for the California portion of the model. The dynamic versions
 of the 2008 and 2014 Conterminous U.S. models were then implemented in the 1st version of
-(nshmp-haz)[https://github.com/usgs/nshmp-haz] (on GitHub). This updated Java codebase uses XML
-source models and supports the web services behind the dynamic calculations of the (Unified Hazard
-Hazard Tool)[https://earthquake.usgs.gov/hazards/interactive/] (UHT).
+[nshmp-haz](https://github.com/usgs/nshmp-haz) (on GitHub). This updated Java codebase uses XML
+source models and supports the web services behind the dynamic calculations of the [Unified Hazard
+Hazard Tool](https://earthquake.usgs.gov/hazards/interactive/) (UHT).
 
 The 2nd version of nshmp-haz (this repository) supercedes prior codebases. The development of this
 version involved a significant refactoring of both the computational code and source model format.
