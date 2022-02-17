@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -112,10 +113,25 @@ public class HazardCalc {
       log.info(config.toString());
 
       log.info("");
-      List<Site> sites = readSites(args[1], config, model.siteData(), log);
-      log.info("Sites: " + Sites.toString(sites));
 
-      Path out = calc(model, config, sites, log);
+      Path out = null;
+      if (config.hazard.vs30s.isEmpty()) {
+
+        List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.empty(), log);
+        log.info("Sites: " + Sites.toString(sites));
+        out = calc(model, config, sites, OptionalDouble.empty(), log);
+
+      } else {
+
+        for (double vs30 : config.hazard.vs30s) {
+          log.info("Vs30 batch: " + vs30);
+          List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.of(vs30), log);
+          log.info("Sites: " + Sites.toString(sites));
+          out = calc(model, config, sites, OptionalDouble.of(vs30), log);
+        }
+        out = checkNotNull(out.getParent());
+
+      }
 
       if (config.output.dataTypes.contains(DataType.MAP)) {
         HazardMaps.createDataSets(out, config.output.returnPeriods, log);
@@ -137,8 +153,8 @@ public class HazardCalc {
 
   static List<Site> readSites(
       String arg,
-      CalcConfig defaults,
       SiteData siteData,
+      OptionalDouble vs30,
       Logger log) {
 
     Path path = Paths.get(arg);
@@ -149,8 +165,8 @@ public class HazardCalc {
 
     try {
       return fname.endsWith(".csv")
-          ? Sites.fromCsv(path, defaults, siteData)
-          : Sites.fromGeoJson(path, defaults, siteData);
+          ? Sites.fromCsv(path, siteData, vs30)
+          : Sites.fromGeoJson(path, siteData, vs30);
     } catch (IOException ioe) {
       throw new IllegalArgumentException(
           "Error parsing sites file [%s]; see sites file documentation");
@@ -165,6 +181,7 @@ public class HazardCalc {
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
+      OptionalDouble vs30,
       Logger log) throws IOException, InterruptedException, ExecutionException {
 
     int threadCount = config.performance.threadCount.value();
@@ -172,7 +189,7 @@ public class HazardCalc {
     log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     log.info(PROGRAM + ": calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites);
+    HazardExport handler = HazardExport.create(model, config, sites, vs30);
     CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
     WriteTask.Builder writeTask = new WriteTask.Builder(handler);
 

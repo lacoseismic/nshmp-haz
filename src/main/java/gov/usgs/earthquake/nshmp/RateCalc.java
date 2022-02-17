@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -107,7 +108,8 @@ public class RateCalc {
       log.info(config.toString());
 
       log.info("");
-      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+      List<Site> sites = HazardCalc.readSites(
+          args[1], model.siteData(), OptionalDouble.empty(), log);
       log.info("Sites: " + Sites.toString(sites));
 
       Path out = calc(model, config, sites, log);
