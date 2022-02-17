@@ -129,7 +129,7 @@ public class HazardCalc {
           log.info("Sites: " + Sites.toString(sites));
           out = calc(model, config, sites, OptionalDouble.of(vs30), log);
         }
-        out = out.getParent();
+        out = checkNotNull(out.getParent());
 
       }
 
