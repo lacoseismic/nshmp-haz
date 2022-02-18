@@ -12,12 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -111,15 +108,15 @@ public class HazardCalc {
             .build();
       }
       log.info(config.toString());
-
       log.info("");
 
-      Path out = null;
+      Path out = createOutputDir(config.output.directory);
+
       if (config.hazard.vs30s.isEmpty()) {
 
         List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.empty(), log);
         log.info("Sites: " + Sites.toString(sites));
-        out = calc(model, config, sites, OptionalDouble.empty(), log);
+        calc(model, config, sites, out, log);
 
       } else {
 
@@ -127,9 +124,10 @@ public class HazardCalc {
           log.info("Vs30 batch: " + vs30);
           List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.of(vs30), log);
           log.info("Sites: " + Sites.toString(sites));
-          out = calc(model, config, sites, OptionalDouble.of(vs30), log);
+          Path vs30dir = out.resolve("vs30-" + ((int) vs30));
+          Files.createDirectory(vs30dir);
+          calc(model, config, sites, vs30dir, log);
         }
-        out = checkNotNull(out.getParent());
 
       }
 
@@ -152,16 +150,16 @@ public class HazardCalc {
   }
 
   static List<Site> readSites(
-      String arg,
+      String siteFile,
       SiteData siteData,
       OptionalDouble vs30,
       Logger log) {
 
-    Path path = Paths.get(arg);
+    Path path = Paths.get(siteFile);
     log.info("Sites file: " + path.toAbsolutePath().normalize());
-    String fname = arg.toLowerCase();
+    String fname = siteFile.toLowerCase();
     checkArgument(fname.endsWith(".csv") || fname.endsWith(".geojson"),
-        "Sites file [%s] must be a path to a *.csv or *.geojson file", arg);
+        "Sites file [%s] must be a path to a *.csv or *.geojson file", siteFile);
 
     try {
       return fname.endsWith(".csv")
@@ -173,15 +171,12 @@ public class HazardCalc {
     }
   }
 
-  /*
-   * Compute hazard curves using the supplied model, config, and sites. Method
-   * returns the path to the directory where results were written.
-   */
-  private static Path calc(
+  /* Compute hazard curves using the supplied model, config, and sites. */
+  private static void calc(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
-      OptionalDouble vs30,
+      Path out,
       Logger log) throws IOException, InterruptedException, ExecutionException {
 
     int threadCount = config.performance.threadCount.value();
@@ -189,18 +184,14 @@ public class HazardCalc {
     log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     log.info(PROGRAM + ": calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, vs30);
-    CalcTask.Builder calcTask = new CalcTask.Builder(model, config, exec);
-    WriteTask.Builder writeTask = new WriteTask.Builder(handler);
-
+    HazardExport handler = HazardExport.create(model, config, sites, out);
     Stopwatch stopwatch = Stopwatch.createStarted();
     int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
 
-    Future<Path> out = null;
     for (int i = 0; i < sites.size(); i++) {
       Site site = sites.get(i);
-      Hazard hazard = calcTask.withSite(site).call();
-      out = exec.submit(writeTask.withResult(hazard));
+      Hazard hazard = HazardCalcs.hazard(model, config, site, exec);
+      handler.write(hazard);
       int count = i + 1;
       if (count % logInterval == 0) {
         log.info(String.format(
@@ -208,16 +199,22 @@ public class HazardCalc {
             count, sites.size(), stopwatch));
       }
     }
-    /* Block shutdown until last task is returned. */
-    Path outputDir = out.get();
-
-    handler.expire();
     exec.shutdown();
     log.info(String.format(
         PROGRAM + ": %s sites completed in %s",
-        handler.resultCount(), stopwatch.stop()));
+        sites.size(), stopwatch));
+  }
 
-    return outputDir;
+  /* Avoid clobbering exsting result directories via incrementing. */
+  static Path createOutputDir(Path dir) throws IOException {
+    int i = 1;
+    Path outDir = dir;
+    while (Files.exists(outDir)) {
+      outDir = outDir.resolveSibling(dir.getFileName() + "-" + i);
+      i++;
+    }
+    Files.createDirectories(outDir);
+    return outDir;
   }
 
   private static ExecutorService initExecutor(int threadCount) {
@@ -225,83 +222,6 @@ public class HazardCalc {
       return MoreExecutors.newDirectExecutorService();
     } else {
       return Executors.newFixedThreadPool(threadCount);
-    }
-  }
-
-  private static final class CalcTask implements
-      Callable<Hazard> {
-
-    final HazardModel model;
-    final CalcConfig config;
-    final Site site;
-    final Executor exec;
-
-    CalcTask(
-        HazardModel model,
-        CalcConfig config,
-        Site site,
-        Executor exec) {
-
-      this.model = model;
-      this.config = config;
-      this.site = site;
-      this.exec = exec;
-    }
-
-    @Override
-    public Hazard call() {
-      return HazardCalcs.hazard(model, config, site, exec);
-    }
-
-    static class Builder {
-
-      final HazardModel model;
-      final CalcConfig config;
-      final Executor exec;
-
-      Builder(HazardModel model, CalcConfig config, Executor exec) {
-        this.model = model;
-        this.config = config;
-        this.exec = exec;
-      }
-
-      /* Builds and returns the task. */
-      CalcTask withSite(Site site) {
-        return new CalcTask(model, config, site, exec);
-      }
-    }
-  }
-
-  private static final class WriteTask implements Callable<Path> {
-
-    final HazardExport handler;
-    final Hazard hazard;
-
-    WriteTask(
-        HazardExport handler,
-        Hazard hazard) {
-      this.handler = handler;
-      this.hazard = hazard;
-    }
-
-    @Override
-    public Path call() throws IOException {
-      handler.write(hazard);
-      return handler.outputDir();
-    }
-
-    static class Builder {
-
-      final HazardExport handler;
-
-      Builder(HazardExport handler) {
-        this.handler = handler;
-      }
-
-      /* Builds and returns the task. */
-      WriteTask withResult(Hazard hazard) {
-        return new WriteTask(handler, hazard);
-      }
     }
   }
 
