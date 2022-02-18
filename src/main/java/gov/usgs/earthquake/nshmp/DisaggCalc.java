@@ -170,20 +170,21 @@ public class DisaggCalc {
 
       Set<Imt> modelImts = model.config().hazard.imts;
 
+      Path out = HazardCalc.createOutputDir(config.output.directory);
+
       /*
        * If no IML columns present, disaggregate at IMTs and return period from
        * config, otherwise disaggregate at target IMLs are present.
        *
-       * We've removed support for gejson site files at present.
+       * We've removed support for geojson site files at present.
        */
-      Path out;
       if (siteColumns.size() == allColumns.size()) {
 
         checkArgument(
             modelImts.containsAll(config.hazard.imts),
             "Config specifies IMTs not supported by model");
         double returnPeriod = config.disagg.returnPeriod;
-        out = calcRp(model, config, sites, returnPeriod, log);
+        calcRp(model, config, sites, returnPeriod, out, log);
 
       } else {
 
@@ -196,7 +197,7 @@ public class DisaggCalc {
             sites.size() == imls.size(),
             "Sites and spectra lists different sizes");
         log.info("Spectra: " + imls.size()); // 1:1 with sites
-        out = calcIml(model, config, sites, imls, log);
+        calcIml(model, config, sites, imls, out, log);
 
       }
 
@@ -266,15 +267,13 @@ public class DisaggCalc {
     return imtImlMap;
   }
 
-  /*
-   * Compute hazard curves using the supplied model, config, and sites. Method
-   * returns the path to the directory where results were written.
-   */
-  private static Path calcRp(
+  /* Compute hazard curves using the supplied model, config, and sites. */
+  private static void calcRp(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
       double returnPeriod,
+      Path out,
       Logger log) throws IOException {
 
     ExecutorService exec = null;
@@ -289,8 +288,8 @@ public class DisaggCalc {
 
     log.info(PROGRAM + " (return period): calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, OptionalDouble.empty());
-    Path disaggDir = handler.outputDir().resolve("disagg");
+    HazardExport handler = HazardExport.create(model, config, sites, out);
+    Path disaggDir = out.resolve("disagg");
     Files.createDirectory(disaggDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
@@ -326,14 +325,10 @@ public class DisaggCalc {
             count, sites.size(), stopwatch));
       }
     }
-    handler.expire();
-
     log.info(String.format(
         PROGRAM + " (return period): %s sites completed in %s",
-        sites.size(), stopwatch.stop()));
-
+        sites.size(), stopwatch));
     exec.shutdown();
-    return handler.outputDir();
   }
 
   /* Hazard curves are already in log-x space. */
@@ -360,11 +355,12 @@ public class DisaggCalc {
    * Compute hazard curves using the supplied model, config, and sites. Method
    * returns the path to the directory where results were written.
    */
-  private static Path calcIml(
+  private static void calcIml(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
       List<Map<Imt, Double>> imls,
+      Path out,
       Logger log) throws IOException {
 
     ExecutorService exec = null;
@@ -379,8 +375,7 @@ public class DisaggCalc {
 
     log.info(PROGRAM + " (IML): calculating ...");
 
-    Path outDir = createOutputDir(config.output.directory);
-    Path disaggDir = outDir.resolve("disagg");
+    Path disaggDir = out.resolve("disagg");
     Files.createDirectory(disaggDir);
 
     Stopwatch stopwatch = Stopwatch.createStarted();
@@ -414,13 +409,10 @@ public class DisaggCalc {
             count, sites.size(), stopwatch));
       }
     }
-
     log.info(String.format(
         PROGRAM + " (IML): %s sites completed in %s",
-        sites.size(), stopwatch.stop()));
-
+        sites.size(), stopwatch));
     exec.shutdown();
-    return outDir;
   }
 
   private static final class Response {
@@ -517,18 +509,6 @@ public class DisaggCalc {
       this.imt = imt.name();
       this.data = data;
     }
-  }
-
-  // duplicate of that in HazardExport
-  private static Path createOutputDir(Path dir) throws IOException {
-    int i = 1;
-    Path incrementedDir = dir;
-    while (Files.exists(incrementedDir)) {
-      incrementedDir = incrementedDir.resolveSibling(dir.getFileName() + "-" + i);
-      i++;
-    }
-    Files.createDirectories(incrementedDir);
-    return incrementedDir;
   }
 
   private static String disaggFilename(Site site) {
