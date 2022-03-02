@@ -52,6 +52,7 @@ import gov.usgs.earthquake.nshmp.data.XySequence;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.model.SiteData;
 
 /**
  * Disaggregate probabilistic seismic hazard at a return period of interest or
@@ -165,7 +166,10 @@ public class DisaggCalc {
           : OptionalDouble.empty();
 
       /* Sites */
-      List<Site> sites = Sites.fromCsv(siteFile, model.siteData(), vs30);
+      SiteData siteData = config.hazard.useSiteData
+          ? model.siteData()
+          : SiteData.EMPTY;
+      List<Site> sites = Sites.fromCsv(siteFile, siteData, vs30);
       log.info("Sites: " + sites.size());
 
       Set<Imt> modelImts = model.config().hazard.imts;
@@ -288,7 +292,8 @@ public class DisaggCalc {
 
     log.info(PROGRAM + " (return period): calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, out);
+    boolean namedSites = sites.get(0).name() != Site.NO_NAME;
+    HazardExport handler = HazardExport.create(model, config, namedSites, out);
     Path disaggDir = out.resolve("disagg");
     Files.createDirectory(disaggDir);
 
