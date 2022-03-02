@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -177,7 +176,7 @@ public class HazardCalc {
       CalcConfig config,
       List<Site> sites,
       Path out,
-      Logger log) throws IOException, InterruptedException, ExecutionException {
+      Logger log) throws IOException {
 
     int threadCount = config.performance.threadCount.value();
     final ExecutorService exec = initExecutor(threadCount);
