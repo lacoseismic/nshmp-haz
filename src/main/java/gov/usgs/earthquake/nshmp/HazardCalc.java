@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -111,10 +110,13 @@ public class HazardCalc {
       log.info("");
 
       Path out = createOutputDir(config.output.directory);
+      SiteData siteData = config.hazard.useSiteData
+          ? model.siteData()
+          : SiteData.EMPTY;
 
       if (config.hazard.vs30s.isEmpty()) {
 
-        List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.empty(), log);
+        List<Site> sites = readSites(args[1], siteData, OptionalDouble.empty(), log);
         log.info("Sites: " + Sites.toString(sites));
         calc(model, config, sites, out, log);
 
@@ -122,7 +124,7 @@ public class HazardCalc {
 
         for (double vs30 : config.hazard.vs30s) {
           log.info("Vs30 batch: " + vs30);
-          List<Site> sites = readSites(args[1], model.siteData(), OptionalDouble.of(vs30), log);
+          List<Site> sites = readSites(args[1], siteData, OptionalDouble.of(vs30), log);
           log.info("Sites: " + Sites.toString(sites));
           Path vs30dir = out.resolve("vs30-" + ((int) vs30));
           Files.createDirectory(vs30dir);
@@ -177,14 +179,15 @@ public class HazardCalc {
       CalcConfig config,
       List<Site> sites,
       Path out,
-      Logger log) throws IOException, InterruptedException, ExecutionException {
+      Logger log) throws IOException {
 
     int threadCount = config.performance.threadCount.value();
     final ExecutorService exec = initExecutor(threadCount);
     log.info("Threads: " + ((ThreadPoolExecutor) exec).getCorePoolSize());
     log.info(PROGRAM + ": calculating ...");
 
-    HazardExport handler = HazardExport.create(model, config, sites, out);
+    boolean namedSites = sites.get(0).name() != Site.NO_NAME;
+    HazardExport handler = HazardExport.create(model, config, namedSites, out);
     Stopwatch stopwatch = Stopwatch.createStarted();
     int logInterval = sites.size() < 100 ? 1 : sites.size() < 1000 ? 10 : 100;
 
