@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -18,6 +19,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -105,12 +107,15 @@ public class RateCalc {
             .build();
       }
       log.info(config.toString());
-
       log.info("");
-      List<Site> sites = HazardCalc.readSites(args[1], config, model.siteData(), log);
+
+      Path out = HazardCalc.createOutputDir(config.output.directory);
+
+      List<Site> sites = HazardCalc.readSites(
+          args[1], model.siteData(), OptionalDouble.empty(), log);
       log.info("Sites: " + Sites.toString(sites));
 
-      Path out = calc(model, config, sites, log);
+      calc(model, config, sites, out, log);
       log.info(PROGRAM + ": finished");
 
       /* Transfer log and write config, windows requires fh.close() */
@@ -134,12 +139,14 @@ public class RateCalc {
    * a single calculation, rate calculations are single threaded. Concurrent
    * calculations for multiple sites are handled below.
    */
-  private static Path calc(
+  private static void calc(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
+      Path out,
       Logger log) throws IOException, ExecutionException, InterruptedException {
 
+    Stopwatch stopwatch = Stopwatch.createStarted();
     ThreadCount threadCount = config.performance.threadCount;
     EqRateExport export = null;
     if (threadCount != ThreadCount.ONE) {
@@ -147,35 +154,31 @@ public class RateCalc {
       ListeningExecutorService executor = MoreExecutors.listeningDecorator(poolExecutor);
       log.info("Threads: " + ((ThreadPoolExecutor) poolExecutor).getCorePoolSize());
       log.info(PROGRAM + ": calculating ...");
-      export = concurrentCalc(model, config, sites, log, executor);
+      export = concurrentCalc(model, config, sites, out, executor);
       executor.shutdown();
     } else {
       log.info("Threads: Running on calling thread");
       log.info(PROGRAM + ": calculating ...");
-      export = EqRateExport.create(model, config, sites, log);
+      export = EqRateExport.create(model, config, sites, out);
       for (Site site : sites) {
         EqRate rate = EqRate.create(model, config, site);
         export.write(rate);
       }
     }
-    export.expire();
-
     log.info(String.format(
         PROGRAM + ": %s sites completed in %s",
-        export.resultCount(), export.elapsedTime()));
-
-    return export.outputDir();
+        sites.size(), stopwatch));
   }
 
   private static EqRateExport concurrentCalc(
       HazardModel model,
       CalcConfig config,
       List<Site> sites,
-      Logger log,
+      Path out,
       ListeningExecutorService executor)
       throws InterruptedException, ExecutionException, IOException {
 
-    EqRateExport export = EqRateExport.create(model, config, sites, log);
+    EqRateExport export = EqRateExport.create(model, config, sites, out);
 
     int submitted = 0;
     int batchSize = 10;
