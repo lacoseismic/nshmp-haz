@@ -8,7 +8,7 @@ project includes a variety of command line applications and web service classes 
 
 Please see the [documentation](docs/README.md) for more information.
 
-DOI: https://doi.org/10.5066/P9STF5GK (version [2.0.0][4])
+DOI: <https://doi.org/10.5066/P9STF5GK> (version [2.0.0][4])
 
 [1]: https://www.usgs.gov
 [2]: https://www.usgs.gov/programs/earthquake-hazards/hazards
