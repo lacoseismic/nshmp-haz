@@ -108,6 +108,7 @@ test {
   useJUnitPlatform()
 
   filter {
-    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsLarge"
+    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsConus"
+    excludeTestsMatching "gov.usgs.earthquake.nshmp.model.NshmTestsHawaii"
   }
 }
