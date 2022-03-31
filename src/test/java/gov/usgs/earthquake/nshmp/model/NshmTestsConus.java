@@ -66,7 +66,7 @@ class NshmTestsConus {
 
   private static final double TOLERANCE = 1e-12;
 
-  private static final List<NamedLocation> CONUS_SITES = List.of(
+  private static final List<NamedLocation> SITES = List.of(
       LOS_ANGELES_CA,
       SAN_FRANCISCO_CA,
       SEATTLE_WA,
@@ -111,7 +111,7 @@ class NshmTestsConus {
   }
 
   private static Stream<NamedLocation> siteStream() {
-    return CONUS_SITES.stream();
+    return SITES.stream();
   }
 
   private static void compareCurves(NamedLocation location) {
@@ -246,7 +246,7 @@ class NshmTestsConus {
     /* Initialize and shut down executor to generate results. */
     setUpBeforeClass();
 
-    writeExpecteds("nshm-conus", 2018, CONUS_SITES);
+    writeExpecteds(MODEL_NAME, MODEL_YEAR, SITES);
 
     tearDownAfterClass();
   }
