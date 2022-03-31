@@ -62,7 +62,7 @@ import gov.usgs.earthquake.nshmp.gmm.Imt;
  *
  * @author U.S. Geological Survey
  */
-class NshmTestsLarge {
+class NshmTestsConus {
 
   private static final double TOLERANCE = 1e-12;
 
@@ -116,7 +116,6 @@ class NshmTestsLarge {
 
   private static void compareCurves(NamedLocation location) {
 
-    System.out.println(location);
     // String actual = generateActual(model, location);
     Map<String, XySequence> actual = generateActual(location);
     // String expected = readExpected(modelName, year, location);
@@ -125,11 +124,6 @@ class NshmTestsLarge {
 
     // assertEquals(expected.keySet(), actual.keySet());
     for (String key : actual.keySet()) {
-      System.out.println(key);
-      System.out.println(actual.get(key));
-    }
-    for (String key : actual.keySet()) {
-      System.out.println(key);
       assertCurveEquals(expected.get(key), actual.get(key), TOLERANCE);
     }
   }
