@@ -6,8 +6,9 @@ use with seismic hazard models developed by the NSHMP for the U.S. and its terri
 project includes a variety of command line applications and web service classes and relies on the
 [*nshmp-lib*][3] hazard library, among other dependencies.
 
-Please see the [documentation](docs/README.md) for more information. The current version of the
-code is [2.0.0][4].
+Please see the [documentation](docs/README.md) for more information.
+
+The current published version of the code is [2.0.0][4] with IPDS record: IP-139142.
 
 **Suggested citation:**  Powers, P.M., Clayton, B.S., and Altekruse, J.M., 2022, nshmp-haz:
 National Seismic Hazard Model Project hazard applications and web services. U.S. Geological Survey
