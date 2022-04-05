@@ -17,5 +17,5 @@ software release, doi: [10.5066/P9STF5GK][5].
 [1]: https://www.usgs.gov
 [2]: https://www.usgs.gov/programs/earthquake-hazards/hazards
 [3]: https://code.usgs.gov/ghsc/nshmp/nshmp-lib
-[4]: https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tags/2.0.0
+[4]: https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/2.0.0
 [5]: https://doi.org/10.5066/P9STF5GK
