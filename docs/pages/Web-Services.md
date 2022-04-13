@@ -121,11 +121,13 @@ Open browser to [http://localhost:8080/](http://localhost:8080/).
 
 A public Docker image is avaialable on [Docker Hub](https://hub.docker.com/r/usgs/nshmp-haz-ws)
 
-There are 2 main tags:
+There are 3 main tags:
 
-* staging-latest (latest): Refers to the
+* `latest`: Refers to the
 [main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch and is the latest updates
-* production-latest: Refers to the
+* `staging-latest`: Refers to the
+[main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch and is the latest updates
+* `production-latest`: Refers to the
 [production](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/production) branch and is stable
 
 ```bash
@@ -155,6 +157,22 @@ docker run -p 8080:8080 -v "$(pwd):/model" nshmp-haz-ws
 ```
 
 Open browser to [http://localhost:8080/](http://localhost:8080/).
+
+#### Java Memory
+
+When running **nshmp-haz** web services with Docker
+the initial (Xms) and maximum (Xmx) JVM memory sizes can
+be set with the environment flag (-e, -env):
+
+```bash
+docker run -p <PORT>:8080 -e JAVA_OPTS="-Xms<INITIAL> -Xmx<MAX>" -d usgs/nshmp-haz-ws
+
+# Example
+docker run -p 8080:8080 -e JAVA_OPTS="-Xms1g -Xmx8g" -d usgs/nshmp-haz-ws
+```
+
+Where `<INITIAL>` and `<MAX >`should be set to the desired initial and maximum memory sizes,
+respectively.
 
 ---
 
