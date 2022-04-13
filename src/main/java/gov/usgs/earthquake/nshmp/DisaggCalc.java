@@ -174,7 +174,7 @@ public class DisaggCalc {
 
       Set<Imt> modelImts = model.config().hazard.imts;
 
-      Path out = HazardCalc.createOutputDir(config.output.directory);
+      Path out = HazardExport.createDirectory(config.output.directory);
 
       /*
        * If no IML columns present, disaggregate at IMTs and return period from
