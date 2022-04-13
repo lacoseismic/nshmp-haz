@@ -183,7 +183,6 @@ Markdown Lint:
     - .java
   script:
     - ./gradlew markdownlint
-  allow_failure: true
 
 Unit Tests:
   artifacts:
