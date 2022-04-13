@@ -109,7 +109,7 @@ public class HazardCalc {
       log.info(config.toString());
       log.info("");
 
-      Path out = createOutputDir(config.output.directory);
+      Path out = HazardExport.createDirectory(config.output.directory);
       SiteData siteData = config.hazard.useSiteData
           ? model.siteData()
           : SiteData.EMPTY;
@@ -206,18 +206,6 @@ public class HazardCalc {
     log.info(String.format(
         PROGRAM + ": %s sites completed in %s",
         sites.size(), stopwatch));
-  }
-
-  /* Avoid clobbering exsting result directories via incrementing. */
-  static Path createOutputDir(Path dir) throws IOException {
-    int i = 1;
-    Path outDir = dir;
-    while (Files.exists(outDir)) {
-      outDir = outDir.resolveSibling(dir.getFileName() + "-" + i);
-      i++;
-    }
-    Files.createDirectories(outDir);
-    return outDir;
   }
 
   private static ExecutorService initExecutor(int threadCount) {

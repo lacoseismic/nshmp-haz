@@ -28,6 +28,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.EqRateExport;
+import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.calc.ThreadCount;
@@ -109,7 +110,7 @@ public class RateCalc {
       log.info(config.toString());
       log.info("");
 
-      Path out = HazardCalc.createOutputDir(config.output.directory);
+      Path out = HazardExport.createDirectory(config.output.directory);
 
       List<Site> sites = HazardCalc.readSites(
           args[1], model.siteData(), OptionalDouble.empty(), log);
