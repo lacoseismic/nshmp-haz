@@ -158,7 +158,7 @@ docker run -p 8080:8080 -v "$(pwd):/model" nshmp-haz-ws
 
 Open browser to [http://localhost:8080/](http://localhost:8080/).
 
-#### Java Memory
+### Java Memory
 
 When running **nshmp-haz** web services with Docker
 the initial (Xms) and maximum (Xmx) JVM memory sizes can
