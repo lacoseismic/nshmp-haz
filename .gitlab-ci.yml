@@ -1,7 +1,6 @@
 variables:
   JACOCO_HTML_DIR: ${REPORTS_DIR}/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
-  NSHMP_HAZ_WS_IMAGE: ${CODE_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
   REPORTS_DIR: build/reports
 
 # Do not run for merge requests
@@ -104,6 +103,19 @@ stages:
     - latest_image_name="${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
     - docker tag "${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}" "${latest_image_name}";
     - docker push "${latest_image_name}";
+    - if [[
+          ${CI_COMMIT_REF_SLUG} == "${CI_DEFAULT_BRANCH}" ||
+          ${CI_COMMIT_REF_SLUG} == "production" ||
+          -n "${CI_COMMIT_TAG}"
+      ]]; then
+        docker tag "${latest_image_name}" "usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
+        docker push "usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
+
+        if [[ ${ENVIRONMENT} == "staging" ]]; then
+          docker tag "usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest" "usgs/${CI_PROJECT_NAME}:latest";
+          docker push "usgs/${CI_PROJECT_NAME}:latest";
+        fi
+      fi
     - |
       printf "
         --------
@@ -211,7 +223,6 @@ Trigger nshmp-haz-ws CDK:
         --form ref=${REF} \
         --form "variables[description]=Triggered by nshmp-haz" \
         --form "variables[ENVIRONMENT]=${ENVIRONMENT}" \
-        --form "variables[NSHMP_HAZ_WS_IMAGE]=${NSHMP_HAZ_WS_IMAGE}" \
         --form "variables[TRIGGER_PASSCODE]=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN}" \
         "https://${PRIVATE_GITLAB}/api/v4/projects/${NSHMP_HAZ_WS_CDK_PROJECT_ID}/trigger/pipeline"
   stage: trigger
