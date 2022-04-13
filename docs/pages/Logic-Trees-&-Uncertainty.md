@@ -3,7 +3,7 @@
 The following page details the logic trees of epistemic uncertainty considered in NSHMs supported
 by *nshmp-haz*. Logic trees are represented in a NSHM using files ending in `-tree.json`.
 
-[[_TOC_]]
+[[*TOC*]]
 
 ## Terminology
 
@@ -15,34 +15,34 @@ alternative models.
 
 | Description | 2008  | 2014 | 2018 |
 |:----------- |:----- |:---- |:---- |
-| CEUS   | __0.1__ : AB_06 (140 bar)<br>__0.1__ : AB_06 (200 bar)<br>__0.1__ : CAMPBELL_03<br>__0.1__ : FRANKEL_96<br>__0.1__ : SILVA_02<br>__0.2__ : SOMERVILLE_01<br>__0.2__ : TORO_97<br>__0.1__ : TP_05 | __0.22__ : AB_06'<br>__0.08__ : ATKINSON_08'<br>__0.11__ : CAMPBELL_03<br>__0.06__ : FRANKEL_96<br>__0.15__ : PEZESHK_11<br>__0.06__ : SILVA_02<br>__0.10__ : SOMERVILLE_01<br>__0.11__ : TORO_97<br>__0.11__ : TP_05 | __0.667__ : NGA_EAST_USGS (17)<br>__0.333__ : NGA_EAST_SEEDS (14)<br>(common aleatory variability) |
-| Sigma Epistemic | _(none)_ | _(no change)_ | __0.2__ : USGS Panel<br>__0.8__ : EPRI |
-| Site Aleatory | _(none)_ | _(no change)_ | __0.185, 0.63, 0.185__ : Site ± σ |
+| CEUS   | **0.1** : AB_06 (140 bar)<br>**0.1** : AB_06 (200 bar)<br>**0.1** : CAMPBELL_03<br>**0.1** : FRANKEL_96<br>**0.1** : SILVA_02<br>**0.2** : SOMERVILLE_01<br>**0.2** : TORO_97<br>**0.1** : TP_05 | **0.22** : AB_06'<br>**0.08** : ATKINSON_08'<br>**0.11** : CAMPBELL_03<br>**0.06** : FRANKEL_96<br>**0.15** : PEZESHK_11<br>**0.06** : SILVA_02<br>**0.10** : SOMERVILLE_01<br>**0.11** : TORO_97<br>**0.11** : TP_05 | **0.667** : NGA_EAST_USGS (17)<br>**0.333** : NGA_EAST_SEEDS (14)<br>(common aleatory variability) |
+| Sigma Epistemic | *(none)* | *(no change)* | **0.2** : USGS Panel<br>**0.8** : EPRI |
+| Site Aleatory | *(none)* | *(no change)* | **0.185, 0.63, 0.185** : Site ± σ |
 
 ## Active Crustal Ground Motion Models
 
 | Description | 2008  | 2014 | 2018 |
 |:----------- |:----- |:---- |:---- |
-| WUS | __0.3333__ : BA_08<br>__0.3333__ : CB_08<br>__0.3334__ : CY_08 | __0.22__ : ASK_14<br>__0.22__ : BSSA_14<br>__0.22__ : CB_14<br>__0.22__ : CY_14<br>__0.22__ : IDRISS_14 | __0.25__ : ASK_14<br>__0.25__ : BSSA_14<br>__0.25__ : CB_14<br>__0.25__ : CY_14 |
-| Mean Epistemic | NGA-West1 (M,R)<br>__0.185__ : epi+<br>__0.630__ : off<br>__0.185__ : epi- | NGA-West2 (M,R)<br>__0.185__ : epi+<br>__0.630__ : off<br>__0.185__ : epi- | _(no change)_  |
+| WUS | **0.3333** : BA_08<br>**0.3333** : CB_08<br>**0.3334** : CY_08 | **0.22** : ASK_14<br>**0.22** : BSSA_14<br>**0.22** : CB_14<br>**0.22** : CY_14<br>**0.22** : IDRISS_14 | **0.25** : ASK_14<br>**0.25** : BSSA_14<br>**0.25** : CB_14<br>**0.25** : CY_14 |
+| Mean Epistemic | NGA-West1 (M,R)<br>**0.185** : epi+<br>**0.630** : off<br>**0.185** : epi- | NGA-West2 (M,R)<br>**0.185** : epi+<br>**0.630** : off<br>**0.185** : epi- | *(no change)*  |
 
 ## Subduction Ground Motion Models
 
 | Description | 2008  | 2014 | 2018 |
 |:----------- |:----- |:---- |:---- |
-| Cascadia<br>(interface) | __0.25__ : AB_03 (global)<br>__0.25__ : YOUNGS_97<br>__0.50__ : ZHAO_06 | __0.1__ : AB_03 (global)<br>__0.3__ : AM_09<br>__0.3__ : BCHYDRO_12<br>__0.3__ : ZHAO_06 | __0.3333__ : AM_09<br>__0.3334__ : BCHYDRO_12<br>__0.3333__ : ZHAO_06 |
-| Cascadia<br>(slab) | __0.25__ : AB_03 (global)<br>__0.25__ : AB_03 (cascadia)<br>__0.50__ : YOUNGS_97 | __0.1665__ : AB_03 (global, mod)<br>__0.1665__ : AB_03 (cascadia, mod)<br>__0.3330__ : BCHYDRO_12<br>__0.3340__ : ZHAO_06 | __0.5__ : BCHYDRO_12<br>__0.5__ : ZHAO_06 |
+| Cascadia<br>(interface) | **0.25** : AB_03 (global)<br>**0.25** : YOUNGS_97<br>**0.50** : ZHAO_06 | **0.1** : AB_03 (global)<br>**0.3** : AM_09<br>**0.3** : BCHYDRO_12<br>**0.3** : ZHAO_06 | **0.3333** : AM_09<br>**0.3334** : BCHYDRO_12<br>**0.3333** : ZHAO_06 |
+| Cascadia<br>(slab) | **0.25** : AB_03 (global)<br>**0.25** : AB_03 (cascadia)<br>**0.50** : YOUNGS_97 | **0.1665** : AB_03 (global, mod)<br>**0.1665** : AB_03 (cascadia, mod)<br>**0.3330** : BCHYDRO_12<br>**0.3340** : ZHAO_06 | **0.5** : BCHYDRO_12<br>**0.5** : ZHAO_06 |
 
 ## Fault Source Model (CEUS)
 
 | Model | Description | 2008 | 2014 | 2018 |
 |:----- |:----------- |:---- |:---- |:---- |
-| Deformation |  | __1.0__ : GEO | __0.1__ : BIRD<br>__0.8__ : GEO<br>__0.1__ : ZENG | _(no change)_  |
-| Rupture |  | __0.5__ : Full<br> __0.5__ : Partial | _(no change)_ | _(no change)_ |
-| Magnitude Scaling |  | __1.0__ : Somerville-01 (area) | _(no change)_  | _(no change)_  |
-| Maximum M¹ | Partial: epistemic | __0.2, 0.6, 0.2__ : M ± 0.2 | _(no change)_  | _(no change)_  |
-|           | Full : epistemic   | __0.2, 0.6, 0.2__ : M ± 0.2 | _(no change)_  | _(no change)_  |
-|           | Full : aleatory    |  M ± 0.24 (±2σ normal PDF)  | _(no change)_  | _(no change)_  |
+| Deformation |  | **1.0** : GEO | **0.1** : BIRD<br>**0.8** : GEO<br>**0.1** : ZENG | *(no change)*  |
+| Rupture |  | **0.5** : Full<br> **0.5** : Partial | *(no change)* | *(no change)* |
+| Magnitude Scaling |  | **1.0** : Somerville-01 (area) | *(no change)*  | *(no change)*  |
+| Maximum M¹ | Partial: epistemic | **0.2, 0.6, 0.2** : M ± 0.2 | *(no change)*  | *(no change)*  |
+|           | Full : epistemic   | **0.2, 0.6, 0.2** : M ± 0.2 | *(no change)*  | *(no change)*  |
+|           | Full : aleatory    |  M ± 0.24 (±2σ normal PDF)  | *(no change)*  | *(no change)*  |
 
 ¹ There are a very limited number of fault sources in CEUS  
 
@@ -50,59 +50,59 @@ alternative models.
 
 | Model | Description | 2008 | 2014 | 2018 |
 |:----- |:----------- |:---- |:---- |:---- |
-| Deformation |  | __1.0__ : GEO | __0.1__ : BIRD<br>__0.8__ : GEO<br>__0.1__ : ZENG | _(no change)_  |
-| Rupture | Partial | __0.333__ : IMW, __0.5__ : PNW | _(no change)_ | _(no change)_ |
-|         | Full    | __0.667__ : IMW, __0.5__ : PNW | _(no change)_ | _(no change)_ |
-| Magnitude Scaling |  | __1.0__ : WC_94 (length) | _(no change)_  | _(no change)_  |
-| Maximum M | Partial: epistemic | __0.2, 0.6, 0.2__ : M ± 0.2 | _(no change)_  | _(no change)_  |
-|           | Full : epistemic   | __0.2, 0.6, 0.2__ : M ± 0.2 | _(no change)_  | _(no change)_  |
-|           | Full : aleatory    |  M ± 0.24 (±2σ normal PDF)  | _(no change)_  | _(no change)_  |
-| Dip | Reverse & Strike-Slip | __1.0__ : assigned | _(no change)_ | _(no change)_ |
-|     | Normal | __0.2, 0.6, 0.2__ : 50 ± 10° | __0.2, 0.6, 0.2__ : 50±15° | _(no change)_ |
+| Deformation |  | **1.0** : GEO | **0.1** : BIRD<br>**0.8** : GEO<br>**0.1** : ZENG | *(no change)*  |
+| Rupture | Partial | **0.333** : IMW, **0.5** : PNW | *(no change)* | *(no change)* |
+|         | Full    | **0.667** : IMW, **0.5** : PNW | *(no change)* | *(no change)* |
+| Magnitude Scaling |  | **1.0** : WC_94 (length) | *(no change)*  | *(no change)*  |
+| Maximum M | Partial: epistemic | **0.2, 0.6, 0.2** : M ± 0.2 | *(no change)*  | *(no change)*  |
+|           | Full : epistemic   | **0.2, 0.6, 0.2** : M ± 0.2 | *(no change)*  | *(no change)*  |
+|           | Full : aleatory    |  M ± 0.24 (±2σ normal PDF)  | *(no change)*  | *(no change)*  |
+| Dip | Reverse & Strike-Slip | **1.0** : assigned | *(no change)* | *(no change)* |
+|     | Normal | **0.2, 0.6, 0.2** : 50 ± 10° | **0.2, 0.6, 0.2** : 50±15° | *(no change)* |
 
 ## Grid Source Model
 
 | Model | Description | 2008 | 2014 | 2018 |
 |:----- |:----------- |:---- |:---- |:---- |
-| Maximum M | WUS (exceptions) | __1.0__ : 7.0 | __0.9__ : 7.5 (truncated)<br>__0.1__ : 8.0 (tapered) | _(no change)_  |
-|           | CEUS (craton) | __0.1__ : 6.6<br>__0.2__ : 6.8<br>__0.5__ : 7.0<br>__0.2__ : 7.2 | __0.2__ : 6.5<br>__0.5__ : 7.0<br>__0.2__ : 7.5<br>__0.1__ : 8.0 | _(no change)_  |
-| Smoothing |  | __1.0__ : Fixed |__0.4__ : Adaptive<br>__0.6__ : Fixed | _(no change)_  |
-| Magnitude Scaling | CEUS & WUS | __1.0__ : WC_94 (length) | _(no change)_  | _(no change)_  |
-| Focal Mechanisms | Spatially Varying | __1.0__ : assigned | _(no change)_  | _(no change)_  |
-| Depth (zTor) | WUS, M < 6.5 | __1.0__ : 5.0 km | _(no change)_  | _(no change)_  |
-|              | WUS, M ≥ 6.5 | __1.0__ : 1.0 km | _(no change)_  | _(no change)_  |
-|              | CEUS, All M  | __1.0__ : 5.0 km | _(no change)_  | _(no change)_  |
+| Maximum M | WUS (exceptions) | **1.0** : 7.0 | **0.9** : 7.5 (truncated)<br>**0.1** : 8.0 (tapered) | *(no change)*  |
+|           | CEUS (craton) | **0.1** : 6.6<br>**0.2** : 6.8<br>**0.5** : 7.0<br>**0.2** : 7.2 | **0.2** : 6.5<br>**0.5** : 7.0<br>**0.2** : 7.5<br>**0.1** : 8.0 | *(no change)*  |
+| Smoothing |  | **1.0** : Fixed |**0.4** : Adaptive<br>**0.6** : Fixed | *(no change)*  |
+| Magnitude Scaling | CEUS & WUS | **1.0** : WC_94 (length) | *(no change)*  | *(no change)*  |
+| Focal Mechanisms | Spatially Varying | **1.0** : assigned | *(no change)*  | *(no change)*  |
+| Depth (zTor) | WUS, M < 6.5 | **1.0** : 5.0 km | *(no change)*  | *(no change)*  |
+|              | WUS, M ≥ 6.5 | **1.0** : 1.0 km | *(no change)*  | *(no change)*  |
+|              | CEUS, All M  | **1.0** : 5.0 km | *(no change)*  | *(no change)*  |
 
 ## Fault Source Model (CA, UCERF3)
 
 | Model | 2014 | 2018 |
 |:----- |:---- |:---- |
-| Fault | __0.5__ : FM3.1<br> __0.5__ : FM3.2 | _(no change)_ |
-| Deformation | __0.1__ : ABM<br>__0.3__ : BIRD<br>__0.3__ : GEO<br>__0.3__ : ZENG | _(no change)_  |
-| Scaling Relationship<br>(mag-area & slip-length)| __0.2__ : ELLS_B<br>__0.2__ : ELLS_B (sqrt-L)<br>__0.2__ : HB_08<br>__0.2__ : SHAW_09<br>__0.2__ : SHAW_09 (csd) | _(no change)_  |
-| Slip Distribution | __0.5__ : Tapered<br>__0.5__ : Boxcar | _(no change)_ |
-| M ≥ 5 rate (yr⁻¹) | __0.1__ : 6.5<br>__0.6__ : 7.9<br>__0.3__ : 9.6 | _(no change)_  |
-| Inversion Constraint | __1.0__ : UCERF2 (CH) | _(no change)_  |
-| Fault Mo Rate | __1.0__ : off |  _(no change)_  |
+| Fault | **0.5** : FM3.1<br> **0.5** : FM3.2 | *(no change)* |
+| Deformation | **0.1** : ABM<br>**0.3** : BIRD<br>**0.3** : GEO<br>**0.3** : ZENG | *(no change)*  |
+| Scaling Relationship<br>(mag-area & slip-length)| **0.2** : ELLS_B<br>**0.2** : ELLS_B (sqrt-L)<br>**0.2** : HB_08<br>**0.2** : SHAW_09<br>**0.2** : SHAW_09 (csd) | *(no change)*  |
+| Slip Distribution | **0.5** : Tapered<br>**0.5** : Boxcar | *(no change)* |
+| M ≥ 5 rate (yr⁻¹) | **0.1** : 6.5<br>**0.6** : 7.9<br>**0.3** : 9.6 | *(no change)*  |
+| Inversion Constraint | **1.0** : UCERF2 (CH) | *(no change)*  |
+| Fault Mo Rate | **1.0** : off |  *(no change)*  |
 
 ## Grid Source Model (CA, UCERF3)
 
 | Model | 2014 | 2018 |
 |:----- |:---- |:---- |
-| Grid: Maximum M | __0.1__ : 7.3<br>__0.8__ : 7.6<br>__0.1__ : 7.9 | _(no change)_  |
-| Grid: Smoothing | __0.5__ : Adaptive<br>__0.5__ : Fixed | _(no change)_  |
-| Grid: Focal Mechanisms | __1.0__ : assigned | _(no change)_  |
-| Magnitude Scaling | __1.0__ : WC_94 (length) | _(no change)_  |
+| Grid: Maximum M | **0.1** : 7.3<br>**0.8** : 7.6<br>**0.1** : 7.9 | *(no change)*  |
+| Grid: Smoothing | **0.5** : Adaptive<br>**0.5** : Fixed | *(no change)*  |
+| Grid: Focal Mechanisms | **1.0** : assigned | *(no change)*  |
+| Magnitude Scaling | **1.0** : WC_94 (length) | *(no change)*  |
 
 ## Subduction seismic source model
 
 | Model | 2008 | 2014 | 2018 |
 |:----- |:---- |:---- |:---- |
-| Rupture | __0.67__ : Full<br>__0.33__ : Partial | __1.0__ : Full<br>__0.5__ : Partial (segmented)<br>__0.5__ : Partial (unsegmented) | _(no change)_ |
-| Magnitude Scaling | __1.0__ : Youngs et al. (length) | __0.334__ : Strasser et al. (2010)<br>__0.333__ : Murotani et al. (2008)<br>__0.333__ : Papazachos et al. (2004)  | _(no change)_  |
-| Magnitude Uncertainty | __0.2, 0.6, 0.2__ : M±0.2 | _(none)_  | _(no change)_  |
-| Depth | __0.5__ : Base<br>__0.2__ : Bottom<br>__0.2__ : Middle<br>__0.1__ : Top | __0.3__ : Bottom<br>__0.5__ : Middle<br>__0.2__ : Top | _(no change)_ |
-| Slab: Maximum M | __1.0__ : 7.2 | __0.9__ : 7.5<br>__0.1__ : 8.0 | _(no change)_ |
+| Rupture | **0.67** : Full<br>**0.33** : Partial | **1.0** : Full<br>**0.5** : Partial (segmented)<br>**0.5** : Partial (unsegmented) | *(no change)* |
+| Magnitude Scaling | **1.0** : Youngs et al. (length) | **0.334** : Strasser et al. (2010)<br>**0.333** : Murotani et al. (2008)<br>**0.333** : Papazachos et al. (2004)  | *(no change)*  |
+| Magnitude Uncertainty | **0.2, 0.6, 0.2** : M±0.2 | *(none)*  | *(no change)*  |
+| Depth | **0.5** : Base<br>**0.2** : Bottom<br>**0.2** : Middle<br>**0.1** : Top | **0.3** : Bottom<br>**0.5** : Middle<br>**0.2** : Top | *(no change)* |
+| Slab: Maximum M | **1.0** : 7.2 | **0.9** : 7.5<br>**0.1** : 8.0 | *(no change)* |
 
 * Full: a.k.a. 'characteristic'
 * Partial: a.k.a. 'Gutenberg-Richter' or 'floating'

@@ -20,10 +20,10 @@ Each model region has a dedicated repository with version tags marking different
 
 * [Conterminous U.S.](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus)
 * [Hawaii](https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii)  
-* Alaska - _update not yet published_
-* Guam & Marianas - _update not yet published_  
-* Puerto Rico & U.S. Virgin Islands - _update not yet published_  
-* Samoa & Pacific Islands - _update not yet published_  
+* Alaska - *update not yet published*
+* Guam & Marianas - *update not yet published*  
+* Puerto Rico & U.S. Virgin Islands - *update not yet published*  
+* Samoa & Pacific Islands - *update not yet published*  
 
 ---
 

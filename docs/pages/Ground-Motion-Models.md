@@ -44,7 +44,7 @@ The following sample `gmm-config.json` file applies the NGA-West 2 epistemic unc
 
 ## GMM Uncertainty Models
 
-*nshmp-haz* supports additional epistemic uncertainty models derived from the PEER NGA-West 1
+_nshmp-haz_ supports additional epistemic uncertainty models derived from the PEER NGA-West 1
 and PEER NGA-West 2 projects. These models both have factors for distance (`Rrup`) bins
 Rrup < 10 km, 10 km <= Rrup, < 30 km, and 30 km <= Rrup, and for magnitude bins M < 6.0, 6.0 <=
 M < 7.0, and 7.0 <= M. These models can be applied within the `gmm-config.json` file as shown in
@@ -52,7 +52,7 @@ the [GMM Uncertainty](#gmm-uncertainty) section above.
 
 ## GMMs By Tectonic Setting
 
-GMMs available in *nshmp-haz* are tabulated by tectonic setting below. See the javadocs for the
+GMMs available in _nshmp-haz_ are tabulated by tectonic setting below. See the javadocs for the
 [GMM Package](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/package-summary.html)
 for implementation details of each GMM and comprehensive lists of GMM IDs.
 
@@ -93,7 +93,7 @@ NGA-East<br>[Goulet et al., 2017](https://peer.berkeley.edu/sites/default/files/
 [Shahjouei and Pezeshk, 2016](http://dx.doi.org/10.1785/0120140367) | NGA_EAST_SEED_SP16 | RotD50 | 3
 **Other**
 [Atkinson, 2008](http://dx.doi.org/10.1785/0120070199)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | ATKINSON_08_PRIME | horizontal | 4
-[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245) | *AB_06_\*<br>140BAR\|200BAR<br>none\|_AB\|_J* | horizontal | 4
+[Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245) | _AB\_06\_\*<br>140BAR\|200BAR<br>none\|\_AB\|\_J_ | horizontal | 4
 [Atkinson & Boore, 2006](http://dx.doi.org/10.1785/0120050245)<br>[Atkinson & Boore, 2011](http://dx.doi.org/10.1785/0120100270) | AB_06_PRIME | horizontal | 4
 [Campbell, 2003](http://dx.doi.org/10.1785/0120020002) | CAMPBELL_03<br>CAMPBELL_03_AB<br>CAMPBELL_03_J | Geometric mean | 4
 [Frankel et al., 1996](https://pubs.usgs.gov/of/1996/532/) | FRANKEL_96<br>FRANKEL_96_AB<br>FRANKEL_96_J | not specified | 4
@@ -112,24 +112,24 @@ for individual NGA-East component model IDs
 
 ### Subduction GMMs
 
-*Note: See the [GMM javadocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html)
-for a comprehensive list of GMM IDs.*
+_Note: See the [GMM javadocs](https://earthquake.usgs.gov/nshmp/docs/nshmp-lib/gov/usgs/earthquake/nshmp/gmm/Gmm.html)
+for a comprehensive list of GMM IDs._
 
 Reference | ID | Component | Notes
 :---------|:---|:----------|:------:
 **NGA-Subduction**
-[Abrahamson & Gülerce, 2020](https://peer.berkeley.edu/sites/default/files/2020_25.pdf) | *AG_20_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|_BASIN* | RotD50
-[Kuehn et al., 2020](https://peer.berkeley.edu/sites/default/files/2020_04_kuehn_final.pdf) | *KBCG_20_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|_BASIN* | RotD50
-[Parker et al., 2020](https://peer.berkeley.edu/sites/default/files/2020_03_parker_final.pdf) | *PSHAB_20_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|_BASIN* | RotD50
+[Abrahamson & Gülerce, 2020](https://peer.berkeley.edu/sites/default/files/2020_25.pdf) | _AG\_20\_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|\_BASIN_ | RotD50
+[Kuehn et al., 2020](https://peer.berkeley.edu/sites/default/files/2020_04_kuehn_final.pdf) | _KBCG\_20\_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|\_BASIN_ | RotD50
+[Parker et al., 2020](https://peer.berkeley.edu/sites/default/files/2020_03_parker_final.pdf) | _PSHAB\_20\_\*<br>GLOBAL\|CASCADIA\|ALASKA<br>INTERFACE\|SLAB<br>no basin\|\_BASIN_ | RotD50
 **Other**
-[Atkinson & Boore, 2003](http://dx.doi.org/10.1785/0120020156) | *AB_03\*<br>GLOBAL\|CASCADIA<br>INTERFACE\|SLAB<br>none\|_LOW_SAT*| horizontal |
+[Atkinson & Boore, 2003](http://dx.doi.org/10.1785/0120020156) | _AB\_03\*<br>GLOBAL\|CASCADIA<br>INTERFACE\|SLAB<br>none\|\_LOW_SAT_| horizontal |
 [Atkinson & Macias, 2009](http://dx.doi.org/10.1785/0120080147) | AM_09_INTERFACE<br>AM_09_INTERFACE_BASIN | Geometric mean | 1
-BC Hydro<br>[Abrahamson et al., 2016](http://dx.doi.org/10.1193/051712EQS188MR) | *BCHYDRO_12_\*<br>INTERFACE\|SLAB<br>none\|_BASIN<br>none\|_BACKARC* | Geometric mean |
-BC Hydro NGA<br>[Abrahamson et al., 2018](https://peer.berkeley.edu/sites/default/files/2018_02_abrahamson_9.10.18.pdf)² | *BCHYDRO_18_NGA_\*<br>INTERFACE\|SLAB<br>none\|_NO_EPI* | Geometric mean | 3
+BC Hydro<br>[Abrahamson et al., 2016](http://dx.doi.org/10.1193/051712EQS188MR) | _BCHYDRO\_12\_\*<br>INTERFACE\|SLAB<br>none\|\_BASIN<br>none\|\_BACKARC_ | Geometric mean |
+BC Hydro NGA<br>[Abrahamson et al., 2018](https://peer.berkeley.edu/sites/default/files/2018_02_abrahamson_9.10.18.pdf)² | _BCHYDRO\_18\_NGA\_\*<br>INTERFACE\|SLAB<br>none\|\_NO_EPI_ | Geometric mean | 3
 [McVerry et al., 2000](http://doi.org/10.5459/BNZSEE.39.1.1-58) | MCVERRY_00_INTERFACE<br>MCVERRY_00_SLAB<br>MCVERRY_00_VOLCANIC | Max-horizontal,<br>also supports geometric mean | 4
 [Youngs et al., 1997](http://dx.doi.org/10.1785/gssrl.68.1.58) | YOUNGS_97_INTERFACE<br>YOUNGS_97_SLAB | Geometric mean |
-[Zhao et al., 2006](http://dx.doi.org/10.1785/0120050122) | *ZHAO_06_\*<br>INTERFACE\|SLAB<br>none\|_BASIN* | Geometric mean |
-[Zhao et al., 2016](http://dx.doi.org/10.1785/0120150034)<br>[Zhao et al., 2016](http://dx.doi.org/10.1785/0120150056) | ZHAO_16_INTERFACE<br>ZHAO_16_SLAB<br>*ZHAO_16_UPPER_MANTLE* | Geometric mean<br>(random orientation) | 5
+[Zhao et al., 2006](http://dx.doi.org/10.1785/0120050122) | _ZHAO\_06\_\*<br>INTERFACE\|SLAB<br>none\|\_BASIN_ | Geometric mean |
+[Zhao et al., 2016](http://dx.doi.org/10.1785/0120150034)<br>[Zhao et al., 2016](http://dx.doi.org/10.1785/0120150056) | ZHAO_16_INTERFACE<br>ZHAO_16_SLAB<br>_ZHAO_16_UPPER_MANTLE_ | Geometric mean<br>(random orientation) | 5
 
 ¹ Interface only  
 ² Likely to be superseded by the final EQ Spectra paper  

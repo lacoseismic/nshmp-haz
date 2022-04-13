@@ -10,8 +10,8 @@ task nodeInstall(type: NpmTask) {
   description "Install markdownlint-clia and yamllint with NPM"
   args = [
     "install",
-    "markdownlint-cli",
-    "yaml-lint",
+    "markdownlint-cli@0.31.1",
+    "yaml-lint@1.2.4",
     "--save-dev",
     "--loglevel",
     "error"

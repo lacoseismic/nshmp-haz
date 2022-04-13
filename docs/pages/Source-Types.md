@@ -12,15 +12,15 @@ geometry itself is unknown or very poorly defined.
 
 [[_TOC_]]
 
-Source models for use with *nshmp-haz* are defined using [JSON](https://www.json.org) and
-[GeoJSON](https://geojson.org). *nshmp-haz* makes determinations about how to represent a source
+Source models for use with _nshmp-haz_ are defined using [JSON](https://www.json.org) and
+[GeoJSON](https://geojson.org). _nshmp-haz_ makes determinations about how to represent a source
 based on a GeoJSON geometry type in conjunction with supporting JSON configuration files. Example
 source configuration files, `*-config.json`, are provided with each source type description.
 Configuration files must be fully specified with `null` JSON member values used to specify 'do
 nothing' where appropriate. Any configuration member value in ALL_CAPS indicates the value is one
 of a fixed number of options commonly referred to as an enum.
 
-__Note on Coordinates:__ *nshmp-haz* supports longitude and latitude values in the closed ranges
+__Note on Coordinates:__ _nshmp-haz_ supports longitude and latitude values in the closed ranges
 `[-360°‥360°]` and `[-90°‥90°]`. Note, however, that mixing site and/or source coordinates across
 the antimeridian (the -180° to 180° transition) will yield unexpected results. For Pacific models
 and calculations, always use positive or negative longitudes exclusively.
@@ -43,7 +43,7 @@ Grid sources are represented in a model using a logic tree with a `rupture-sets.
 ruptures on each branch.  Because gridded seismicity models may be governed by regionally
 varying MFD properties (e.g. `mMax`), rupture sets for grids are defined in a JSON array.
 
-**rupture-sets.json**: Defines an array of one or more rupture sets. Multiple rupture sets are
+__rupture-sets.json__: Defines an array of one or more rupture sets. Multiple rupture sets are
 used to model regional differences in MFD properties such as maximum magnitude. The `feature`
 member points to the ID of a geojson feature (in the `grid-sources/features` directory) that
 defines the bounds of the gridded seismicity source. A grid rupture set `mfd-tree` is never
@@ -62,7 +62,7 @@ defined inline and always points to a tree in a
 ]
 ```
 
-**grid-config.json**: A `grid-depth-map` defines a mapping of magnitude ranges to logic trees of
+__grid-config.json__: A `grid-depth-map` defines a mapping of magnitude ranges to logic trees of
 depth distributions. The map can use arbitrary names as keys, but the magnitude ranges defined by
 each member must be non-overlapping. The magnitude ranges are interpreted as closed (inclusive) –
 open (exclusive), e.g. [mMin..mMax). `maxDepth` constrains the maximum depth of any pseudo fault
@@ -104,7 +104,7 @@ to upper-right). While most gridded rate files contain columns of longitude, lat
 some may contain depth values (intraslab sources), maximum magnitude caps, or other values. Scaled
 spatial PDFs are the preferred approach to modeling regional rate variations, however it is also
 possible to define explicit MFDs at each grid node. To do so, the `spatial-pdf` member
-of a **rupture-sets.json** is replaced with `grid-mfds`. See
+of a __rupture-sets.json__ is replaced with `grid-mfds`. See
 `2018 CONUS NSHM > active-crust > grid-sources` for examples of both approaches.
 
 ## Zone Sources
@@ -146,7 +146,7 @@ directly.
 }
 ```
 
-**zone-config.json:** Zone source model configuration is identical to a grid source configuration.
+__zone-config.json:__ Zone source model configuration is identical to a grid source configuration.
 
 ```json
 {
@@ -182,7 +182,7 @@ they occur in multiple locations on the fault surface with appropriately scaled 
 associated with finite fault models may be explicitly defined or derived from slip rates.
 Fault rupture rates may be modeled using explicitly defined MFDs or logic trees of slip rate.
 
-**fault-source.geojson**: Defines the geometry and properties of a single source. In the example
+__fault-source.geojson__: Defines the geometry and properties of a single source. In the example
 below the presence of a `rate-map` property indicates MFDs should be constructed from the supplied
 slip rates and using the weights defined in a `rate-tree.json`.
 
@@ -229,7 +229,7 @@ slip rates and using the weights defined in a `rate-tree.json`.
 }
 ```
 
-**fault-config.json**: Controls the point spacing on a gridded surface used to realize the fault
+__fault-config.json__: Controls the point spacing on a gridded surface used to realize the fault
 geometry as well as define the models to use for magnitude scaling and rupture floating. Dip
 variations and an associated slip-rate scaling model are also supported for normal faults.
 
@@ -243,7 +243,7 @@ variations and an associated slip-rate scaling model are also supported for norm
 }
 ```
 
-**rupture-set.json**: When a fault source is represented with a logic tree a
+__rupture-set.json__: When a fault source is represented with a logic tree a
 `rupture-set.json` defines the ruptures for each branch. A rupture set _may_ also define custom
 properties and _may_ also contain a `sections` member that defines the fault sections for the
 rupture set (see note on fault section stitching, [below](#fault-section-stitching)).
@@ -281,7 +281,7 @@ as the joint probability of exceeding ground motions from each independent event
 a cluster may only have an mfd-tree composed of `Mfd.Type.SINGLE` MFDs and the mfd-trees must
 match across all sources in a cluster (i.e. each mfd-tree has the same IDs and weights).
 
-**cluster-set.json** A specialized type of rupture set, this file defines the array of fault
+__cluster-set.json__ A specialized type of rupture set, this file defines the array of fault
 rupture sets that make up a 'cluster'. As with fault sources, the nested rupture sets in a cluster
 set _may_ define `properties` and `sections` members.
 
@@ -317,10 +317,10 @@ U.S. Fault system source sets require three files: `rupture_set.json`, `sections
 logic tree. Note that system sources _may_ have complementary gridded seismicity source models
 with matching logic trees.
 
-**rupture-set.json**: Provides identifying information for the ruptures defined in the adjacant
+__rupture-set.json__: Provides identifying information for the ruptures defined in the adjacant
 sections and ruptures files.
 
-**sections.geojson**: defines a feature collection of the fault sections in a fault network.
+__sections.geojson__: defines a feature collection of the fault sections in a fault network.
 Because fault sections are derived by dividing larger faults into subsections, section features
 contain several properties that differ from standalone fault section source models (e.g.
 `dip-direction`).
@@ -356,7 +356,7 @@ contain several properties that differ from standalone fault section source mode
 }
 ```
 
-**ruptures.csv**: Defines the properties of every rupture. The last column in a rupture file
+__ruptures.csv__: Defines the properties of every rupture. The last column in a rupture file
 defines the ordered array of participating fault section IDs using the shorthand
 `1127:1131-2411:2412`. Colons denote continous ranges of sections and hyphens denote breaks.
 
@@ -383,7 +383,7 @@ using an `slab-config.json` file.
   * [Magnitude Frequency Distributions (MFDs)](./Magnitude-Frequency-Distributions.md#magnitude-frequency-distributions)
   * [Rupture Scaling Relations](./Rupture-Scaling-Relations.md#rupture-scaling-relations)
   * [Ground Motion Models (GMMs)](./Ground-Motion-Models.md#ground-motion-models)
-* [**Documentation Index**](../README.md)
+* [__Documentation Index__](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

@@ -139,9 +139,9 @@ See also: [Grid Source Type](./Source-Types.md#grid-sources)
 
 Zone sources specify a single rate that is distributed over a GeoJSON `Polygon` using point source
 rupture models. Presently, there is a 1:1 mapping of source zones to their associated rate files.
-*__Note:__ The rate file approach will be discouraged and/or deprecated in the near future in favor
+_**Note:** The rate file approach will be discouraged and/or deprecated in the near future in favor
 of dynamically computing rates over a zone from a single value or `rate-tree.json` when the loading
-a model.*
+a model._
 
 ```text
 zone/

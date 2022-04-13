@@ -73,7 +73,7 @@ Open browser to [http://localhost:8080/](http://localhost:8080/).
 
 #### Docker Memory on Mac
 
-By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run nshmp-haz-ws, the 
+By default, Docker Desktop for Mac is set to use 2 GB runtime memory. To run nshmp-haz-ws, the
 memory available to Docker must be [increased](https://docs.docker.com/docker-for-mac/#advanced)
 to a minimum of 4 GB.
 

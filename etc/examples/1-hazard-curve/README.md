@@ -49,4 +49,4 @@ In the next example, we'll override the model supplied configuration with a cust
 
 ---
 
-* [**Documentation Index**](../../../docs/README.md)
+* [__Documentation Index__](../../../docs/README.md)

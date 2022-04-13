@@ -119,10 +119,10 @@ foreach IMT {
 Break the traditional PSHA formulation down into discrete steps and preserve the data associated
 with each step:
 
-* **[1]** Source & Site parameterization
-* **[2]** Ground motion calculation (mean and standard deviation only)
-* **[3]** Exceedance curve calculation (per source)
-* **[4]** Recombine
+* __[1]__ Source & Site parameterization
+* __[2]__ Ground motion calculation (mean and standard deviation only)
+* __[3]__ Exceedance curve calculation (per source)
+* __[4]__ Recombine
 
 Whereas the traditional pipeline looks something like this:
 
@@ -132,9 +132,9 @@ The functional pipeline can be processed stepwise:
 
 ![image](images/psha-functional.png "PSHA functional pipeline")
 
-**Need a disaggregation?** Revisit and parse the results of steps 1 and 2
+__Need a disaggregation?__ Revisit and parse the results of steps 1 and 2
 
-**Need a response spectra?** Spawn more calculations, one for each IMT, at step 2.
+__Need a response spectra?__ Spawn more calculations, one for each IMT, at step 2.
 
 ## Benefits
 
@@ -161,7 +161,7 @@ The functional pipeline can be processed stepwise:
 
 ---
 
-[**Documentation Index**](../README.md)
+[__Documentation Index__](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

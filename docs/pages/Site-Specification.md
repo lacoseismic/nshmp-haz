@@ -107,7 +107,7 @@ outside the 'calculation' polygon are set to zero. For an example, see the
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples) (or
     [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
-* [**Documentation Index**](../README.md)
+* [__Documentation Index__](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

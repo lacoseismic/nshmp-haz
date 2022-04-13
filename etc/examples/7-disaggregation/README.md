@@ -65,4 +65,4 @@ will not be saved.
 
 ---
 
-* [**Documentation Index**](../../../docs/README.md)
+* [__Documentation Index__](../../../docs/README.md)

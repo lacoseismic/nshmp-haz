@@ -76,4 +76,4 @@ __Results directory structure:__
 
 ---
 
-* [**Documentation Index**](../../../docs/README.md)
+* [__Documentation Index__](../../../docs/README.md)
