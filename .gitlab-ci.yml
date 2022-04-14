@@ -1,7 +1,9 @@
 variables:
   JACOCO_HTML_DIR: ${REPORTS_DIR}/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
+  NSHMP_HAZ_WS_IMAGE: ${CODE_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
   REPORTS_DIR: build/reports
+
 
 # Do not run for merge requests
 workflow:
@@ -213,6 +215,7 @@ Trigger nshmp-haz-ws CDK:
         --form ref=${REF} \
         --form "variables[description]=Triggered by nshmp-haz" \
         --form "variables[ENVIRONMENT]=${ENVIRONMENT}" \
+        --form "variables[NSHMP_HAZ_WS_IMAGE]=${NSHMP_HAZ_WS_IMAGE}" \
         --form "variables[TRIGGER_PASSCODE]=${NSHMP_HAZ_WS_CDK_TRIGGER_TOKEN}" \
         "https://${PRIVATE_GITLAB}/api/v4/projects/${NSHMP_HAZ_WS_CDK_PROJECT_ID}/trigger/pipeline"
   stage: trigger
