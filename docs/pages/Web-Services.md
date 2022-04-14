@@ -80,7 +80,7 @@ to a minimum of 4 GB.
 ### Docker Build Options
 
 * [Build and run docker locally](#build-and-run-docker-locally)
-* [Run from Docker Hub](#run-from-docker-hub)
+* [Run from Container Registry](#run-from-container-registry)
 
 ### Build and Run Docker Locally
 
@@ -117,14 +117,14 @@ docker run -p 8080:8080 -v "$(pwd):/model" nshmp-haz-ws
 
 Open browser to [http://localhost:8080/](http://localhost:8080/).
 
-### Run from Docker Hub
+### Run from Container Registry
 
-A public Docker image is avaialable on [Docker Hub](https://hub.docker.com/r/usgs/nshmp-haz-ws)
+A public Docker image is avaialable from this repository's
+[container registry](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/container_registry).
 
 There are 3 main tags:
 
-* `latest`: Refers to the
-[main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch and is the latest updates
+* `latest`: Refers to the latest updates from the main or production branch
 * `staging-latest`: Refers to the
 [main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch and is the latest updates
 * `production-latest`: Refers to the
@@ -132,28 +132,28 @@ There are 3 main tags:
 
 ```bash
 # Pull image
-docker pull nshmp-haz-ws:latest
+docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws:latest 
 
 # Run
-docker run -p 8080:8080 -v "/path/to/model:/model" nshmp-haz-ws
+docker run -p 8080:8080 -v "/path/to/model:/model" code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws
 ```
 
 Web service runs on [http://localhost:8080/](http://localhost:8080/)
 
 The hazard model is read in via Docker volumes.
 
-#### Docker Hub Example with NSHM
+#### Container Registry Example with NSHM
 
 ```bash
 # Pull image
-docker pull nshmp-haz-ws:latest
+docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws:latest 
 
 # Download NSHM CONUS
 cd ..
 git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus
 
 # Run web services
-docker run -p 8080:8080 -v "$(pwd):/model" nshmp-haz-ws
+docker run -p 8080:8080 -v "$(pwd):/model" code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws
 ```
 
 Open browser to [http://localhost:8080/](http://localhost:8080/).
