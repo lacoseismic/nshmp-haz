@@ -99,7 +99,7 @@ one of the dynamic editions is likely better.
   * [Model Editions](./Model-Editions.md#model-editions)
   * [Logic Trees & Uncertainty](./Logic-Trees-&-Uncertainty.md#logic-trees-&-uncertainty)
   * [Code Versions](./Code-Versions.md#code-versions)
-* [**Documentation Index**](../README.md)
+* [__Documentation Index__](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

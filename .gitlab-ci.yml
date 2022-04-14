@@ -14,6 +14,10 @@ stages:
   - build
   - trigger
 
+default:
+  tags:
+    - nshmp
+
 ####
 # Environment Templates
 ####
@@ -93,17 +97,23 @@ stages:
       for arg in ${DOCKER_BUILD_ARGS}; do
         BUILD_ARGS="${BUILD_ARGS} --build-arg ${arg}";
       done
+    - env_image_name="${REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
+    - latest_image_name="${REGISTRY_IMAGE}/${CI_PROJECT_NAME}:latest";
+    - sha_image_name="${REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}";
     - |
       docker build \
         ${BUILD_ARGS} \
         --pull \
-        --tag "${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}" \
+        --tag "${latest_image_name}" \
         --file "${CI_PROJECT_DIR}/${DOCKERFILE}" \
         "${CI_PROJECT_DIR}/.";
-    - docker push "${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}";
-    - latest_image_name="${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
-    - docker tag "${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}" "${latest_image_name}";
     - docker push "${latest_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${env_image_name}";
+      docker push "${env_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${sha_image_name}";
+      docker push "${sha_image_name}";
     - |
       printf "
         --------
@@ -112,13 +122,15 @@ stages:
       " "${CI_PROJECT_NAME}" "${IMAGE_TAG}";
   stage: build
   tags:
-    - build
+    - ${TAG}
   variables:
     DOCKERFILE: Dockerfile
     DOCKER_BUILD_ARGS: |
-      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/centos:latest
-      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/centos:latest
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
     IMAGE_TAG: ${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+    REGISTRY_IMAGE: ${CI_REGISTRY_IMAGE}
+    TAG: build
 
 ####
 # Java Templates
@@ -130,34 +142,55 @@ stages:
 .java:
   image: ${DEVOPS_REGISTRY}usgs/amazoncorretto:11
   stage: build
-  tags:
-    - development
 
 ####
 # Stage: build
 ####
 
-Build Image Haz:
+CHS Registry:
   extends:
     - .docker-build
+  parallel:
+    matrix:
+      -
+        CI_PROJECT_NAME: nshmp-haz
+        DOCKERFILE: Dockerfile
+        REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
+        TAG: build
+      -
+        CI_PROJECT_NAME: nshmp-haz-ws
+        DOCKERFILE: ws.Dockerfile
+        REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
+        TAG: build
   variables:
-    CI_PROJECT_NAME: nshmp-haz
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
-Build Image WS:
+Container Registry:
+  before_script:
+    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
   extends:
     - .docker-build
+  parallel:
+    matrix:
+      -
+        CI_PROJECT_NAME: nshmp-haz
+        DOCKERFILE: Dockerfile
+        REGISTRY_IMAGE: ${CI_REGISTRY_IMAGE}
+        TAG: nshmp
+      -
+        CI_PROJECT_NAME: nshmp-haz-ws
+        DOCKERFILE: ws.Dockerfile
+        REGISTRY_IMAGE: ${CI_REGISTRY_IMAGE}
+        TAG: nshmp
   variables:
-    CI_PROJECT_NAME: nshmp-haz-ws
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
-    DOCKERFILE: ws.Dockerfile
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Build Project:
@@ -170,8 +203,15 @@ Markdown Lint:
   extends:
     - .java
   script:
+    - ./gradlew nodeInstall
     - ./gradlew markdownlint
-  allow_failure: true
+
+YAML Lint:
+  extends:
+    - .java
+  script:
+    - ./gradlew nodeInstall
+    - ./gradlew yamllint
 
 Unit Tests:
   artifacts:
@@ -192,7 +232,7 @@ Unit Tests:
 
 Trigger nshmp-haz-ws CDK:
   needs:
-    - Build Image WS
+    - CHS Registry
   rules:
     -
       <<: *development-env

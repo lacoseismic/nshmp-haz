@@ -106,7 +106,7 @@ T ≤ 10 s   | 0.000333, 0.000499, 0.000749, 0.00112, 0.00169, 0.00253, <br>0.00
   * [Site Specification](./Site-Specification.md#site-specification)
   * [Examples](../../etc/examples) (or
     [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
-* [**Documentation Index**](../README.md)
+* [__Documentation Index__](../README.md)
 
 ---
 ![USGS logo](./images/usgs-icon.png) &nbsp;[U.S. Geological Survey](https://www.usgs.gov)

@@ -19,6 +19,7 @@ use *nshmp-haz* as well as underlying model implementation details.
   * [Calculation Configuration](./pages/Calculation-Configuration.md)
   * [Site Specification](./pages/Site-Specification.md)
   * [Examples](../../etc/examples)
+  * [Web Services](./pages/Web-Services.md)
 * [Hazard Model](./pages/Hazard-Model.md)
   * [Model Structure](./pages/Model-Structure.md)
   * [Model Files](./pages/Model-Files.md)

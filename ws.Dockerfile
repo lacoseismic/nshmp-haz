@@ -43,7 +43,7 @@ LABEL maintainer="Peter Powers <pmpowers@usgs.gov>, Brandon Clayton <bclayton@us
 
 ENV CONTEXT_PATH="/"
 ENV JAVA_OPTS="-Xms2g -Xmx8g"
-ENV MODELS_DIRECTORY="/models"
+ENV MODELS_DIRECTORY="/model"
 
 WORKDIR /app
 
@@ -58,4 +58,4 @@ ENTRYPOINT java \
     -jar \
     nshmp-haz.jar \
     "-Dmicronaut.server.context-path=${CONTEXT_PATH}" \
-    --models="${MODELS_DIRECTORY}";
+    --model="${MODELS_DIRECTORY}";
