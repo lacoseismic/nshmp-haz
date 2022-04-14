@@ -5,23 +5,15 @@ node {
   version = "${nodeVersion}"
 }
 
-/* Install markdownlint-cli with NPM */
+/* Install Dependencies */
 task nodeInstall(type: NpmTask) {
-  description "Install markdownlint-clia and yamllint with NPM"
-  args = [
-    "install",
-    "markdownlint-cli@0.31.1",
-    "yaml-lint@1.2.4",
-    "--save-dev",
-    "--loglevel",
-    "error"
-  ]
+  description "Install dependencies"
+  args = ["install"]
 }
 
 /* Run markdownlint */
 task markdownlint(type: NpxTask) {
   description "Run markdownlint"
-  dependsOn nodeInstall
   command = "markdownlint"
   args = ["**/*.md"]
 }
@@ -29,7 +21,6 @@ task markdownlint(type: NpxTask) {
 /* Apply markdownlint fixes */
 task markdownlintApply(type: NpxTask) {
   description "Apply markdownlint fixes"
-  dependsOn nodeInstall
   command = "markdownlint"
   args = [
     "**/*.md",
@@ -40,7 +31,6 @@ task markdownlintApply(type: NpxTask) {
 /* Run yamllint */
 task yamllint(type: NpxTask) {
   description "Run yamllint"
-  dependsOn nodeInstall
   command = "yamllint"
   args = [
     "**/*.yml",

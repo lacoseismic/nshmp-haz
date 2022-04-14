@@ -10,7 +10,7 @@ githook {
 
   hooks {
     "pre-push" {
-      task = "markdownlint yamllint spotlessCheck spotbugsMain spotbugsTest"
+      task = "nodeInstall markdownlint yamllint spotlessCheck spotbugsMain spotbugsTest"
     }
   }
 }
