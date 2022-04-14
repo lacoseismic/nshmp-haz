@@ -110,9 +110,8 @@ stages:
   variables:
     DOCKERFILE: Dockerfile
     DOCKER_BUILD_ARGS: |
-      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/centos:latest
-      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/centos:latest
-    IMAGE_TAG: ${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+      BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
 
 ####
 # Java Templates
