@@ -109,6 +109,8 @@ default:
     - docker tag "${env_image_name}" "${latest_image_name}"
     - docker push "${latest_image_name}"
   stage: build
+  tags:
+    - development
   variables:
     DOCKERFILE: Dockerfile
     DOCKER_BUILD_ARGS: |
