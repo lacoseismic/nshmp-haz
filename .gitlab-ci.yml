@@ -232,7 +232,7 @@ Unit Tests:
 
 Trigger nshmp-haz-ws CDK:
   needs:
-    - Build Image WS
+    - CHS Registry
   rules:
     -
       <<: *development-env
