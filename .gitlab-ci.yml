@@ -132,7 +132,6 @@ default:
       " "${CI_PROJECT_NAME}" "${IMAGE_TAG}";
   stage: build
   tags:
-    - nshmp
     - build
   variables:
     DOCKERFILE: Dockerfile
