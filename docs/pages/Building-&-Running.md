@@ -74,10 +74,11 @@ files. Disaggregations also have some independent
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-nshmp-haz is available as a [public image](https://hub.docker.com/repository/docker/usgs/nshmp-haz)
+nshmp-haz is available as a public image from the
+[container registry](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/container_registry)
 with tags:
 
-* `development-latest`: Developer forks
+* `latest`: Refers to the latest updates from the main or production branch
 * `staging-latest`: Latest updates associated with the
 [main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch
 * `production-latest`: Latest stable release associated with the
