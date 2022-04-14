@@ -1,7 +1,7 @@
 variables:
   JACOCO_HTML_DIR: ${REPORTS_DIR}/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
-  NSHMP_HAZ_WS_IMAGE: ${CI_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+  NSHMP_HAZ_WS_IMAGE: ${CODE_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
   REPORTS_DIR: build/reports
 
 # Do not run for merge requests
@@ -101,19 +101,28 @@ default:
       done
     - latest_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:latest";
     - env_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
-    - sha_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}";
+    - chs_sha_image_name="${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}";
+    - chs_env_image_name="${CODE_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
     - |
       docker build \
         ${BUILD_ARGS} \
         --pull \
-        --tag "${env_image_name}" \
+        --tag "${latest_image_name}" \
         --file "${CI_PROJECT_DIR}/${DOCKERFILE}" \
         "${CI_PROJECT_DIR}/.";
-    - docker push "${env_image_name}";
-    - docker tag "${env_image_name}" "${latest_image_name}"
-    - docker push "${latest_image_name}"
-    - docker tag "${latest_image_name}" "${sha_image_name}"
-    - docker push "${sha_image_name}"
+    - docker push "${latest_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${env_image_name}";
+      docker push "${env_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${sha_image_name}";
+      docker push "${sha_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${chs_sha_image_name}";
+      docker push "${chs_sha_image_name}";
+    - |
+      docker tag "${latest_image_name}" "${chs_env_image_name}";
+      docker push "${chs_env_image_name}";
     - |
       printf "
         --------
