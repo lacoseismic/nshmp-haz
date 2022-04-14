@@ -13,6 +13,10 @@ stages:
   - build
   - trigger
 
+default:
+  tags:
+    - nshmp
+
 ####
 # Environment Templates
 ####
@@ -105,8 +109,6 @@ stages:
     - docker tag "${env_image_name}" "${latest_image_name}"
     - docker push "${latest_image_name}"
   stage: build
-  tags:
-    - build
   variables:
     DOCKERFILE: Dockerfile
     DOCKER_BUILD_ARGS: |
@@ -123,8 +125,6 @@ stages:
 .java:
   image: ${DEVOPS_REGISTRY}usgs/amazoncorretto:11
   stage: build
-  tags:
-    - development
 
 ####
 # Stage: build
