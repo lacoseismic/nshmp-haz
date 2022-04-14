@@ -165,7 +165,15 @@ Markdown Lint:
   extends:
     - .java
   script:
+    - ./gradlew nodeInstall
     - ./gradlew markdownlint
+
+YAML Lint:
+  extends:
+    - .java
+  script:
+    - ./gradlew nodeInstall
+    - ./gradlew yamllint
 
 Unit Tests:
   artifacts:
