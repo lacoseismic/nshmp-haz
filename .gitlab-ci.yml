@@ -102,6 +102,7 @@ default:
       done
     - latest_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:latest";
     - env_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
+    - sha_image_name="${CI_REGISTRY_IMAGE}/${CI_PROJECT_NAME}:${IMAGE_TAG}";
     - |
       docker build \
         ${BUILD_ARGS} \
@@ -112,12 +113,21 @@ default:
     - docker push "${env_image_name}";
     - docker tag "${env_image_name}" "${latest_image_name}"
     - docker push "${latest_image_name}"
+    - docker tag "${latest_image_name}" "${sha_image_name}"
+    - docker push "${sha_image_name}"
+    - |
+      printf "
+        --------
+        Image Name - %s:%s
+        --------
+      " "${CI_PROJECT_NAME}" "${IMAGE_TAG}";
   stage: build
   variables:
     DOCKERFILE: Dockerfile
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+    IMAGE_TAG: ${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
 
 ####
 # Java Templates
