@@ -1,7 +1,7 @@
 variables:
   JACOCO_HTML_DIR: ${REPORTS_DIR}/jacoco/test/html
   JUNIT_FILES: build/test-results/test/TEST-*.xml
-  NSHMP_HAZ_WS_IMAGE: ${CODE_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+  NSHMP_HAZ_WS_IMAGE: ${CI_REGISTRY_IMAGE}/nshmp-haz-ws:${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
   REPORTS_DIR: build/reports
 
 
