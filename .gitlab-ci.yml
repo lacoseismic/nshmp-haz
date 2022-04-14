@@ -159,7 +159,7 @@ CHS Registry:
         TAG: build
       -
         CI_PROJECT_NAME: nshmp-haz-ws
-        DOCKERFILE: Dockerfile
+        DOCKERFILE: ws.Dockerfile
         REGISTRY_IMAGE: ${CODE_REGISTRY_IMAGE}
         TAG: build
   variables:
@@ -183,7 +183,7 @@ Container Registry:
         TAG: nshmp
       -
         CI_PROJECT_NAME: nshmp-haz-ws
-        DOCKERFILE: Dockerfile
+        DOCKERFILE: ws.Dockerfile
         REGISTRY_IMAGE: ${CI_REGISTRY_IMAGE}
         TAG: nshmp
   variables:
