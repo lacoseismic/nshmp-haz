@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.usgs.earthquake.nshmp.model.Models;
+import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
 
@@ -33,6 +35,7 @@ public class SourceLogicTreesService {
       var response = ResponseBody.success()
           .name(NAME)
           .url(url)
+          .metadata(new ResponseMetadata(HazVersion.appVersions()))
           .request(url)
           .response(trees)
           .build();
@@ -52,6 +55,7 @@ public class SourceLogicTreesService {
       var response = ResponseBody.success()
           .name(NAME)
           .url(url)
+          .metadata(new ResponseMetadata(HazVersion.appVersions()))
           .request(requestData)
           .response(tree)
           .build();

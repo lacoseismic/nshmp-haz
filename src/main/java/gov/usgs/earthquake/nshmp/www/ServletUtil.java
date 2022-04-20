@@ -166,6 +166,7 @@ public class ServletUtil {
     var svcResponse = ResponseBody.error()
         .name(name)
         .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
         .response(msg)
         .build();

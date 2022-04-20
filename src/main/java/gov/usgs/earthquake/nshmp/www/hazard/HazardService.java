@@ -34,7 +34,9 @@ import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SourceType;
+import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
@@ -92,6 +94,7 @@ public final class HazardService {
     var body = ResponseBody.usage()
         .name(NAME)
         .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
         .response(usage)
         .build();
@@ -112,6 +115,7 @@ public final class HazardService {
     var body = ResponseBody.success()
         .name(NAME)
         .url(request.http.getUri().toString())
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(request)
         .response(response)
         .build();
