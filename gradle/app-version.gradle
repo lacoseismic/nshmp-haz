@@ -5,6 +5,7 @@ tasks.withType(JavaCompile) {
     def versionFile = new File("${projectDir}/src/main/resources/version/nshmp-haz-version.json")
     new File(versionFile.getParent()).mkdirs()
     def details = versionDetails()
+    def ciProjectUrl = System.getenv("CI_PROJECT_URL")
     def versionInfo = [
       branchName: details.branchName,
       commitDistance: details.commitDistance,
@@ -13,7 +14,7 @@ tasks.withType(JavaCompile) {
       isCleanTag:  details.isCleanTag,
       lastTag:  details.lastTag,
       projectName: project.name,
-      url: 'git config --get remote.origin.url'.execute().text.replace('\n', ''),
+      url: ciProjectUrl ? ciProjectUrl : 'git config --get remote.origin.url'.execute().text.replace('\n', ''),
       version: details.version,
     ]
     def json = groovy.json.JsonOutput.toJson(versionInfo)
