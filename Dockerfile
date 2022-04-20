@@ -39,6 +39,8 @@ FROM ${BUILD_IMAGE} as builder
 # Remove once nshmp-lib is public
 ARG GITLAB_TOKEN=null
 ARG CI_JOB_TOKEN=null
+ARG CI_PROJECT_URL=null
+ARG CI_COMMIT_BRANCH=null
 
 WORKDIR /app
 
