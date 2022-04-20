@@ -6,8 +6,9 @@ tasks.withType(JavaCompile) {
     new File(versionFile.getParent()).mkdirs()
     def details = versionDetails()
     def ciProjectUrl = System.getenv("CI_PROJECT_URL")
+    def branch = System.getenv("CI_COMMIT_BRANCH")
     def versionInfo = [
-      branchName: details.branchName,
+      branchName: branch ? branch : details.branchName,
       commitDistance: details.commitDistance,
       gitHash:  details.gitHash,
       gitHashFull:  details.gitHashFull,
