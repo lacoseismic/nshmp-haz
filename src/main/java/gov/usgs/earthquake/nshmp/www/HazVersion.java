@@ -9,9 +9,9 @@ public class HazVersion implements AppVersion {
 
   public static VersionInfo[] appVersions() {
     VersionInfo[] versions = {
-      new HazVersion().getVersionInfo(),
-      new LibVersion().getVersionInfo(),
-      new WsUtilsVersion().getVersionInfo(),
+        new HazVersion().getVersionInfo(),
+        new LibVersion().getVersionInfo(),
+        new WsUtilsVersion().getVersionInfo(),
     };
     return versions;
   }
