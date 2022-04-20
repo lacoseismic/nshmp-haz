@@ -1,6 +1,5 @@
 apply plugin: "com.palantir.git-version"
 
-
 tasks.withType(JavaCompile) {
   doFirst {
     def versionFile = new File("${projectDir}/src/main/resources/version/nshmp-haz-version.json")
