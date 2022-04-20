@@ -46,7 +46,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./gradlew assemble
+RUN ./gradlew assemble && cat src/main/resources/*
 
 ####
 # Application image: Run jar file.
