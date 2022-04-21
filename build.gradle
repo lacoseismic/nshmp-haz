@@ -33,6 +33,7 @@ plugins {
   id "com.github.johnrengelman.shadow" version "${shadowVersion}"
   id "com.github.node-gradle.node" version "${nodePluginVersion}"
   id "com.github.spotbugs" version "${spotbugsVersion}"
+  id "com.palantir.git-version" version "${gitVersionVersion}"
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
   id "io.micronaut.application" version "${micronautPluginVersion}"
@@ -40,6 +41,7 @@ plugins {
   id "maven-publish"
 }
 
+apply from: "${projectDir}/gradle/app-version.gradle"
 apply from: "${projectDir}/gradle/dependencies.gradle"
 apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"

@@ -166,6 +166,7 @@ public class ServletUtil {
     var svcResponse = ResponseBody.error()
         .name(name)
         .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
         .response(msg)
         .build();
@@ -206,8 +207,7 @@ public class ServletUtil {
     Server(int threads, Stopwatch timer) {
       this.threads = threads;
       this.timer = timer.toString();
-      this.version = "TODO where to get version?";
+      this.version = new HazVersion().getVersionInfo().version;
     }
   }
-
 }

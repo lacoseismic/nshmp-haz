@@ -1,0 +1,24 @@
+apply plugin: "com.palantir.git-version"
+
+tasks.withType(JavaCompile) {
+  doFirst {
+    def versionFile = new File("${projectDir}/src/main/resources/version/nshmp-haz-version.json")
+    new File(versionFile.getParent()).mkdirs()
+    def details = versionDetails()
+    def ciProjectUrl = System.getenv("CI_PROJECT_URL")
+    def branch = System.getenv("CI_COMMIT_BRANCH")
+    def versionInfo = [
+      branchName: branch ? branch : details.branchName,
+      commitDistance: details.commitDistance,
+      gitHash:  details.gitHash,
+      gitHashFull:  details.gitHashFull,
+      isCleanTag:  details.isCleanTag,
+      lastTag:  details.lastTag,
+      projectName: project.name,
+      url: ciProjectUrl ? ciProjectUrl : 'git config --get remote.origin.url'.execute().text.replace('\n', ''),
+      version: details.version,
+    ]
+    def json = groovy.json.JsonOutput.toJson(versionInfo)
+    versionFile.write(groovy.json.JsonOutput.prettyPrint(json))
+  }
+}

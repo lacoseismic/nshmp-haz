@@ -22,6 +22,7 @@ config.properties
 libs
 .factorypath
 .apt_generated*
+*version.json
 
 # Node
 node_modules

@@ -28,7 +28,9 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
@@ -73,6 +75,7 @@ public final class DisaggService {
     var response = ResponseBody.usage()
         .name(NAME)
         .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
         .response(usage)
         .build();
@@ -93,6 +96,7 @@ public final class DisaggService {
     var body = ResponseBody.success()
         .name(NAME)
         .url(request.http.getUri().toString())
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(request)
         .response(response)
         .build();
@@ -113,6 +117,7 @@ public final class DisaggService {
     var body = ResponseBody.success()
         .name(NAME)
         .url(request.http.getUri().toString())
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(request)
         .response(response)
         .build();

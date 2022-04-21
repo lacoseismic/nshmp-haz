@@ -166,7 +166,9 @@ CHS Registry:
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
+      CI_PROJECT_URL=${CI_PROJECT_URL}
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Container Registry:
@@ -190,7 +192,9 @@ Container Registry:
     DOCKER_BUILD_ARGS: |
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
+      CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
+      CI_PROJECT_URL=${CI_PROJECT_URL}
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Build Project:

@@ -18,8 +18,10 @@ import gov.usgs.earthquake.nshmp.calc.EqRate;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.RateController;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceRequestData;
@@ -107,6 +109,7 @@ public final class RateService {
     return ResponseBody.<String, Usage> usage()
         .name(service.name)
         .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
         .response(usage)
         .build();
@@ -118,10 +121,11 @@ public final class RateService {
       RequestData data) throws InterruptedException, ExecutionException {
     var timer = Stopwatch.createStarted();
     var rates = calc(service, data);
-    var responseData = new ResponseData(new ResponseMetadata(service, data), rates, timer);
+    var responseData = new ResponseData(new ServiceResponseMetadata(service, data), rates, timer);
     return ResponseBody.<RequestData, ResponseData> success()
         .name(service.name)
         .request(data)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .response(responseData)
         .url(request.getUri().getPath())
         .build();
@@ -249,7 +253,7 @@ public final class RateService {
     }
   }
 
-  private static final class ResponseMetadata {
+  private static final class ServiceResponseMetadata {
     final double latitude;
     final double longitude;
     final double distance;
@@ -258,7 +262,7 @@ public final class RateService {
     final String xlabel = "Magnitude (Mw)";
     final String ylabel;
 
-    ResponseMetadata(Service service, RequestData request) {
+    ServiceResponseMetadata(Service service, RequestData request) {
       var isProbability = service == Service.PROBABILITY;
       this.longitude = request.longitude;
       this.latitude = request.latitude;
@@ -270,10 +274,10 @@ public final class RateService {
 
   private static final class ResponseData {
     final Object server;
-    final ResponseMetadata metadata;
+    final ServiceResponseMetadata metadata;
     final List<Sequence> data;
 
-    ResponseData(ResponseMetadata metadata, EqRate rates, Stopwatch timer) {
+    ResponseData(ServiceResponseMetadata metadata, EqRate rates, Stopwatch timer) {
       server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
