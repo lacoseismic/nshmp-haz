@@ -1,8 +1,9 @@
-apply plugin: "com.palantir.git-version"
 
 tasks.withType(JavaCompile) {
   doFirst {
     try {
+      apply plugin: "com.palantir.git-version"
+
       def versionFile = new File("${projectDir}/src/main/resources/version/nshmp-haz-version.json")
       new File(versionFile.getParent()).mkdirs()
       def details = versionDetails()
@@ -23,6 +24,7 @@ tasks.withType(JavaCompile) {
       versionFile.write(groovy.json.JsonOutput.prettyPrint(json))
     } catch (Exception e) {
       println("Failed to create version file.")
+      throw new Exception(e)
     }
   }
 }
