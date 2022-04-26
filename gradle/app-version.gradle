@@ -24,7 +24,6 @@ tasks.withType(JavaCompile) {
       versionFile.write(groovy.json.JsonOutput.prettyPrint(json))
     } catch (Exception e) {
       println("Failed to create version file.")
-      throw new Exception(e)
     }
   }
 }
