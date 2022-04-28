@@ -80,7 +80,7 @@ or its children will be processed; any standalone sources will be ignored. For e
 
 **source-group.json:** A specialized form of logic tree that describes model branches that are
 additive and therefore does not include weights. Examples from the NSHM for the conterminous U.S.
-NSHM include the Cascadia segmented partial-rupture models and the New Madrid 1500-yr cluster
+NSHM include the Cascadia segmented and partial-rupture models, and the New Madrid 1500-yr cluster
 branches. The branch objects in a source group _may_ include an optional `scale` member that can
 be used to impose a probability of occurrence or other scaling requred by a NSHM. If absent, the
 `scale` value is one.
