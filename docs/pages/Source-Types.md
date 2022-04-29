@@ -71,6 +71,9 @@ rupture representations.
 ```json
 {
   "grid-spacing": 0.1,
+  "smoothing-density": 10,
+  "smoothing-limit": 40.0,
+  "opt-distance-bin": 1.0,
   "point-source-type": "FINITE",
   "rupture-scaling": "NSHM_POINT_WC94_LENGTH",
   "max-depth": 22.0,
@@ -151,6 +154,9 @@ __zone-config.json:__ Zone source model configuration is identical to a grid sou
 ```json
 {
   "grid-spacing": 0.1,
+  "smoothing-density": 10,
+  "smoothing-limit": 40.0,
+  "opt-distance-bin": null,
   "point-source-type": "FIXED_STRIKE",
   "rupture-scaling": "NSHM_POINT_WC94_LENGTH",
   "max-depth": 22.0,

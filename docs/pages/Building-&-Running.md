@@ -6,8 +6,7 @@
   * [Developer Basics](./Developer-Basics.md#developer-basics)
   * [Calculation Configuration](./Calculation-Configuration.md#calculation-configuration)
   * [Site Specification](./Site-Specification.md#site-specification)
-  * [Examples](../../etc/examples) (or
-    [on GitLab](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main/etc/examples))
+  * [Examples](../../etc/examples)
   * [Web Services](./Web-Services.md)
 
 ## Build & Run Options
