@@ -104,26 +104,28 @@ default:
       docker build \
         ${BUILD_ARGS} \
         --pull \
-        --tag "${latest_image_name}" \
+        --tag "${env_image_name}" \
         --file "${CI_PROJECT_DIR}/${DOCKERFILE}" \
         "${CI_PROJECT_DIR}/.";
-    - docker push "${latest_image_name}";
+    - docker push "${env_image_name}";
     - |
-      docker tag "${latest_image_name}" "${env_image_name}";
-      docker push "${env_image_name}";
-    - |
-      docker tag "${latest_image_name}" "${sha_image_name}";
+      docker tag "${env_image_name}" "${sha_image_name}";
       docker push "${sha_image_name}";
     - |
-      docker_latest_iamge="usgs/${CI_PROJECT_NAME}:latest";
+      docker_latest_image="usgs/${CI_PROJECT_NAME}:latest";
       docker_env_image="usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
 
+      if [[ "${ENVIRONMENT}" != "development" ]]; then
+        docker tag "${env_image_name}" "${latest_image_name}";
+        docker push "${latest_image_name}";
+      fi
+
       if [[ "${PUSH_DOCKER}" == true ]]; then
-        docker tag "${latest_image_name}" "${docker_env_image}";
+        docker tag "${env_image_name}" "${docker_env_image}";
         docker push "${docker_env_image}";
 
         if  [[ "${ENVIRONMENT}" != "development" ]]; then
-          docker tag "${latest_image_name}" "${docker_latest_image}";
+          docker tag "${env_image_name}" "${docker_latest_image}";
           docker push "${docker_latest_image}";
         fi
       fi
