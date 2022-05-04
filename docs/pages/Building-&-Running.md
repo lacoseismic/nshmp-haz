@@ -73,11 +73,11 @@ files. Disaggregations also have some independent
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-nshmp-haz is available as a public image from the
-[container registry](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/container_registry)
+nshmp-haz is available as a public image from [Docker hub](https://hub.docker.com/r/usgs/nshmp-haz) 
 with tags:
 
 * `latest`: Refers to the latest updates from the main or production branch
+* `development-latest`: Refers to forks of the repository.
 * `staging-latest`: Latest updates associated with the
 [main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch
 * `production-latest`: Latest stable release associated with the
@@ -108,13 +108,12 @@ to a minimum of 4 GB.
 
 The *nshmp-haz* application may be run as a Docker container which mitigates the need to install
 Git, Java, or other dependencies besides Docker. A public image is available
-from this repository's
-[container registry](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/container_registry).
+from  [Docker hub](https://hub.docker.com/r/usgs/nshmp-haz)
 which can be run with:
 
 ```bash
 # Pull docker image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz:latest 
+docker pull usgs/nshmp-haz:latest 
 
 # Run docker image
 docker run \
@@ -124,7 +123,7 @@ docker run \
     --volume /absolute/path/to/sites/file:/app/sites.<geojson | csv> \
     --volume /absolute/path/to/config/file:/app/config.json \
     --volume /absolute/path/to/output:/app/output \
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws
+    usgs/nshmp-haz
 ```
 
 Where:
@@ -157,7 +156,7 @@ assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.ge
 git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
 
 # Pull image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz:latest 
+docker pull usgs/nshmp-haz:latest 
 
 # Run nshmp-haz HazardCalc
 docker run \
@@ -165,7 +164,7 @@ docker run \
     --volume "$(pwd)/nshm-hawaii:/app/model" \
     --volume "$(pwd)/sites.geojson" \
     --volume "$(pwd)/hawaii-hazard-output:/app/output" \
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz
+    usgs/nshmp-haz
 ```
 
 #### [`DisaggCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/DisaggCalc.java) Example
@@ -179,7 +178,7 @@ assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.ge
 git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
 
 # Pull image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz:latest 
+docker pull usgs/nshmp-haz:latest 
 
 # Run nshmp-haz DisaggCalc
 docker run \
@@ -188,7 +187,7 @@ docker run \
     --volume "$(pwd)/nshm-hawaii:/app/model" \
     --volume "$(pwd)/sites.geojson" \
     --volume "$(pwd)/hawaii-disagg-output:/app/output" \
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz:latest
+    usgs/nshmp-haz:latest
 ```
 
 #### [`RateCalc`](../../src/main/java/gov/usgs/earthquake/nshmp/RateCalc.java) Example
@@ -202,7 +201,7 @@ assumption a GeoJSON [site](./Site-Specification.md) file exists named `sites.ge
 git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-hawaii.git
 
 # Pull image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz:latest 
+docker pull usgs/nshmp-haz:latest 
 
 # Run nshmp-haz RateCalc
 docker run \
@@ -210,7 +209,7 @@ docker run \
     --volume "$(pwd)/nshm-hawaii:/app/model" \
     --volume "$(pwd)/sites.geojson" \
     --volume "$(pwd)/hawaii-rate-output:/app/output" \
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz
+    usgs/nshmp-haz
 ```
 
 ### Run Customization
@@ -222,13 +221,13 @@ be set with the environment flag (-e, -env):
 docker run \
     --env JAVA_MEMORY=<MEMORY> \
     ...
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz
+    usgs/nshmp-haz
 
 # Example
 docker run \
     --env JAVA_MEMORY="12g" \
     ...
-    code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz
+    usgs/nshmp-haz
 ```
 
 Where:

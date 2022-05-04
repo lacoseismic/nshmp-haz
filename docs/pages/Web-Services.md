@@ -119,12 +119,12 @@ Open browser to [http://localhost:8080/](http://localhost:8080/).
 
 ### Run from Container Registry
 
-A public Docker image is avaialable from this repository's
-[container registry](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/container_registry).
+A public Docker image is avaialable from [Docker hub](https://hub.docker.com/r/usgs/nshmp-haz-ws).
 
-There are 3 main tags:
+There are 4 main tags:
 
 * `latest`: Refers to the latest updates from the main or production branch
+* `development-latest`: Refers to forks of the repository.
 * `staging-latest`: Refers to the
 [main](https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/tree/main) branch and is the latest updates
 * `production-latest`: Refers to the
@@ -132,10 +132,10 @@ There are 3 main tags:
 
 ```bash
 # Pull image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws:latest 
+docker pull usgs/nshmp-haz-ws:latest 
 
 # Run
-docker run -p 8080:8080 -v "/path/to/model:/model" code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws
+docker run -p 8080:8080 -v "/path/to/model:/model" usgs/nshmp-haz-ws
 ```
 
 Web service runs on [http://localhost:8080/](http://localhost:8080/)
@@ -146,14 +146,14 @@ The hazard model is read in via Docker volumes.
 
 ```bash
 # Pull image
-docker pull code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws:latest 
+docker pull usgs/nshmp-haz-ws:latest 
 
 # Download NSHM CONUS
 cd ..
 git clone https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus
 
 # Run web services
-docker run -p 8080:8080 -v "$(pwd):/model" code.usgs.gov:5001/ghsc/nshmp/nshmp-haz/nshmp-haz-ws
+docker run -p 8080:8080 -v "$(pwd):/model" usgs/nshmp-haz-ws
 ```
 
 Open browser to [http://localhost:8080/](http://localhost:8080/).
