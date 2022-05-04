@@ -73,7 +73,7 @@ files. Disaggregations also have some independent
 
 ## Run with [Docker](https://docs.docker.com/install/)
 
-nshmp-haz is available as a public image from [Docker hub](https://hub.docker.com/r/usgs/nshmp-haz) 
+nshmp-haz is available as a public image from [Docker hub](https://hub.docker.com/r/usgs/nshmp-haz)
 with tags:
 
 * `latest`: Refers to the latest updates from the main or production branch
