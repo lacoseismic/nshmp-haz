@@ -115,6 +115,16 @@ default:
       docker tag "${latest_image_name}" "${sha_image_name}";
       docker push "${sha_image_name}";
     - |
+      docker_latest_iamge="usgs/${CI_PROJECT_NAME}:latest";
+      docker_env_image="usgs/${CI_PROJECT_NAME}:${ENVIRONMENT}-latest";
+
+      if [[ "${PUSH_DOCKER}" == true ]]; then
+        docker tag "${latest_image_name}" "${docker_latest_image}";
+        docker tag "${latest_image_name}" "${docker_env_image}";
+        docker push "${docker_latest_image}";
+        docker push "${docker_env_image}";
+      fi
+    - |
       printf "
         --------
         Image Name - %s:%s
@@ -129,6 +139,7 @@ default:
       BUILD_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
       FROM_IMAGE=${DEVOPS_REGISTRY}usgs/amazoncorretto:11
     IMAGE_TAG: ${ENVIRONMENT}-${CI_COMMIT_SHORT_SHA}
+    PUSH_DOCKER: false
     REGISTRY_IMAGE: ${CI_REGISTRY_IMAGE}
     TAG: build
 
@@ -169,6 +180,7 @@ CHS Registry:
       CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
       CI_JOB_TOKEN=${CI_JOB_TOKEN}
       CI_PROJECT_URL=${CI_PROJECT_URL}
+    PUSH_DOCKER: true
     UPSTREAM_PATH: ghsc/nshmp/nshmp-haz
 
 Container Registry:
