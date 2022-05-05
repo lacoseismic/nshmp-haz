@@ -228,7 +228,7 @@ public final class HazardService {
     private static final class Metadata {
       final Object server;
       final String xlabel = "Ground Motion (g)";
-      final String ylabel = "Annual Frequency of Exceedence";
+      final String ylabel = "Annual Frequency of Exceedance";
 
       Metadata(Object server) {
         this.server = server;
