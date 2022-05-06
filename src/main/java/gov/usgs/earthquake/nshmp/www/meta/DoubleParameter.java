@@ -13,4 +13,20 @@ public final class DoubleParameter {
     this.min = min;
     this.max = max;
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getUnits() {
+    return units;
+  }
+
+  public double getMin() {
+    return min;
+  }
+
+  public double getMax() {
+    return max;
+  }
 }

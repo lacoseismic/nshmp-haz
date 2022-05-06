@@ -57,6 +57,14 @@ public class ServicesUtil {
       longitude = query.longitude;
       latitude = query.latitude;
     }
+
+    public double getLongitude() {
+      return longitude;
+    }
+
+    public double getLatitude() {
+      return latitude;
+    }
   }
 
   public enum Key {

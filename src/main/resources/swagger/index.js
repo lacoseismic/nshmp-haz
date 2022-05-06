@@ -3,13 +3,17 @@ window.onload = function() {
   contextPath = contextPath.endsWith('/') ? contextPath.slice(0, -1) : contextPath;
 
   const ui = SwaggerUIBundle({
-    url: `./swagger`,
+    defaultModelsExpandDepth: 0,
+    deepLinking: true,
+    // docExpansion: 'full',
     dom_id: '#swagger-ui',
-    tagsSorter: 'alpha',
-    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+    layout: 'BaseLayout',
     plugins: [SwaggerUIBundle.plugins.DownloadUrl, updateContextPath(contextPath)],
+    presets: [SwaggerUIBundle.presets.apis],
+    tagsSorter: 'alpha',
+    tryItOutEnabled: true,
     validatorUrl: null,
-    deepLinking: true
+    url: `./swagger`,
   });
 
   window.ui = ui;

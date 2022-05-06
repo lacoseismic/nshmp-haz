@@ -32,6 +32,8 @@ import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardRequest;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 
@@ -202,12 +204,7 @@ public final class DisaggService {
     return disagg;
   }
 
-  static final class RequestIml {
-
-    final transient HttpRequest<?> http;
-    final double longitude;
-    final double latitude;
-    final double vs30;
+  static final class RequestIml extends HazardRequest {
     final Map<Imt, Double> imls;
     final Set<DataType> dataTypes;
 
@@ -218,48 +215,57 @@ public final class DisaggService {
         double vs30,
         Map<Imt, Double> imls,
         Set<DataType> dataTypes) {
+      super(http, longitude, latitude, vs30);
 
-      this.http = http;
-      this.longitude = longitude;
-      this.latitude = latitude;
-      this.vs30 = vs30;
       this.imls = imls;
       this.dataTypes = dataTypes;
     }
+
+    public Map<Imt, Double> getImls() {
+      return imls;
+    }
+
+    public Set<DataType> getDataTypes() {
+      return dataTypes;
+    }
   }
 
-  static final class RequestRp {
-
-    final transient HttpRequest<?> http;
-    final double longitude;
-    final double latitude;
-    final double vs30;
+  static final class RequestRp extends HazardRequest {
     final double returnPeriod;
-    final Set<Imt> imts;
     final Set<DataType> dataTypes;
+    final Set<Imt> imts;
 
     RequestRp(
         HttpRequest<?> http,
         double longitude,
         double latitude,
         double vs30,
-        double returnPeriod,
         Set<Imt> imts,
+        double returnPeriod,
         Set<DataType> dataTypes) {
+      super(http, longitude, latitude, vs30);
 
-      this.http = http;
-      this.longitude = longitude;
-      this.latitude = latitude;
-      this.vs30 = vs30;
       this.returnPeriod = returnPeriod;
+      this.dataTypes = dataTypes;
       this.imts = imts.isEmpty()
           ? ServletUtil.model().config().hazard.imts
           : imts;
-      this.dataTypes = dataTypes;
+    }
+
+    public double getReturnPeriod() {
+      return returnPeriod;
+    }
+
+    public Set<DataType> getDataTypes() {
+      return dataTypes;
+    }
+
+    public Set<Imt> getImts() {
+      return imts;
     }
   }
 
-  private static final class Response {
+  static final class Response {
     final Response.Metadata metadata;
     final List<ImtDisagg> disaggs;
 
@@ -268,17 +274,46 @@ public final class DisaggService {
       this.disaggs = disaggs;
     }
 
+    public Response.Metadata getMetadata() {
+      return metadata;
+    }
+
+    public List<ImtDisagg> getDisaggs() {
+      return disaggs;
+    }
+
     private static final class Metadata {
-      final Object server;
+      final Server server;
       final String rlabel = "Closest Distance, rRup (km)";
       final String mlabel = "Magnitude (Mw)";
       final String εlabel = "% Contribution to Hazard";
       final Object εbins;
 
-      Metadata(Object server, Object εbins) {
+      Metadata(Server server, Object εbins) {
         this.server = server;
         this.εbins = εbins;
       }
+
+      public Server getServer() {
+        return server;
+      }
+
+      public String getRLabel() {
+        return rlabel;
+      }
+
+      public String getMLabel() {
+        return mlabel;
+      }
+
+      public String getεLabel() {
+        return εlabel;
+      }
+
+      public Object getεbins() {
+        return εbins;
+      }
+
     }
 
     private static final class Builder {
@@ -326,7 +361,7 @@ public final class DisaggService {
                 dataTypes.contains(DISAGG_DATA))))
             .collect(toList());
 
-        Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
+        var server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
 
         return new Response(
             new Response.Metadata(server, disagg.εBins()),
@@ -344,6 +379,14 @@ public final class DisaggService {
           ServletUtil.imtShortLabel(imt),
           imt.name());
       this.data = data;
+    }
+
+    public Parameter getImt() {
+      return imt;
+    }
+
+    public Object getData() {
+      return data;
     }
   }
 }

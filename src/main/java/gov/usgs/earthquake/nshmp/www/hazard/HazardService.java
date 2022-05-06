@@ -38,6 +38,7 @@ import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
@@ -59,33 +60,6 @@ public final class HazardService {
   static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
   private static final String TOTAL_KEY = "Total";
-
-  /* For Swagger selections; mprs + pgv */
-  enum HazardImt {
-    PGA,
-    PGV,
-    SA0P01,
-    SA0P02,
-    SA0P03,
-    SA0P05,
-    SA0P075,
-    SA0P1,
-    SA0P15,
-    SA0P2,
-    SA0P25,
-    SA0P3,
-    SA0P4,
-    SA0P5,
-    SA0P75,
-    SA1P0,
-    SA1P5,
-    SA2P0,
-    SA3P0,
-    SA4P0,
-    SA5P0,
-    SA7P5,
-    SA10P0;
-  }
 
   /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
@@ -182,14 +156,55 @@ public final class HazardService {
           150,
           1500);
     }
+
+    public SourceModel getModel() {
+      return model;
+    }
+
+    public DoubleParameter getLongitude() {
+      return longitude;
+    }
+
+    public DoubleParameter getLatitude() {
+      return latitude;
+    }
+
+    public DoubleParameter getVs30() {
+      return vs30;
+    }
   }
 
-  static final class Request {
-
+  static class HazardRequest {
     final transient HttpRequest<?> http;
     final double longitude;
     final double latitude;
     final double vs30;
+
+    public HazardRequest(
+        HttpRequest<?> http,
+        double longitude,
+        double latitude,
+        double vs30) {
+      this.http = http;
+      this.longitude = checkLongitude(longitude);
+      this.latitude = checkLatitude(latitude);
+      this.vs30 = checkInRange(Site.VS30_RANGE, Site.Key.VS30, vs30);
+    }
+
+    public double getLongitude() {
+      return longitude;
+    }
+
+    public double getLatitude() {
+      return latitude;
+    }
+
+    public double getVs30() {
+      return vs30;
+    }
+  }
+
+  static final class Request extends HazardRequest {
     final boolean truncate;
     final boolean maxdir;
     final Set<Imt> imts;
@@ -198,24 +213,32 @@ public final class HazardService {
         HttpRequest<?> http,
         double longitude,
         double latitude,
-        int vs30,
+        double vs30,
+        Set<Imt> imts,
         boolean truncate,
-        boolean maxdir,
-        Set<Imt> imts) {
-
-      this.http = http;
-      this.longitude = checkLongitude(longitude);
-      this.latitude = checkLatitude(latitude);
-      this.vs30 = checkInRange(Site.VS30_RANGE, Site.Key.VS30, vs30);
+        boolean maxdir) {
+      super(http, longitude, latitude, vs30);
       this.truncate = truncate;
       this.maxdir = maxdir;
       this.imts = imts.isEmpty()
           ? ServletUtil.model().config().hazard.imts
           : imts;
     }
+
+    public boolean getTruncate() {
+      return truncate;
+    }
+
+    public boolean getMaxdir() {
+      return maxdir;
+    }
+
+    public Set<Imt> getImts() {
+      return imts;
+    }
   }
 
-  private static final class Response {
+  static class Response {
 
     final Metadata metadata;
     final List<ImtCurves> hazardCurves;
@@ -225,13 +248,33 @@ public final class HazardService {
       this.hazardCurves = hazardCurves;
     }
 
+    public Metadata getMetadata() {
+      return metadata;
+    }
+
+    public List<ImtCurves> getHazardCurves() {
+      return hazardCurves;
+    }
+
     private static final class Metadata {
-      final Object server;
+      final Server server;
       final String xlabel = "Ground Motion (g)";
       final String ylabel = "Annual Frequency of Exceedance";
 
-      Metadata(Object server) {
+      Metadata(Server server) {
         this.server = server;
+      }
+
+      public Server getServer() {
+        return server;
+      }
+
+      public String getXLabel() {
+        return xlabel;
+      }
+
+      public String getYLabel() {
+        return ylabel;
       }
     }
 
@@ -305,7 +348,7 @@ public final class HazardService {
           hazards.add(new ImtCurves(imt, curves));
         }
 
-        Object server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
+        var server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
         var response = new Response(
             new Response.Metadata(server),
             hazards);
@@ -324,6 +367,14 @@ public final class HazardService {
       this.imt = new Parameter(ServletUtil.imtShortLabel(imt), imt.name());
       this.data = data;
     }
+
+    public Parameter getImt() {
+      return imt;
+    }
+
+    public List<Curve> getData() {
+      return data;
+    }
   }
 
   private static final class Curve {
@@ -333,6 +384,14 @@ public final class HazardService {
     Curve(String component, XySequence values) {
       this.component = component;
       this.values = values;
+    }
+
+    public String getComponent() {
+      return component;
+    }
+
+    public XySequence getValues() {
+      return values;
     }
   }
 

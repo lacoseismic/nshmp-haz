@@ -1,6 +1,8 @@
-package gov.usgs.earthquake.nshmp.www;
+package gov.usgs.earthquake.nshmp.www.services;
 
-import gov.usgs.earthquake.nshmp.www.services.SourceServices;
+import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.services.SourceServices.ResponseData;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -8,6 +10,8 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
@@ -43,10 +47,15 @@ public class SourceController {
       operationId = "source_doGetUsage")
   @ApiResponse(
       description = "Installed source model",
-      responseCode = "200")
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(
+              implementation = MetadataResponse.class)))
   @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
     return SourceServices.handleDoGetUsage(request);
   }
 
+  // For Swagger schemas
+  private static class MetadataResponse extends ResponseBody<String, ResponseData> {}
 }
