@@ -3,6 +3,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService.RequestData;
+
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -38,10 +39,8 @@ public class SourceLogicTreesController {
       description = "Source logic trees metadata",
       responseCode = "200",
       content = @Content(
-        schema = @Schema(
-          implementation = MetadataResponse.class
-        )
-      ))
+          schema = @Schema(
+              implementation = MetadataResponse.class)))
   @Get
   public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
     return SourceLogicTreesService.handleDoGetMetadata(request);
@@ -58,8 +57,7 @@ public class SourceLogicTreesController {
       description = "NSHM source logic tree",
       responseCode = "200",
       content = @Content(
-        schema = @Schema(implementation = TreeResponse.class)
-      ))
+          schema = @Schema(implementation = TreeResponse.class)))
   @Get(uri = "/{id}")
   public HttpResponse<String> doGetTrees(HttpRequest<?> request, @PathVariable int id) {
     return SourceLogicTreesService.handleDoGetTrees(request, id);
