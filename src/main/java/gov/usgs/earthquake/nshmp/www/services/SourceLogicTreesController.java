@@ -2,6 +2,7 @@ package gov.usgs.earthquake.nshmp.www.services;
 
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService.Metadata;
 import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService.RequestData;
 
 import io.micronaut.http.HttpRequest;
@@ -64,7 +65,7 @@ public class SourceLogicTreesController {
   }
 
   // For Swagger schemas
-  private static class MetadataResponse extends ResponseBody<String, Object> {}
+  private static class MetadataResponse extends ResponseBody<String, Metadata> {}
 
   // For Swagger schemas
   private static class TreeResponse extends ResponseBody<RequestData, Object> {}
