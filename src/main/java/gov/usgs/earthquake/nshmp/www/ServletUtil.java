@@ -184,7 +184,7 @@ public class ServletUtil {
     return imt.toString();
   }
 
-  public static Object serverData(int threads, Stopwatch timer) {
+  public static Server serverData(int threads, Stopwatch timer) {
     return new Server(threads, timer);
   }
 
@@ -198,7 +198,7 @@ public class ServletUtil {
     return builder.build();
   }
 
-  private static class Server {
+  public static class Server {
 
     final int threads;
     final String timer;
@@ -208,6 +208,18 @@ public class ServletUtil {
       this.threads = threads;
       this.timer = timer.toString();
       this.version = new HazVersion().getVersionInfo().version;
+    }
+
+    public int getThreads() {
+      return threads;
+    }
+
+    public String getTimer() {
+      return timer;
+    }
+
+    public String getVersion() {
+      return version;
     }
   }
 }

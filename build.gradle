@@ -36,7 +36,6 @@ plugins {
   id "com.palantir.git-version" version "${gitVersionVersion}" apply false
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
   id "eclipse-wtp"
-  id "io.micronaut.application" version "${micronautPluginVersion}"
   id "jacoco"
   id "maven-publish"
 }

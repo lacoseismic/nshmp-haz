@@ -12,7 +12,7 @@ body {
 }
 
 #swagger-ui {
-  padding-top: 1em;
+  padding-top: 2em;
   padding-bottom: 50px;
 }
 
@@ -70,4 +70,67 @@ body {
 
 .nshmp-template-footer a:visited {
   color: white;
+}
+
+/* ---- Disclaimer ---- */
+
+.wrapper {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 1460px;
+  padding: 0 20px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 1000px) {
+  .alert {
+    line-height: 1.1 !important;
+    font-size: 10px !important;
+  }
+}
+
+.alert {
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
+  line-height: 1.5;
+  margin: 1em 1em 0 1em;
+  overflow: hidden;
+  padding: 1.5em 2em;
+  position: relative;
+  top: 50px;
+}
+
+.alert:before {
+  content: '\0e002';
+  font-family: 'Material Icons';
+  font-size: 4.5em;
+  left: -.2em;
+  line-height: 1;
+  opacity: .075;
+  position: absolute;
+  top: -.2em;
+}
+
+details {
+  cursor: pointer;
+  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
+}
+
+details:hover {
+  background-color: #f3f3f3;
+}
+
+details[open] {
+  background-color: initial;
+  padding: 0 1.5em 1.5em 1.5em;
+}
+
+summary {
+  font-weight: bold;
+  padding: 1.5em;
+}
+
+details[open] > summary {
+  margin-left: -1.5em;
 }

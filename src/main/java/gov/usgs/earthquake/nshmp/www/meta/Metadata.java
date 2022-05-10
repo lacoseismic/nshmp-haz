@@ -52,6 +52,14 @@ public final class Metadata {
           Coordinates.LAT_RANGE.lowerEndpoint(),
           Coordinates.LAT_RANGE.upperEndpoint());
     }
+
+    public DoubleParameter getLongitude() {
+      return longitude;
+    }
+
+    public DoubleParameter getLatitude() {
+      return latitude;
+    }
   }
 
   public static String errorMessage(String url, Throwable e, boolean trace) {

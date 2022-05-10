@@ -9,4 +9,12 @@ public class Parameter {
     this.display = display;
     this.value = value;
   }
+
+  public String getDisplay() {
+    return display;
+  }
+
+  public String getValue() {
+    return value;
+  }
 }

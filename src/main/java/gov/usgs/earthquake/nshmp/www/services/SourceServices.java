@@ -9,7 +9,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,9 +37,6 @@ import jakarta.inject.Singleton;
 public class SourceServices {
 
   private static final String NAME = "Source Model";
-  private static final String DESCRIPTION = "Installed source model listing";
-  private static final String SERVICE_DESCRIPTION =
-      "Utilities for querying earthquake source models";
 
   static final Logger LOG = LoggerFactory.getLogger(RateService.class);
 
@@ -55,7 +51,7 @@ public class SourceServices {
         .create();
   }
 
-  public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
+  static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
     var url = request.getUri().getPath();
     try {
       var response = ResponseBody.usage()
@@ -72,27 +68,29 @@ public class SourceServices {
     }
   }
 
-  /*
-   * task... service metadata should be in same package as services (why
-   * ResponseData is currently public); rename meta package to
-   */
-  public static class ResponseData {
+  static class ResponseData {
     final String description;
-    final Object server;
+    final SourceModel model;
 
     public ResponseData() {
-      this.description = "Installed source model listing";
-      this.server = ServletUtil.serverData(
-          ServletUtil.THREAD_COUNT,
-          Stopwatch.createStarted());
+      description = "Installed source model listing";
+      model = new SourceModel(ServletUtil.model());
+    }
+
+    public String getDescription() {
+      return description;
+    }
+
+    public SourceModel getSourceModel() {
+      return model;
     }
   }
 
   public static class SourceModel {
-    String name;
-    Set<Gmm> gmms;
-    Map<NehrpSiteClass, Double> siteClasses;
-    List<Parameter> imts;
+    final String name;
+    final Set<Gmm> gmms;
+    final Map<NehrpSiteClass, Double> siteClasses;
+    final List<Parameter> imts;
 
     public SourceModel(HazardModel model) {
       name = model.name();
@@ -105,6 +103,22 @@ public class SourceServices {
           .sorted()
           .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
           .collect(toList());
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Set<Gmm> getGmms() {
+      return gmms;
+    }
+
+    public Map<NehrpSiteClass, Double> getSiteClasses() {
+      return siteClasses;
+    }
+
+    public List<Parameter> getImts() {
+      return imts;
     }
   }
 

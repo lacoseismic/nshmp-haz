@@ -19,13 +19,13 @@ import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.HazVersion;
-import gov.usgs.earthquake.nshmp.www.RateController;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.Key;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceQueryData;
 import gov.usgs.earthquake.nshmp.www.ServicesUtil.ServiceRequestData;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Metadata.DefaultParameters;
@@ -57,23 +57,6 @@ public final class RateService {
   private static final String TOTAL_KEY = "Total";
 
   /**
-   * Handler for {@link RateController#doGetUsageRate} and
-   * {@link RateController#doGetUsageProbability}.
-   *
-   * @param service The service
-   * @param urlHelper The url helper
-   */
-  public static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request, Service service) {
-    try {
-      var response = metadata(request, service);
-      var json = ServletUtil.GSON.toJson(response);
-      return HttpResponse.ok(json);
-    } catch (Exception e) {
-      return ServletUtil.error(LOG, e, service.name, request.getUri().getPath());
-    }
-  }
-
-  /**
    * Handler for {@link RateController#doGetProbability},
    * {@link RateController#doGetProbabilitySlash},
    * {@link RateController#doGetRate}, and {@link RateController#doGetRateSlash}
@@ -83,7 +66,7 @@ public final class RateService {
    * @param urlHelper The url helper
    * @return
    */
-  public static HttpResponse<String> handleDoGetCalc(HttpRequest<?> request, Query query) {
+  static HttpResponse<String> handleDoGetCalc(HttpRequest<?> request, Query query) {
     var service = query.service;
 
     try {
@@ -102,11 +85,12 @@ public final class RateService {
     }
   }
 
-  static ResponseBody<String, Usage> metadata(HttpRequest<?> request, Service service) {
+  static ResponseBody<String, Usage<DefaultParameters>> metadata(HttpRequest<?> request,
+      Service service) {
     var parameters = service == Service.RATE ? new RateParameters() : new ProbabilityParameters();
-    var usage = new Usage(service, parameters);
+    var usage = new Usage<DefaultParameters>(service, parameters);
     var url = request.getUri().getPath();
-    return ResponseBody.<String, Usage> usage()
+    return ResponseBody.<String, Usage<DefaultParameters>> usage()
         .name(service.name)
         .url(url)
         .metadata(new ResponseMetadata(HazVersion.appVersions()))
@@ -165,6 +149,12 @@ public final class RateService {
     }
 
     return ratesCombined;
+  }
+
+  private static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request, Service service) {
+    var response = metadata(request, service);
+    var json = ServletUtil.GSON.toJson(response);
+    return HttpResponse.ok(json);
   }
 
   private static ListenableFuture<EqRate> process(
@@ -251,6 +241,14 @@ public final class RateService {
       this.distance = query.distance;
       this.timespan = query.timespan;
     }
+
+    public double getDistance() {
+      return distance;
+    }
+
+    public Optional<Double> getTimespan() {
+      return timespan;
+    }
   }
 
   private static final class ServiceResponseMetadata {
@@ -270,10 +268,34 @@ public final class RateService {
       this.ylabel = isProbability ? "Probability" : "Annual Rate (yr⁻¹)";
       this.timespan = request.timespan.orElse(null);
     }
+
+    public double getLatitude() {
+      return latitude;
+    }
+
+    public double getLongitude() {
+      return longitude;
+    }
+
+    public double getDistance() {
+      return distance;
+    }
+
+    public Double getTimespan() {
+      return timespan;
+    }
+
+    public String getXlabel() {
+      return xlabel;
+    }
+
+    public String getYLabel() {
+      return ylabel;
+    }
   }
 
-  private static final class ResponseData {
-    final Object server;
+  static final class ResponseData {
+    final Server server;
     final ServiceResponseMetadata metadata;
     final List<Sequence> data;
 
@@ -281,6 +303,18 @@ public final class RateService {
       server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
       this.metadata = metadata;
       this.data = buildSequence(rates);
+    }
+
+    public Server getServer() {
+      return server;
+    }
+
+    public ServiceResponseMetadata getMetadata() {
+      return metadata;
+    }
+
+    public List<Sequence> getData() {
+      return data;
     }
 
     List<Sequence> buildSequence(EqRate rates) {
@@ -326,23 +360,45 @@ public final class RateService {
       this.xvalues = xvalues;
       this.yvalues = yvalues;
     }
-  }
 
-  private static class Usage {
-    final String description;
-    final List<String> syntax;
-    final Object server;
-    final DefaultParameters parameters;
+    public String getComponent() {
+      return component;
+    }
 
-    private Usage(Service service, DefaultParameters parameters) {
-      description = service.description;
-      this.syntax = service.syntax;
-      server = ServletUtil.serverData(1, Stopwatch.createStarted());
-      this.parameters = parameters;
+    public List<Double> getXvalues() {
+      return xvalues;
+    }
+
+    public List<Double> getYvalues() {
+      return yvalues;
     }
   }
 
-  private static class RateParameters extends DefaultParameters {
+  static class Usage<T extends DefaultParameters> {
+    final String description;
+    final List<String> syntax;
+    final T parameters;
+
+    private Usage(Service service, T parameters) {
+      description = service.description;
+      this.syntax = service.syntax;
+      this.parameters = parameters;
+    }
+
+    public String getDescription() {
+      return description;
+    }
+
+    public List<String> getSyntax() {
+      return syntax;
+    }
+
+    public T getParameters() {
+      return parameters;
+    }
+  }
+
+  static class RateParameters extends DefaultParameters {
     final DoubleParameter distance;
 
     RateParameters() {
@@ -353,9 +409,13 @@ public final class RateService {
           0.01,
           1000.0);
     }
+
+    public DoubleParameter getDistance() {
+      return distance;
+    }
   }
 
-  private static class ProbabilityParameters extends RateParameters {
+  static class ProbabilityParameters extends RateParameters {
     final DoubleParameter timespan;
 
     ProbabilityParameters() {
@@ -365,6 +425,9 @@ public final class RateService {
           Maths.TIMESPAN_RANGE.lowerEndpoint(),
           Maths.TIMESPAN_RANGE.upperEndpoint());
     }
-  }
 
+    public DoubleParameter getTimespan() {
+      return timespan;
+    }
+  }
 }

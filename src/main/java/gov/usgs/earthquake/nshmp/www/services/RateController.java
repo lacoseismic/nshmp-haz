@@ -1,10 +1,16 @@
-package gov.usgs.earthquake.nshmp.www;
+package gov.usgs.earthquake.nshmp.www.services;
 
 import java.util.Optional;
 
-import gov.usgs.earthquake.nshmp.www.services.RateService;
+import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.services.RateService.ProbabilityParameters;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Query;
+import gov.usgs.earthquake.nshmp.www.services.RateService.RateParameters;
+import gov.usgs.earthquake.nshmp.www.services.RateService.RequestData;
+import gov.usgs.earthquake.nshmp.www.services.RateService.ResponseData;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Service;
+import gov.usgs.earthquake.nshmp.www.services.RateService.Usage;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
@@ -15,6 +21,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.inject.Inject;
@@ -33,24 +40,6 @@ public class RateController {
   private NshmpMicronautServlet servlet;
 
   /**
-   * GET method to return the usage information on the rate service.
-   *
-   * @param request The HTTP request
-   */
-  @Operation(
-      summary = "Returns the earthquake rate service usage",
-      description = "Returns the supported:\n * Cutoff distance\n * Longitude\n * Latitude",
-      operationId = "rate_doGetUsageRate",
-      tags = { "Rate Service" })
-  @ApiResponse(
-      description = "Earthquake rate usage",
-      responseCode = "200")
-  @Get(uri = "/rate/usage", produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetUsageRate(HttpRequest<?> request) {
-    return RateService.handleDoGetUsage(request, Service.RATE);
-  }
-
-  /**
    * GET method to compute annual-rate, query based.
    *
    * @param request The HTTP request
@@ -64,8 +53,19 @@ public class RateController {
       operationId = "rate_doGetRate",
       tags = { "Rate Service" })
   @ApiResponse(
-      description = "Earthquake annual-rates",
-      responseCode = "200")
+      description = "Earthquake annual-rates service metadata",
+      responseCode = "20x",
+      content = {
+          @Content(
+              schema = @Schema(implementation = RateMetadataResponse.class))
+      })
+  @ApiResponse(
+      description = "Earthquake annual-rates calculation response",
+      responseCode = "200",
+      content = {
+          @Content(
+              schema = @Schema(implementation = CalcResponse.class))
+      })
   @Get(
       uri = "/rate{?longitude,latitude,distance}",
       produces = MediaType.APPLICATION_JSON)
@@ -102,8 +102,10 @@ public class RateController {
       operationId = "rate_doGetRateSlash",
       tags = { "Rate Service" })
   @ApiResponse(
-      description = "Earthquake annual-rates",
-      responseCode = "200")
+      description = "Earthquake annual-rates calculation response",
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(implementation = CalcResponse.class)))
   @Get(
       uri = "/rate{/longitude}{/latitude}{/distance}",
       produces = MediaType.APPLICATION_JSON)
@@ -127,25 +129,6 @@ public class RateController {
   }
 
   /**
-   * GET method to return the usage information on the probability service.
-   *
-   * @param request The HTTP request
-   */
-  @Operation(
-      summary = "Returns the earthquake probability service usage",
-      description = "Returns the supported:\n " +
-          "* Timespan\n * Cutoff distance\n * Longitude\n * Latitude",
-      operationId = "probability_doGetProbabilityRate",
-      tags = { "Probability Service" })
-  @ApiResponse(
-      description = "Earthquake probability usage",
-      responseCode = "200")
-  @Get(uri = "/probability/usage", produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetUsageProbability(HttpRequest<?> request) {
-    return RateService.handleDoGetUsage(request, Service.PROBABILITY);
-  }
-
-  /**
    * GET method to compute probability, query based.
    *
    * @param request The HTTP request
@@ -160,8 +143,20 @@ public class RateController {
       operationId = "probability_doGetProbability",
       tags = { "Probability Service" })
   @ApiResponse(
-      description = "Earthquake probabilities",
-      responseCode = "200")
+      description = "Earthquake probabilities service metadata",
+      responseCode = "20x",
+      content = {
+          @Content(
+              schema = @Schema(implementation = ProbMetadataResponse.class))
+      })
+  @ApiResponse(
+      description = "Earthquake probabilities calculation response",
+      responseCode = "200",
+      content = {
+          @Content(
+              schema = @Schema(
+                  implementation = CalcResponse.class))
+      })
   @Get(
       uri = "/probability{?longitude,latitude,distance,timespan}",
       produces = MediaType.APPLICATION_JSON)
@@ -203,8 +198,11 @@ public class RateController {
       operationId = "probability_doGetProbabilitySlash",
       tags = { "Probability Service" })
   @ApiResponse(
-      description = "Earthquake probabilities",
-      responseCode = "200")
+      description = "Earthquake probabilities calculation response",
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(
+              implementation = CalcResponse.class)))
   @Get(
       uri = "/probability{/longitude}{/latitude}{/distance}{/timespan}",
       produces = MediaType.APPLICATION_JSON)
@@ -231,4 +229,11 @@ public class RateController {
     return RateService.handleDoGetCalc(request, query);
   }
 
+  // Swagger schemas
+  private static class CalcResponse extends ResponseBody<RequestData, ResponseData> {}
+
+  private static class RateMetadataResponse extends ResponseBody<String, Usage<RateParameters>> {};
+
+  private static class ProbMetadataResponse extends
+      ResponseBody<String, Usage<ProbabilityParameters>> {};
 }

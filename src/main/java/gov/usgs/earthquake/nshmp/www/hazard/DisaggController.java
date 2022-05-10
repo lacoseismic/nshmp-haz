@@ -8,9 +8,13 @@ import java.util.Set;
 import gov.usgs.earthquake.nshmp.calc.DataType;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
+import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.DisaggDataType;
-import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardImt;
+import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestIml;
+import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestRp;
+import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.Response;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
@@ -21,6 +25,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,10 +48,13 @@ public class DisaggController {
 
   @Operation(
       summary = "Disaggregation model and service metadata",
-      description = "Returns details of the installed model and service request parameters")
+      description = "Returns details of the installed model and service request parameters",
+      operationId = "disagg-metadata")
   @ApiResponse(
       description = "Disaggregation service metadata",
-      responseCode = "200")
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(implementation = MetadataResponse.class)))
   @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetMetadata(HttpRequest<?> http) {
     try {
@@ -75,7 +83,9 @@ public class DisaggController {
       description = "Returns a hazard disaggregation computed from the installed model")
   @ApiResponse(
       description = "Disaggregation",
-      responseCode = "200")
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(implementation = DisaggResponseReturnPeriod.class)))
   @Get(
       uri = "{longitude}/{latitude}/{vs30}/{returnPeriod}{?imt}",
       produces = MediaType.APPLICATION_JSON)
@@ -93,16 +103,15 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double returnPeriod,
-      @QueryValue @Nullable Set<HazardImt> imt,
+      @QueryValue @Nullable Set<Imt> imt,
       @QueryValue @Nullable Set<DisaggDataType> out) {
     try {
       Set<Imt> imts = HazardService.readImts(http);
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
           http,
-          longitude, latitude, vs30,
+          longitude, latitude, vs30, imts,
           returnPeriod,
-          imts,
           dataTypes);
       return DisaggService.getDisaggRp(request);
     } catch (Exception e) {
@@ -124,7 +133,9 @@ public class DisaggController {
       description = "Returns a hazard disaggregation computed from the installed model")
   @ApiResponse(
       description = "Disaggregation",
-      responseCode = "200")
+      responseCode = "200",
+      content = @Content(
+          schema = @Schema(implementation = DisaggResponseIml.class)))
   @Get(
       uri = "{longitude}/{latitude}/{vs30}",
       produces = MediaType.APPLICATION_JSON)
@@ -139,20 +150,9 @@ public class DisaggController {
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double vs30,
-      @QueryValue @Nullable Double PGA,
-      @QueryValue @Nullable Double SA0P2,
-      @QueryValue @Nullable Double SA1P0,
-      @QueryValue @Nullable Double SA5P0,
+      @Schema(
+          example = "{\"PGA\": 0, \"SA0P2\": 0, \"SA1P0\": 0, \"SA2P0\": 0}") @QueryValue @Nullable Map<Imt, Double> imls,
       @QueryValue @Nullable Set<DisaggDataType> out) {
-
-    /*
-     * Developer notes:
-     *
-     * It is awkward to support IMT=#; numerous unique keys that may or may not
-     * be present yields a clunky swagger interface. The disagg-iml endpoint
-     * requires one or more IMT=# query arguments. Document in example.
-     */
-
     try {
       Map<Imt, Double> imtImlMap = http.getParameters().asMap(Imt.class, Double.class);
       checkArgument(!imtImlMap.isEmpty(), "No IMLs supplied");
@@ -170,4 +170,13 @@ public class DisaggController {
           http.getUri().toString());
     }
   }
+
+  // For Swagger schema
+  private static class DisaggResponseIml extends ResponseBody<RequestIml, Response> {}
+
+  // For Swagger schema
+  private static class DisaggResponseReturnPeriod extends ResponseBody<RequestRp, Response> {}
+
+  // For Swagger schema
+  private static class MetadataResponse extends ResponseBody<String, Metadata> {};
 }

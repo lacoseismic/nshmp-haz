@@ -8,7 +8,6 @@ import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.SourceLogicTreesController;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -65,11 +64,15 @@ public class SourceLogicTreesService {
     }
   }
 
-  private static class RequestData {
-    int id;
+  static class RequestData {
+    final int id;
 
     RequestData(int id) {
       this.id = id;
+    }
+
+    public int getId() {
+      return id;
     }
   }
 }
