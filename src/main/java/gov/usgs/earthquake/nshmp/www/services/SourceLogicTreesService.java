@@ -33,7 +33,7 @@ public class SourceLogicTreesService {
 
     try {
       var metadata = new Metadata(ServletUtil.model());
-      var response = ResponseBody.success()
+      var response = ResponseBody.usage()
           .name(NAME)
           .url(url)
           .metadata(new ResponseMetadata(HazVersion.appVersions()))
