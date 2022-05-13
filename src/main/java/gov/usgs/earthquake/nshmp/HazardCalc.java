@@ -254,8 +254,9 @@ public class HazardCalc {
     return Optional.of(sb.toString());
   }
 
-  private static final VersionInfo[] versions = HazVersion.appVersions();
-  public static final StringBuilder VERSION = versions();
+  public static final StringBuilder VERSION =
+      new StringBuilder("TODO get version from file").append(NEWLINE);
+  // public static final StringBuilder VERSION = versions();
 
   private static StringBuilder versions() {
     StringBuilder sb = new StringBuilder().append(NEWLINE);
