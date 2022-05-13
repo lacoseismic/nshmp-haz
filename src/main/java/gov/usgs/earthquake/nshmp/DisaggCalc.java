@@ -129,7 +129,7 @@ public class DisaggCalc {
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
-      log.info(PROGRAM + ": " + HazardCalc.VERSION);
+      log.info(PROGRAM + " version: " + HazardCalc.VERSION);
       Path modelPath = Paths.get(args[0]);
       HazardModel model = HazardModel.load(modelPath);
 
@@ -535,7 +535,7 @@ public class DisaggCalc {
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
-      .append(PROGRAM).append(" [").append(HazardCalc.VERSION).append("]").append(NEWLINE)
+      .append(PROGRAM).append(" version:").append(HazardCalc.VERSION)
       .append(NEWLINE)
       .append("Usage:").append(NEWLINE)
       .append("  ").append(USAGE_COMMAND).append(NEWLINE)

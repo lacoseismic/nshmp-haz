@@ -29,9 +29,11 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.HazardExport;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
+import gov.usgs.earthquake.nshmp.internal.AppVersion.VersionInfo;
 import gov.usgs.earthquake.nshmp.internal.Logging;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.model.SiteData;
+import gov.usgs.earthquake.nshmp.www.HazVersion;
 
 /**
  * Compute probabilisitic seismic hazard from a {@link HazardModel}.
@@ -94,7 +96,7 @@ public class HazardCalc {
       fh.setFormatter(new Logging.ConsoleFormatter());
       log.getParent().addHandler(fh);
 
-      log.info(PROGRAM + ": " + VERSION);
+      log.info(PROGRAM + " version: " + VERSION);
       Path modelPath = Paths.get(args[0]);
       HazardModel model = HazardModel.load(modelPath);
 
@@ -252,8 +254,18 @@ public class HazardCalc {
     return Optional.of(sb.toString());
   }
 
-  /** The Git application version. */
-  public static final String VERSION = "TODO get version from resource";
+  private static final VersionInfo[] versions = HazVersion.appVersions();
+  public static final StringBuilder VERSION = versions();
+
+  private static StringBuilder versions() {
+    StringBuilder sb = new StringBuilder().append(NEWLINE);
+    for (VersionInfo component : HazVersion.appVersions()) {
+      sb.append("  ").append(component.projectName)
+          .append(": ").append(component.version)
+          .append(NEWLINE);
+    }
+    return sb;
+  }
 
   private static final String PROGRAM = HazardCalc.class.getSimpleName();
   private static final String USAGE_COMMAND =
@@ -265,7 +277,7 @@ public class HazardCalc {
 
   private static final String USAGE = new StringBuilder()
       .append(NEWLINE)
-      .append(PROGRAM).append(" [").append(VERSION).append("]").append(NEWLINE)
+      .append(PROGRAM).append(" version:").append(VERSION)
       .append(NEWLINE)
       .append("Usage:").append(NEWLINE)
       .append("  ").append(USAGE_COMMAND).append(NEWLINE)
