@@ -1,10 +1,13 @@
 package gov.usgs.earthquake.nshmp.www.services;
 
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 
+import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
@@ -54,8 +57,8 @@ public class SwaggerController {
       HttpRequest<?> request,
       HazardModel model) {
     var openApi = new OpenAPIV3Parser().read("META-INF/swagger/nshmp-haz.yml");
-    // TODO: Get min and max boundaries
-    // SwaggerUtils.addLocationBounds
+    var bounds = new Bounds(model.bounds());
+    SwaggerUtils.addLocationBounds(openApi, bounds.min, bounds.max);
     var components = openApi.getComponents();
     var schemas = components.getSchemas();
     SwaggerUtils.siteClassSchema(schemas, List.copyOf(model.siteClasses().keySet()));
@@ -69,5 +72,20 @@ public class SwaggerController {
             model.name() + " hazard model.");
 
     return openApi;
+  }
+
+  private static class Bounds {
+    final Location min;
+    final Location max;
+
+    Bounds(Map<String, Double> bounds) {
+      var log = Logger.getAnonymousLogger();
+
+      bounds.entrySet().forEach(entry -> {
+        log.info(entry.getKey() + ", " + entry.getValue());
+      });
+      min = Location.create(bounds.get("min-longitude"), bounds.get("min-latitude"));
+      max = Location.create(bounds.get("max-longitude"), bounds.get("max-latitude"));
+    }
   }
 }

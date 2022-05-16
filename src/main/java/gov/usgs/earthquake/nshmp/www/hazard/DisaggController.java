@@ -68,8 +68,8 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range [-360..360]°.
-   * @param latitude Latitude in the range [-90..90]°.
+   * @param longitude Longitude in the range
+   * @param latitude Latitude in the range
    * @param vs30 Site Vs30 value in the range [150..3000] m/s.
    * @param returnPeriod The return period of the target ground motion, or
    *        intensity measure level (IML), in the range [1..20000] years.
@@ -91,12 +91,8 @@ public class DisaggController {
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggReturnPeriod(
       HttpRequest<?> http,
-      @Schema(
-          minimum = "-360",
-          maximum = "360") @PathVariable double longitude,
-      @Schema(
-          minimum = "-90",
-          maximum = "90") @PathVariable double latitude,
+      @PathVariable double longitude,
+      @PathVariable double latitude,
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double vs30,
@@ -123,8 +119,8 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range [-360..360]°.
-   * @param latitude Latitude in decimal degrees [-90..90]°.
+   * @param longitude Longitude in the range
+   * @param latitude Latitude in decimal degrees
    * @param vs30 Site Vs30 value in the range [150..3000] m/s.
    * @param out The data types to output
    */
@@ -141,12 +137,8 @@ public class DisaggController {
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetDisaggIml(
       HttpRequest<?> http,
-      @Schema(
-          minimum = "-360",
-          maximum = "360") @PathVariable double longitude,
-      @Schema(
-          minimum = "-90",
-          maximum = "90") @PathVariable double latitude,
+      @PathVariable double longitude,
+      @PathVariable double latitude,
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable double vs30,
