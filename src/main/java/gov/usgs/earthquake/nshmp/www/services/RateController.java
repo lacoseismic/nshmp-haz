@@ -43,8 +43,8 @@ public class RateController {
    * GET method to compute annual-rate, query based.
    *
    * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
+   * @param longitude Longitude (in decimal degrees)
+   * @param latitude Latitude (in decimal degrees)
    * @param distance Cutoff distance (in km) ([0.01, 1000])
    */
   @Operation(
@@ -72,13 +72,9 @@ public class RateController {
   public HttpResponse<String> doGetRate(
       HttpRequest<?> request,
       @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @QueryValue @Nullable Double longitude,
+          required = true) @QueryValue @Nullable Double longitude,
       @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @QueryValue @Nullable Double latitude,
+          required = true) @QueryValue @Nullable Double latitude,
       @Schema(
           required = true,
           minimum = "0.01",
@@ -92,8 +88,8 @@ public class RateController {
    * GET method to compute annual-rate, slash based
    *
    * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
+   * @param longitude Longitude (in decimal degrees)
+   * @param latitude Latitude (in decimal degrees)
    * @param distance Cutoff distance (in km) ([0.01, 1000])
    */
   @Operation(
@@ -112,13 +108,9 @@ public class RateController {
   public HttpResponse<String> doGetRateSlash(
       HttpRequest<?> request,
       @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @PathVariable @Nullable Double longitude,
+          required = true) @PathVariable @Nullable Double longitude,
       @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @PathVariable @Nullable Double latitude,
+          required = true) @PathVariable @Nullable Double latitude,
       @Schema(
           required = true,
           minimum = "0.01",
@@ -132,8 +124,8 @@ public class RateController {
    * GET method to compute probability, query based.
    *
    * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
+   * @param longitude Longitude (in decimal degrees)
+   * @param latitude Latitude (in decimal degrees)
    * @param distance Cutoff distance (in km) ([0.01, 1000])
    * @param timespan Forcast time span (in years) ([1, 10000])
    */
@@ -163,13 +155,9 @@ public class RateController {
   public HttpResponse<String> doGetProbability(
       HttpRequest<?> request,
       @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @QueryValue @Nullable Double longitude,
+          required = true) @QueryValue @Nullable Double longitude,
       @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @QueryValue @Nullable Double latitude,
+          required = true) @QueryValue @Nullable Double latitude,
       @Schema(
           required = true,
           minimum = "0.01",
@@ -187,8 +175,8 @@ public class RateController {
    * GET method to compute probability, slash based
    *
    * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees) ([-360, 360])
-   * @param latitude Latitude (in decimal degrees) ([-90, 90])
+   * @param longitude Longitude (in decimal degrees)
+   * @param latitude Latitude (in decimal degrees)
    * @param distance Cutoff distance (in km) ([0.01, 1000])
    * @param timespan Forecast time span (in years) ([1, 10000])
    */
@@ -209,13 +197,9 @@ public class RateController {
   public HttpResponse<String> doGetProbabilitySlash(
       HttpRequest<?> request,
       @Schema(
-          required = true,
-          minimum = "-360",
-          maximum = "360") @PathVariable @Nullable Double longitude,
+          required = true) @PathVariable @Nullable Double longitude,
       @Schema(
-          required = true,
-          minimum = "-90",
-          maximum = "90") @PathVariable @Nullable Double latitude,
+          required = true) @PathVariable @Nullable Double latitude,
       @Schema(
           required = true,
           minimum = "0.01",

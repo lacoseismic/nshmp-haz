@@ -62,8 +62,8 @@ public class HazardController {
   }
 
   /**
-   * @param longitude Longitude in decimal degrees [-360..360]
-   * @param latitude Latitude in decimal degrees [-90..90]
+   * @param longitude Longitude in decimal degrees
+   * @param latitude Latitude in decimal degrees
    * @param vs30 Site Vs30 value in m/s [150..3000]
    * @param truncate Truncate curves at return periods below ~10,000 years
    * @param maxdir Apply max-direction scaling
@@ -84,12 +84,8 @@ public class HazardController {
       produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetHazard(
       HttpRequest<?> http,
-      @Schema(
-          minimum = "-360",
-          maximum = "360") @PathVariable double longitude,
-      @Schema(
-          minimum = "-90",
-          maximum = "90") @PathVariable double latitude,
+      @PathVariable double longitude,
+      @PathVariable double latitude,
       @Schema(
           minimum = "150",
           maximum = "3000") @PathVariable int vs30,
