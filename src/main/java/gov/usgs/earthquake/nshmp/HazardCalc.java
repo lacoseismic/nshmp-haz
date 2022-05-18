@@ -254,14 +254,12 @@ public class HazardCalc {
     return Optional.of(sb.toString());
   }
 
-  public static final StringBuilder VERSION =
-      new StringBuilder("TODO get version from file").append(NEWLINE);
-  // public static final StringBuilder VERSION = versions();
+  public static final StringBuilder VERSION = versions();
 
   private static StringBuilder versions() {
     StringBuilder sb = new StringBuilder().append(NEWLINE);
     for (VersionInfo component : HazVersion.appVersions()) {
-      sb.append("  ").append(component.projectName)
+      sb.append("\t").append(component.projectName)
           .append(": ").append(component.version)
           .append(NEWLINE);
     }
