@@ -4,7 +4,6 @@
 # Build locally:
 #   docker build
 #       -f ws.Dockerfile
-#       --build-arg gitlab_token=<git-api-token>
 #       -t nshmp-haz-ws .
 #
 # Run locally:
