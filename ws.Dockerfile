@@ -4,7 +4,6 @@
 # Build locally:
 #   docker build
 #       -f ws.Dockerfile
-#       --build-arg gitlab_token=<git-api-token>
 #       -t nshmp-haz-ws .
 #
 # Run locally:
@@ -23,10 +22,7 @@ FROM ${BUILD_IMAGE} as builder
 
 ARG builder_workdir
 
-# TODO
-# Remove once nshmp-lib is public
-ARG GITLAB_TOKEN=null
-ARG CI_JOB_TOKEN=null
+# For GitLab CI/CD
 ARG CI_PROJECT_URL=null
 ARG CI_COMMIT_BRANCH=null
 
