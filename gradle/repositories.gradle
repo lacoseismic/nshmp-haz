@@ -1,50 +1,8 @@
-
-publishing {
-  publications {
-    library(MavenPublication) {
-      groupId = "ghsc"
-      version = project.getProperty("version")
-      version = version == "unspecified" ? "latest" : version
-      from components.java
-    }
-  }
-
-  repositories {
-    maven {
-      url "https://code.usgs.gov/api/v4/projects/2148/packages/maven"
-      name = "GitLab"
-      credentials(HttpHeaderCredentials) {
-        name = 'Job-Token'
-        value = System.getenv("CI_JOB_TOKEN")
-      }
-      authentication {
-        header(HttpHeaderAuthentication)
-      }
-    }
-  }
-}
-
 repositories {
   mavenCentral()
 
   maven {
-    url "https://code.usgs.gov/api/v4/groups/160/-/packages/maven"
-    name "GitLab"
-    if (System.getenv("CI_JOB_TOKEN") && System.getenv("CI_JOB_TOKEN") != "null") {
-      credentials(HttpHeaderCredentials) {
-        name = "Job-Token"
-        value = System.getenv("CI_JOB_TOKEN")
-      }
-    } else if (System.getenv("GITLAB_TOKEN") && System.getenv("GITLAB_TOKEN") != "null") {
-      credentials(HttpHeaderCredentials) {
-        name = "Private-Token"
-        value = System.getenv("GITLAB_TOKEN")
-      }
-    } else {
-      throw new GradleException("CI_JOB_TOKEN or GITLAB_TOKEN environmental variable must be set")
-    }
-    authentication {
-      header(HttpHeaderAuthentication)
-    }
+    url "https://code.usgs.gov/api/v4/groups/1352/-/packages/maven"
+    name "NSHMP GitLab Group"
   }
 }

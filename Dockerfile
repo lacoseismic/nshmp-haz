@@ -35,10 +35,7 @@ ARG FROM_IMAGE=usgs/amazoncorretto:11
 ####
 FROM ${BUILD_IMAGE} as builder
 
-# TODO
-# Remove once nshmp-lib is public
-ARG GITLAB_TOKEN=null
-ARG CI_JOB_TOKEN=null
+# FOr GitLab CI/CD
 ARG CI_PROJECT_URL=null
 ARG CI_COMMIT_BRANCH=null
 
