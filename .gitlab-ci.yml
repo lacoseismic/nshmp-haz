@@ -219,6 +219,7 @@ Build Project:
     - ./gradlew assemble
 
 Markdown Lint:
+  allow_failure: true
   extends:
     - .java
   script:
@@ -226,6 +227,7 @@ Markdown Lint:
     - ./gradlew markdownlint
 
 YAML Lint:
+  allow_failure: true
   extends:
     - .java
   script:
