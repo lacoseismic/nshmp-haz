@@ -1,10 +1,9 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www.source;
 
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService.Metadata;
-import gov.usgs.earthquake.nshmp.www.services.SourceLogicTreesService.RequestData;
-
+import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.Metadata;
+import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.RequestData;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
