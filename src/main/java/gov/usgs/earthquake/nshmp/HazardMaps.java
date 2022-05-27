@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import gov.usgs.earthquake.nshmp.data.Interpolator;
-import gov.usgs.earthquake.nshmp.internal.Parsing;
 
 /**
  * Utility class to create hazard map datasets from a hazard curve results.
@@ -38,7 +37,7 @@ public class HazardMaps {
   private static final String PROGRAM = HazardMaps.class.getSimpleName();
   private static final String VALUE_FMT = "%.8e";
   private static final Function<Double, String> VALUE_FORMATTER =
-      Parsing.formatDoubleFunction(VALUE_FMT);
+      Text.formatDoubleFunction(VALUE_FMT);
 
   private HazardMaps() {}
 
