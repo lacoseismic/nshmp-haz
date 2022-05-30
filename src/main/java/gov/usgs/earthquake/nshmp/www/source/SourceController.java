@@ -2,7 +2,7 @@ package gov.usgs.earthquake.nshmp.www.source;
 
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.source.SourceServices.ResponseData;
+import gov.usgs.earthquake.nshmp.www.source.SourceService.ResponseData;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -52,7 +52,7 @@ public class SourceController {
               implementation = MetadataResponse.class)))
   @Get(produces = MediaType.APPLICATION_JSON)
   public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
-    return SourceServices.getMetadata(request);
+    return SourceService.getMetadata(request);
   }
 
   // For Swagger schemas

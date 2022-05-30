@@ -34,7 +34,7 @@ import jakarta.inject.Singleton;
  * @author U.S. Geological Survey
  */
 @Singleton
-public class SourceServices {
+public class SourceService {
 
   private static final String NAME = "Source Model";
 
