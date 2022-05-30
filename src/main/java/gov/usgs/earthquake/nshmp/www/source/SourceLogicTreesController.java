@@ -30,8 +30,8 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Source Model Logic Trees",
-    description = "USGS NSHM source model logic trees service")
+    name = "Source Model Logic Tree",
+    description = "USGS NSHM source model logic tree service")
 @Controller("/trees")
 public class SourceLogicTreesController {
 
@@ -41,9 +41,9 @@ public class SourceLogicTreesController {
   @Operation(
       summary = "Source model logic tree listing",
       description = "Returns the ID's of logic trees in the model",
-      operationId = "trees-metadata")
+      operationId = "source-tree-metadata")
   @ApiResponse(
-      description = "Source logic trees metadata",
+      description = "Source logic tree metadata",
       responseCode = "200",
       content = @Content(
           schema = @Schema(
@@ -66,7 +66,7 @@ public class SourceLogicTreesController {
   @Operation(
       summary = "Get a source model MFD logic tree",
       description = "Returns the logic tree of MFDs for the supplied ID",
-      operationId = "trees-mfds")
+      operationId = "source-tree-mfds")
   @ApiResponse(
       description = "NSHM source logic tree",
       responseCode = "200",
