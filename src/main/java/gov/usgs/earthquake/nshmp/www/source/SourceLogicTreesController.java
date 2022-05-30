@@ -29,8 +29,8 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Source Logic Trees",
-    description = "NSHM source logic trees service")
+    name = "Source Model Logic Trees",
+    description = "USGS NSHM source model logic trees service")
 @Controller("/trees")
 public class SourceLogicTreesController {
 
@@ -38,9 +38,9 @@ public class SourceLogicTreesController {
   private NshmpMicronautServlet servlet;
 
   @Operation(
-      description = "Returns the tectonic setting to source logic trees in the NSHM",
-      operationId = "trees_doGetMetadata",
-      summary = "Hazard model source logic trees")
+      summary = "Source model logic tree listing",
+      description = "Returns the ID's of logic trees in the model",
+      operationId = "trees-metadata")
   @ApiResponse(
       description = "Source logic trees metadata",
       responseCode = "200",
@@ -49,24 +49,24 @@ public class SourceLogicTreesController {
               implementation = MetadataResponse.class)))
   @Get
   public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
-    return SourceLogicTreesService.handleDoGetMetadata(request);
+    return SourceLogicTreesService.getMetadata(request);
   }
 
   /**
    * @param id Source tree id
    */
   @Operation(
-      description = "Returns the source logic tree for an id",
-      operationId = "trees_goGetTrees",
-      summary = "Get NSHM source logic tree")
+      summary = "Get a source model MFD logic tree",
+      description = "Returns the logic tree of MFDs for the supplied ID",
+      operationId = "trees-mfds")
   @ApiResponse(
       description = "NSHM source logic tree",
       responseCode = "200",
       content = @Content(
           schema = @Schema(implementation = TreeResponse.class)))
   @Get(uri = "/{id}")
-  public HttpResponse<String> doGetTrees(HttpRequest<?> request, @PathVariable int id) {
-    return SourceLogicTreesService.handleDoGetTrees(request, id);
+  public HttpResponse<String> doGetTree(HttpRequest<?> request, @PathVariable int id) {
+    return SourceLogicTreesService.getTree(request, id);
   }
 
   // For Swagger schemas

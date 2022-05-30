@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut web service controller to return metadata on the current installed
+ * Micronaut web service controller to return metadata for the current installed
  * model.
  *
  * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
@@ -27,7 +27,9 @@ import jakarta.inject.Inject;
  *
  * @author U.S. Geological Survey
  */
-@Tag(name = "Source Model")
+@Tag(
+    name = "Source Model Information",
+    description = "USGS NSHM source model metadata service")
 @Controller("/source")
 public class SourceController {
 
@@ -35,15 +37,13 @@ public class SourceController {
   private NshmpMicronautServlet servlet;
 
   /**
-   * GET method to return the source model usage
-   *
    * @param request The HTTP request
    */
   @Operation(
-      summary = "Returns the metadata about the current installed NSHM",
+      summary = "Returns metadata about the current installed NSHM",
       description = "Returns the install National Hazard Model with supported:\n" +
-          "* Intensity measure types (IMT)\n * VS30\n * Region bounds\n * Return period",
-      operationId = "source_doGetUsage")
+          "* Intensity measure types (IMT)\n * Vs30\n * Region bounds\n * Return period",
+      operationId = "source-model-metadata")
   @ApiResponse(
       description = "Installed source model",
       responseCode = "200",
@@ -51,8 +51,8 @@ public class SourceController {
           schema = @Schema(
               implementation = MetadataResponse.class)))
   @Get(produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetUsage(HttpRequest<?> request) {
-    return SourceServices.handleDoGetUsage(request);
+  public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
+    return SourceServices.getMetadata(request);
   }
 
   // For Swagger schemas

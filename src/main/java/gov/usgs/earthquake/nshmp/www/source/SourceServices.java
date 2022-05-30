@@ -51,7 +51,7 @@ public class SourceServices {
         .create();
   }
 
-  static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
+  static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().getPath();
     try {
       var response = ResponseBody.usage()

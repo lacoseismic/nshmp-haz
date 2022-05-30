@@ -43,8 +43,8 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Disaggregation",
-    description = "USGS NSHMP hazard disaggregation service")
+    name = "Hazard Disaggregation",
+    description = "USGS NSHM hazard disaggregation service")
 @Controller("/disagg")
 public class DisaggController {
 
@@ -73,9 +73,9 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range
-   * @param latitude Latitude in the range
-   * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param vs30 Site Vs30 value in the range [150..3000] m/s
    * @param returnPeriod The return period of the target ground motion, or
    *        intensity measure level (IML), in the range [1..20000] years.
    * @param imt Optional IMTs at which to compute hazard. If none are supplied,
@@ -85,7 +85,8 @@ public class DisaggController {
    */
   @Operation(
       summary = "Disaggregate hazard at a specified return period",
-      description = "Returns a hazard disaggregation computed from the installed model")
+      description = "Returns a hazard disaggregation computed from the installed model",
+      operationId = "disagg-calc-rp")
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200",
@@ -124,14 +125,16 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range
-   * @param latitude Latitude in decimal degrees
-   * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param vs30 Site Vs30 value in the range [150..3000] m/s
+   * @param imls Mapping of IMTs to disaggregation intensity measure levels
    * @param out The data types to output
    */
   @Operation(
       summary = "Disaggregate hazard at specified IMLs",
-      description = "Returns a hazard disaggregation computed from the installed model")
+      description = "Returns a hazard disaggregation computed from the installed model",
+      operationId = "disagg-calc-iml")
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200",

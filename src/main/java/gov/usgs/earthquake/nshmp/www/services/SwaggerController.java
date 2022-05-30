@@ -3,7 +3,6 @@ package gov.usgs.earthquake.nshmp.www.services;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +11,6 @@ import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.SwaggerUtils;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -62,8 +60,7 @@ public class SwaggerController {
     var components = openApi.getComponents();
     var schemas = components.getSchemas();
     SwaggerUtils.siteClassSchema(schemas, List.copyOf(model.siteClasses().keySet()));
-    SwaggerUtils.imtSchema(schemas,
-        model.config().hazard.imts.stream().collect(Collectors.toList()));
+    SwaggerUtils.imtSchema(schemas, List.copyOf(model.config().hazard.imts));
     openApi.servers(null);
 
     openApi.getInfo().setTitle(model.name() + " Web Services");

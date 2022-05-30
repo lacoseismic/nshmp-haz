@@ -27,7 +27,7 @@ public class SourceLogicTreesService {
   private static final String NAME = "Source Logic Trees";
 
   /** SourceLogicTreesController.doGetMetadata() handler */
-  public static HttpResponse<String> handleDoGetMetadata(HttpRequest<?> request) {
+  public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().getPath();
 
     try {
@@ -46,7 +46,7 @@ public class SourceLogicTreesService {
   }
 
   /** SourceLogicTreesController.doGetTrees() handler */
-  public static HttpResponse<String> handleDoGetTrees(HttpRequest<?> request, Integer id) {
+  public static HttpResponse<String> getTree(HttpRequest<?> request, Integer id) {
     var url = request.getUri().getPath();
 
     try {
