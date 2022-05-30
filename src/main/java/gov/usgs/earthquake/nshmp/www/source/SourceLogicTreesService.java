@@ -22,47 +22,34 @@ import jakarta.inject.Singleton;
 @Singleton
 public class SourceLogicTreesService {
 
+  static final String NAME = "Source Logic Trees";
   static final Logger LOG = LoggerFactory.getLogger(SourceLogicTreesService.class);
 
-  private static final String NAME = "Source Logic Trees";
-
-  /** SourceLogicTreesController.doGetMetadata() handler */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
-    var url = request.getUri().getPath();
-
-    try {
-      var metadata = new Metadata(ServletUtil.model());
-      var response = ResponseBody.usage()
-          .name(NAME)
-          .url(url)
-          .metadata(new ResponseMetadata(HazVersion.appVersions()))
-          .request(url)
-          .response(metadata)
-          .build();
-      return HttpResponse.ok(ServletUtil.GSON.toJson(response));
-    } catch (Exception e) {
-      return ServletUtil.error(LOG, e, NAME, url);
-    }
+    var url = request.getUri().toString();
+    var metadata = new Metadata(ServletUtil.model());
+    var response = ResponseBody.usage()
+        .name(NAME)
+        .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
+        .request(url)
+        .response(metadata)
+        .build();
+    return HttpResponse.ok(ServletUtil.GSON2.toJson(response));
   }
 
-  /** SourceLogicTreesController.doGetTrees() handler */
   public static HttpResponse<String> getTree(HttpRequest<?> request, Integer id) {
-    var url = request.getUri().getPath();
-
-    try {
-      var tree = Models.tree(ServletUtil.model(), id);
-      var requestData = new RequestData(id);
-      var response = ResponseBody.success()
-          .name(NAME)
-          .url(url)
-          .metadata(new ResponseMetadata(HazVersion.appVersions()))
-          .request(requestData)
-          .response(tree)
-          .build();
-      return HttpResponse.ok(ServletUtil.GSON.toJson(response));
-    } catch (Exception e) {
-      return ServletUtil.error(LOG, e, NAME, url);
-    }
+    var url = request.getUri().toString();
+    var tree = Models.tree(ServletUtil.model(), id);
+    var requestData = new RequestData(id);
+    var response = ResponseBody.success()
+        .name(NAME)
+        .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
+        .request(requestData)
+        .response(tree)
+        .build();
+    return HttpResponse.ok(ServletUtil.GSON2.toJson(response));
   }
 
   static class RequestData {

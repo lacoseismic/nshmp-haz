@@ -2,6 +2,7 @@ package gov.usgs.earthquake.nshmp.www.source;
 
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.Metadata;
 import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.RequestData;
 import io.micronaut.http.HttpRequest;
@@ -48,8 +49,15 @@ public class SourceLogicTreesController {
           schema = @Schema(
               implementation = MetadataResponse.class)))
   @Get
-  public HttpResponse<String> doGetMetadata(HttpRequest<?> request) {
-    return SourceLogicTreesService.getMetadata(request);
+  public HttpResponse<String> doGetMetadata(HttpRequest<?> http) {
+    try {
+      return SourceLogicTreesService.getMetadata(http);
+    } catch (Exception e) {
+      return ServletUtil.error(
+          SourceLogicTreesService.LOG, e,
+          SourceLogicTreesService.NAME,
+          http.getUri().toString());
+    }
   }
 
   /**
@@ -65,8 +73,15 @@ public class SourceLogicTreesController {
       content = @Content(
           schema = @Schema(implementation = TreeResponse.class)))
   @Get(uri = "/{id}")
-  public HttpResponse<String> doGetTree(HttpRequest<?> request, @PathVariable int id) {
-    return SourceLogicTreesService.getTree(request, id);
+  public HttpResponse<String> doGetTree(HttpRequest<?> http, @PathVariable int id) {
+    try {
+      return SourceLogicTreesService.getTree(http, id);
+    } catch (Exception e) {
+      return ServletUtil.error(
+          SourceLogicTreesService.LOG, e,
+          SourceLogicTreesService.NAME,
+          http.getUri().toString());
+    }
   }
 
   // For Swagger schemas

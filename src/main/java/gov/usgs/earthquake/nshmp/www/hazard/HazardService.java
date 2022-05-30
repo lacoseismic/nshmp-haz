@@ -60,7 +60,6 @@ public final class HazardService {
 
   private static final String TOTAL_KEY = "Total";
 
-  /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
     var usage = new Metadata(ServletUtil.model());
@@ -75,7 +74,6 @@ public final class HazardService {
     return HttpResponse.ok(json);
   }
 
-  /** HazardController.doGetHazard() handler. */
   public static HttpResponse<String> getHazard(Request request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
@@ -105,7 +103,7 @@ public final class HazardService {
    * apply truncation and scaling on the client.
    */
 
-  public static Hazard calcHazard(Request request)
+  static Hazard calcHazard(Request request)
       throws InterruptedException, ExecutionException {
 
     HazardModel model = ServletUtil.model();
