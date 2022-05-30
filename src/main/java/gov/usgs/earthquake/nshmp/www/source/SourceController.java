@@ -34,6 +34,8 @@ import jakarta.inject.Inject;
 @Controller("/source")
 public class SourceController {
 
+  // TODO consider renaming to /model
+
   @Inject
   private NshmpMicronautServlet servlet;
 

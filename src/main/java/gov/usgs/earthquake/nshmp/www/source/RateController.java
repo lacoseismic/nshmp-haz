@@ -1,16 +1,16 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www.source;
 
 import java.util.Optional;
 
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.services.RateService.ProbabilityParameters;
-import gov.usgs.earthquake.nshmp.www.services.RateService.Query;
-import gov.usgs.earthquake.nshmp.www.services.RateService.RateParameters;
-import gov.usgs.earthquake.nshmp.www.services.RateService.RequestData;
-import gov.usgs.earthquake.nshmp.www.services.RateService.ResponseData;
-import gov.usgs.earthquake.nshmp.www.services.RateService.Service;
-import gov.usgs.earthquake.nshmp.www.services.RateService.Usage;
+import gov.usgs.earthquake.nshmp.www.source.RateService.ProbabilityParameters;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Query;
+import gov.usgs.earthquake.nshmp.www.source.RateService.RateParameters;
+import gov.usgs.earthquake.nshmp.www.source.RateService.RequestData;
+import gov.usgs.earthquake.nshmp.www.source.RateService.ResponseData;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Service;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Usage;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;

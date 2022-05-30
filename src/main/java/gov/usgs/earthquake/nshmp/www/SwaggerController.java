@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.SwaggerUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
