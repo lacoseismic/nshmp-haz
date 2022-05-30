@@ -16,14 +16,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Source model service to return the current installed model.
+ * Micronaut web service controller to return metadata on the current installed
+ * model.
  *
- * <p> See src/main/resources/applicaiton.yml nshmp-haz.installed-model for
- * default model used
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
  *
- * <p> To run the Micronaut jar file with a model: java -jar
- * path/to/nshmp-haz.jar -model=<{@code Model}>
- *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
  *
  * @author U.S. Geological Survey
  */

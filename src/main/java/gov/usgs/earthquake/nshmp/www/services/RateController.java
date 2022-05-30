@@ -11,7 +11,6 @@ import gov.usgs.earthquake.nshmp.www.services.RateService.RequestData;
 import gov.usgs.earthquake.nshmp.www.services.RateService.ResponseData;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Service;
 import gov.usgs.earthquake.nshmp.www.services.RateService.Usage;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -27,9 +26,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut controller for rate and probability services.
+ * Micronaut web service controller for rate and probability calcuations.
  *
- * @see RateService
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
+ *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
  *
  * @author U.S. Geological Survey
  */

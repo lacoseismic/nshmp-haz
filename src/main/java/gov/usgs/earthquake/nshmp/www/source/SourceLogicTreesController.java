@@ -17,9 +17,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut controller for NSHM source logic trees.
+ * Micronaut web service controller for the source logic trees in the current
+ * installed model.
  *
- * @see SourceLogicTreesService
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
+ *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
+ *
  * @author U.S. Geological Survey
  */
 @Tag(

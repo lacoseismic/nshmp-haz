@@ -15,7 +15,6 @@ import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestIml;
 import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestRp;
 import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.Response;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -34,6 +33,12 @@ import jakarta.inject.Inject;
 /**
  * Micronaut web service controller for disaggregation of probabilistic seismic
  * hazard.
+ *
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
+ *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
  *
  * @author U.S. Geological Survey
  */
