@@ -84,9 +84,9 @@ public class SourceLogicTreesController {
     }
   }
 
-  // For Swagger schemas
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, Metadata> {}
 
-  // For Swagger schemas
+  // Swagger schema
   private static class TreeResponse extends ResponseBody<RequestData, Object> {}
 }

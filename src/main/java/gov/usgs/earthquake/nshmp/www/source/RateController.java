@@ -1,17 +1,11 @@
 package gov.usgs.earthquake.nshmp.www.source;
 
-import java.util.Optional;
-
 import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
-import gov.usgs.earthquake.nshmp.www.source.RateService.ProbabilityParameters;
-import gov.usgs.earthquake.nshmp.www.source.RateService.Query;
-import gov.usgs.earthquake.nshmp.www.source.RateService.RateParameters;
-import gov.usgs.earthquake.nshmp.www.source.RateService.RequestData;
-import gov.usgs.earthquake.nshmp.www.source.RateService.ResponseData;
-import gov.usgs.earthquake.nshmp.www.source.RateService.Service;
-import gov.usgs.earthquake.nshmp.www.source.RateService.Usage;
-import io.micronaut.core.annotation.Nullable;
+import gov.usgs.earthquake.nshmp.www.ServletUtil;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Metadata;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Request;
+import gov.usgs.earthquake.nshmp.www.source.RateService.Response;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -26,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 /**
- * Micronaut web service controller for rate and probability calcuations.
+ * Micronaut web service controller for rate calcuations.
  *
  * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
  * model.
@@ -37,97 +31,74 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Rate Calculation",
-    description = "USGS NSHM hazard calculation service")
-@Controller("/")
+    name = "Earthquake Rate Calculation",
+    description = "USGS NSHM earthquake rate calculation service")
+@Controller("/rate")
 public class RateController {
 
   @Inject
   private NshmpMicronautServlet servlet;
 
-  /**
-   * GET method to compute annual-rate, slash based
-   *
-   * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees)
-   * @param latitude Latitude (in decimal degrees)
-   * @param distance Cutoff distance (in km) ([0.01, 1000])
-   */
   @Operation(
-      summary = "Compute earthquake annual-rates",
-      description = "Compute incremental earthquake annual-rates at a location",
-      operationId = "rate_doGetRateSlash",
-      tags = { "Rate Service" })
+      summary = "Earthquake rate calculation model and service metadata",
+      description = "Returns details of the installed model and service request parameters",
+      operationId = "rate-metadata")
   @ApiResponse(
-      description = "Earthquake annual-rates calculation response",
+      description = "Rate service metadata",
       responseCode = "200",
       content = @Content(
-          schema = @Schema(implementation = CalcResponse.class)))
-  @Get(
-      uri = "/rate{/longitude}{/latitude}{/distance}",
-      produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetRateSlash(
-      HttpRequest<?> request,
-      @Schema(
-          required = true) @PathVariable @Nullable Double longitude,
-      @Schema(
-          required = true) @PathVariable @Nullable Double latitude,
-      @Schema(
-          required = true,
-          minimum = "0.01",
-          maximum = "1000") @PathVariable @Nullable Double distance) {
-    var service = Service.RATE;
-    var query = new Query(service, longitude, latitude, distance, Optional.empty());
-    return RateService.handleDoGetCalc(request, query);
+          schema = @Schema(implementation = RateMetadata.class)))
+  @Get(produces = MediaType.APPLICATION_JSON)
+  public HttpResponse<String> doGetRateMetadata(HttpRequest<?> http) {
+    try {
+      return RateService.getRateMetadata(http);
+    } catch (Exception e) {
+      return ServletUtil.error(
+          RateService.LOG, e,
+          RateService.NAME_RATE,
+          http.getUri().toString());
+    }
   }
 
   /**
-   * GET method to compute probability, slash based
-   *
-   * @param request The HTTP request
-   * @param longitude Longitude (in decimal degrees)
-   * @param latitude Latitude (in decimal degrees)
-   * @param distance Cutoff distance (in km) ([0.01, 1000])
-   * @param timespan Forecast time span (in years) ([1, 10000])
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param distance Cutoff distance in the range [0.01, 1000] km.
    */
   @Operation(
-      summary = "Compute earthquake probabilities",
-      description = "Compute cumulative earthquake probabilities P(M ≥ x) at a location",
-      operationId = "probability_doGetProbabilitySlash",
-      tags = { "Probability Service" })
+      summary = "Compute annual earthquake rates",
+      description = "Compute incremental annual earthquake rates at a location",
+      operationId = "rate-calc")
   @ApiResponse(
-      description = "Earthquake probabilities calculation response",
+      description = "Earthquake annual rate calculation response",
       responseCode = "200",
       content = @Content(
-          schema = @Schema(
-              implementation = CalcResponse.class)))
+          schema = @Schema(implementation = RateResponse.class)))
   @Get(
-      uri = "/probability{/longitude}{/latitude}{/distance}{/timespan}",
+      uri = "/{longitude}/{latitude}/{distance}",
       produces = MediaType.APPLICATION_JSON)
-  public HttpResponse<String> doGetProbabilitySlash(
-      HttpRequest<?> request,
+  public HttpResponse<String> doGetRate(
+      HttpRequest<?> http,
+      @PathVariable double longitude,
+      @PathVariable double latitude,
       @Schema(
-          required = true) @PathVariable @Nullable Double longitude,
-      @Schema(
-          required = true) @PathVariable @Nullable Double latitude,
-      @Schema(
-          required = true,
           minimum = "0.01",
-          maximum = "1000") @PathVariable @Nullable Double distance,
-      @Schema(
-          required = true,
-          minimum = "1",
-          maximum = "10000") @PathVariable @Nullable Double timespan) {
-    var service = Service.PROBABILITY;
-    var query = new Query(service, longitude, latitude, distance, Optional.ofNullable(timespan));
-    return RateService.handleDoGetCalc(request, query);
+          maximum = "1000") @PathVariable double distance) {
+    try {
+      RateService.Request request = new RateService.Request(
+          http, longitude, latitude, distance);
+      return RateService.getRate(request);
+    } catch (Exception e) {
+      return ServletUtil.error(
+          RateService.LOG, e,
+          RateService.NAME_RATE,
+          http.getUri().toString());
+    }
   }
 
-  // Swagger schemas
-  private static class CalcResponse extends ResponseBody<RequestData, ResponseData> {}
+  // Swagger schema
+  private static class RateResponse extends ResponseBody<Request, Response> {}
 
-  private static class RateMetadataResponse extends ResponseBody<String, Usage<RateParameters>> {};
-
-  private static class ProbMetadataResponse extends
-      ResponseBody<String, Usage<ProbabilityParameters>> {};
+  // Swagger schema
+  private static class RateMetadata extends ResponseBody<String, Metadata> {};
 }

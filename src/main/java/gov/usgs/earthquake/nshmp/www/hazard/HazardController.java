@@ -103,10 +103,7 @@ public class HazardController {
     try {
       Set<Imt> imts = HazardService.readImts(http);
       HazardService.Request request = new HazardService.Request(
-          http,
-          longitude, latitude, vs30,
-          imts,
-          truncate, maxdir);
+          http, longitude, latitude, vs30, imts, truncate, maxdir);
       return HazardService.getHazard(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -116,9 +113,9 @@ public class HazardController {
     }
   }
 
-  // For Swagger schemas
+  // Swagger schema
   private static class HazardResponse extends ResponseBody<Request, Response> {}
 
-  // For Swagger schemas
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, Metadata> {};
 }

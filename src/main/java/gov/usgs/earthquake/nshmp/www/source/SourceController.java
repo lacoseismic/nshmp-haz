@@ -65,6 +65,6 @@ public class SourceController {
     }
   }
 
-  // For Swagger schemas
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, ResponseData> {}
 }

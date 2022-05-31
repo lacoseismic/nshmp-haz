@@ -111,10 +111,7 @@ public class DisaggController {
       Set<Imt> imts = HazardService.readImts(http);
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
-          http,
-          longitude, latitude, vs30, imts,
-          returnPeriod,
-          dataTypes);
+          http, longitude, latitude, vs30, imts, returnPeriod, dataTypes);
       return DisaggService.getDisaggRp(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -158,10 +155,7 @@ public class DisaggController {
       checkArgument(!imtImlMap.isEmpty(), "No IMLs supplied");
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestIml request = new DisaggService.RequestIml(
-          http,
-          longitude, latitude, vs30,
-          imtImlMap,
-          dataTypes);
+          http, longitude, latitude, vs30, imtImlMap, dataTypes);
       return DisaggService.getDisaggIml(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -171,12 +165,12 @@ public class DisaggController {
     }
   }
 
-  // For Swagger schema
+  // Swagger schema
   private static class DisaggResponseIml extends ResponseBody<RequestIml, Response> {}
 
-  // For Swagger schema
+  // Swagger schema
   private static class DisaggResponseReturnPeriod extends ResponseBody<RequestRp, Response> {}
 
-  // For Swagger schema
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, Metadata> {};
 }

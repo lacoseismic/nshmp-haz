@@ -134,7 +134,7 @@ public final class HazardService {
 
     Metadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // should get min max from model
+      // TODO should get min max from model (fix via swagger openapi injection)
       longitude = new DoubleParameter(
           "Longitude",
           "°",
