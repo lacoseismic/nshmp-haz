@@ -6,6 +6,7 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.source.RateService.Metadata;
 import gov.usgs.earthquake.nshmp.www.source.RateService.Request;
 import gov.usgs.earthquake.nshmp.www.source.RateService.Response;
+
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
