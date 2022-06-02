@@ -35,11 +35,17 @@ import jakarta.inject.Inject;
  * Micronaut web service controller for disaggregation of probabilistic seismic
  * hazard.
  *
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
+ *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
+ *
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Disaggregation",
-    description = "USGS NSHMP hazard disaggregation service")
+    name = DisaggService.NAME,
+    description = "USGS NSHM hazard disaggregation service")
 @Controller("/disagg")
 public class DisaggController {
 
@@ -68,9 +74,9 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range
-   * @param latitude Latitude in the range
-   * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param vs30 Site Vs30 value in the range [150..3000] m/s
    * @param returnPeriod The return period of the target ground motion, or
    *        intensity measure level (IML), in the range [1..20000] years.
    * @param imt Optional IMTs at which to compute hazard. If none are supplied,
@@ -80,7 +86,8 @@ public class DisaggController {
    */
   @Operation(
       summary = "Disaggregate hazard at a specified return period",
-      description = "Returns a hazard disaggregation computed from the installed model")
+      description = "Returns a hazard disaggregation computed from the installed model",
+      operationId = "disagg-calc-rp")
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200",
@@ -105,10 +112,7 @@ public class DisaggController {
       Set<Imt> imts = HazardService.readImts(http);
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestRp request = new DisaggService.RequestRp(
-          http,
-          longitude, latitude, vs30, imts,
-          returnPeriod,
-          dataTypes);
+          http, longitude, latitude, vs30, imts, returnPeriod, dataTypes);
       return DisaggService.getDisaggRp(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -119,14 +123,16 @@ public class DisaggController {
   }
 
   /**
-   * @param longitude Longitude in the range
-   * @param latitude Latitude in decimal degrees
-   * @param vs30 Site Vs30 value in the range [150..3000] m/s.
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param vs30 Site Vs30 value in the range [150..3000] m/s
+   * @param imls Mapping of IMTs to disaggregation intensity measure levels
    * @param out The data types to output
    */
   @Operation(
       summary = "Disaggregate hazard at specified IMLs",
-      description = "Returns a hazard disaggregation computed from the installed model")
+      description = "Returns a hazard disaggregation computed from the installed model",
+      operationId = "disagg-calc-iml")
   @ApiResponse(
       description = "Disaggregation",
       responseCode = "200",
@@ -150,10 +156,7 @@ public class DisaggController {
       checkArgument(!imtImlMap.isEmpty(), "No IMLs supplied");
       Set<DataType> dataTypes = HazardService.readDataTypes(http);
       DisaggService.RequestIml request = new DisaggService.RequestIml(
-          http,
-          longitude, latitude, vs30,
-          imtImlMap,
-          dataTypes);
+          http, longitude, latitude, vs30, imtImlMap, dataTypes);
       return DisaggService.getDisaggIml(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -163,12 +166,12 @@ public class DisaggController {
     }
   }
 
-  // For Swagger schema
+  // Swagger schema
   private static class DisaggResponseIml extends ResponseBody<RequestIml, Response> {}
 
-  // For Swagger schema
+  // Swagger schema
   private static class DisaggResponseReturnPeriod extends ResponseBody<RequestRp, Response> {}
 
-  // For Swagger schema
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, Metadata> {};
 }

@@ -49,6 +49,7 @@ import jakarta.inject.Singleton;
 @Singleton
 public class ServletUtil {
 
+  @Deprecated
   public static final Gson GSON;
   public static final Gson GSON2;
 

@@ -2,7 +2,7 @@ package gov.usgs.earthquake.nshmp.model.peer;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter.COMMA;
+import static gov.usgs.earthquake.nshmp.Text.Delimiter.COMMA;
 import static java.lang.Math.abs;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -31,13 +31,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import gov.usgs.earthquake.nshmp.Maths;
+import gov.usgs.earthquake.nshmp.Text;
 import gov.usgs.earthquake.nshmp.calc.CalcConfig;
 import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.calc.Sites;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
-import gov.usgs.earthquake.nshmp.internal.Parsing;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 
 class PeerTest {
@@ -164,7 +164,7 @@ class PeerTest {
     for (String line : Iterables.skip(lines, 1)) {
       String[] splitLine = line.split(",", 4);
       String siteName = splitLine[0];
-      List<Double> values = Parsing.splitToDoubleList(splitLine[3], COMMA);
+      List<Double> values = Text.splitToDoubleList(splitLine[3], COMMA);
       siteValuesMap.put(siteName, Doubles.toArray(values));
     }
     return siteValuesMap;

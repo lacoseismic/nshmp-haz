@@ -1,26 +1,22 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www.source;
 
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.DoubleStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import gov.usgs.earthquake.nshmp.gmm.Gmm;
-import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.gmm.NehrpSiteClass;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.HazVersion;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.WsUtils;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 
 import io.micronaut.http.HttpRequest;
@@ -28,44 +24,29 @@ import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
 
 /**
- * Entry point for services related to source models. Current services:
- * <ul><li>/source/</li></ul>
+ * Source model service.
  *
  * @author U.S. Geological Survey
  */
 @Singleton
-public class SourceServices {
+public class SourceService {
 
-  private static final String NAME = "Source Model";
+  static final String NAME = "Model Contents";
+  static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
-  static final Logger LOG = LoggerFactory.getLogger(RateService.class);
-
-  public static final Gson GSON;
-
-  static {
-    GSON = new GsonBuilder()
-        .registerTypeAdapter(Imt.class, new WsUtils.EnumSerializer<Imt>())
-        .disableHtmlEscaping()
-        .serializeNulls()
-        .setPrettyPrinting()
-        .create();
-  }
-
-  static HttpResponse<String> handleDoGetUsage(HttpRequest<?> request) {
-    var url = request.getUri().getPath();
-    try {
-      var response = ResponseBody.usage()
-          .name(NAME)
-          .url(url)
-          .metadata(new ResponseMetadata(HazVersion.appVersions()))
-          .request(url)
-          .response(new ResponseData())
-          .build();
-      var json = GSON.toJson(response);
-      return HttpResponse.ok(json);
-    } catch (Exception e) {
-      return ServletUtil.error(LOG, e, NAME, url);
-    }
+  static HttpResponse<String> getMetadata(HttpRequest<?> request) {
+    var url = request.getUri().toString();
+    var response = ResponseBody.usage()
+        .name(NAME)
+        .url(url)
+        .metadata(new ResponseMetadata(HazVersion.appVersions()))
+        .request(url)
+        .response(new ResponseData())
+        .build();
+    // TODO check other services for url) and
+    // request() passing in the same url obj
+    var json = ServletUtil.GSON2.toJson(response);
+    return HttpResponse.ok(json);
   }
 
   static class ResponseData {
@@ -91,6 +72,7 @@ public class SourceServices {
     final Set<Gmm> gmms;
     final Map<NehrpSiteClass, Double> siteClasses;
     final List<Parameter> imts;
+    final List<Double> bounds;
 
     public SourceModel(HazardModel model) {
       name = model.name();
@@ -103,6 +85,7 @@ public class SourceServices {
           .sorted()
           .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
           .collect(toList());
+      bounds = DoubleStream.of(model.bounds().toArray()).boxed().collect(toList());
     }
 
     public String getName() {
@@ -120,36 +103,9 @@ public class SourceServices {
     public List<Parameter> getImts() {
       return imts;
     }
-  }
 
-  enum Attributes {
-    /* Source model service */
-    MODEL,
-
-    /* Serializing */
-    ID,
-    VALUE,
-    DISPLAY,
-    DISPLAYORDER,
-    YEAR,
-    PATH,
-    REGION,
-    IMT,
-    VS30,
-    SUPPORTS,
-    MINLATITUDE,
-    MINLONGITUDE,
-    MAXLATITUDE,
-    MAXLONGITUDE;
-
-    /** Return upper case string */
-    String toUpperCase() {
-      return name().toUpperCase();
-    }
-
-    /** Return lower case string */
-    String toLowerCase() {
-      return name().toLowerCase();
+    public List<Double> getBounds() {
+      return bounds;
     }
   }
 }

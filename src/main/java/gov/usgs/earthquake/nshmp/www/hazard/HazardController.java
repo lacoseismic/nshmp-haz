@@ -29,11 +29,17 @@ import jakarta.inject.Inject;
  * Micronaut web service controller for probabilistic seismic hazard
  * calculations.
  *
+ * <p>See src/main/resources/application.yml nshmp-haz.model-path for installed
+ * model.
+ *
+ * <p>To run the Micronaut jar file with a model: java -jar
+ * path/to/nshmp-haz.jar --model=<path/to/model>
+ *
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Hazard",
-    description = "USGS NSHMP hazard calculation service")
+    name = HazardService.NAME,
+    description = "USGS NSHM hazard calculation service")
 @Controller("/hazard")
 public class HazardController {
 
@@ -41,7 +47,7 @@ public class HazardController {
   private NshmpMicronautServlet servlet;
 
   @Operation(
-      summary = "Hazard model and service metadata",
+      summary = "Hazard calculation model and service metadata",
       description = "Returns details of the installed model and service request parameters",
       operationId = "hazard-metadata")
   @ApiResponse(
@@ -62,18 +68,19 @@ public class HazardController {
   }
 
   /**
-   * @param longitude Longitude in decimal degrees
-   * @param latitude Latitude in decimal degrees
-   * @param vs30 Site Vs30 value in m/s [150..3000]
-   * @param truncate Truncate curves at return periods below ~10,000 years
-   * @param maxdir Apply max-direction scaling
+   * @param longitude Longitude in decimal degrees in the range
+   * @param latitude Latitude in decimal degrees in the range
+   * @param vs30 Site Vs30 value in the range [150..3000] m/s
+   * @param truncate Truncate curves at return periods below ~10,000 years.
+   * @param maxdir Apply max-direction scaling.
    * @param imt Optional IMTs at which to compute hazard. If none are supplied,
    *        then the supported set for the installed model is used. Responses
    *        for numerous IMT's are quite large, on the order of MB.
    */
   @Operation(
       summary = "Compute probabilisitic hazard at a site",
-      description = "Returns hazard curves computed from the installed model")
+      description = "Returns hazard curves computed from the installed model",
+      operationId = "hazard-calc")
   @ApiResponse(
       description = "Hazard curves",
       responseCode = "200",
@@ -97,10 +104,7 @@ public class HazardController {
     try {
       Set<Imt> imts = HazardService.readImts(http);
       HazardService.Request request = new HazardService.Request(
-          http,
-          longitude, latitude, vs30,
-          imts,
-          truncate, maxdir);
+          http, longitude, latitude, vs30, imts, truncate, maxdir);
       return HazardService.getHazard(request);
     } catch (Exception e) {
       return ServletUtil.error(
@@ -110,9 +114,9 @@ public class HazardController {
     }
   }
 
-  // For Swagger schemas
+  // Swagger schema
   private static class HazardResponse extends ResponseBody<Request, Response> {}
 
-  // For Swagger schemas
+  // Swagger schema
   private static class MetadataResponse extends ResponseBody<String, Metadata> {};
 }

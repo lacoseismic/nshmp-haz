@@ -1,6 +1,5 @@
 package gov.usgs.earthquake.nshmp.www.hazard;
 
-import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.data.DoubleData.checkInRange;
 import static gov.usgs.earthquake.nshmp.geo.Coordinates.checkLatitude;
@@ -29,7 +28,6 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
 import gov.usgs.earthquake.nshmp.data.XySequence;
-import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -41,7 +39,7 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-import gov.usgs.earthquake.nshmp.www.services.SourceServices.SourceModel;
+import gov.usgs.earthquake.nshmp.www.source.SourceService.SourceModel;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -56,12 +54,11 @@ import jakarta.inject.Singleton;
 @Singleton
 public final class HazardService {
 
-  static final String NAME = "Hazard Service";
+  static final String NAME = "Hazard Curves";
   static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
   private static final String TOTAL_KEY = "Total";
 
-  /** HazardController.doGetUsage() handler. */
   public static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
     var usage = new Metadata(ServletUtil.model());
@@ -76,7 +73,6 @@ public final class HazardService {
     return HttpResponse.ok(json);
   }
 
-  /** HazardController.doGetHazard() handler. */
   public static HttpResponse<String> getHazard(Request request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
@@ -106,7 +102,7 @@ public final class HazardService {
    * apply truncation and scaling on the client.
    */
 
-  public static Hazard calcHazard(Request request)
+  static Hazard calcHazard(Request request)
       throws InterruptedException, ExecutionException {
 
     HazardModel model = ServletUtil.model();
@@ -137,18 +133,17 @@ public final class HazardService {
 
     Metadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // should get min max from model
       longitude = new DoubleParameter(
           "Longitude",
           "°",
-          Coordinates.LON_RANGE.lowerEndpoint(),
-          Coordinates.LON_RANGE.upperEndpoint());
+          model.bounds().min.longitude,
+          model.bounds().max.longitude);
 
       latitude = new DoubleParameter(
           "Latitude",
           "°",
-          Coordinates.LAT_RANGE.lowerEndpoint(),
-          Coordinates.LAT_RANGE.upperEndpoint());
+          model.bounds().min.latitude,
+          model.bounds().max.latitude);
 
       vs30 = new DoubleParameter(
           "Vs30",
@@ -174,13 +169,14 @@ public final class HazardService {
     }
   }
 
-  static class HazardRequest {
+  /* Base request class for both hazard and disagg. */
+  static class BaseRequest {
     final transient HttpRequest<?> http;
     final double longitude;
     final double latitude;
     final double vs30;
 
-    public HazardRequest(
+    public BaseRequest(
         HttpRequest<?> http,
         double longitude,
         double latitude,
@@ -204,7 +200,7 @@ public final class HazardService {
     }
   }
 
-  static final class Request extends HazardRequest {
+  static final class Request extends BaseRequest {
     final boolean truncate;
     final boolean maxdir;
     final Set<Imt> imts;
@@ -296,12 +292,8 @@ public final class HazardService {
       }
 
       Builder hazard(Hazard hazard) {
-        // necessary??
-        checkState(totalMap == null, "Hazard has already been added to this builder");
-
         componentMaps = new EnumMap<>(Imt.class);
         totalMap = new EnumMap<>(Imt.class);
-
         var typeTotalMaps = curvesBySource(hazard);
 
         for (var imt : hazard.curves().keySet()) {
@@ -322,7 +314,6 @@ public final class HazardService {
             XySequence.addToMap(type, componentMap, typeTotalMap.get(type));
           }
         }
-
         return this;
       }
 
@@ -442,7 +433,7 @@ public final class HazardService {
         .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
   }
 
-  /* Read the 'imt' query values; can be comma-delimited. */
+  /* Read the 'out'put type query values; can be comma-delimited. */
   static Set<DataType> readDataTypes(HttpRequest<?> http) {
     return http.getParameters().getAll("out").stream()
         .map(s -> s.split(","))

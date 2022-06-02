@@ -1,17 +1,10 @@
-package gov.usgs.earthquake.nshmp.www.services;
+package gov.usgs.earthquake.nshmp.www;
 
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 
-import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
-import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
-import gov.usgs.earthquake.nshmp.www.ServletUtil;
-import gov.usgs.earthquake.nshmp.www.SwaggerUtils;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -57,13 +50,12 @@ public class SwaggerController {
       HttpRequest<?> request,
       HazardModel model) {
     var openApi = new OpenAPIV3Parser().read("META-INF/swagger/nshmp-haz.yml");
-    var bounds = new Bounds(model.bounds());
+    var bounds = model.bounds();
     SwaggerUtils.addLocationBounds(openApi, bounds.min, bounds.max);
     var components = openApi.getComponents();
     var schemas = components.getSchemas();
     SwaggerUtils.siteClassSchema(schemas, List.copyOf(model.siteClasses().keySet()));
-    SwaggerUtils.imtSchema(schemas,
-        model.config().hazard.imts.stream().collect(Collectors.toList()));
+    SwaggerUtils.imtSchema(schemas, List.copyOf(model.config().hazard.imts));
     openApi.servers(null);
 
     openApi.getInfo().setTitle(model.name() + " Web Services");
@@ -74,18 +66,4 @@ public class SwaggerController {
     return openApi;
   }
 
-  private static class Bounds {
-    final Location min;
-    final Location max;
-
-    Bounds(Map<String, Double> bounds) {
-      var log = Logger.getAnonymousLogger();
-
-      bounds.entrySet().forEach(entry -> {
-        log.info(entry.getKey() + ", " + entry.getValue());
-      });
-      min = Location.create(bounds.get("min-longitude"), bounds.get("min-latitude"));
-      max = Location.create(bounds.get("max-longitude"), bounds.get("max-latitude"));
-    }
-  }
 }

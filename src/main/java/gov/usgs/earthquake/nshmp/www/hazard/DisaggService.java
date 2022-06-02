@@ -33,7 +33,7 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
-import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardRequest;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.BaseRequest;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 
@@ -57,9 +57,10 @@ public final class DisaggService {
    * OR imt=iml pairs
    */
 
-  static final String NAME = "Disaggregation Service";
+  static final String NAME = "Hazard Disaggregation";
   static final Logger LOG = LoggerFactory.getLogger(DisaggService.class);
 
+  // TODO range check return periods and imls
   private static Range<Double> rpRange = Range.closed(1.0, 20000.0);
   private static Range<Double> imlRange = Range.closed(0.0001, 8.0);
 
@@ -70,7 +71,6 @@ public final class DisaggService {
     DISAGG_DATA;
   }
 
-  /** HazardController.doGetMetadata() handler. */
   static HttpResponse<String> getMetadata(HttpRequest<?> request) {
     var url = request.getUri().toString();
     var usage = new Metadata(ServletUtil.model());
@@ -85,7 +85,6 @@ public final class DisaggService {
     return HttpResponse.ok(svcResponse);
   }
 
-  /** HazardController.doGetDisaggIml() handler. */
   static HttpResponse<String> getDisaggIml(RequestIml request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
@@ -106,7 +105,6 @@ public final class DisaggService {
     return HttpResponse.ok(svcResponse);
   }
 
-  /** HazardController.doGetDisaggRp() handler. */
   static HttpResponse<String> getDisaggRp(RequestRp request)
       throws InterruptedException, ExecutionException {
     var stopwatch = Stopwatch.createStarted();
@@ -132,7 +130,6 @@ public final class DisaggService {
    *
    * If disaggIml, we need to do the calculation for single XySeqs if disaggRp,
    * we don't know the imls so must compute hazard over the full curve
-   *
    */
 
   private static Disaggregation calcDisaggIml(RequestIml request)
@@ -204,7 +201,7 @@ public final class DisaggService {
     return disagg;
   }
 
-  static final class RequestIml extends HazardRequest {
+  static final class RequestIml extends BaseRequest {
     final Map<Imt, Double> imls;
     final Set<DataType> dataTypes;
 
@@ -230,7 +227,7 @@ public final class DisaggService {
     }
   }
 
-  static final class RequestRp extends HazardRequest {
+  static final class RequestRp extends BaseRequest {
     final double returnPeriod;
     final Set<DataType> dataTypes;
     final Set<Imt> imts;
