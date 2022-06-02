@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.DoubleStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class SourceService {
     final Set<Gmm> gmms;
     final Map<NehrpSiteClass, Double> siteClasses;
     final List<Parameter> imts;
-    // final Bounds
+    final List<Double> bounds;
 
     public SourceModel(HazardModel model) {
       name = model.name();
@@ -83,6 +84,7 @@ public class SourceService {
           .sorted()
           .map(imt -> new Parameter(ServletUtil.imtShortLabel(imt), imt.name()))
           .collect(toList());
+      bounds = DoubleStream.of(model.bounds().toArray()).boxed().collect(toList());
     }
 
     public String getName() {
@@ -99,6 +101,10 @@ public class SourceService {
 
     public List<Parameter> getImts() {
       return imts;
+    }
+
+    public List<Double> getBounds() {
+      return bounds;
     }
   }
 }
