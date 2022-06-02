@@ -33,7 +33,7 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
-import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardRequest;
+import gov.usgs.earthquake.nshmp.www.hazard.HazardService.BaseRequest;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import io.micronaut.http.HttpRequest;
@@ -200,7 +200,7 @@ public final class DisaggService {
     return disagg;
   }
 
-  static final class RequestIml extends HazardRequest {
+  static final class RequestIml extends BaseRequest {
     final Map<Imt, Double> imls;
     final Set<DataType> dataTypes;
 
@@ -226,7 +226,7 @@ public final class DisaggService {
     }
   }
 
-  static final class RequestRp extends HazardRequest {
+  static final class RequestRp extends BaseRequest {
     final double returnPeriod;
     final Set<DataType> dataTypes;
     final Set<Imt> imts;

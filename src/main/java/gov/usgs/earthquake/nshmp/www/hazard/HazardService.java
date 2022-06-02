@@ -168,13 +168,14 @@ public final class HazardService {
     }
   }
 
-  static class HazardRequest {
+  /* Base request class for both hazard and disagg. */
+  static class BaseRequest {
     final transient HttpRequest<?> http;
     final double longitude;
     final double latitude;
     final double vs30;
 
-    public HazardRequest(
+    public BaseRequest(
         HttpRequest<?> http,
         double longitude,
         double latitude,
@@ -198,7 +199,7 @@ public final class HazardService {
     }
   }
 
-  static final class Request extends HazardRequest {
+  static final class Request extends BaseRequest {
     final boolean truncate;
     final boolean maxdir;
     final Set<Imt> imts;
