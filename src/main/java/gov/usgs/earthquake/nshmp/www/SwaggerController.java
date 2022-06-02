@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.LoggerFactory;
 
 import gov.usgs.earthquake.nshmp.model.HazardModel;
+
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
