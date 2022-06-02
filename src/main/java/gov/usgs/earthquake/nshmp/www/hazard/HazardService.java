@@ -28,7 +28,6 @@ import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.data.MutableXySequence;
 import gov.usgs.earthquake.nshmp.data.XySequence;
-import gov.usgs.earthquake.nshmp.geo.Coordinates;
 import gov.usgs.earthquake.nshmp.geo.Location;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
@@ -136,14 +135,14 @@ public final class HazardService {
       longitude = new DoubleParameter(
           "Longitude",
           "°",
-          Coordinates.LON_RANGE.lowerEndpoint(),
-          Coordinates.LON_RANGE.upperEndpoint());
+          model.bounds().min.longitude,
+          model.bounds().max.longitude);
 
       latitude = new DoubleParameter(
           "Latitude",
           "°",
-          Coordinates.LAT_RANGE.lowerEndpoint(),
-          Coordinates.LAT_RANGE.upperEndpoint());
+          model.bounds().min.latitude,
+          model.bounds().max.latitude);
 
       vs30 = new DoubleParameter(
           "Vs30",
