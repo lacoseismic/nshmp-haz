@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Source Model Logic Trees",
+    name = SourceLogicTreesService.NAME,
     description = "USGS NSHM source model logic tree service")
 @Controller("/trees")
 public class SourceLogicTreesController {

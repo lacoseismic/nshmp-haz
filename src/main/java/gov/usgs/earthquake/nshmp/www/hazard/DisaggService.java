@@ -36,7 +36,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.HazardRequest;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -57,7 +56,7 @@ public final class DisaggService {
    * OR imt=iml pairs
    */
 
-  static final String NAME = "Disaggregation Service";
+  static final String NAME = "Hazard Disaggregation";
   static final Logger LOG = LoggerFactory.getLogger(DisaggService.class);
 
   // TODO range check return periods and imls

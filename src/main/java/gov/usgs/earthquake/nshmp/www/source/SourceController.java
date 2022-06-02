@@ -4,7 +4,6 @@ import gov.usgs.earthquake.nshmp.www.NshmpMicronautServlet;
 import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.source.SourceService.ResponseData;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -30,7 +29,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Source Model Information",
+    name = SourceService.NAME,
     description = "USGS NSHM source model metadata service")
 @Controller("/source")
 public class SourceController {

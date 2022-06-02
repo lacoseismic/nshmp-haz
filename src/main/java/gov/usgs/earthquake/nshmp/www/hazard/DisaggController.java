@@ -15,7 +15,6 @@ import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestIml;
 import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.RequestRp;
 import gov.usgs.earthquake.nshmp.www.hazard.DisaggService.Response;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -44,7 +43,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Hazard Disaggregation",
+    name = DisaggService.NAME,
     description = "USGS NSHM hazard disaggregation service")
 @Controller("/disagg")
 public class DisaggController {

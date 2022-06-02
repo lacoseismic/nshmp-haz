@@ -6,7 +6,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.source.RateService.ProbMetadata;
 import gov.usgs.earthquake.nshmp.www.source.RateService.Request;
 import gov.usgs.earthquake.nshmp.www.source.RateService.Response;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -32,7 +31,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Earthquake Probability Calculation",
+    name = RateService.NAME_PROBABILITY,
     description = "USGS NSHM earthquake probability calculation service")
 @Controller("/probability")
 public class ProbabilityController {

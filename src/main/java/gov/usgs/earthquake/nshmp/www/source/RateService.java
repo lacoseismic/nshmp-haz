@@ -42,8 +42,8 @@ import jakarta.inject.Singleton;
 @Singleton
 public final class RateService {
 
-  static final String NAME_RATE = "Earthquake Rate Service";
-  static final String NAME_PROBABILITY = "Earthquake Probability Service";
+  static final String NAME_RATE = "Earthquake Rates";
+  static final String NAME_PROBABILITY = "Earthquake Probabilities";
   static final Logger LOG = LoggerFactory.getLogger(RateService.class);
 
   /*
@@ -348,7 +348,7 @@ public final class RateService {
     var url = request.getUri().toString();
     var usage = new ProbMetadata(ServletUtil.model());
     var body = ResponseBody.usage()
-        .name(NAME_RATE)
+        .name(NAME_PROBABILITY)
         .url(url)
         .metadata(new ResponseMetadata(HazVersion.appVersions()))
         .request(url)
@@ -367,7 +367,6 @@ public final class RateService {
 
     Metadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // TODO should get min max from model (fix via swagger openapi injection)
       longitude = new DoubleParameter(
           "Longitude",
           "°",

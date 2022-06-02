@@ -29,7 +29,7 @@ import jakarta.inject.Singleton;
 @Singleton
 public class SourceService {
 
-  static final String NAME = "Source Model";
+  static final String NAME = "Model Contents";
   static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
   static HttpResponse<String> getMetadata(HttpRequest<?> request) {

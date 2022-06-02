@@ -9,7 +9,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Request;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Response;
-
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -38,7 +37,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Hazard Calculation",
+    name = HazardService.NAME,
     description = "USGS NSHM hazard calculation service")
 @Controller("/hazard")
 public class HazardController {

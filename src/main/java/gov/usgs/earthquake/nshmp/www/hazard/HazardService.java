@@ -53,7 +53,7 @@ import jakarta.inject.Singleton;
 @Singleton
 public final class HazardService {
 
-  static final String NAME = "Hazard Service";
+  static final String NAME = "Hazard Curves";
   static final Logger LOG = LoggerFactory.getLogger(HazardService.class);
 
   private static final String TOTAL_KEY = "Total";
