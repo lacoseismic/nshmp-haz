@@ -17,7 +17,6 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -71,6 +70,8 @@ public class SourceService {
     final Set<Gmm> gmms;
     final Map<NehrpSiteClass, Double> siteClasses;
     final List<Parameter> imts;
+
+    // final Bounds
 
     public SourceModel(HazardModel model) {
       name = model.name();

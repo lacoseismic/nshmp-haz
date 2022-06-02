@@ -5,7 +5,6 @@ import gov.usgs.earthquake.nshmp.www.ResponseBody;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.Metadata;
 import gov.usgs.earthquake.nshmp.www.source.SourceLogicTreesService.RequestData;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -31,7 +30,7 @@ import jakarta.inject.Inject;
  * @author U.S. Geological Survey
  */
 @Tag(
-    name = "Source Model Logic Tree",
+    name = "Source Model Logic Trees",
     description = "USGS NSHM source model logic tree service")
 @Controller("/trees")
 public class SourceLogicTreesController {

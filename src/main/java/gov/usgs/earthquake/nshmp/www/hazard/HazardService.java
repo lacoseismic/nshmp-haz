@@ -1,6 +1,5 @@
 package gov.usgs.earthquake.nshmp.www.hazard;
 
-import static com.google.common.base.Preconditions.checkState;
 import static gov.usgs.earthquake.nshmp.calc.HazardExport.curvesBySource;
 import static gov.usgs.earthquake.nshmp.data.DoubleData.checkInRange;
 import static gov.usgs.earthquake.nshmp.geo.Coordinates.checkLatitude;
@@ -42,7 +41,6 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 import gov.usgs.earthquake.nshmp.www.source.SourceService.SourceModel;
-
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import jakarta.inject.Singleton;
@@ -135,7 +133,6 @@ public final class HazardService {
 
     Metadata(HazardModel model) {
       this.model = new SourceModel(model);
-      // TODO should get min max from model (fix via swagger openapi injection)
       longitude = new DoubleParameter(
           "Longitude",
           "°",
@@ -294,12 +291,8 @@ public final class HazardService {
       }
 
       Builder hazard(Hazard hazard) {
-        // necessary??
-        checkState(totalMap == null, "Hazard has already been added to this builder");
-
         componentMaps = new EnumMap<>(Imt.class);
         totalMap = new EnumMap<>(Imt.class);
-
         var typeTotalMaps = curvesBySource(hazard);
 
         for (var imt : hazard.curves().keySet()) {
@@ -320,7 +313,6 @@ public final class HazardService {
             XySequence.addToMap(type, componentMap, typeTotalMap.get(type));
           }
         }
-
         return this;
       }
 
@@ -440,7 +432,7 @@ public final class HazardService {
         .collect(toCollection(() -> EnumSet.noneOf(Imt.class)));
   }
 
-  /* Read the 'imt' query values; can be comma-delimited. */
+  /* Read the 'out'put type query values; can be comma-delimited. */
   static Set<DataType> readDataTypes(HttpRequest<?> http) {
     return http.getParameters().getAll("out").stream()
         .map(s -> s.split(","))
