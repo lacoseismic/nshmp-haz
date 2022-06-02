@@ -70,7 +70,6 @@ public class SourceService {
     final Set<Gmm> gmms;
     final Map<NehrpSiteClass, Double> siteClasses;
     final List<Parameter> imts;
-
     // final Bounds
 
     public SourceModel(HazardModel model) {
@@ -100,37 +99,6 @@ public class SourceService {
 
     public List<Parameter> getImts() {
       return imts;
-    }
-  }
-
-  enum Attributes {
-    /* Source model service */
-    MODEL,
-
-    /* Serializing */
-    ID,
-    VALUE,
-    DISPLAY,
-    DISPLAYORDER,
-    YEAR,
-    PATH,
-    REGION,
-    IMT,
-    VS30,
-    SUPPORTS,
-    MINLATITUDE,
-    MINLONGITUDE,
-    MAXLATITUDE,
-    MAXLONGITUDE;
-
-    /** Return upper case string */
-    String toUpperCase() {
-      return name().toUpperCase();
-    }
-
-    /** Return lower case string */
-    String toLowerCase() {
-      return name().toLowerCase();
     }
   }
 }
