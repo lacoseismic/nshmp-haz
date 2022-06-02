@@ -1,4 +1,10 @@
 {
   "name": "PEER Set1-Case10",
-  "site-class-vs30": { "BC": 760 }
+  "site-class-vs30": { "BC": 760 },
+  "bounds":  {
+    "min-latitude": 36.0,
+    "min-longitude": -124.0,
+    "max-latitude": 40.0,
+    "max-longitude": -118.0
+  }
 }
