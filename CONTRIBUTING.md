@@ -11,5 +11,5 @@ into the project you can [fork this repository][2] and
 [submit a merge request][3] for review.
 
 [1]: https://code.usgs.gov/ghsc/nshmp/nshmp-haz/-/issues
-[2]: https://docs.gitlab.com/ee/gitlab-basics/fork-project.html
-[3]: https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html
+[2]: https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork
+[3]: https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html
