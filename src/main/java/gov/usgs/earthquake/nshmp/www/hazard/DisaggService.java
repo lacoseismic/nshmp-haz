@@ -34,7 +34,7 @@ import gov.usgs.earthquake.nshmp.www.ResponseMetadata;
 import gov.usgs.earthquake.nshmp.www.ServletUtil;
 import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.BaseRequest;
-import gov.usgs.earthquake.nshmp.www.hazard.HazardService.Metadata;
+import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
 
 import io.micronaut.http.HttpRequest;
@@ -263,15 +263,15 @@ public final class DisaggService {
   }
 
   static final class Response {
-    final Response.Metadata metadata;
+    final ResponseMetadata metadata;
     final List<ImtDisagg> disaggs;
 
-    Response(Response.Metadata metadata, List<ImtDisagg> disaggs) {
+    Response(ResponseMetadata metadata, List<ImtDisagg> disaggs) {
       this.metadata = metadata;
       this.disaggs = disaggs;
     }
 
-    public Response.Metadata getMetadata() {
+    public ResponseMetadata getMetadata() {
       return metadata;
     }
 
@@ -279,14 +279,14 @@ public final class DisaggService {
       return disaggs;
     }
 
-    private static final class Metadata {
+    private static final class ResponseMetadata {
       final Server server;
       final String rlabel = "Closest Distance, rRup (km)";
       final String mlabel = "Magnitude (Mw)";
       final String εlabel = "% Contribution to Hazard";
       final Object εbins;
 
-      Metadata(Server server, Object εbins) {
+      ResponseMetadata(Server server, Object εbins) {
         this.server = server;
         this.εbins = εbins;
       }
@@ -361,7 +361,7 @@ public final class DisaggService {
         var server = ServletUtil.serverData(ServletUtil.THREAD_COUNT, timer);
 
         return new Response(
-            new Response.Metadata(server, disagg.εBins()),
+            new ResponseMetadata(server, disagg.εBins()),
             disaggs);
       }
     }
@@ -384,6 +384,35 @@ public final class DisaggService {
 
     public Object getData() {
       return data;
+    }
+  }
+
+  private static class Metadata extends HazardService.Metadata {
+    final DoubleParameter iml;
+    final DoubleParameter returnPeriod;
+
+    Metadata(HazardModel model) {
+      super(model);
+
+      iml = new DoubleParameter(
+          "Intensity Measure Level",
+          "",
+          imlRange.lowerEndpoint(),
+          imlRange.upperEndpoint());
+
+      returnPeriod = new DoubleParameter(
+          "Return Period",
+          "yr",
+          rpRange.lowerEndpoint(),
+          rpRange.upperEndpoint());
+    }
+
+    public DoubleParameter getIml() {
+      return iml;
+    }
+
+    public DoubleParameter getReturnPeriod() {
+      return returnPeriod;
     }
   }
 }
