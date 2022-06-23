@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ import gov.usgs.earthquake.nshmp.calc.Hazard;
 import gov.usgs.earthquake.nshmp.calc.HazardCalcs;
 import gov.usgs.earthquake.nshmp.calc.Site;
 import gov.usgs.earthquake.nshmp.geo.Location;
+import gov.usgs.earthquake.nshmp.gmm.Gmm;
 import gov.usgs.earthquake.nshmp.gmm.Imt;
 import gov.usgs.earthquake.nshmp.model.HazardModel;
 import gov.usgs.earthquake.nshmp.www.HazVersion;
@@ -36,6 +39,7 @@ import gov.usgs.earthquake.nshmp.www.ServletUtil.Server;
 import gov.usgs.earthquake.nshmp.www.hazard.HazardService.BaseRequest;
 import gov.usgs.earthquake.nshmp.www.meta.DoubleParameter;
 import gov.usgs.earthquake.nshmp.www.meta.Parameter;
+import gov.usgs.earthquake.nshmp.www.source.SourceService.SourceModel;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -63,6 +67,7 @@ public final class DisaggService {
   // TODO range check return periods and imls
   private static Range<Double> rpRange = Range.closed(1.0, 20000.0);
   private static Range<Double> imlRange = Range.closed(0.0001, 8.0);
+  private static Range<Double> imlPgvRange = Range.closed(0.1, 1000.0);
 
   /* For Swagger selctions */
   enum DisaggDataType {
@@ -134,7 +139,6 @@ public final class DisaggService {
 
   private static Disaggregation calcDisaggIml(RequestIml request)
       throws InterruptedException, ExecutionException {
-
     HazardModel model = ServletUtil.model();
 
     // modify config to include service endpoint arguments
@@ -199,6 +203,20 @@ public final class DisaggService {
     Disaggregation disagg = disaggfuture.get();
 
     return disagg;
+  }
+
+  private static DoubleParameter imlParameter(Imt imt) {
+    String name = ServletUtil.imtShortLabel(imt) + " IML range";
+
+    if (imt.equals(Imt.PGV)) {
+      return new DoubleParameter(
+          name,
+          "cm/s",
+          imlPgvRange.lowerEndpoint(),
+          imlPgvRange.upperEndpoint());
+    } else {
+      return new DoubleParameter(name, "g", imlRange.lowerEndpoint(), imlRange.upperEndpoint());
+    }
   }
 
   static final class RequestIml extends BaseRequest {
@@ -367,6 +385,22 @@ public final class DisaggService {
     }
   }
 
+  private static final class ImlMetadata {
+    private final String name;
+    private final TreeMap<String, DoubleParameter> range;
+
+    private ImlMetadata(HazardModel model) {
+      name = "Intensity Measure Level";
+      range = model.gmms().stream()
+          .map(Gmm::supportedImts)
+          .flatMap(Set::stream)
+          .distinct()
+          .sorted()
+          .collect(
+              Collectors.toMap(Imt::name, DisaggService::imlParameter, (x, y) -> x, TreeMap::new));
+    }
+  }
+
   private static final class ImtDisagg {
     final Parameter imt;
     final Object data;
@@ -387,32 +421,66 @@ public final class DisaggService {
     }
   }
 
-  private static class Metadata extends HazardService.Metadata {
-    final DoubleParameter iml;
+  private static class Metadata {
+    final SourceModel model;
+    final DoubleParameter longitude;
+    final DoubleParameter latitude;
+    final ImlMetadata iml;
     final DoubleParameter returnPeriod;
+    final DoubleParameter vs30;
 
     Metadata(HazardModel model) {
-      super(model);
+      this.model = new SourceModel(model);
 
-      iml = new DoubleParameter(
-          "Intensity Measure Level",
-          "",
-          imlRange.lowerEndpoint(),
-          imlRange.upperEndpoint());
+      longitude = new DoubleParameter(
+          "Longitude",
+          "°",
+          model.bounds().min.longitude,
+          model.bounds().max.longitude);
+
+      latitude = new DoubleParameter(
+          "Latitude",
+          "°",
+          model.bounds().min.latitude,
+          model.bounds().max.latitude);
+
+      iml = new ImlMetadata(model);
 
       returnPeriod = new DoubleParameter(
           "Return Period",
           "yr",
           rpRange.lowerEndpoint(),
           rpRange.upperEndpoint());
+
+      vs30 = new DoubleParameter(
+          "Vs30",
+          "m/s",
+          150,
+          1500);
     }
 
-    public DoubleParameter getIml() {
+    public SourceModel getModel() {
+      return model;
+    }
+
+    public DoubleParameter getLongitude() {
+      return longitude;
+    }
+
+    public DoubleParameter getLatitude() {
+      return latitude;
+    }
+
+    public ImlMetadata getIml() {
       return iml;
     }
 
     public DoubleParameter getReturnPeriod() {
       return returnPeriod;
+    }
+
+    public DoubleParameter getVs30() {
+      return vs30;
     }
   }
 }
