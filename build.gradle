@@ -6,6 +6,7 @@ plugins {
   id "com.github.spotbugs" version "${spotbugsVersion}"
   id "com.palantir.git-version" version "${gitVersionVersion}" apply false
   id "com.star-zero.gradle.githook" version "${githooksVersion}"
+  id "de.undercouch.download" version "${downloadVersion}"
   id "eclipse-wtp"
   id "jacoco"
   id "maven-publish"
@@ -17,6 +18,7 @@ apply from: "${projectDir}/gradle/ext.gradle"
 apply from: "${projectDir}/gradle/jar.gradle"
 apply from: "${projectDir}/gradle/git-hooks.gradle"
 apply from: "${projectDir}/gradle/node.gradle"
+apply from: "${projectDir}/gradle/nshm.gradle"
 apply from: "${projectDir}/gradle/repositories.gradle"
 apply from: "${projectDir}/gradle/spotbugs.gradle"
 apply from: "${projectDir}/gradle/spotless.gradle"
@@ -52,6 +54,7 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(JavaExec) {
+  dependsOn downloadNshms
   jvmArgs(
       '-noverify',
       '-Xms2g',
@@ -70,11 +73,6 @@ tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
     }
   }
 }
-
-task libsClean(type: Delete) {
-  delete libsDir
-}
-clean.dependsOn libsClean
 
 test {
   useJUnitPlatform()

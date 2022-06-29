@@ -1,6 +1,11 @@
 ####
 # Run hazard web services.
 #
+# Pull Docker Image:
+#   - Production (stable): docker pull usgs/nshmp-haz-ws:production-latest
+#   - Staging (latest, main branch of repo): docker pull usgs/nshmp-haz-ws:staging-latest
+#   - Development (developer forks): docker pull usgs/nshmp-haz-ws:development-latest
+#
 # Build locally:
 #   docker build
 #       -f ws.Dockerfile
