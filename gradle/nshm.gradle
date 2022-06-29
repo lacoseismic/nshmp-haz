@@ -1,0 +1,32 @@
+apply plugin: "de.undercouch.download"
+
+ext {
+  archiveUrl = "https://code.usgs.gov/ghsc/nshmp/nshms/nshm-conus/-/archive"
+  nshmDir = "nshms";
+}
+
+/**
+ * Download the default NSHM to use for the web services.
+ */
+task downloadNshms() {
+  doLast {
+    // Download and unzip nshm-conus tag 5.1.2
+    def zipFile = new File(nshmDir, "nshm-conus-5.1.2.zip")
+    download.run {
+      src "${archiveUrl}/5.1.2/nshm-conus-5.1.2.zip"
+      dest zipFile
+    }
+    copy {
+      from zipTree(zipFile)
+      into nshmDir
+    }
+    delete {
+      delete zipFile
+    }
+  }
+}
+
+task cleanNshm(type: Delete) {
+  delete nshmDir
+}
+clean.dependsOn cleanNshm
