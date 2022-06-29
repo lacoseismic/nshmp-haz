@@ -19,7 +19,7 @@ scratch*.html
 Scratch*.js
 webapp/config.json
 config.properties
-libs
+nshms/
 .factorypath
 .apt_generated*
 *version.json

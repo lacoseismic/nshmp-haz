@@ -14,4 +14,4 @@ Scratch*.java
 nshmp-haz-log*
 .vscode
 config.properties
-libs
+nshms/
