@@ -79,7 +79,7 @@ class NshmTestsConus {
 
   private static final Set<Imt> IMTS = EnumSet.of(PGA, SA0P2, SA1P0, SA5P0);
 
-  private static final String MODEL_NAME = "nshm-conus";
+  private static final String MODEL_NAME = "nshm-conus-2018-5.1-maint";
   private static final int MODEL_YEAR = 2018;
   private static final Path MODEL_PATH = Paths.get("../" + MODEL_NAME);
   private static final Path DATA_PATH = Paths.get("src/test/resources/e2e");
