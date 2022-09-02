@@ -79,7 +79,8 @@ class NshmTestsConus {
 
   private static final Set<Imt> IMTS = EnumSet.of(PGA, SA0P2, SA1P0, SA5P0);
 
-  private static final String MODEL_NAME = "nshm-conus";
+  private static final String MODEL_NAME = "nshm-conus-2018-5.1-maint";
+  private static final String MODEL_NAME_OUT = "nshm-conus";
   private static final int MODEL_YEAR = 2018;
   private static final Path MODEL_PATH = Paths.get("../" + MODEL_NAME);
   private static final Path DATA_PATH = Paths.get("src/test/resources/e2e");
@@ -187,7 +188,7 @@ class NshmTestsConus {
 
   private static Map<String, XySequence> readExpected(NamedLocation loc) {
 
-    String filename = resultFilename(MODEL_NAME, MODEL_YEAR, loc);
+    String filename = resultFilename(MODEL_NAME_OUT, MODEL_YEAR, loc);
     Path resultPath = DATA_PATH.resolve(filename);
 
     JsonObject obj = null;
@@ -246,7 +247,7 @@ class NshmTestsConus {
     /* Initialize and shut down executor to generate results. */
     setUpBeforeClass();
 
-    writeExpecteds(MODEL_NAME, MODEL_YEAR, SITES);
+    writeExpecteds(MODEL_NAME_OUT, MODEL_YEAR, SITES);
 
     tearDownAfterClass();
   }
