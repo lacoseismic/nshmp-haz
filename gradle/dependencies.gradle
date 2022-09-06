@@ -2,8 +2,8 @@
 dependencies {
 
   // NSHMP
-  if (System.getenv('NSHMP_LIB_LOCAL') == 'true') {
-    implementation files('../nshmp-lib/build/libs/nshmp-lib.jar')
+  if (System.getenv("NSHMP_LIB_LOCAL") == "true") {
+    implementation files("../nshmp-lib/build/libs/nshmp-lib.jar")
   } else {
     implementation "ghsc:nshmp-lib:${nshmpLibVersion}"
   }
