@@ -2,8 +2,11 @@
 dependencies {
 
   // NSHMP
-  // implementation files('../nshmp-lib/build/libs/nshmp-lib.jar')
-  implementation "ghsc:nshmp-lib:${nshmpLibVersion}"
+  if (System.getenv('NSHMP_LIB_LOCAL') == 'true') {
+    implementation files('../nshmp-lib/build/libs/nshmp-lib.jar')
+  } else {
+    implementation "ghsc:nshmp-lib:${nshmpLibVersion}"
+  }
   implementation "ghsc:nshmp-ws-utils:${nshmpWsUtilsVersion}"
 
   // AWS
