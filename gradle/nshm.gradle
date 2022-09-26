@@ -10,10 +10,10 @@ ext {
  */
 task downloadNshms() {
   doLast {
-    // Download and unzip nshm-conus tag 5.2.0
-    def zipFile = new File(nshmDir, "nshm-conus-5.2.0.zip")
+    // Download and unzip nshm-conus tag 5.1.2
+    def zipFile = new File(nshmDir, "nshm-conus-5.1.2.zip")
     download.run {
-      src "${archiveUrl}/5.2.0/nshm-conus-5.2.0.zip"
+      src "${archiveUrl}/5.1.2/nshm-conus-5.1.2.zip"
       dest zipFile
     }
     copy {
